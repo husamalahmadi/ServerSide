@@ -6,10 +6,12 @@ import { usePrefetchDelay } from "../hooks/usePrefetchDelay.js";
 import { useIsMobile } from "../hooks/useIsMobile.js";
 
 // These must already exist in your client-only version:
-import { getCompany } from "../data/stocksCatalog.js";
+import { getCompany, resolveMarketAndSymbol } from "../data/stocksCatalog.js";
 import { getLivePrice } from "../services/priceService.js";
 import { getFinancialsCached } from "../services/financialsService.js";
 import { computeValuation } from "../domain/valuation.js";
+import { twelveLogo, twelveProfile } from "../services/twelveData.js";
+import { translateToArabic } from "../services/translateService.js";
 
 /* Formatting */
 function fmt2(n) {
@@ -238,6 +240,10 @@ export default function Stock() {
 
   const [fin, setFin] = useState({ loading: false, error: "", data: null });
   const [val, setVal] = useState({ loading: false, error: "", data: null });
+  const [logoUrl, setLogoUrl] = useState(null);
+  const [logoLoadError, setLogoLoadError] = useState(false);
+  const [profile, setProfile] = useState(null);
+  const [translatedProfile, setTranslatedProfile] = useState(null);
 
   const reportDate = useMemo(() => new Date().toLocaleDateString(), []);
   const waitText = !ready ? `${t("WAITING_BEFORE_FETCH")} ${secondsLeft}s…` : "";
@@ -330,6 +336,80 @@ export default function Stock() {
     return () => { alive = false; };
   }, [ready, ticker, market, t]);
 
+  // Logo & profile: delayed (when ready)
+  useEffect(() => {
+    let alive = true;
+    setLogoLoadError(false);
+    if (!ready) {
+      setLogoUrl(null);
+      setProfile(null);
+      setTranslatedProfile(null);
+      return () => { alive = false; };
+    }
+
+    (async () => {
+      try {
+        const r = await resolveMarketAndSymbol(ticker, market);
+        if (!r.ok || !alive) return;
+        const symbol = r.symbol;
+        const [logoRes, profileRes] = await Promise.all([
+          twelveLogo(symbol),
+          twelveProfile(symbol),
+        ]);
+        if (!alive) return;
+        const base = logoRes?.logo_base;
+        setLogoUrl(base && typeof base === "string" ? base : null);
+        setProfile(profileRes && typeof profileRes === "object" ? profileRes : null);
+      } catch {
+        if (!alive) return;
+        setLogoUrl(null);
+        setProfile(null);
+      }
+    })();
+
+    return () => { alive = false; };
+  }, [ready, ticker, market]);
+
+  // Translate profile to Arabic when lang is ar
+  useEffect(() => {
+    let alive = true;
+    if (!profile || lang !== "ar") {
+      setTranslatedProfile(null);
+      return;
+    }
+    setTranslatedProfile(null);
+    (async () => {
+      const str = (v) => (v && String(v).trim()) || "";
+      const n = str(profile.name), ind = str(profile.industry), sec = str(profile.sector);
+      const desc = str(profile.description), co = str(profile.country), ci = str(profile.city), ceo = str(profile.CEO);
+      try {
+        const [name, industry, sector, description, country, city, ceoTr] = await Promise.all([
+          n ? translateToArabic(n) : Promise.resolve(""),
+          ind ? translateToArabic(ind) : Promise.resolve(""),
+          sec ? translateToArabic(sec) : Promise.resolve(""),
+          desc ? translateToArabic(desc) : Promise.resolve(""),
+          co ? translateToArabic(co) : Promise.resolve(""),
+          ci ? translateToArabic(ci) : Promise.resolve(""),
+          ceo ? translateToArabic(ceo) : Promise.resolve(""),
+        ]);
+        if (!alive) return;
+        setTranslatedProfile({
+          name: name || profile.name,
+          industry: industry || profile.industry,
+          sector: sector || profile.sector,
+          description: description || profile.description,
+          country: country || profile.country,
+          city: city || profile.city,
+          CEO: ceoTr || profile.CEO,
+        });
+      } catch {
+        if (!alive) return;
+        setTranslatedProfile(null);
+      }
+    })();
+    return () => { alive = false; };
+  }, [profile, lang]);
+
   const years = useMemo(() => fin?.data?.years || [], [fin]);
   const toSeries = (k) =>
     years
@@ -374,12 +454,25 @@ export default function Stock() {
             minWidth: 0,
           }}
         >
-          <div style={{ display: "grid", gap: 2, minWidth: 0, flex: "1 1 320px" }}>
-            <div style={{ fontSize: 18, fontWeight: 900, overflowWrap: "anywhere" }}>{t("REPORT")}</div>
-            <div style={{ fontSize: 13, color: "#cbd5e1", overflowWrap: "anywhere" }}>
-              <b>{t("TICKER")}:</b> {ticker} — {company || "—"} · <b>{t("REPORT_DATE")}:</b> {reportDate}
+          <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0, flex: "1 1 320px" }}>
+            {logoUrl && !logoLoadError ? (
+              <img
+                src={logoUrl}
+                alt=""
+                referrerPolicy="no-referrer"
+                style={{ width: 48, height: 48, objectFit: "contain", borderRadius: 8, background: "#fff", flexShrink: 0 }}
+                onError={() => setLogoLoadError(true)}
+              />
+            ) : null}
+            <div style={{ display: "grid", gap: 2, minWidth: 0 }}>
+              <div style={{ fontSize: 18, fontWeight: 900, overflowWrap: "anywhere" }}>
+                {(lang === "ar" && translatedProfile?.name) || profile?.name || company || "—"}
+              </div>
+              <div style={{ fontSize: 13, color: "#cbd5e1", overflowWrap: "anywhere" }}>
+                <b>{t("TICKER")}:</b> {ticker} · <b>{t("REPORT_DATE")}:</b> {reportDate}
+              </div>
+              {!ready ? <div style={{ fontSize: 12, color: "#e2e8f0" }}>{waitText}</div> : null}
             </div>
-            {!ready ? <div style={{ fontSize: 12, color: "#e2e8f0" }}>{waitText}</div> : null}
           </div>
 
           <div
@@ -495,7 +588,7 @@ export default function Stock() {
         </Card>
 
         {/* 3. Revenue & Income */}
-        <Card title={t("REV_INC_TITLE")}>
+        <Card title={`${t("REV_INC_TITLE")} (${currency})`}>
           {!ready ? (
             <div style={{ color: "#475569" }}>{waitText}</div>
           ) : (
@@ -515,7 +608,7 @@ export default function Stock() {
         </Card>
 
         {/* 4. Equity & FCF */}
-        <Card title={t("EQUITY_FCF_TITLE")}>
+        <Card title={`${t("EQUITY_FCF_TITLE")} (${currency})`}>
           {!ready ? (
             <div style={{ color: "#475569" }}>{waitText}</div>
           ) : (
@@ -529,6 +622,74 @@ export default function Stock() {
             >
               <ChartBlock title={t("TOTAL_EQUITY")} series={serEquity} w={bigChartW} dir={dir} t={t} />
               <ChartBlock title={t("FCF")} series={serFCF} w={bigChartW} dir={dir} t={t} />
+            </div>
+          )}
+        </Card>
+
+        {/* 5. Company profile */}
+        <Card title={t("COMPANY_PROFILE")}>
+          {!ready ? (
+            <div style={{ color: "#475569" }}>{waitText}</div>
+          ) : !profile ? (
+            <div style={{ color: "#475569" }}>{t("NO_DATA")}</div>
+          ) : (
+            <div style={{ display: "grid", gap: 12, maxWidth: 720, minWidth: 0 }}>
+              {(() => {
+                const P = lang === "ar" && translatedProfile ? translatedProfile : profile;
+                return (
+                  <>
+                    <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,2fr)", gap: "6px 16px", alignItems: "baseline" }}>
+                      <span style={{ fontWeight: 700, color: "#374151" }}>{t("TICKER")}</span>
+                      <span style={{ overflowWrap: "anywhere" }}>{profile.symbol ?? ticker}</span>
+                      <span style={{ fontWeight: 700, color: "#374151" }}>{t("INDUSTRY")}</span>
+                      <span style={{ overflowWrap: "anywhere" }}>{P.industry || "—"}</span>
+                      <span style={{ fontWeight: 700, color: "#374151" }}>{t("SECTOR")}</span>
+                      <span style={{ overflowWrap: "anywhere" }}>{P.sector || "—"}</span>
+                    </div>
+                    {(P.description || profile.description) ? (
+                      <>
+                        <div style={{ fontWeight: 700, color: "#374151" }}>{t("DESCRIPTION")}</div>
+                        <p
+                          style={{
+                            margin: 0,
+                            fontSize: 14,
+                            lineHeight: 1.6,
+                            color: "#334155",
+                            width: "100%",
+                            maxWidth: "100%",
+                            boxSizing: "border-box",
+                            textAlign: "justify",
+                            overflowWrap: "break-word",
+                            wordBreak: "break-word",
+                          }}
+                        >
+                          {P.description || profile.description}
+                        </p>
+                      </>
+                    ) : null}
+                    <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,2fr)", gap: "6px 16px", alignItems: "baseline" }}>
+                      <span style={{ fontWeight: 700, color: "#374151" }}>{t("CITY")}</span>
+                      <span style={{ overflowWrap: "anywhere" }}>{P.city || "—"}</span>
+                      <span style={{ fontWeight: 700, color: "#374151" }}>{t("COUNTRY")}</span>
+                      <span style={{ overflowWrap: "anywhere" }}>{P.country || "—"}</span>
+                      <span style={{ fontWeight: 700, color: "#374151" }}>{t("CEO")}</span>
+                      <span style={{ overflowWrap: "anywhere" }}>{P.CEO || "—"}</span>
+                      <span style={{ fontWeight: 700, color: "#374151" }}>{t("WEBSITE")}</span>
+                      <span style={{ overflowWrap: "anywhere" }}>
+                        {profile.website ? (
+                          <a href={profile.website} target="_blank" rel="noopener noreferrer" style={{ color: "#2563eb", textDecoration: "none" }}>
+                            {profile.website}
+                          </a>
+                        ) : (
+                          "—"
+                        )}
+                      </span>
+                      <span style={{ fontWeight: 700, color: "#374151" }}>{t("CONTACT")}</span>
+                      <span style={{ overflowWrap: "anywhere" }}>{profile.phone || "—"}</span>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           )}
         </Card>

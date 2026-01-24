@@ -61,3 +61,41 @@ export async function twelveCashFlow(symbol, { period = "annual" } = {}) {
   const url = buildUrl("/cash_flow", { symbol, period });
   return fetchJson(url, { cache: "no-store" });
 }
+
+/**
+ * Company logo. Returns { logo_base, logo_quote, logo } or null if unavailable.
+ * Use logo_base (stocks) or logo (single-asset) for company logo.
+ */
+export async function twelveLogo(symbol) {
+  try {
+    const url = buildUrl("/logo", { symbol });
+    const res = await fetch(url, { cache: "no-store" });
+    const txt = await res.text();
+    let json = {};
+    try {
+      json = txt ? JSON.parse(txt) : {};
+    } catch {
+      return null;
+    }
+    if (!res.ok) return null;
+    const err = json?.code ?? json?.status;
+    if (typeof err === "number" && err >= 400) return null;
+    if (json?.message && /error|invalid|not found/i.test(String(json.message))) return null;
+    const urlOut = json?.logo_base || json?.logo_quote || json?.logo;
+    return typeof urlOut === "string" && urlOut.startsWith("http") ? { logo_base: urlOut } : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Company profile. Returns { name, symbol, industry, sector, description, city, country, CEO, website, phone, ... } or null.
+ */
+export async function twelveProfile(symbol) {
+  try {
+    const url = buildUrl("/profile", { symbol });
+    return await fetchJson(url, { cache: "no-store" });
+  } catch {
+    return null;
+  }
+}

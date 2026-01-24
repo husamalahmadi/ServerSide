@@ -43,9 +43,17 @@ const dict = {
     // Stock
     EXEC_SUM: "1. Executive summary",
     FAIR_VALUE_SECTION: "2. Fair value analysis",
-    REV_INC_TITLE: "3. Revenue & income (USD)",
-    EQUITY_FCF_TITLE: "4. Equity & free cash flow (USD)",
+    REV_INC_TITLE: "3. Revenue & income",
+    EQUITY_FCF_TITLE: "4. Equity & free cash flow",
+    COMPANY_PROFILE: "5. Company profile",
     APPENDIX: "Appendix: Financial statements (all years)",
+    SECTOR: "Sector",
+    DESCRIPTION: "Description",
+    CITY: "City",
+    COUNTRY: "Country",
+    CEO: "CEO",
+    WEBSITE: "Website",
+    CONTACT: "Contact",
 
     REV_GROWTH: "Revenue growth",
     OP_INCOME: "Operating income",
@@ -69,6 +77,12 @@ const dict = {
     // Added (missing in your UI)
     ERR_STATEMENTS: "Failed to load financial statements.",
     ERR_VALUATION: "Failed to load valuation.",
+
+    // Blogs
+    BLOGS: "Blogs",
+    ERR_LOAD_BLOGS: "Failed to load blogs.",
+    READ_MORE: "Read more",
+    PUBLISHED: "Published",
   },
 
   ar: {
@@ -110,9 +124,17 @@ const dict = {
     // Stock
     EXEC_SUM: "١. الملخص التنفيذي",
     FAIR_VALUE_SECTION: "٢. تحليل القيمة العادلة",
-    REV_INC_TITLE: "٣. الإيرادات والدخل (دولار)",
-    EQUITY_FCF_TITLE: "٤. حقوق الملكية والتدفق النقدي الحر (دولار)",
+    REV_INC_TITLE: "٣. الإيرادات والدخل",
+    EQUITY_FCF_TITLE: "٤. حقوق الملكية والتدفق النقدي الحر",
+    COMPANY_PROFILE: "٥. ملف الشركة",
     APPENDIX: "الملحق: القوائم المالية (كل السنوات)",
+    SECTOR: "القطاع",
+    DESCRIPTION: "الوصف",
+    CITY: "المدينة",
+    COUNTRY: "الدولة",
+    CEO: "الرئيس التنفيذي",
+    WEBSITE: "الموقع الإلكتروني",
+    CONTACT: "معلومات الاتصال",
 
     REV_GROWTH: "نمو الإيرادات",
     OP_INCOME: "الدخل التشغيلي",
@@ -136,6 +158,12 @@ const dict = {
     // Added
     ERR_STATEMENTS: "فشل تحميل القوائم المالية.",
     ERR_VALUATION: "فشل تحميل التقييم.",
+
+    // Blogs
+    BLOGS: "المدونة",
+    ERR_LOAD_BLOGS: "فشل تحميل المدونات.",
+    READ_MORE: "اقرأ المزيد",
+    PUBLISHED: "تاريخ النشر",
   },
 };
 

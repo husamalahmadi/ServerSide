@@ -264,6 +264,10 @@ export default function Home() {
           </div>
 
           <div className="tp-actions">
+            <Link to="/blogs" aria-label={t("BLOGS")} className="tp-pill">
+              {t("BLOGS")}
+            </Link>
+
             <Link to="/about" aria-label={t("ABOUT_US")} className="tp-pill">
               {t("ABOUT_US")}
             </Link>

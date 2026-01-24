@@ -7,6 +7,7 @@ import Home from "./Home.jsx";
 import Stock from "./Stock.jsx";
 import Contact from "./Contact.jsx";
 import AboutUs from "./AboutUs.jsx";
+import Blogs from "./Blogs.jsx";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/stock/:ticker" element={<Stock />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<AboutUs />} />
+          <Route path="/blogs" element={<Blogs />} />
         </Routes>
       </BrowserRouter>
     </I18nProvider>

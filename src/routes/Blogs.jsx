@@ -1,0 +1,442 @@
+// FILE: src/routes/Blogs.jsx
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useI18n } from "../i18n.jsx";
+import { getBlogPosts } from "../services/bloggerService.js";
+
+function formatDate(date, lang) {
+  if (!date) return "";
+  try {
+    return new Date(date).toLocaleDateString(lang === "ar" ? "ar-SA" : "en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  } catch {
+    return "";
+  }
+}
+
+function stripHtml(html) {
+  if (!html) return "";
+  const tmp = document.createElement("div");
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || "";
+}
+
+function truncateText(text, maxLength = 150) {
+  const clean = stripHtml(text);
+  if (clean.length <= maxLength) return clean;
+  return clean.slice(0, maxLength).trim() + "...";
+}
+
+// Group posts by year and month for tree view
+function groupPostsByDate(posts) {
+  const grouped = {};
+  posts.forEach((post) => {
+    if (!post.published) return;
+    const date = new Date(post.published);
+    const year = date.getFullYear();
+    const month = date.getMonth(); // 0-11
+    
+    if (!grouped[year]) grouped[year] = {};
+    if (!grouped[year][month]) grouped[year][month] = [];
+    grouped[year][month].push(post);
+  });
+  
+  // Sort months within each year (newest first)
+  Object.keys(grouped).forEach((year) => {
+    const months = Object.keys(grouped[year]).map(Number).sort((a, b) => b - a);
+    const sorted = {};
+    months.forEach((month) => {
+      sorted[month] = grouped[year][month];
+    });
+    grouped[year] = sorted;
+  });
+  
+  return grouped;
+}
+
+function getMonthName(monthIndex, lang) {
+  const months = {
+    en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    ar: ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"],
+  };
+  return months[lang]?.[monthIndex] || months.en[monthIndex] || "";
+}
+
+export default function Blogs() {
+  const { t, lang, dir } = useI18n();
+  const [state, setState] = useState({
+    loading: true,
+    error: "",
+    posts: [],
+  });
+  const [selectedPostId, setSelectedPostId] = useState(null);
+
+  useEffect(() => {
+    let alive = true;
+
+    async function loadBlogs() {
+      try {
+        setState((s) => ({ ...s, loading: true, error: "" }));
+        console.log(`[Blogs] Loading blogs for language: ${lang}`);
+        const posts = await getBlogPosts({ lang, maxResults: 50 });
+        
+        // Sort posts by date (newest first)
+        const sortedPosts = posts.sort((a, b) => {
+          const dateA = a.published ? new Date(a.published).getTime() : 0;
+          const dateB = b.published ? new Date(b.published).getTime() : 0;
+          return dateB - dateA; // Newest first
+        });
+        
+        console.log(`[Blogs] Received ${sortedPosts.length} posts (sorted newest to oldest)`);
+        if (!alive) return;
+        setState({ loading: false, error: "", posts: sortedPosts });
+      } catch (e) {
+        if (!alive) return;
+        const errorMsg = e?.message || String(e) || t("ERR_LOAD_BLOGS");
+        console.error("[Blogs] Loading error:", e);
+        console.error("[Blogs] Error details:", {
+          message: e?.message,
+          stack: e?.stack,
+          name: e?.name,
+        });
+        setState({
+          loading: false,
+          error: `${t("ERR_LOAD_BLOGS")} (${errorMsg})`,
+          posts: [],
+        });
+      }
+    }
+
+    loadBlogs();
+    return () => {
+      alive = false;
+    };
+  }, [lang, t]);
+
+  const groupedPosts = groupPostsByDate(state.posts);
+  const years = Object.keys(groupedPosts).map(Number).sort((a, b) => b - a); // Newest year first
+
+  return (
+    <div dir={dir} lang={lang} style={{ minHeight: "100vh", background: "#f8fafc" }}>
+      <style>{`
+        .tp-wrap, .tp-card, .tp-header, .tp-blog-list { box-sizing: border-box; }
+        .tp-wrap * { box-sizing: border-box; }
+        .tp-container { max-width: 1400px; margin: 0 auto; padding: 16px; }
+        .tp-header-wrap { margin-bottom: 16px; }
+        .tp-content-wrap { display: flex; gap: 20px; align-items: flex-start; }
+        .tp-main-content { flex: 1; min-width: 0; }
+        .tp-tree-sidebar {
+          width: 280px;
+          flex-shrink: 0;
+          position: sticky;
+          top: 20px;
+          max-height: calc(100vh - 40px);
+          overflow-y: auto;
+        }
+        [dir="rtl"] .tp-content-wrap {
+          flex-direction: row-reverse;
+        }
+        .tp-card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:14px; box-shadow:0 1px 10px rgba(0,0,0,0.04); }
+        .tp-title { font-weight:900; margin-bottom:10px; }
+        .tp-muted { color:#64748b; }
+        .tp-danger { color:#b91c1c; }
+
+        .tp-header {
+          border-radius: 18px;
+          background: linear-gradient(180deg, #0f172a, #111827);
+          padding: 14px 16px;
+          color: #fff;
+          box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          flex-wrap: wrap;
+          min-width: 0;
+        }
+        .tp-brand { min-width: 0; }
+        .tp-brand h1 { margin:0; font-size:18px; font-weight:900; }
+        .tp-brand p { margin:2px 0 0; font-size:13px; color:#cbd5e1; }
+
+        .tp-actions {
+          margin-inline-start: auto;
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+          min-width: 0;
+        }
+
+        .tp-pill {
+          border: 1px solid #d1d5db;
+          border-radius: 999px;
+          padding: 6px 10px;
+          font-weight: 700;
+          background: #fff;
+          color: #111827;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          white-space: nowrap;
+          max-width: 100%;
+        }
+
+        .tp-blog-list { margin-top: 16px; }
+        .tp-blog-item {
+          border: 1px solid #e5e7eb;
+          border-radius: 14px;
+          padding: 16px;
+          background: #fff;
+          margin-bottom: 16px;
+          transition: box-shadow 0.2s;
+          cursor: pointer;
+          text-decoration: none;
+          color: inherit;
+          display: block;
+        }
+        .tp-blog-item:hover {
+          box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .tp-blog-title {
+          font-size: 20px;
+          font-weight: 900;
+          color: #0f172a;
+          margin-bottom: 8px;
+          line-height: 1.3;
+        }
+        .tp-blog-meta {
+          font-size: 12px;
+          color: #64748b;
+          margin-bottom: 12px;
+        }
+        .tp-blog-excerpt {
+          font-size: 14px;
+          color: #334155;
+          line-height: 1.6;
+          margin-bottom: 12px;
+        }
+        .tp-blog-link {
+          font-size: 14px;
+          font-weight: 700;
+          color: #2563eb;
+          text-decoration: none;
+        }
+        .tp-blog-link:hover {
+          text-decoration: underline;
+        }
+        
+        .tp-tree-card {
+          background: #fff;
+          border: 1px solid #e5e7eb;
+          border-radius: 14px;
+          padding: 14px;
+          box-shadow: 0 1px 10px rgba(0,0,0,0.04);
+        }
+        .tp-tree-title {
+          font-weight: 900;
+          font-size: 16px;
+          margin-bottom: 12px;
+          color: #0f172a;
+        }
+        .tp-tree-year {
+          margin-bottom: 16px;
+        }
+        .tp-tree-year-header {
+          font-weight: 700;
+          font-size: 14px;
+          color: #1e293b;
+          margin-bottom: 8px;
+          padding: 4px 0;
+          border-bottom: 1px solid #e2e8f0;
+        }
+        .tp-tree-month {
+          margin-bottom: 12px;
+          padding-inline-start: 12px;
+        }
+        .tp-tree-month-header {
+          font-weight: 600;
+          font-size: 13px;
+          color: #475569;
+          margin-bottom: 6px;
+        }
+        .tp-tree-post-link {
+          display: block;
+          font-size: 12px;
+          color: #64748b;
+          padding: 4px 8px;
+          margin-bottom: 4px;
+          border-radius: 6px;
+          text-decoration: none;
+          transition: all 0.2s;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .tp-tree-post-link:hover {
+          background: #f1f5f9;
+          color: #2563eb;
+        }
+        .tp-tree-post-link.active {
+          background: #dbeafe;
+          color: #1e40af;
+          font-weight: 600;
+        }
+
+        @media (max-width: 1024px) {
+          .tp-content-wrap { flex-direction: column !important; }
+          .tp-tree-sidebar {
+            width: 100%;
+            position: static;
+            max-height: 400px;
+          }
+        }
+
+        @media (max-width: 520px) {
+          .tp-container { padding: 12px; }
+          .tp-header { align-items: stretch; }
+          .tp-actions { width: 100%; justify-content: space-between; }
+          .tp-pill { flex: 1; }
+        }
+      `}</style>
+
+      <div className="tp-container">
+        {/* Header */}
+        <div className="tp-header-wrap">
+          <div className="tp-header">
+            <div className="tp-brand">
+              <h1>Trueprice.cash</h1>
+              <p>{t("BLOGS")}</p>
+            </div>
+
+            <div className="tp-actions">
+              <Link to="/about" aria-label={t("ABOUT_US")} className="tp-pill">
+                {t("ABOUT_US")}
+              </Link>
+
+              <Link to="/contact" aria-label={t("CONTACT_US")} className="tp-pill">
+                {t("CONTACT_US")}
+              </Link>
+
+              <Link to="/" aria-label={t("DASHBOARD")} className="tp-pill">
+                {t("DASHBOARD")}
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Content Area with Tree View and Blog List */}
+        <div className="tp-content-wrap">
+          {/* Tree View Sidebar */}
+          {state.posts.length > 0 && (
+            <div className="tp-tree-sidebar">
+              <div className="tp-tree-card">
+                <div className="tp-tree-title">{lang === "ar" ? "التاريخ" : "History"}</div>
+                {years.map((year) => (
+                  <div key={year} className="tp-tree-year">
+                    <div className="tp-tree-year-header">{year}</div>
+                    {Object.keys(groupedPosts[year])
+                      .map(Number)
+                      .sort((a, b) => b - a)
+                      .map((month) => (
+                        <div key={month} className="tp-tree-month">
+                          <div className="tp-tree-month-header">{getMonthName(month, lang)}</div>
+                          {groupedPosts[year][month].map((post) => (
+                            <a
+                              key={post.id}
+                              href={`#post-${post.id}`}
+                              className={`tp-tree-post-link ${selectedPostId === post.id ? "active" : ""}`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setSelectedPostId(post.id);
+                                document.getElementById(`post-${post.id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                              }}
+                              title={post.title}
+                            >
+                              {truncateText(post.title, 40)}
+                            </a>
+                          ))}
+                        </div>
+                      ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Main Content */}
+          <div className="tp-main-content">
+            {/* Blog List */}
+            <div className="tp-card tp-blog-list">
+              <div className="tp-title">{t("BLOGS")}</div>
+
+          {state.loading ? (
+            <div className="tp-muted">{t("LOADING")}</div>
+          ) : state.error ? (
+            <div className="tp-danger">
+              {state.error}
+              <div style={{ marginTop: 8, fontSize: 12, color: "#64748b" }}>
+                Check browser console (F12) for details
+              </div>
+            </div>
+          ) : state.posts.length === 0 ? (
+            <div className="tp-muted">
+              {t("NO_DATA")}
+              <div style={{ marginTop: 8, fontSize: 12 }}>
+                <div>Possible reasons:</div>
+                <ul style={{ marginTop: 4, paddingInlineStart: 20 }}>
+                  <li>No posts with label "{lang === "ar" ? "arabic" : "english"}"</li>
+                  <li>Blog has no published posts</li>
+                  <li>Check browser console (F12) for API errors</li>
+                </ul>
+              </div>
+            </div>
+          ) : (
+            <div>
+              {state.posts.map((post) => (
+                <div key={post.id} id={`post-${post.id}`}>
+                  <a
+                    href={post.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="tp-blog-item"
+                    onMouseEnter={() => setSelectedPostId(post.id)}
+                    onMouseLeave={() => setSelectedPostId(null)}
+                  >
+                    <div className="tp-blog-title">{post.title}</div>
+                    <div className="tp-blog-meta">
+                      {t("PUBLISHED")}: {formatDate(post.published, lang)}
+                      {post.author ? ` · ${post.author}` : ""}
+                    </div>
+                    {post.content ? (
+                      <div className="tp-blog-excerpt">{truncateText(post.content)}</div>
+                    ) : null}
+                    <div className="tp-blog-link">{t("READ_MORE")} →</div>
+                  </a>
+                </div>
+              ))}
+            </div>
+          )}
+            </div>
+          </div>
+        </div>
+
+        <footer
+          style={{
+            marginTop: 24,
+            padding: "14px 4px",
+            textAlign: "center",
+            color: "#64748b",
+            fontSize: 12,
+          }}
+        >
+          © Trueprice.cash
+        </footer>
+      </div>
+    </div>
+  );
+}
