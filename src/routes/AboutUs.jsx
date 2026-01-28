@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { Link } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
 
 export default function AboutUs() {
@@ -38,10 +39,44 @@ export default function AboutUs() {
             padding: "14px 16px",
             color: "#fff",
             boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
           }}
         >
-          <div style={{ fontSize: 18, fontWeight: 900 }}>Trueprice.cash</div>
-          <div style={{ fontSize: 13, color: "#cbd5e1", marginTop: 2 }}>{t("ABOUT_US")}</div>
+          <div>
+            <div style={{ fontSize: 18, fontWeight: 900 }}>Trueprice.cash</div>
+            <div style={{ fontSize: 13, color: "#cbd5e1", marginTop: 2 }}>{t("ABOUT_US")}</div>
+          </div>
+          <div
+            style={{
+              marginInlineStart: "auto",
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            <Link
+              to="/"
+              aria-label={t("DASHBOARD")}
+              style={{
+                border: "1px solid #d1d5db",
+                borderRadius: 999,
+                padding: "6px 10px",
+                fontWeight: 700,
+                background: "#ffffff",
+                color: "#111827",
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Trueprice.cash
+            </Link>
+          </div>
         </div>
 
         <div

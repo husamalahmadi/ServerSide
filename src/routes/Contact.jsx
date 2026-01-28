@@ -1,6 +1,7 @@
 // FILE: client/src/routes/Contact.jsx  (READY TO PASTE)
 
 import React, { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
 
 const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
@@ -115,7 +116,30 @@ export default function Contact() {
           justifyContent: "space-between",
         }}
       >
-        <div style={{ fontSize: 18, fontWeight: 800 }}>{L.title}</div>
+        <div style={{ fontSize: 18, fontWeight: 800 }}>Trueprice.cash</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 13, color: "#cbd5e1" }}>{L.title}</span>
+          <Link
+            to="/"
+            aria-label="Dashboard"
+            style={{
+              border: "1px solid #d1d5db",
+              borderRadius: 999,
+              padding: "6px 10px",
+              fontWeight: 700,
+              background: "#ffffff",
+              color: "#111827",
+              textDecoration: "none",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Trueprice.cash
+          </Link>
+        </div>
       </div>
 
       <form

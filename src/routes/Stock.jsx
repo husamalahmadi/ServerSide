@@ -1,6 +1,6 @@
 
 import React, { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
 import { usePrefetchDelay } from "../hooks/usePrefetchDelay.js";
 import { useIsMobile } from "../hooks/useIsMobile.js";
@@ -499,6 +499,26 @@ export default function Stock() {
                 `${fmt2(price)} ${currency}`
               )}
             </div>
+            <Link
+              to="/"
+              aria-label={t("DASHBOARD")}
+              style={{
+                border: "1px solid #d1d5db",
+                borderRadius: 999,
+                padding: "6px 10px",
+                fontWeight: 700,
+                background: "#ffffff",
+                color: "#111827",
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Trueprice.cash
+            </Link>
             <LangToggle lang={lang} onToggle={toggleLang} t={t} />
           </div>
         </div>
