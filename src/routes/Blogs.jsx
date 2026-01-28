@@ -309,8 +309,7 @@ export default function Blogs() {
         <div className="tp-header-wrap">
           <div className="tp-header">
             <div className="tp-brand">
-              <h1>Trueprice.cash</h1>
-              <p>{t("BLOGS")}</p>
+              <h1>{t("BLOGS")}</h1>
             </div>
 
             <div className="tp-actions">
