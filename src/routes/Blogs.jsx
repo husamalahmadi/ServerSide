@@ -340,10 +340,6 @@ export default function Blogs() {
               <Link to="/contact" aria-label={t("CONTACT_US")} className="tp-pill">
                 {t("CONTACT_US")}
               </Link>
-
-              <Link to="/" aria-label={t("DASHBOARD")} className="tp-pill">
-                {t("DASHBOARD")}
-              </Link>
             </div>
           </div>
         </div>
