@@ -314,6 +314,26 @@ export default function Blogs() {
             </div>
 
             <div className="tp-actions">
+              <Link
+                to="/"
+                aria-label={t("DASHBOARD")}
+                style={{
+                  border: "1px solid #d1d5db",
+                  borderRadius: 999,
+                  padding: "6px 10px",
+                  fontWeight: 700,
+                  background: "#ffffff",
+                  color: "#111827",
+                  textDecoration: "none",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Trueprice.cash
+              </Link>
               <Link to="/about" aria-label={t("ABOUT_US")} className="tp-pill">
                 {t("ABOUT_US")}
               </Link>

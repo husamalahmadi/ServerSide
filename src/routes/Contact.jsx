@@ -103,46 +103,50 @@ export default function Contact() {
   }
 
   return (
-    <div style={{ padding: 20 }} dir={dir}>
-      <div
-        style={{
-          background: "#111827",
-          color: "#fff",
-          borderRadius: 12,
-          padding: "16px 18px",
-          marginBottom: 16,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <div style={{ fontSize: 18, fontWeight: 800 }}>Trueprice.cash</div>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <span style={{ fontSize: 13, color: "#cbd5e1" }}>{L.title}</span>
-          <Link
-            to="/"
-            aria-label="Dashboard"
-            style={{
-              border: "1px solid #d1d5db",
-              borderRadius: 999,
-              padding: "6px 10px",
-              fontWeight: 700,
-              background: "#ffffff",
-              color: "#111827",
-              textDecoration: "none",
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              whiteSpace: "nowrap",
-            }}
-          >
-            Trueprice.cash
-          </Link>
+    <div dir={dir} lang={lang} style={{ minHeight: "100vh", background: "#f8fafc" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: 16 }}>
+        <div
+          style={{
+            borderRadius: 18,
+            background: "linear-gradient(180deg, #0f172a, #111827)",
+            padding: "14px 16px",
+            color: "#fff",
+            boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            marginBottom: 16,
+          }}
+        >
+          <div>
+            <div style={{ fontSize: 18, fontWeight: 900 }}>Trueprice.cash</div>
+            <div style={{ fontSize: 13, color: "#cbd5e1", marginTop: 2 }}>{L.title}</div>
+          </div>
+          <div style={{ marginInlineStart: "auto", display: "flex", alignItems: "center", gap: 10 }}>
+            <Link
+              to="/"
+              aria-label="Dashboard"
+              style={{
+                border: "1px solid #d1d5db",
+                borderRadius: 999,
+                padding: "6px 10px",
+                fontWeight: 700,
+                background: "#ffffff",
+                color: "#111827",
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Trueprice.cash
+            </Link>
+          </div>
         </div>
-      </div>
 
-      <form
+        <form
         onSubmit={handleSend}
         style={{
           maxWidth: 720,
@@ -256,8 +260,9 @@ export default function Contact() {
             {state.msg}
           </div>
         )}
-      </form>
-      <footer
+        </form>
+
+        <footer
           style={{
             marginTop: 24,
             padding: "14px 4px",
@@ -265,10 +270,10 @@ export default function Contact() {
             color: "#64748b",
             fontSize: 12,
           }}
-          >
-            © Trueprice.cash
+        >
+          © Trueprice.cash
         </footer>
-
+      </div>
     </div>
   );
 }
