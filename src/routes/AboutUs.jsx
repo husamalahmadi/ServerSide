@@ -1,9 +1,12 @@
 import React, { useMemo } from "react";
-import { Link } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
+import { PageHeader } from "../components/PageHeader.jsx";
+import { PillLink } from "../components/PillLink.jsx";
+import { usePageMeta } from "../hooks/usePageMeta.js";
 
 export default function AboutUs() {
   const { lang, dir, t } = useI18n();
+  usePageMeta({ title: t("ABOUT_US"), description: "Trueprice.cash – " + t("ABOUT_US") + "." });
 
   const content = useMemo(
     () => ({
@@ -32,52 +35,9 @@ export default function AboutUs() {
   return (
     <div dir={dir} lang={lang} style={{ minHeight: "100vh", background: "#f8fafc" }}>
       <div style={{ maxWidth: 900, margin: "0 auto", padding: 16 }}>
-        <div
-          style={{
-            borderRadius: 18,
-            background: "linear-gradient(180deg, #0f172a, #111827)",
-            padding: "14px 16px",
-            color: "#fff",
-            boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-          }}
-        >
-          <div>
-            <div style={{ fontSize: 18, fontWeight: 900 }}>Trueprice.cash</div>
-            <div style={{ fontSize: 13, color: "#cbd5e1", marginTop: 2 }}>{t("ABOUT_US")}</div>
-          </div>
-          <div
-            style={{
-              marginInlineStart: "auto",
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-            }}
-          >
-            <Link
-              to="/"
-              aria-label={t("DASHBOARD")}
-              style={{
-                border: "1px solid #d1d5db",
-                borderRadius: 999,
-                padding: "6px 10px",
-                fontWeight: 700,
-                background: "#ffffff",
-                color: "#111827",
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-              }}
-            >
-              Trueprice.cash
-            </Link>
-          </div>
-        </div>
+        <PageHeader title="Trueprice.cash" subtitle={t("ABOUT_US")}>
+          <PillLink to="/" ariaLabel={t("DASHBOARD")}>Trueprice.cash</PillLink>
+        </PageHeader>
 
         <div
           style={{

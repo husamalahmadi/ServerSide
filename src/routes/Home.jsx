@@ -1,31 +1,23 @@
 // FILE: src/routes/Home.jsx
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
 import { getStocks } from "../data/stocksCatalog.js";
+import { PageHeader } from "../components/PageHeader.jsx";
+import { PillLink } from "../components/PillLink.jsx";
+import { LangToggle } from "../components/LangToggle.jsx";
+import { usePageMeta } from "../hooks/usePageMeta.js";
+import { useFavorites } from "../hooks/useFavorites.js";
 
 function normalize(s) {
   return (s || "").toString().trim().toLowerCase();
 }
 
-function LangToggle({ lang, onToggle, t }) {
-  const active = lang === "ar";
-  return (
-    <button
-      onClick={onToggle}
-      aria-pressed={active}
-      title="Toggle language"
-      className="tp-pill tp-pill--lang"
-      type="button"
-    >
-      {lang === "en" ? t("EN") : t("AR")}
-    </button>
-  );
-}
-
 export default function Home() {
   const { t, lang, dir, toggleLang } = useI18n();
   const navigate = useNavigate();
+  const { favorites, isFavorite, toggleFavorite, removeFavorite } = useFavorites();
+  usePageMeta({ title: t("DASHBOARD"), description: t("MARKET_US") + " & " + t("MARKET_SA") + ". " + t("COMPANIES") + "." });
 
   const [market, setMarket] = useState("us");
   const [industry, setIndustry] = useState("all");
@@ -123,50 +115,11 @@ export default function Home() {
         .tp-muted { color:#64748b; }
         .tp-danger { color:#b91c1c; }
 
-        /* Header */
-        .tp-header {
-          border-radius: 18px;
-          background: linear-gradient(180deg, #0f172a, #111827);
-          padding: 14px 16px;
-          color: #fff;
-          box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-          display: flex;
-          align-items: center;
-          gap: 14px;
-          flex-wrap: wrap; /* critical */
-          min-width: 0;
+        /* Pills (for mobile flex) */
+        .tp-pill { max-width: 100%; }
+        @media (max-width: 520px) {
+          .tp-pill { flex: 1; }
         }
-        .tp-brand { min-width: 0; }
-        .tp-brand h1 { margin:0; font-size:18px; font-weight:900; }
-        .tp-brand p { margin:2px 0 0; font-size:13px; color:#cbd5e1; }
-
-        .tp-actions {
-          margin-inline-start: auto;
-          display: flex;
-          gap: 10px;
-          align-items: center;
-          flex-wrap: wrap; /* critical */
-          justify-content: flex-end;
-          min-width: 0;
-        }
-
-        /* Pills (About/Contact/Lang) */
-        .tp-pill {
-          border: 1px solid #d1d5db;
-          border-radius: 999px;
-          padding: 6px 10px;
-          font-weight: 700;
-          background: #fff;
-          color: #111827;
-          text-decoration: none;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          white-space: nowrap;
-          max-width: 100%;
-        }
-        .tp-pill--lang { gap: 8px; }
 
         /* Filters layout */
         .tp-filters { margin-top: 16px; }
@@ -248,37 +201,53 @@ export default function Home() {
         }
         @media (max-width: 520px) {
           .tp-wrap { padding: 12px; }
-          .tp-header { align-items: stretch; }
-          .tp-actions { width: 100%; justify-content: space-between; }
-          .tp-pill { flex: 1; }
           .tp-grid { grid-template-columns: 1fr; }
         }
       `}</style>
 
       <div className="tp-wrap">
-        {/* Header */}
-        <div className="tp-header">
-          <div className="tp-brand">
-            <h1>Trueprice.cash</h1>
-            <p>{market === "us" ? t("MARKET_US") : t("MARKET_SA")}</p>
+        <PageHeader
+          title="Trueprice.cash"
+          subtitle={market === "us" ? t("MARKET_US") : t("MARKET_SA")}
+        >
+          <PillLink to="/blogs" ariaLabel={t("BLOGS")} className="tp-pill">
+            {t("BLOGS")}
+          </PillLink>
+          <PillLink to="/about" ariaLabel={t("ABOUT_US")} className="tp-pill">
+            {t("ABOUT_US")}
+          </PillLink>
+          <PillLink to="/contact" ariaLabel={t("CONTACT_US")} className="tp-pill">
+            {t("CONTACT_US")}
+          </PillLink>
+          <LangToggle lang={lang} onToggle={toggleLang} t={t} />
+        </PageHeader>
+
+        {favorites.length > 0 ? (
+          <div className="tp-card tp-filters" style={{ marginBottom: 16 }}>
+            <div className="tp-title">{t("FAVORITES")}</div>
+            <div className="tp-grid">
+              {favorites.map((ticker) => (
+                <button
+                  key={ticker}
+                  type="button"
+                  onClick={() => goToStock(ticker)}
+                  className="tp-company"
+                  style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}
+                >
+                  <span className="tp-company-name">{ticker}</span>
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); removeFavorite(ticker); }}
+                    aria-label={t("REMOVE_FAVORITE")}
+                    style={{ padding: "4px 8px", borderRadius: 8, border: "1px solid #e5e7eb", background: "transparent", cursor: "pointer", fontSize: 12 }}
+                  >
+                    ✕
+                  </button>
+                </button>
+              ))}
+            </div>
           </div>
-
-          <div className="tp-actions">
-            <Link to="/blogs" aria-label={t("BLOGS")} className="tp-pill">
-              {t("BLOGS")}
-            </Link>
-
-            <Link to="/about" aria-label={t("ABOUT_US")} className="tp-pill">
-              {t("ABOUT_US")}
-            </Link>
-
-            <Link to="/contact" aria-label={t("CONTACT_US")} className="tp-pill">
-              {t("CONTACT_US")}
-            </Link>
-
-            <LangToggle lang={lang} onToggle={toggleLang} t={t} />
-          </div>
-        </div>
+        ) : null}
 
         {/* Filters */}
         <div className="tp-card tp-filters">
@@ -361,7 +330,26 @@ export default function Home() {
                   onClick={() => goToStock(it.ticker)}
                   className="tp-company"
                   type="button"
+                  style={{ position: "relative" }}
                 >
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); toggleFavorite(it.ticker); }}
+                    aria-label={isFavorite(it.ticker) ? t("REMOVE_FAVORITE") : t("ADD_FAVORITE")}
+                    style={{
+                      position: "absolute",
+                      top: 8,
+                      right: 8,
+                      padding: 4,
+                      border: "none",
+                      background: "transparent",
+                      cursor: "pointer",
+                      fontSize: 16,
+                      color: isFavorite(it.ticker) ? "#b45309" : "#94a3b8",
+                    }}
+                  >
+                    {isFavorite(it.ticker) ? "★" : "☆"}
+                  </button>
                   <div className="tp-company-name">{it.name}</div>
                   <div className="tp-company-meta">
                     <span className="tp-strong">{t("TICKER")}:</span> {it.ticker}

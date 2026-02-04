@@ -4,7 +4,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>TruePric.cash</title>
+    <title>Trueprice.cash – Stock fair value & fundamentals</title>
+    <meta name="description" content="Trueprice.cash helps investors with stock fair value, financial statements, and fundamentals. US and Saudi markets." />
+    <meta property="og:title" content="Trueprice.cash – Stock fair value & fundamentals" />
+    <meta property="og:description" content="Stock fair value, financial statements, and fundamentals. US and Saudi markets." />
+    <meta property="og:type" content="website" />
     <link rel="icon" href="%BASE_URL%favicon.ico" />
     <!-- Fonts: English + Arabic -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,6 +29,10 @@
       html { font-family: var(--font-en); }
       html[lang="ar"] { font-family: var(--font-ar); }
       body, button, input, textarea, select { font-family: inherit; }
+      @media print {
+        .no-print { display: none !important; }
+        body { background: #fff; color: #000; }
+      }
     </style>
   </head>
   <body>

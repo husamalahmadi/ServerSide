@@ -1,8 +1,12 @@
 // FILE: src/routes/Blogs.jsx
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
 import { useI18n } from "../i18n.jsx";
 import { getBlogPosts } from "../services/bloggerService.js";
+import { PageHeader } from "../components/PageHeader.jsx";
+import { PillLink } from "../components/PillLink.jsx";
+import { usePageMeta } from "../hooks/usePageMeta.js";
+import { stripHtmlToText } from "../utils/sanitizeHtml.js";
+import { SafeHtml } from "../components/SafeHtml.jsx";
 
 function formatDate(date, lang) {
   if (!date) return "";
@@ -17,15 +21,8 @@ function formatDate(date, lang) {
   }
 }
 
-function stripHtml(html) {
-  if (!html) return "";
-  const tmp = document.createElement("div");
-  tmp.innerHTML = html;
-  return tmp.textContent || tmp.innerText || "";
-}
-
 function truncateText(text, maxLength = 150) {
-  const clean = stripHtml(text);
+  const clean = stripHtmlToText(text);
   if (clean.length <= maxLength) return clean;
   return clean.slice(0, maxLength).trim() + "...";
 }
@@ -67,6 +64,7 @@ function getMonthName(monthIndex, lang) {
 
 export default function Blogs() {
   const { t, lang, dir } = useI18n();
+  usePageMeta({ title: t("BLOGS"), description: t("BLOGS") + " – " + t("PUBLISHED") + "." });
   const [state, setState] = useState({
     loading: true,
     error: "",
@@ -74,47 +72,29 @@ export default function Blogs() {
   });
   const [selectedPostId, setSelectedPostId] = useState(null);
 
-  useEffect(() => {
-    let alive = true;
-
-    async function loadBlogs() {
-      try {
-        setState((s) => ({ ...s, loading: true, error: "" }));
-        console.log(`[Blogs] Loading blogs for language: ${lang}`);
-        const posts = await getBlogPosts({ lang, maxResults: 50 });
-        
-        // Sort posts by date (newest first)
-        const sortedPosts = posts.sort((a, b) => {
-          const dateA = a.published ? new Date(a.published).getTime() : 0;
-          const dateB = b.published ? new Date(b.published).getTime() : 0;
-          return dateB - dateA; // Newest first
-        });
-        
-        console.log(`[Blogs] Received ${sortedPosts.length} posts (sorted newest to oldest)`);
-        if (!alive) return;
-        setState({ loading: false, error: "", posts: sortedPosts });
-      } catch (e) {
-        if (!alive) return;
-        const errorMsg = e?.message || String(e) || t("ERR_LOAD_BLOGS");
-        console.error("[Blogs] Loading error:", e);
-        console.error("[Blogs] Error details:", {
-          message: e?.message,
-          stack: e?.stack,
-          name: e?.name,
-        });
-        setState({
-          loading: false,
-          error: `${t("ERR_LOAD_BLOGS")} (${errorMsg})`,
-          posts: [],
-        });
-      }
+  const loadBlogs = useCallback(async () => {
+    try {
+      setState((s) => ({ ...s, loading: true, error: "" }));
+      const posts = await getBlogPosts({ lang, maxResults: 50 });
+      const sortedPosts = [...posts].sort((a, b) => {
+        const dateA = a.published ? new Date(a.published).getTime() : 0;
+        const dateB = b.published ? new Date(b.published).getTime() : 0;
+        return dateB - dateA;
+      });
+      setState({ loading: false, error: "", posts: sortedPosts });
+    } catch (e) {
+      const errorMsg = e?.message || String(e) || t("ERR_LOAD_BLOGS");
+      setState({
+        loading: false,
+        error: `${t("ERR_LOAD_BLOGS")} (${errorMsg})`,
+        posts: [],
+      });
     }
-
-    loadBlogs();
-    return () => {
-      alive = false;
-    };
   }, [lang, t]);
+
+  useEffect(() => {
+    loadBlogs();
+  }, [loadBlogs]);
 
   const groupedPosts = groupPostsByDate(state.posts);
   const years = Object.keys(groupedPosts).map(Number).sort((a, b) => b - a); // Newest year first
@@ -305,44 +285,11 @@ export default function Blogs() {
       `}</style>
 
       <div className="tp-container">
-        {/* Header */}
-        <div className="tp-header-wrap">
-          <div className="tp-header">
-            <div className="tp-brand">
-              <h1>{t("BLOGS")}</h1>
-            </div>
-
-            <div className="tp-actions">
-              <Link
-                to="/"
-                aria-label={t("DASHBOARD")}
-                style={{
-                  border: "1px solid #d1d5db",
-                  borderRadius: 999,
-                  padding: "6px 10px",
-                  fontWeight: 700,
-                  background: "#ffffff",
-                  color: "#111827",
-                  textDecoration: "none",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                Trueprice.cash
-              </Link>
-              <Link to="/about" aria-label={t("ABOUT_US")} className="tp-pill">
-                {t("ABOUT_US")}
-              </Link>
-
-              <Link to="/contact" aria-label={t("CONTACT_US")} className="tp-pill">
-                {t("CONTACT_US")}
-              </Link>
-            </div>
-          </div>
-        </div>
+        <PageHeader title={t("BLOGS")}>
+          <PillLink to="/" ariaLabel={t("DASHBOARD")}>Trueprice.cash</PillLink>
+          <PillLink to="/about" ariaLabel={t("ABOUT_US")}>{t("ABOUT_US")}</PillLink>
+          <PillLink to="/contact" ariaLabel={t("CONTACT_US")}>{t("CONTACT_US")}</PillLink>
+        </PageHeader>
 
         {/* Content Area with Tree View and Blog List */}
         <div className="tp-content-wrap">
@@ -390,13 +337,26 @@ export default function Blogs() {
               <div className="tp-title">{t("BLOGS")}</div>
 
           {state.loading ? (
-            <div className="tp-muted">{t("LOADING")}</div>
+            <div style={{ color: "#64748b" }}>Loading…</div>
           ) : state.error ? (
             <div className="tp-danger">
               {state.error}
-              <div style={{ marginTop: 8, fontSize: 12, color: "#64748b" }}>
-                Check browser console (F12) for details
-              </div>
+              <button
+                type="button"
+                onClick={() => loadBlogs()}
+                style={{
+                  marginTop: 12,
+                  padding: "8px 14px",
+                  borderRadius: 8,
+                  border: "1px solid #b91c1c",
+                  background: "#fef2f2",
+                  color: "#991b1b",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                {t("RETRY_MSG")}
+              </button>
             </div>
           ) : state.posts.length === 0 ? (
             <div className="tp-muted">
@@ -422,7 +382,7 @@ export default function Blogs() {
                     onMouseEnter={() => setSelectedPostId(post.id)}
                     onMouseLeave={() => setSelectedPostId(null)}
                   >
-                    <div className="tp-blog-title">{post.title}</div>
+                    <SafeHtml html={post.title} tagName="div" className="tp-blog-title" />
                     <div className="tp-blog-meta">
                       {t("PUBLISHED")}: {formatDate(post.published, lang)}
                       {post.author ? ` · ${post.author}` : ""}

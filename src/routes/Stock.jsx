@@ -1,236 +1,46 @@
-
-import React, { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
-import { usePrefetchDelay } from "../hooks/usePrefetchDelay.js";
 import { useIsMobile } from "../hooks/useIsMobile.js";
-
-// These must already exist in your client-only version:
 import { getCompany, resolveMarketAndSymbol } from "../data/stocksCatalog.js";
 import { getLivePrice } from "../services/priceService.js";
 import { getFinancialsCached } from "../services/financialsService.js";
 import { computeValuation } from "../domain/valuation.js";
 import { twelveLogo, twelveProfile } from "../services/twelveData.js";
 import { translateToArabic } from "../services/translateService.js";
-
-/* Formatting */
-function fmt2(n) {
-  const x = Number(n);
-  if (!Number.isFinite(x)) return "—";
-  return x.toLocaleString(undefined, { maximumFractionDigits: 2 });
-}
-function fmtBill(n) {
-  const x = Number(n);
-  if (!Number.isFinite(x)) return "—";
-  const abs = Math.abs(x);
-  if (abs >= 1e12) return `${fmt2(x / 1e12)}T`;
-  if (abs >= 1e9) return `${fmt2(x / 1e9)}B`;
-  if (abs >= 1e6) return `${fmt2(x / 1e6)}M`;
-  return fmt2(x);
-}
-
-/* Trend helpers */
-function sortSeries(series) {
-  return (series || [])
-    .filter((p) => Number.isFinite(Number(p?.value)))
-    .map((p) => ({ label: String(p.label), value: Number(p.value) }))
-    .sort((a, b) => Number(a.label) - Number(b.label));
-}
-function calcTrend(series, { neutralThresholdPct = 2 } = {}) {
-  const data = sortSeries(series);
-  if (data.length < 2) return { kind: "no_data", pct: null };
-
-  const first = data[0].value;
-  const last = data[data.length - 1].value;
-  const denom = Math.max(Math.abs(first), 1);
-  const pct = ((last - first) / denom) * 100;
-
-  if (!Number.isFinite(pct)) return { kind: "no_data", pct: null };
-  if (Math.abs(pct) < neutralThresholdPct) return { kind: "neutral", pct };
-  return { kind: pct > 0 ? "up" : "down", pct };
-}
-function trendText(series, t) {
-  const { kind, pct } = calcTrend(series);
-  if (kind === "no_data") return t("NO_DATA");
-  const word =
-    kind === "up"
-      ? t("UPTREND")
-      : kind === "down"
-        ? t("DOWNTREND")
-        : t("NEUTRAL");
-  return `${word} · ${fmt2(Math.abs(pct))}%`;
-}
-
-/* UI atoms */
-function Card({ title, children, style }) {
-  return (
-    <section
-      style={{
-        border: "1px solid #e5e7eb",
-        borderRadius: 16,
-        background: "#fff",
-        marginBottom: 16,
-        boxShadow: "0 1px 10px rgba(0,0,0,0.04)",
-        overflow: "hidden",
-        ...style,
-      }}
-    >
-      {title ? (
-        <header
-          style={{
-            padding: "10px 14px",
-            borderBottom: "1px solid #e5e7eb",
-            fontWeight: 900,
-            color: "#111827",
-          }}
-        >
-          {title}
-        </header>
-      ) : null}
-      <div style={{ padding: 14, minWidth: 0 }}>{children}</div>
-    </section>
-  );
-}
-
-function LangToggle({ lang, onToggle, t }) {
-  const active = lang === "ar";
-  return (
-    <button
-      onClick={onToggle}
-      aria-pressed={active}
-      title="Toggle language"
-      style={{
-        border: "1px solid #d1d5db",
-        borderRadius: 999,
-        padding: "6px 10px",
-        fontWeight: 700,
-        background: "#ffffff",
-        color: "#111827",
-        cursor: "pointer",
-        flex: "0 0 auto",
-      }}
-    >
-      {active ? t("AR") : t("EN")}
-    </button>
-  );
-}
-
-function CompareBar({ current, fair, currency, dir = "ltr", t }) {
-  const cur = Number(current);
-  const fv = Number(fair);
-  const max = Math.max(cur, fv, 1);
-  const curPct = (cur / max) * 100;
-  const fairPct = (fv / max) * 100;
-
-  return (
-    <div style={{ width: "100%", maxWidth: 360, minWidth: 0, display: "grid", gap: 6 }}>
-      <div
-        style={{
-          height: 10,
-          background: "#e5e7eb",
-          borderRadius: 999,
-          overflow: "hidden",
-          position: "relative",
-          width: "100%",
-        }}
-        dir={dir}
-      >
-        <div style={{ height: "100%", width: `${curPct}%`, background: "#2563eb" }} />
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            bottom: 0,
-            width: 3,
-            left: `${fairPct}%`,
-            background: "#10b981",
-          }}
-        />
-      </div>
-      <div style={{ display: "grid", gap: 2, fontSize: 12, color: "#374151" }}>
-        <span style={{ overflowWrap: "anywhere" }}>
-          {t("CUR_PRICE")}: <b>{fmt2(cur)} {currency}</b>
-        </span>
-        <span style={{ overflowWrap: "anywhere" }}>
-          {t("FAIR_AVG")}: <b>{fmt2(fv)} {currency}</b>
-        </span>
-      </div>
-    </div>
-  );
-}
-
-function LineChart({ title, series, w = 380, dir = "ltr" }) {
-  const data = sortSeries(series);
-
-  const h = 220;
-  const pad = { t: 22, r: 18, b: 28, l: 56 };
-  const iw = w - pad.l - pad.r;
-  const ih = h - pad.t - pad.b;
-
-  if (!data.length) return <div style={{ fontSize: 12, color: "#6b7280" }}>{title}: —</div>;
-
-  const xs = (i) => pad.l + (i * iw) / Math.max(1, data.length - 1);
-
-  const vals = data.map((d) => d.value);
-  let min = Math.min(...vals);
-  let max = Math.max(...vals);
-  if (min === max) {
-    const d = Math.abs(min || 1) * 0.1;
-    min -= d;
-    max += d;
-  }
-
-  const ys = (v) => pad.t + (1 - (v - min) / (max - min)) * ih;
-  const dAttr = data.map((p, i) => `${i ? "L" : "M"} ${xs(i)} ${ys(p.value)}`).join(" ");
-
-  return (
-    <svg
-      viewBox={`0 0 ${w} ${h}`}
-      style={{ width: "100%", display: "block", maxWidth: "100%" }}
-      direction={dir}
-    >
-      <text x={w / 2} y={16} textAnchor="middle" style={{ fontSize: 14, fontWeight: 900 }}>
-        {title}
-      </text>
-      <line x1={pad.l} y1={h - pad.b} x2={w - pad.r} y2={h - pad.b} stroke="#e5e7eb" />
-      <path d={dAttr} fill="none" stroke="#0f4a5a" strokeWidth="2" />
-      {data.map((p, i) => (
-        <g key={`${p.label}-${i}`}>
-          <circle cx={xs(i)} cy={ys(p.value)} r="3.5" fill="#0f4a5a" />
-          <text
-            x={xs(i)}
-            y={h - pad.b + 16}
-            textAnchor="middle"
-            style={{ fontSize: 10, fill: "#6b7280" }}
-          >
-            {p.label}
-          </text>
-        </g>
-      ))}
-    </svg>
-  );
-}
-
-function ChartBlock({ title, series, w, dir, t }) {
-  return (
-    <div style={{ display: "grid", gap: 8, minWidth: 0 }}>
-      <LineChart title={title} series={series} w={w} dir={dir} />
-      <div style={{ fontSize: 12, color: "#374151", overflowWrap: "anywhere" }}>
-        <span style={{ fontWeight: 900 }}>{t("TREND")}:</span>{" "}
-        <span style={{ fontWeight: 800 }}>{trendText(series, t)}</span>
-      </div>
-    </div>
-  );
-}
+import { Card } from "../components/Card.jsx";
+import { PillLink } from "../components/PillLink.jsx";
+import { LangToggle } from "../components/LangToggle.jsx";
+import { RetryButton } from "../components/RetryButton.jsx";
+import { CompareBar, ChartBlock } from "../components/stock/StockCharts.jsx";
+import { fmt2, fmtBill, trendText } from "../domain/formatting.js";
+import { usePageMeta } from "../hooks/usePageMeta.js";
+import { useFavorites } from "../hooks/useFavorites.js";
 
 /* Page */
 export default function Stock() {
   const { ticker } = useParams();
   const { t, lang, dir, toggleLang } = useI18n();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const [shareCopied, setShareCopied] = useState(false);
+  usePageMeta({ title: ticker ? `${ticker} – ${t("REPORT")}` : t("REPORT"), description: t("FAIR_VALUE_SECTION") + ". " + t("EXEC_SUM") + "." });
   const isMobile = useIsMobile(700);
 
-  const delayMs = Number(import.meta.env.VITE_PREFETCH_DELAY_MS || 5000);
-  const { ready, secondsLeft } = usePrefetchDelay(delayMs, ticker);
+  function copyToClipboard(text) {
+    navigator.clipboard?.writeText(text).then(() => {
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 2000);
+    });
+  }
+  const handleShare = () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      navigator.share({ title: t("REPORT"), url }).then(() => setShareCopied(true)).catch(() => copyToClipboard(url));
+    } else {
+      copyToClipboard(url);
+    }
+  };
+  const handlePrint = () => window.print();
 
   const [company, setCompany] = useState("");
   const [market, setMarket] = useState("us");
@@ -246,7 +56,6 @@ export default function Stock() {
   const [translatedProfile, setTranslatedProfile] = useState(null);
 
   const reportDate = useMemo(() => new Date().toLocaleDateString(), []);
-  const waitText = !ready ? `${t("WAITING_BEFORE_FETCH")} ${secondsLeft}s…` : "";
 
   // Company info: immediate (no TwelveData)
   useEffect(() => {
@@ -267,14 +76,9 @@ export default function Stock() {
     return () => { alive = false; };
   }, [ticker]);
 
-  // Price: delayed, LIVE ONLY (no cache)
+  // Price: LIVE ONLY (no cache)
   useEffect(() => {
     let alive = true;
-    if (!ready) {
-      setPrice(null);
-      return () => { alive = false; };
-    }
-
     (async () => {
       try {
         setHeaderError("");
@@ -286,67 +90,43 @@ export default function Stock() {
         setHeaderError(String(e?.message || e));
       }
     })();
-
     return () => { alive = false; };
-  }, [ready, ticker, market]);
+  }, [ticker, market]);
 
-  // Financial statements: delayed, KEEP cached
-  useEffect(() => {
-    let alive = true;
-    if (!ready) {
-      setFin({ loading: false, error: "", data: null });
-      return () => { alive = false; };
+  const loadFinancials = useCallback(async () => {
+    try {
+      setFin({ loading: true, error: "", data: null });
+      const j = await getFinancialsCached({ ticker, market });
+      setFin({ loading: false, error: "", data: j });
+    } catch (e) {
+      setFin({ loading: false, error: t("ERR_STATEMENTS"), data: null });
     }
+  }, [ticker, market, t]);
 
-    (async () => {
-      try {
-        setFin({ loading: true, error: "", data: null });
-        const j = await getFinancialsCached({ ticker, market });
-        if (!alive) return;
-        setFin({ loading: false, error: "", data: j });
-      } catch (e) {
-        if (!alive) return;
-        setFin({ loading: false, error: t("ERR_STATEMENTS"), data: null });
-      }
-    })();
-
-    return () => { alive = false; };
-  }, [ready, ticker, market, t]);
-
-  // Valuation: delayed, LIVE ONLY (no cache)
-  useEffect(() => {
-    let alive = true;
-    if (!ready) {
-      setVal({ loading: false, error: "", data: null });
-      return () => { alive = false; };
+  const loadValuation = useCallback(async () => {
+    try {
+      setVal({ loading: true, error: "", data: null });
+      const j = await computeValuation({ ticker, market, cache: "no-store" });
+      setVal({ loading: false, error: "", data: j });
+    } catch (e) {
+      setVal({ loading: false, error: t("ERR_VALUATION"), data: null });
     }
+  }, [ticker, market, t]);
 
-    (async () => {
-      try {
-        setVal({ loading: true, error: "", data: null });
-        const j = await computeValuation({ ticker, market, cache: "no-store" });
-        if (!alive) return;
-        setVal({ loading: false, error: "", data: j });
-      } catch (e) {
-        if (!alive) return;
-        setVal({ loading: false, error: t("ERR_VALUATION"), data: null });
-      }
-    })();
+  // Financial statements: KEEP cached
+  useEffect(() => {
+    loadFinancials();
+  }, [loadFinancials]);
 
-    return () => { alive = false; };
-  }, [ready, ticker, market, t]);
+  // Valuation: LIVE ONLY (no cache)
+  useEffect(() => {
+    loadValuation();
+  }, [loadValuation]);
 
-  // Logo & profile: delayed (when ready)
+  // Logo & profile
   useEffect(() => {
     let alive = true;
     setLogoLoadError(false);
-    if (!ready) {
-      setLogoUrl(null);
-      setProfile(null);
-      setTranslatedProfile(null);
-      return () => { alive = false; };
-    }
-
     (async () => {
       try {
         const r = await resolveMarketAndSymbol(ticker, market);
@@ -368,7 +148,7 @@ export default function Stock() {
     })();
 
     return () => { alive = false; };
-  }, [ready, ticker, market]);
+  }, [ticker, market]);
 
   // Translate profile to Arabic when lang is ar
   useEffect(() => {
@@ -440,6 +220,7 @@ export default function Stock() {
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: 16, overflowX: "hidden" }}>
         {/* Banner */}
         <div
+          className="no-print"
           style={{
             background: "#111827",
             color: "#fff",
@@ -471,11 +252,11 @@ export default function Stock() {
               <div style={{ fontSize: 13, color: "#cbd5e1", overflowWrap: "anywhere" }}>
                 <b>{t("TICKER")}:</b> {ticker} · <b>{t("REPORT_DATE")}:</b> {reportDate}
               </div>
-              {!ready ? <div style={{ fontSize: 12, color: "#e2e8f0" }}>{waitText}</div> : null}
             </div>
           </div>
 
           <div
+            className="no-print"
             style={{
               marginInlineStart: "auto",
               display: "flex",
@@ -491,42 +272,67 @@ export default function Stock() {
               {t("PRICE")}:{" "}
               {headerError ? (
                 <span style={{ color: "#fecaca" }}>{headerError}</span>
-              ) : !ready ? (
-                t("LOADING")
               ) : price == null ? (
                 t("LOADING")
               ) : (
                 `${fmt2(price)} ${currency}`
               )}
             </div>
-            <Link
-              to="/"
-              aria-label={t("DASHBOARD")}
+            <button
+              type="button"
+              onClick={() => ticker && toggleFavorite(ticker)}
+              aria-label={isFavorite(ticker) ? t("REMOVE_FAVORITE") : t("ADD_FAVORITE")}
+              style={{
+                border: "1px solid #d1d5db",
+                borderRadius: 999,
+                padding: "6px 10px",
+                background: "#fff",
+                color: isFavorite(ticker) ? "#b45309" : "#6b7280",
+                cursor: "pointer",
+                fontSize: 16,
+              }}
+            >
+              {isFavorite(ticker) ? "★" : "☆"}
+            </button>
+            <button
+              type="button"
+              onClick={handleShare}
               style={{
                 border: "1px solid #d1d5db",
                 borderRadius: 999,
                 padding: "6px 10px",
                 fontWeight: 700,
-                background: "#ffffff",
+                background: "#fff",
                 color: "#111827",
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
                 cursor: "pointer",
-                whiteSpace: "nowrap",
               }}
             >
-              Trueprice.cash
-            </Link>
+              {shareCopied ? t("SHARE_COPIED") : t("SHARE_REPORT")}
+            </button>
+            <button
+              type="button"
+              onClick={handlePrint}
+              style={{
+                border: "1px solid #d1d5db",
+                borderRadius: 999,
+                padding: "6px 10px",
+                fontWeight: 700,
+                background: "#fff",
+                color: "#111827",
+                cursor: "pointer",
+              }}
+            >
+              {t("PRINT_REPORT")}
+            </button>
+            <PillLink to="/" ariaLabel={t("DASHBOARD")}>Trueprice.cash</PillLink>
             <LangToggle lang={lang} onToggle={toggleLang} t={t} />
           </div>
         </div>
 
         {/* 1. Executive Summary */}
         <Card title={t("EXEC_SUM")}>
-          {!ready ? (
-            <div style={{ color: "#475569" }}>{waitText}</div>
+          {fin.loading && !fin.data ? (
+            <div style={{ color: "#64748b" }}>Loading…</div>
           ) : (
             <div
               style={{
@@ -556,12 +362,13 @@ export default function Stock() {
 
         {/* 2. Fair value analysis */}
         <Card title={t("FAIR_VALUE_SECTION")}>
-          {!ready ? (
-            <div style={{ color: "#475569" }}>{waitText}</div>
-          ) : val.loading ? (
-            <div style={{ color: "#475569" }}>{t("LOADING")}</div>
+          {val.loading && !val.data ? (
+            <div style={{ color: "#64748b" }}>Loading…</div>
           ) : val.error ? (
-            <div style={{ color: "#b91c1c" }}>{val.error}</div>
+            <div style={{ color: "#b91c1c" }}>
+              {val.error}
+              <RetryButton onRetry={loadValuation} t={t} />
+            </div>
           ) : (
             <div
               style={{
@@ -609,9 +416,7 @@ export default function Stock() {
 
         {/* 3. Revenue & Income */}
         <Card title={`${t("REV_INC_TITLE")} (${currency})`}>
-          {!ready ? (
-            <div style={{ color: "#475569" }}>{waitText}</div>
-          ) : (
+          {(
             <div
               style={{
                 display: "grid",
@@ -629,9 +434,7 @@ export default function Stock() {
 
         {/* 4. Equity & FCF */}
         <Card title={`${t("EQUITY_FCF_TITLE")} (${currency})`}>
-          {!ready ? (
-            <div style={{ color: "#475569" }}>{waitText}</div>
-          ) : (
+          {(
             <div
               style={{
                 display: "grid",
@@ -648,12 +451,10 @@ export default function Stock() {
 
         {/* 5. Company profile */}
         <Card title={t("COMPANY_PROFILE")}>
-          {!ready ? (
-            <div style={{ color: "#475569" }}>{waitText}</div>
-          ) : !profile ? (
+          {!profile ? (
             <div style={{ color: "#475569" }}>{t("NO_DATA")}</div>
           ) : (
-            <div style={{ display: "grid", gap: 12, maxWidth: 720, minWidth: 0 }}>
+            <div style={{ display: "grid", gap: 12, minWidth: 0, width: "100%" }}>
               {(() => {
                 const P = lang === "ar" && translatedProfile ? translatedProfile : profile;
                 return (
@@ -716,12 +517,13 @@ export default function Stock() {
 
         {/* Appendix */}
         <Card title={t("APPENDIX")}>
-          {!ready ? (
-            <div style={{ color: "#475569" }}>{waitText}</div>
-          ) : fin.loading ? (
-            <div style={{ color: "#475569" }}>{t("LOADING")}</div>
+          {fin.loading && !fin.data ? (
+            <div style={{ color: "#64748b" }}>Loading…</div>
           ) : fin.error ? (
-            <div style={{ color: "#b91c1c" }}>{fin.error}</div>
+            <div style={{ color: "#b91c1c" }}>
+              {fin.error}
+              <RetryButton onRetry={loadFinancials} t={t} />
+            </div>
           ) : !years.length ? (
             <div style={{ color: "#475569" }}>{t("NO_DATA")}</div>
           ) : (
@@ -755,7 +557,7 @@ export default function Stock() {
         </Card>
       </div>
 
-      <footer style={{ marginTop: 24, padding: "14px 4px", textAlign: "center", color: "#64748b", fontSize: 12 }}>
+      <footer className="no-print" style={{ marginTop: 24, padding: "14px 4px", textAlign: "center", color: "#64748b", fontSize: 12 }}>
         © Trueprice.cash
       </footer>
     </div>

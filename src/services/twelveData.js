@@ -4,12 +4,12 @@
  * Note: API key is public in a client-only app.
  */
 
+import { getTwelveDataApiKey } from "../config/env.js";
+
 const BASE = "https://api.twelvedata.com";
 
 function apiKey() {
-  const k = (import.meta.env.VITE_TWELVEDATA_API_KEY || "").trim();
-  if (!k) throw new Error("Missing VITE_TWELVEDATA_API_KEY in client/.env");
-  return k;
+  return getTwelveDataApiKey();
 }
 
 async function fetchJson(url, { cache = "no-store" } = {}) {

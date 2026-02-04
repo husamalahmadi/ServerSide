@@ -1,22 +1,15 @@
-// FILE: client/src/routes/Contact.jsx  (READY TO PASTE)
-
+// FILE: client/src/routes/Contact.jsx
 import React, { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
+import { PageHeader } from "../components/PageHeader.jsx";
+import { PillLink } from "../components/PillLink.jsx";
+import { getWeb3FormsKey, getWeb3FormsTo } from "../config/env.js";
+import { usePageMeta } from "../hooks/usePageMeta.js";
 
 const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 
-function getAccessKey() {
-  const k = (import.meta.env.VITE_WEB3FORMS_KEY || "").trim();
-  return k;
-}
-function getTo() {
-  return (import.meta.env.VITE_WEB3FORMS_TO || "").trim();
-}
-
 export default function Contact() {
-  const { lang, dir } = useI18n();
-
+  const { lang, dir, t } = useI18n();
   const L = useMemo(
     () => ({
       en: {
@@ -50,6 +43,7 @@ export default function Contact() {
     }),
     []
   )[lang] || {};
+  usePageMeta({ title: L.title, description: L.intro });
 
   const [email, setEmail] = useState("");
   const [topic, setTopic] = useState("");
@@ -65,7 +59,7 @@ export default function Contact() {
       setState({ ok: false, msg: L.emailInvalid });
       return;
     }
-    const key = getAccessKey();
+    const key = getWeb3FormsKey();
     if (!key) {
       setState({ ok: false, msg: L.missingKey });
       return;
@@ -81,7 +75,7 @@ export default function Contact() {
     form.append("email", email);   // sender’s email
     form.append("message", message);
 
-    const to = getTo();
+    const to = getWeb3FormsTo();
     if (to) form.append("to", to); // optional override from env
 
     try {
@@ -105,46 +99,9 @@ export default function Contact() {
   return (
     <div dir={dir} lang={lang} style={{ minHeight: "100vh", background: "#f8fafc" }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: 16 }}>
-        <div
-          style={{
-            borderRadius: 18,
-            background: "linear-gradient(180deg, #0f172a, #111827)",
-            padding: "14px 16px",
-            color: "#fff",
-            boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            marginBottom: 16,
-          }}
-        >
-          <div>
-            <div style={{ fontSize: 18, fontWeight: 900 }}>Trueprice.cash</div>
-            <div style={{ fontSize: 13, color: "#cbd5e1", marginTop: 2 }}>{L.title}</div>
-          </div>
-          <div style={{ marginInlineStart: "auto", display: "flex", alignItems: "center", gap: 10 }}>
-            <Link
-              to="/"
-              aria-label="Dashboard"
-              style={{
-                border: "1px solid #d1d5db",
-                borderRadius: 999,
-                padding: "6px 10px",
-                fontWeight: 700,
-                background: "#ffffff",
-                color: "#111827",
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-              }}
-            >
-              Trueprice.cash
-            </Link>
-          </div>
-        </div>
+        <PageHeader title="Trueprice.cash" subtitle={L.title}>
+          <PillLink to="/" ariaLabel="Dashboard">Trueprice.cash</PillLink>
+        </PageHeader>
 
         <form
         onSubmit={handleSend}

@@ -4,27 +4,26 @@
  * Filters posts by language based on labels.
  */
 
+import { getBloggerBlogId, getBloggerApiKey } from "../config/env.js";
+import { logger } from "../utils/logger.js";
+
 const BLOGGER_API_BASE = "https://www.googleapis.com/blogger/v3";
 
 function getBlogId() {
-  const id = (import.meta.env.VITE_BLOGGER_BLOG_ID || "").trim();
-  if (!id) throw new Error("Missing VITE_BLOGGER_BLOG_ID in .env");
-  return id;
+  return getBloggerBlogId();
 }
 
 function getApiKey() {
-  const key = (import.meta.env.VITE_BLOGGER_API_KEY || "").trim();
-  if (!key) throw new Error("Missing VITE_BLOGGER_API_KEY in .env");
-  return key;
+  return getBloggerApiKey();
 }
 
 async function fetchJson(url) {
   let res;
   try {
-    console.log(`[Blogger] Fetching URL: ${url.replace(/key=[^&]+/, "key=***")}`);
+    logger.log(`[Blogger] Fetching URL: ${url.replace(/key=[^&]+/, "key=***")}`);
     res = await fetch(url, { cache: "no-store" });
   } catch (e) {
-    console.error(`[Blogger] Network error:`, e);
+    logger.error(`[Blogger] Network error:`, e);
     throw new Error(`Network error: ${e.message || "Failed to fetch"}`);
   }
   
@@ -33,17 +32,17 @@ async function fetchJson(url) {
   try {
     json = txt ? JSON.parse(txt) : {};
   } catch {
-    console.error(`[Blogger] JSON parse error. Status: ${res.status}, Response: ${txt?.slice(0, 200)}`);
+    logger.error(`[Blogger] JSON parse error. Status: ${res.status}, Response: ${txt?.slice(0, 200)}`);
     throw new Error(`Bad JSON response ${res.status}: ${txt?.slice(0, 150)}`);
   }
   
   if (!res.ok) {
     const errorMsg = json?.error?.message || json?.message || `HTTP ${res.status}`;
     const errorDetails = json?.error?.errors?.[0]?.message || "";
-    console.error(`[Blogger] API error:`, { status: res.status, error: json?.error, message: errorMsg });
+    logger.error(`[Blogger] API error:`, { status: res.status, error: json?.error, message: errorMsg });
     throw new Error(`${errorMsg}${errorDetails ? ` - ${errorDetails}` : ""}`);
   }
-  console.log(`[Blogger] API response OK, status: ${res.status}`);
+  logger.log(`[Blogger] API response OK, status: ${res.status}`);
   return json;
 }
 
@@ -73,15 +72,15 @@ export async function getBlogPosts({ lang = "en", maxResults = 50 } = {}) {
   try {
     blogId = getBlogId();
     apiKey = getApiKey();
-    console.log(`[Blogger] Config loaded - Blog ID: ${blogId}, API Key: ${apiKey ? "***" + apiKey.slice(-4) : "MISSING"}`);
+    logger.log(`[Blogger] Config loaded - Blog ID: ${blogId}, API Key: ${apiKey ? "***" + apiKey.slice(-4) : "MISSING"}`);
   } catch (e) {
-    console.error(`[Blogger] Configuration error:`, e);
+    logger.error(`[Blogger] Configuration error:`, e);
     throw new Error(`Configuration error: ${e.message}. Please check your .env file.`);
   }
   
   // Language labels: 'english' or 'arabic' (case-insensitive matching)
   const langLabel = lang === "ar" ? "arabic" : "english";
-  console.log(`[Blogger] Language: ${lang}, Label: ${langLabel}`);
+  logger.log(`[Blogger] Language: ${lang}, Label: ${langLabel}`);
   
   const url = buildUrl(`/blogs/${blogId}/posts`, {
     maxResults,
@@ -91,13 +90,13 @@ export async function getBlogPosts({ lang = "en", maxResults = 50 } = {}) {
   });
 
   try {
-    console.log(`[Blogger] Fetching posts for blog ${blogId} with label "${langLabel}"...`);
+    logger.log(`[Blogger] Fetching posts for blog ${blogId} with label "${langLabel}"...`);
     const json = await fetchJson(url);
     const items = json?.items || [];
-    console.log(`[Blogger] Found ${items.length} posts with label "${langLabel}"`);
+    logger.log(`[Blogger] Found ${items.length} posts with label "${langLabel}"`);
     
     if (items.length === 0) {
-      console.log("[Blogger] No posts found with label filter, trying fallback method...");
+      logger.log("[Blogger] No posts found with label filter, trying fallback method...");
       return getBlogPostsFallback({ blogId, langLabel, maxResults });
     }
     
@@ -114,12 +113,12 @@ export async function getBlogPosts({ lang = "en", maxResults = 50 } = {}) {
       images: post.images || [],
     }));
     
-    console.log(`[Blogger] Sample post labels:`, posts[0]?.labels || "No labels found");
+    logger.log(`[Blogger] Sample post labels:`, posts[0]?.labels || "No labels found");
     return posts;
   } catch (e) {
     // If label filtering fails, try fetching all and filter client-side
     const errorMsg = e.message?.toLowerCase() || "";
-    console.log(`[Blogger] Label filtering failed: ${e.message}, trying fallback method...`);
+    logger.log(`[Blogger] Label filtering failed: ${e.message}, trying fallback method...`);
     if (errorMsg.includes("label") || errorMsg.includes("404") || errorMsg.includes("not found")) {
       return getBlogPostsFallback({ blogId, langLabel, maxResults });
     }
@@ -147,10 +146,10 @@ export async function getAllBlogPosts({ maxResults = 50 } = {}) {
     fetchImages: true,
   });
 
-  console.log(`[Blogger] Fetching ALL posts (no label filter)...`);
+  logger.log(`[Blogger] Fetching ALL posts (no label filter)...`);
   const json = await fetchJson(url);
   const items = json?.items || [];
-  console.log(`[Blogger] Found ${items.length} total posts (no filter)`);
+  logger.log(`[Blogger] Found ${items.length} total posts (no filter)`);
   
   return items.map((post) => ({
     id: post.id,
@@ -175,24 +174,24 @@ async function getBlogPostsFallback({ blogId, langLabel, maxResults }) {
     fetchImages: true,
   });
 
-  console.log(`[Blogger] Fetching all posts for blog ${blogId} (fallback method)...`);
+  logger.log(`[Blogger] Fetching all posts for blog ${blogId} (fallback method)...`);
   const json = await fetchJson(url);
   const items = json?.items || [];
-  console.log(`[Blogger] Found ${items.length} total posts`);
+  logger.log(`[Blogger] Found ${items.length} total posts`);
   
   if (items.length === 0) {
-    console.warn(`[Blogger] No posts found for blog ${blogId}. Make sure the blog is public and has posts.`);
+    logger.warn(`[Blogger] No posts found for blog ${blogId}. Make sure the blog is public and has posts.`);
     return [];
   }
   
   // Check if posts have labels
   const samplePost = items[0];
   const hasLabels = Array.isArray(samplePost?.labels) && samplePost.labels.length > 0;
-  console.log(`[Blogger] Posts have labels: ${hasLabels}`, samplePost?.labels || "No labels field");
+  logger.log(`[Blogger] Posts have labels: ${hasLabels}`, samplePost?.labels || "No labels field");
   
   // If no labels, detect language from content
   if (!hasLabels) {
-    console.log(`[Blogger] No labels found, detecting language from content...`);
+    logger.log(`[Blogger] No labels found, detecting language from content...`);
     return detectLanguageFromContent({ items, langLabel, maxResults });
   }
   
@@ -203,12 +202,12 @@ async function getBlogPostsFallback({ blogId, langLabel, maxResults }) {
     return labels.includes(langLower);
   }).slice(0, maxResults);
 
-  console.log(`[Blogger] Filtered to ${filtered.length} posts with label "${langLabel}"`);
+  logger.log(`[Blogger] Filtered to ${filtered.length} posts with label "${langLabel}"`);
 
   if (filtered.length === 0) {
     const allLabels = [...new Set(items.flatMap(p => (p.labels || [])))];
-    console.warn(`[Blogger] No posts found with label "${langLabel}". Available labels:`, allLabels);
-    console.warn(`[Blogger] Trying language detection from content instead...`);
+    logger.warn(`[Blogger] No posts found with label "${langLabel}". Available labels:`, allLabels);
+    logger.warn(`[Blogger] Trying language detection from content instead...`);
     return detectLanguageFromContent({ items, langLabel, maxResults });
   }
 
@@ -246,7 +245,7 @@ function detectLanguageFromContent({ items, langLabel, maxResults }) {
     return isArabic ? hasArabic : !hasArabic;
   }).slice(0, maxResults);
   
-  console.log(`[Blogger] Language detection: Found ${filtered.length} ${isArabic ? "Arabic" : "English"} posts`);
+  logger.log(`[Blogger] Language detection: Found ${filtered.length} ${isArabic ? "Arabic" : "English"} posts`);
   
   return filtered.map((post) => ({
     id: post.id,

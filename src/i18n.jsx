@@ -1,188 +1,38 @@
 // FILE: client/src/i18n.jsx
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import dictEn from "./locales/en.js";
 
 const I18nContext = createContext(null);
 
-const dict = {
-  en: {
-    EN: "EN",
-    AR: "AR",
+const STORAGE_KEY = "lang";
 
-    // Shared
-    REPORT: "Trueprice.cash Financial Report",
-    DASHBOARD: "Trueprice.cash",
-    CONTACT_US: "Contact us",
-    ABOUT_US: "About us",
-    TICKER: "Ticker",
-    REPORT_DATE: "Report date",
-    PRICE: "Price",
-    LOADING: "Loading...",
-    NO_DATA: "No data",
-    WAITING_BEFORE_FETCH: "Waiting before requesting data…",
-    RETRY_MSG: "Something went wrong. Please try again.",
-    PRICE_FAILED_IN_FV: "We couldn't retrieve the stock price. Please try again.",
-    TREND: "Trend",
-    UPTREND: "Uptrend",
-    DOWNTREND: "Downtrend",
-    NEUTRAL: "Neutral",
-
-    // Home
-    FILTERS: "Filters",
-    MARKET: "Market",
-    MARKET_US: "US Market",
-    MARKET_SA: "Saudi Market",
-    INDUSTRY: "Industry",
-    INDUSTRY_ALL: "All industries",
-    SEARCH: "Search",
-    SEARCH_PLACEHOLDER: "Search by name or ticker...",
-    RESET: "Reset",
-    COMPANIES: "Companies",
-    NO_MATCH: "No matching companies.",
-    ERR_LOAD_STOCKS: "Failed to load stocks.",
-
-    // Stock
-    EXEC_SUM: "1. Executive summary",
-    FAIR_VALUE_SECTION: "2. Fair value analysis",
-    REV_INC_TITLE: "3. Revenue & income",
-    EQUITY_FCF_TITLE: "4. Equity & free cash flow",
-    COMPANY_PROFILE: "5. Company profile",
-    APPENDIX: "Appendix: Financial statements (all years)",
-    SECTOR: "Sector",
-    DESCRIPTION: "Description",
-    CITY: "City",
-    COUNTRY: "Country",
-    CEO: "CEO",
-    WEBSITE: "Website",
-    CONTACT: "Contact",
-
-    REV_GROWTH: "Revenue growth",
-    OP_INCOME: "Operating income",
-    NET_INCOME: "Net income",
-    FCF: "Free cash flow",
-    TOTAL_EQUITY: "Total equity",
-    YEAR: "Year",
-    REVENUE: "Revenue",
-
-    CUR_PRICE: "Current price",
-    FAIR_AVG: "Fair value (avg)",
-    FAIR_ABBR: "FV",
-    STOCK_VALUATION: "Stock valuation",
-
-    VAL_METHODS: "Valuation methods",
-    EV_SHARE: "EV / share",
-    PS_BASED: "P/S based",
-    PE_BASED: "P/E based",
-    EQUITY_PER_SHARE: "Equity / share",
-
-    // Added (missing in your UI)
-    ERR_STATEMENTS: "Failed to load financial statements.",
-    ERR_VALUATION: "Failed to load valuation.",
-
-    // Blogs
-    BLOGS: "Blogs",
-    ERR_LOAD_BLOGS: "Failed to load blogs.",
-    READ_MORE: "Read more",
-    PUBLISHED: "Published",
-  },
-
-  ar: {
-    EN: "EN",
-    AR: "AR",
-
-    // Shared
-    REPORT: "Trueprice.cash - تقرير مالي",
-    DASHBOARD: "Trueprice.cash",
-    CONTACT_US: "اتصل بنا",
-    ABOUT_US: "من نحن",
-    TICKER: "رمز السهم",
-    REPORT_DATE: "تاريخ التقرير",
-    PRICE: "السعر",
-    LOADING: "جار التحميل...",
-    NO_DATA: "لا توجد بيانات",
-    WAITING_BEFORE_FETCH: "انتظار قبل جلب البيانات…",
-    RETRY_MSG: "حدث خطأ ما. الرجاء المحاولة مرة أخرى.",
-    PRICE_FAILED_IN_FV: "تعذر جلب سعر السهم. الرجاء المحاولة مرة أخرى.",
-    TREND: "الاتجاه",
-    UPTREND: "اتجاه صاعد",
-    DOWNTREND: "اتجاه هابط",
-    NEUTRAL: "محايد",
-
-    // Home
-    FILTERS: "الفلاتر",
-    MARKET: "السوق",
-    MARKET_US: "السوق الأمريكي",
-    MARKET_SA: "السوق السعودي",
-    INDUSTRY: "القطاع",
-    INDUSTRY_ALL: "كل القطاعات",
-    SEARCH: "بحث",
-    SEARCH_PLACEHOLDER: "ابحث بالاسم أو الرمز...",
-    RESET: "إعادة تعيين",
-    COMPANIES: "الشركات",
-    NO_MATCH: "لا توجد شركات مطابقة.",
-    ERR_LOAD_STOCKS: "فشل تحميل قائمة الأسهم.",
-
-    // Stock
-    EXEC_SUM: "١. الملخص التنفيذي",
-    FAIR_VALUE_SECTION: "٢. تحليل القيمة العادلة",
-    REV_INC_TITLE: "٣. الإيرادات والدخل",
-    EQUITY_FCF_TITLE: "٤. حقوق الملكية والتدفق النقدي الحر",
-    COMPANY_PROFILE: "٥. ملف الشركة",
-    APPENDIX: "الملحق: القوائم المالية (كل السنوات)",
-    SECTOR: "القطاع",
-    DESCRIPTION: "الوصف",
-    CITY: "المدينة",
-    COUNTRY: "الدولة",
-    CEO: "الرئيس التنفيذي",
-    WEBSITE: "الموقع الإلكتروني",
-    CONTACT: "معلومات الاتصال",
-
-    REV_GROWTH: "نمو الإيرادات",
-    OP_INCOME: "الدخل التشغيلي",
-    NET_INCOME: "صافي الربح",
-    FCF: "التدفق النقدي الحر",
-    TOTAL_EQUITY: "إجمالي حقوق الملكية",
-    YEAR: "السنة",
-    REVENUE: "الإيرادات",
-
-    CUR_PRICE: "السعر الحالي",
-    FAIR_AVG: "القيمة العادلة (المتوسط)",
-    FAIR_ABBR: "ق.ع",
-    STOCK_VALUATION: "تقييم السهم",
-
-    VAL_METHODS: "طرق التقييم",
-    EV_SHARE: "قيمة المنشأة/سهم",
-    PS_BASED: "حسب مكرر المبيعات",
-    PE_BASED: "حسب مكرر الربحية",
-    EQUITY_PER_SHARE: "حقوق الملكية/سهم",
-
-    // Added
-    ERR_STATEMENTS: "فشل تحميل القوائم المالية.",
-    ERR_VALUATION: "فشل تحميل التقييم.",
-
-    // Blogs
-    BLOGS: "المدونة",
-    ERR_LOAD_BLOGS: "فشل تحميل المدونات.",
-    READ_MORE: "اقرأ المزيد",
-    PUBLISHED: "تاريخ النشر",
-  },
-};
+function getInitialLang() {
+  if (typeof window === "undefined") return "en";
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored === "ar" || stored === "en") return stored;
+  const browser = navigator.language || navigator.userLanguage || "";
+  return /^ar/i.test(browser) ? "ar" : "en";
+}
 
 export function I18nProvider({ children }) {
-  const [lang, setLang] = useState(() => {
-    const v = localStorage.getItem("lang");
-    return v === "ar" ? "ar" : "en";
-  });
+  const [lang, setLang] = useState(getInitialLang);
+  const [dictAr, setDictAr] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("lang", lang);
+    localStorage.setItem(STORAGE_KEY, lang);
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
   }, [lang]);
 
+  useEffect(() => {
+    if (lang !== "ar" || dictAr != null) return;
+    import("./locales/ar.js").then((m) => setDictAr(m.default)).catch(() => setDictAr(dictEn));
+  }, [lang, dictAr]);
+
   const t = useMemo(() => {
-    const current = dict[lang] || dict.en;
-    return (key) => current[key] ?? dict.en[key] ?? key;
-  }, [lang]);
+    const current = lang === "ar" && dictAr ? dictAr : dictEn;
+    return (key) => current[key] ?? dictEn[key] ?? key;
+  }, [lang, dictAr]);
 
   const value = useMemo(
     () => ({
