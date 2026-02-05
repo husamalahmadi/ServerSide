@@ -16,6 +16,9 @@ import { CompareBar, ChartBlock } from "../components/stock/StockCharts.jsx";
 import { fmt2, fmtBill, trendText } from "../domain/formatting.js";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { useFavorites } from "../hooks/useFavorites.js";
+import { getPrefetchDelayMs } from "../config/env.js";
+
+const PREFETCH_DELAY_SEC = Math.ceil(getPrefetchDelayMs() / 1000);
 
 /* Page */
 export default function Stock() {
@@ -54,6 +57,7 @@ export default function Stock() {
   const [logoLoadError, setLogoLoadError] = useState(false);
   const [profile, setProfile] = useState(null);
   const [translatedProfile, setTranslatedProfile] = useState(null);
+  const [prefetchCountdown, setPrefetchCountdown] = useState(PREFETCH_DELAY_SEC);
 
   const reportDate = useMemo(() => new Date().toLocaleDateString(), []);
 
@@ -113,15 +117,22 @@ export default function Stock() {
     }
   }, [ticker, market, t]);
 
-  // Financial statements: KEEP cached
+  // Prefetch delay: wait PREFETCH_DELAY_SEC then load financials and valuation
   useEffect(() => {
-    loadFinancials();
-  }, [loadFinancials]);
-
-  // Valuation: LIVE ONLY (no cache)
-  useEffect(() => {
-    loadValuation();
-  }, [loadValuation]);
+    setPrefetchCountdown(PREFETCH_DELAY_SEC);
+    const start = Date.now();
+    const interval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - start) / 1000);
+      const left = Math.max(0, PREFETCH_DELAY_SEC - elapsed);
+      setPrefetchCountdown(left);
+      if (left <= 0) {
+        clearInterval(interval);
+        loadFinancials();
+        loadValuation();
+      }
+    }, 200);
+    return () => clearInterval(interval);
+  }, [ticker, market, loadFinancials, loadValuation]);
 
   // Logo & profile
   useEffect(() => {
@@ -247,7 +258,7 @@ export default function Stock() {
             ) : null}
             <div style={{ display: "grid", gap: 2, minWidth: 0 }}>
               <div style={{ fontSize: 18, fontWeight: 900, overflowWrap: "anywhere" }}>
-                {(lang === "ar" && translatedProfile?.name) || profile?.name || company || "—"}
+                {(lang === "ar" && translatedProfile?.name) || profile?.name || company || t("NOT_AVAILABLE")}
               </div>
               <div style={{ fontSize: 13, color: "#cbd5e1", overflowWrap: "anywhere" }}>
                 <b>{t("TICKER")}:</b> {ticker} · <b>{t("REPORT_DATE")}:</b> {reportDate}
@@ -331,7 +342,12 @@ export default function Stock() {
 
         {/* 1. Executive Summary */}
         <Card title={t("EXEC_SUM")}>
-          {fin.loading && !fin.data ? (
+          {prefetchCountdown > 0 ? (
+            <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
+              <span>{t("WAITING_BEFORE_FETCH")} {prefetchCountdown}s</span>
+              <span style={{ fontSize: 13 }}>{t("WAITING_PREFETCH_HINT")}</span>
+            </div>
+          ) : fin.loading && !fin.data ? (
             <div style={{ color: "#64748b" }}>Loading…</div>
           ) : (
             <div
@@ -362,7 +378,12 @@ export default function Stock() {
 
         {/* 2. Fair value analysis */}
         <Card title={t("FAIR_VALUE_SECTION")}>
-          {val.loading && !val.data ? (
+          {prefetchCountdown > 0 ? (
+            <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
+              <span>{t("WAITING_BEFORE_FETCH")} {prefetchCountdown}s</span>
+              <span style={{ fontSize: 13 }}>{t("WAITING_PREFETCH_HINT")}</span>
+            </div>
+          ) : val.loading && !val.data ? (
             <div style={{ color: "#64748b" }}>Loading…</div>
           ) : val.error ? (
             <div style={{ color: "#b91c1c" }}>
@@ -463,9 +484,9 @@ export default function Stock() {
                       <span style={{ fontWeight: 700, color: "#374151" }}>{t("TICKER")}</span>
                       <span style={{ overflowWrap: "anywhere" }}>{profile.symbol ?? ticker}</span>
                       <span style={{ fontWeight: 700, color: "#374151" }}>{t("INDUSTRY")}</span>
-                      <span style={{ overflowWrap: "anywhere" }}>{P.industry || "—"}</span>
+                      <span style={{ overflowWrap: "anywhere" }}>{P.industry || t("NOT_AVAILABLE")}</span>
                       <span style={{ fontWeight: 700, color: "#374151" }}>{t("SECTOR")}</span>
-                      <span style={{ overflowWrap: "anywhere" }}>{P.sector || "—"}</span>
+                      <span style={{ overflowWrap: "anywhere" }}>{P.sector || t("NOT_AVAILABLE")}</span>
                     </div>
                     {(P.description || profile.description) ? (
                       <>
@@ -490,11 +511,11 @@ export default function Stock() {
                     ) : null}
                     <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,2fr)", gap: "6px 16px", alignItems: "baseline" }}>
                       <span style={{ fontWeight: 700, color: "#374151" }}>{t("CITY")}</span>
-                      <span style={{ overflowWrap: "anywhere" }}>{P.city || "—"}</span>
+                      <span style={{ overflowWrap: "anywhere" }}>{P.city || t("NOT_AVAILABLE")}</span>
                       <span style={{ fontWeight: 700, color: "#374151" }}>{t("COUNTRY")}</span>
-                      <span style={{ overflowWrap: "anywhere" }}>{P.country || "—"}</span>
+                      <span style={{ overflowWrap: "anywhere" }}>{P.country || t("NOT_AVAILABLE")}</span>
                       <span style={{ fontWeight: 700, color: "#374151" }}>{t("CEO")}</span>
-                      <span style={{ overflowWrap: "anywhere" }}>{P.CEO || "—"}</span>
+                      <span style={{ overflowWrap: "anywhere" }}>{P.CEO || t("NOT_AVAILABLE")}</span>
                       <span style={{ fontWeight: 700, color: "#374151" }}>{t("WEBSITE")}</span>
                       <span style={{ overflowWrap: "anywhere" }}>
                         {profile.website ? (
@@ -502,11 +523,11 @@ export default function Stock() {
                             {profile.website}
                           </a>
                         ) : (
-                          "—"
+                          t("NOT_AVAILABLE")
                         )}
                       </span>
                       <span style={{ fontWeight: 700, color: "#374151" }}>{t("CONTACT")}</span>
-                      <span style={{ overflowWrap: "anywhere" }}>{profile.phone || "—"}</span>
+                      <span style={{ overflowWrap: "anywhere" }}>{profile.phone || t("NOT_AVAILABLE")}</span>
                     </div>
                   </>
                 );
@@ -517,7 +538,12 @@ export default function Stock() {
 
         {/* Appendix */}
         <Card title={t("APPENDIX")}>
-          {fin.loading && !fin.data ? (
+          {prefetchCountdown > 0 ? (
+            <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
+              <span>{t("WAITING_BEFORE_FETCH")} {prefetchCountdown}s</span>
+              <span style={{ fontSize: 13 }}>{t("WAITING_PREFETCH_HINT")}</span>
+            </div>
+          ) : fin.loading && !fin.data ? (
             <div style={{ color: "#64748b" }}>Loading…</div>
           ) : fin.error ? (
             <div style={{ color: "#b91c1c" }}>
