@@ -13,6 +13,7 @@ export default {
   NOT_AVAILABLE: "Not available",
   WAITING_BEFORE_FETCH: "Waiting before requesting data…",
   WAITING_PREFETCH_HINT: "Data will load automatically after the countdown.",
+  ZERO_DATA_TRY_AGAIN: "Some data was retrieved with zero values. Please try again later.",
   RETRY_MSG: "Something went wrong. Please try again.",
   PRICE_FAILED_IN_FV: "We couldn't retrieve the stock price. Please try again.",
   TREND: "Trend",

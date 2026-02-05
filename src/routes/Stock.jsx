@@ -223,6 +223,17 @@ export default function Stock() {
     return arr.reduce((s, n) => s + n, 0) / arr.length;
   }, [fair]);
 
+  const hasZeroData = useMemo(() => {
+    if (prefetchCountdown > 0 || fin.loading || val.loading) return false;
+    const zeroPrice = price !== null && price !== undefined && Number(price) === 0;
+    const zeroFairValue = val?.data && (fairAvg == null || fairAvg === 0);
+    const noFinancials = fin?.data && (years.length === 0 || (
+      serRevenue.length === 0 && serOp.length === 0 && serNet.length === 0 &&
+      serEquity.length === 0 && serFCF.length === 0
+    ));
+    return zeroPrice || zeroFairValue || noFinancials;
+  }, [prefetchCountdown, fin.loading, val.loading, fin?.data, val?.data, price, fairAvg, years.length, serRevenue.length, serOp.length, serNet.length, serEquity.length, serFCF.length]);
+
   const chartW = isMobile ? 320 : 380;
   const bigChartW = isMobile ? 320 : 480;
 
@@ -340,6 +351,22 @@ export default function Stock() {
           </div>
         </div>
 
+        {hasZeroData ? (
+          <div
+            style={{
+              background: "#fef3c7",
+              color: "#92400e",
+              padding: "12px 16px",
+              borderRadius: 12,
+              marginBottom: 16,
+              fontWeight: 600,
+              border: "1px solid #f59e0b",
+            }}
+          >
+            {t("ZERO_DATA_TRY_AGAIN")}
+          </div>
+        ) : null}
+
         {/* 1. Executive Summary */}
         <Card title={t("EXEC_SUM")}>
           {prefetchCountdown > 0 ? (
@@ -437,7 +464,12 @@ export default function Stock() {
 
         {/* 3. Revenue & Income */}
         <Card title={`${t("REV_INC_TITLE")} (${currency})`}>
-          {(
+          {prefetchCountdown > 0 ? (
+            <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
+              <span>{t("WAITING_BEFORE_FETCH")} {prefetchCountdown}s</span>
+              <span style={{ fontSize: 13 }}>{t("WAITING_PREFETCH_HINT")}</span>
+            </div>
+          ) : (
             <div
               style={{
                 display: "grid",
@@ -455,7 +487,12 @@ export default function Stock() {
 
         {/* 4. Equity & FCF */}
         <Card title={`${t("EQUITY_FCF_TITLE")} (${currency})`}>
-          {(
+          {prefetchCountdown > 0 ? (
+            <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
+              <span>{t("WAITING_BEFORE_FETCH")} {prefetchCountdown}s</span>
+              <span style={{ fontSize: 13 }}>{t("WAITING_PREFETCH_HINT")}</span>
+            </div>
+          ) : (
             <div
               style={{
                 display: "grid",
@@ -472,7 +509,12 @@ export default function Stock() {
 
         {/* 5. Company profile */}
         <Card title={t("COMPANY_PROFILE")}>
-          {!profile ? (
+          {prefetchCountdown > 0 ? (
+            <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
+              <span>{t("WAITING_BEFORE_FETCH")} {prefetchCountdown}s</span>
+              <span style={{ fontSize: 13 }}>{t("WAITING_PREFETCH_HINT")}</span>
+            </div>
+          ) : !profile ? (
             <div style={{ color: "#475569" }}>{t("NO_DATA")}</div>
           ) : (
             <div style={{ display: "grid", gap: 12, minWidth: 0, width: "100%" }}>
