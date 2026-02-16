@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
 import { useIsMobile } from "../hooks/useIsMobile.js";
-import { getCompany, resolveMarketAndSymbol } from "../data/stocksCatalog.js";
+import { getCompany, getStocks, resolveMarketAndSymbol } from "../data/stocksCatalog.js";
 import { getLivePrice } from "../services/priceService.js";
 import { getFinancialsCached } from "../services/financialsService.js";
 import { computeValuation } from "../domain/valuation.js";
@@ -58,6 +58,9 @@ export default function Stock() {
   const [profile, setProfile] = useState(null);
   const [translatedProfile, setTranslatedProfile] = useState(null);
   const [prefetchCountdown, setPrefetchCountdown] = useState(PREFETCH_DELAY_SEC);
+  const [peers, setPeers] = useState({ loading: false, error: "", list: [] });
+  const [peersCountdown, setPeersCountdown] = useState(0);
+  const [peersRequested, setPeersRequested] = useState(false);
 
   const reportDate = useMemo(() => new Date().toLocaleDateString(), []);
 
@@ -201,6 +204,57 @@ export default function Stock() {
     return () => { alive = false; };
   }, [profile, lang]);
 
+  // Industry peers: load only when user clicks button, after 8s countdown
+  const loadPeers = useCallback(() => {
+    if (!ticker || !market) return;
+    let alive = true;
+    setPeersRequested(true);
+    setPeers((p) => ({ ...p, loading: true, error: "", list: [] }));
+    (async () => {
+      try {
+        const { items } = await getStocks({ market });
+        if (!alive) return;
+        const tickerNorm = market === "us" ? (ticker || "").toUpperCase() : ticker;
+        const currentItem = items.find((i) => (market === "us" ? (i.ticker || "").toUpperCase() === tickerNorm : i.ticker === ticker));
+        const industry = currentItem?.industry;
+        if (!industry) {
+          if (alive) setPeers({ loading: false, error: "", list: [] });
+          return;
+        }
+        const peerItems = items
+          .filter((i) => i.industry === industry && (market === "us" ? (i.ticker || "").toUpperCase() !== tickerNorm : i.ticker !== ticker))
+          .slice(0, 8);
+        const list = [];
+        for (const peer of peerItems) {
+          if (!alive) break;
+          try {
+            const v = await computeValuation({ ticker: peer.ticker, market });
+            if (!alive) break;
+            if (v && Number.isFinite(v.fairEV)) list.push({ ticker: peer.ticker, name: peer.name, fairEV: v.fairEV, price: v?.price ?? null, currency: v.currency });
+          } catch {
+            // skip failed peer
+          }
+          await new Promise((r) => setTimeout(r, 250));
+        }
+        if (alive) setPeers({ loading: false, error: "", list });
+      } catch (e) {
+        if (alive) setPeers({ loading: false, error: String(e?.message || e), list: [] });
+      }
+    })();
+  }, [ticker, market]);
+
+  useEffect(() => {
+    if (peersCountdown <= 0) return;
+    const id = setInterval(() => {
+      setPeersCountdown((prev) => {
+        const next = prev - 1;
+        if (next <= 0) setTimeout(() => loadPeers(), 0);
+        return Math.max(0, next);
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, [peersCountdown, loadPeers]);
+
   const years = useMemo(() => fin?.data?.years || [], [fin]);
   const toSeries = (k) =>
     years
@@ -270,6 +324,9 @@ export default function Stock() {
             <div style={{ display: "grid", gap: 2, minWidth: 0 }}>
               <div style={{ fontSize: 18, fontWeight: 900, overflowWrap: "anywhere" }}>
                 {(lang === "ar" && translatedProfile?.name) || profile?.name || company || t("NOT_AVAILABLE")}
+                {((lang === "ar" && translatedProfile?.industry) || profile?.industry) ? (
+                  <span style={{ fontWeight: 600, opacity: 0.9 }}> – {(lang === "ar" && translatedProfile?.industry) || profile?.industry}</span>
+                ) : null}
               </div>
               <div style={{ fontSize: 13, color: "#cbd5e1", overflowWrap: "anywhere" }}>
                 <b>{t("TICKER")}:</b> {ticker} · <b>{t("REPORT_DATE")}:</b> {reportDate}
@@ -504,6 +561,174 @@ export default function Stock() {
               <ChartBlock title={t("TOTAL_EQUITY")} series={serEquity} w={bigChartW} dir={dir} t={t} />
               <ChartBlock title={t("FCF")} series={serFCF} w={bigChartW} dir={dir} t={t} />
             </div>
+          )}
+        </Card>
+
+        {/* 4.5 Industry peers (EV-based fair value) – button + 8s wait */}
+        <Card title={t("INDUSTRY_PEERS_EV")}>
+          {peersCountdown > 0 ? (
+            <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
+              <span>{t("PEERS_WAIT_8S")} {peersCountdown}s</span>
+              <span style={{ fontSize: 13 }}>{t("PEERS_WAIT_HINT")}</span>
+            </div>
+          ) : peers.loading ? (
+            <div style={{ color: "#64748b" }}>{t("PEERS_LOADING")}</div>
+          ) : peers.error ? (
+            <div style={{ display: "grid", gap: 8 }}>
+              <div style={{ color: "#b91c1c" }}>{peers.error}</div>
+              <button
+                type="button"
+                onClick={() => { setPeersCountdown(8); }}
+                style={{
+                  padding: "10px 16px",
+                  borderRadius: 10,
+                  border: "1px solid #2563eb",
+                  background: "#eff6ff",
+                  color: "#1d4ed8",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  alignSelf: "start",
+                }}
+              >
+                {t("PEERS_BUTTON")}
+              </button>
+            </div>
+          ) : !peersRequested && peers.list.length === 0 ? (
+            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12, direction: dir }}>
+              <p style={{ margin: 0, color: "#374151", lineHeight: 1.5, flex: "1 1 auto", minWidth: 0 }}>{t("PEERS_PROMPT")}</p>
+              <button
+                type="button"
+                onClick={() => setPeersCountdown(8)}
+                style={{
+                  padding: "6px 14px",
+                  fontSize: 13,
+                  borderRadius: 8,
+                  border: "1px solid #2563eb",
+                  background: "#2563eb",
+                  color: "#fff",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  flexShrink: 0,
+                  marginInlineStart: "auto",
+                }}
+              >
+                {t("PEERS_BUTTON")}
+              </button>
+            </div>
+          ) : peersRequested && !peers.loading && peers.list.length === 0 && !peers.error ? (
+            <div style={{ display: "grid", gap: 12 }}>
+              <div style={{ color: "#475569" }}>{t("PEERS_NO_PEERS")}</div>
+              <button
+                type="button"
+                onClick={() => setPeersCountdown(8)}
+                style={{
+                  padding: "10px 16px",
+                  borderRadius: 10,
+                  border: "1px solid #2563eb",
+                  background: "#eff6ff",
+                  color: "#1d4ed8",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  alignSelf: "start",
+                }}
+              >
+                {t("PEERS_BUTTON")}
+              </button>
+            </div>
+          ) : (
+            (() => {
+              const currentEV = fair?.fairEV;
+              const currentName = (lang === "ar" && translatedProfile?.name) || profile?.name || company || ticker;
+              const currentPrice = price != null && Number.isFinite(price) ? price : null;
+              const rows = [
+                ...(currentEV != null && Number.isFinite(currentEV)
+                  ? [{ ticker, name: currentName, fairEV: currentEV, price: currentPrice, currency, isCurrent: true }]
+                  : []),
+                ...peers.list.map((p) => ({ ...p, isCurrent: false })),
+              ].sort((a, b) => (b.fairEV || 0) - (a.fairEV || 0));
+              const hasZeroValue = rows.some((r) => r.fairEV === 0 || !Number.isFinite(r.fairEV));
+              if (rows.length === 0) return <div style={{ color: "#475569" }}>{t("PEERS_NO_PEERS")}</div>;
+              return (
+                <div style={{ display: "grid", gap: 12 }}>
+                  <div style={{ overflowX: "auto" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
+                      <thead>
+                        <tr style={{ background: "#f8fafc" }}>
+                          <th style={{ textAlign: "start", padding: 10, borderBottom: "1px solid #e5e7eb" }}>{t("TICKER")}</th>
+                          <th style={{ textAlign: "start", padding: 10, borderBottom: "1px solid #e5e7eb" }}>{t("COMPANIES")}</th>
+                          <th style={{ textAlign: "end", padding: 10, borderBottom: "1px solid #e5e7eb" }}>{t("PRICE")}</th>
+                          <th style={{ textAlign: "end", padding: 10, borderBottom: "1px solid #e5e7eb" }}>{t("EV_SHARE")}</th>
+                          <th style={{ textAlign: "end", padding: 10, borderBottom: "1px solid #e5e7eb" }}>{t("PEERS_DIFF_PCT")}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {rows.map((row) => {
+                          const rowPrice = row.price != null && Number.isFinite(row.price) ? row.price : null;
+                          const diffPct =
+                            rowPrice != null && rowPrice > 0 && row.fairEV != null && Number.isFinite(row.fairEV)
+                              ? `${(((row.fairEV - rowPrice) / rowPrice) * 100).toFixed(1)}%`
+                              : "—";
+                          return (
+                            <tr
+                              key={row.ticker + (row.isCurrent ? "-current" : "")}
+                              style={{
+                                background: row.isCurrent ? "#eff6ff" : undefined,
+                                borderBottom: "1px solid #f1f5f9",
+                              }}
+                            >
+                              <td style={{ padding: 10, fontWeight: row.isCurrent ? 700 : 400 }}>
+                                {row.isCurrent ? t("THIS_STOCK") : (
+                                  <Link to={`/stock/${row.ticker}`} style={{ color: "#2563eb", textDecoration: "none", fontWeight: 600 }}>
+                                    {row.ticker}
+                                  </Link>
+                                )}
+                              </td>
+                              <td style={{ padding: 10, overflowWrap: "anywhere" }}>{row.name}</td>
+                              <td style={{ textAlign: "end", padding: 10 }}>{rowPrice != null ? fmt2(rowPrice) + " " + row.currency : "—"}</td>
+                              <td style={{ textAlign: "end", padding: 10, fontWeight: 600 }}>{fmt2(row.fairEV)} {row.currency}</td>
+                              <td style={{ textAlign: "end", padding: 10, color: row.isCurrent ? "#64748b" : "#0f172a" }}>{diffPct}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                  {hasZeroValue ? (
+                    <div
+                      style={{
+                        background: "#fef3c7",
+                        color: "#92400e",
+                        padding: "10px 14px",
+                        borderRadius: 10,
+                        fontWeight: 600,
+                        border: "1px solid #f59e0b",
+                      }}
+                    >
+                      {t("ZERO_PEER_TRY_AGAIN")}
+                    </div>
+                  ) : null}
+                  <div style={{ display: "flex", direction: dir }}>
+                    <button
+                      type="button"
+                      onClick={() => setPeersCountdown(8)}
+                      style={{
+                        padding: "6px 12px",
+                        fontSize: 13,
+                        borderRadius: 8,
+                        border: "1px solid #2563eb",
+                        background: "#eff6ff",
+                        color: "#1d4ed8",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        marginInlineStart: "auto",
+                      }}
+                    >
+                      {t("PEERS_BUTTON")}
+                    </button>
+                  </div>
+                </div>
+              );
+            })()
           )}
         </Card>
 

@@ -7,9 +7,14 @@ import {
   twelveBalanceSheet,
   twelveIncomeStatement,
 } from "../services/twelveData.js";
+import { getTasiCompanyData, tasiToValuationFormat } from "../services/tasiDataService.js";
+import { getSp500CompanyData, sp500ToValuationFormat } from "../services/sp500DataService.js";
 
 /**
  * Client-side replacement for GET /api/valuation/:ticker.
+ * - TASI (SA): uses local tasi_all_financial_data.json for financials; twelvePrice for live price.
+ * - US (S&P 500): uses local sp500_all_financial_data.json for financials; twelvePrice for live price.
+ * - Falls back to Twelve Data API when local data is empty/incomplete.
  * Caller can still cache the result in sessionStorage (as the UI already does).
  */
 export async function computeValuation({ ticker, market } = {}) {
@@ -18,12 +23,57 @@ export async function computeValuation({ ticker, market } = {}) {
 
   const { market: resolvedMarket, symbol, tickerUS, tickerSA } = r;
 
-  const [priceJson, statsJson, bsJson, isJson] = await Promise.all([
-    twelvePrice(symbol).catch(() => ({})),
-    twelveStatistics(symbol).catch(() => ({})),
-    twelveBalanceSheet(symbol).catch(() => ({})),
-    twelveIncomeStatement(symbol).catch(() => ({})),
-  ]);
+  let statsJson = {};
+  let bsJson = {};
+  let isJson = {};
+
+  if (resolvedMarket === "sa") {
+    const tasiData = await getTasiCompanyData(tickerSA);
+    if (tasiData) {
+      const v = tasiToValuationFormat(tasiData);
+      const d = tasiData.data;
+      const hasUsableData =
+        v &&
+        d?.outstanding_common_stocks != null &&
+        d?.outstanding_common_stocks > 0 &&
+        (d?.enterprise_value != null ||
+          d?.market_capitalization != null ||
+          (d?.equity?.length > 0 && (d?.sales?.length > 0 || d?.net_income?.length > 0)));
+      if (v && hasUsableData) {
+        statsJson = { statistics: v.stats };
+        bsJson = { balance_sheet: v.balance_sheet };
+        isJson = { income_statement: v.income_statement };
+      }
+    }
+  } else if (resolvedMarket === "us") {
+    const sp500Data = await getSp500CompanyData(tickerUS);
+    if (sp500Data) {
+      const v = sp500ToValuationFormat(sp500Data);
+      const d = sp500Data.data;
+      const hasUsableData =
+        v &&
+        d?.outstanding_common_stocks != null &&
+        d?.outstanding_common_stocks > 0 &&
+        (d?.enterprise_value != null ||
+          d?.market_capitalization != null ||
+          (d?.equity?.length > 0 && (d?.sales?.length > 0 || d?.net_income?.length > 0)));
+      if (v && hasUsableData) {
+        statsJson = { statistics: v.stats };
+        bsJson = { balance_sheet: v.balance_sheet };
+        isJson = { income_statement: v.income_statement };
+      }
+    }
+  }
+
+  if (!statsJson?.statistics && !bsJson?.balance_sheet) {
+    [statsJson, bsJson, isJson] = await Promise.all([
+      twelveStatistics(symbol).catch(() => ({})),
+      twelveBalanceSheet(symbol).catch(() => ({})),
+      twelveIncomeStatement(symbol).catch(() => ({})),
+    ]);
+  }
+
+  const priceJson = await twelvePrice(symbol).catch(() => ({}));
 
   const stats = statsJson?.statistics || statsJson || {};
   const price = toNumber(priceJson?.price) ?? 0;
