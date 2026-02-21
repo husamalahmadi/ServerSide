@@ -2,6 +2,9 @@
 Fetch S&P 500 financial data with retry loop: regenerate JSON, detect missing companies,
 re-fetch missing from Twelve Data API until ALL companies have complete data.
 
+Reads ALL stocks from sp500_grouped_by_industry.json (by industry) and saves
+complete financial data to sp500_all_financial_data.json.
+
 Usage: python fetch_sp500_complete.py [--fresh]
   --fresh  Ignore existing output and regenerate from scratch
 """
@@ -166,7 +169,7 @@ def main():
 
     companies = load_sp500_companies(str(sp500_path))
     total = len(companies)
-    print(f"Loaded {total} S&P 500 companies from {SP500_JSON_PATH}\n")
+    print(f"Loaded {total} companies from {SP500_JSON_PATH}\n")
 
     # Load existing output if present (unless --fresh)
     out = None
