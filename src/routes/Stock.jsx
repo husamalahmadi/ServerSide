@@ -13,7 +13,7 @@ import { PillLink } from "../components/PillLink.jsx";
 import { LangToggle } from "../components/LangToggle.jsx";
 import { RetryButton } from "../components/RetryButton.jsx";
 import { CompareBar, ChartBlock } from "../components/stock/StockCharts.jsx";
-import { fmt2, fmtBill, trendText } from "../domain/formatting.js";
+import { fmt2, fmtBill, trendText, calcTrend } from "../domain/formatting.js";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { useFavorites } from "../hooks/useFavorites.js";
 import { getPrefetchDelayMs } from "../config/env.js";
@@ -276,6 +276,30 @@ export default function Stock() {
     if (!arr.length) return null;
     return arr.reduce((s, n) => s + n, 0) / arr.length;
   }, [fair]);
+
+  const investmentAdvice = useMemo(() => {
+    const p = Number(price);
+    const avg = Number(fairAvg);
+    const evVal = Number(fair?.fairEV);
+    const hasPrice = Number.isFinite(p) && p > 0;
+    const avgGtPrice = hasPrice && Number.isFinite(avg) && avg > p;
+    const evGtPrice = hasPrice && Number.isFinite(evVal) && evVal > p;
+    const revUp = calcTrend(serRevenue).kind === "up";
+    const opUp = calcTrend(serOp).kind === "up";
+    const netUp = calcTrend(serNet).kind === "up";
+    const fcfUp = calcTrend(serFCF).kind === "up";
+    const items = [
+      { key: "avg", met: avgGtPrice },
+      { key: "ev", met: evGtPrice },
+      { key: "rev", met: revUp },
+      { key: "op", met: opUp },
+      { key: "net", met: netUp },
+      { key: "fcf", met: fcfUp },
+    ];
+    const unmatchCount = items.filter((i) => !i.met).length;
+    const verdict = unmatchCount === 0 ? "good" : unmatchCount <= 2 ? "hold" : "avoid";
+    return { verdict, items };
+  }, [price, fairAvg, fair?.fairEV, serRevenue, serOp, serNet, serFCF]);
 
   const hasZeroData = useMemo(() => {
     if (prefetchCountdown > 0 || fin.loading || val.loading) return false;
@@ -564,7 +588,7 @@ export default function Stock() {
           )}
         </Card>
 
-        {/* 4.5 Industry peers (EV-based fair value) – button + 8s wait */}
+        {/* 5. Industry peers (EV-based fair value) – button + 8s wait */}
         <Card title={t("INDUSTRY_PEERS_EV")}>
           {peersCountdown > 0 ? (
             <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
@@ -732,7 +756,80 @@ export default function Stock() {
           )}
         </Card>
 
-        {/* 5. Company profile */}
+        {/* 6. Investment summary */}
+        <Card title={t("INVESTMENT_SUMMARY")}>
+          {prefetchCountdown > 0 ? (
+            <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
+              <span>{t("WAITING_BEFORE_FETCH")} {prefetchCountdown}s</span>
+              <span style={{ fontSize: 13 }}>{t("WAITING_PREFETCH_HINT")}</span>
+            </div>
+          ) : (fin.loading && !fin.data) || (val.loading && !val.data) ? (
+            <div style={{ color: "#64748b" }}>Loading…</div>
+          ) : (
+            <div style={{ display: "grid", gap: 16 }}>
+              <div style={{ fontWeight: 600, fontSize: 14, color: "#374151" }}>
+                {t("INVESTMENT_CONDITIONS_INTRO")}
+              </div>
+              <ul style={{ margin: 0, paddingInlineStart: 20, display: "grid", gap: 6, color: "#475569", fontSize: 14 }}>
+                {investmentAdvice.items.map((item) => (
+                  <li key={item.key} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ color: item.met ? "#15803d" : "#b91c1c", fontWeight: 700 }}>
+                      {item.met ? "✓" : "✗"}
+                    </span>
+                    <span>
+                      {t(`INVESTMENT_CONDITION_${item.key.toUpperCase()}`)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              {(investmentAdvice.verdict === "hold" || investmentAdvice.verdict === "avoid") && (
+                <div style={{ display: "grid", gap: 8 }}>
+                  <div style={{ fontWeight: 700, fontSize: 14, color: "#374151" }}>
+                    {t("INVESTMENT_WAIT_UNTIL")}
+                  </div>
+                  <ul style={{ margin: 0, paddingInlineStart: 20, display: "grid", gap: 4, color: "#64748b", fontSize: 12 }}>
+                    {investmentAdvice.items
+                      .filter((i) => !i.met)
+                      .map((item) => (
+                        <li key={item.key}>
+                          • {t(`INVESTMENT_CONDITION_${item.key.toUpperCase()}`)}
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+              )}
+              <div
+                style={{
+                  fontWeight: 700,
+                  fontSize: 16,
+                  color:
+                    investmentAdvice.verdict === "good"
+                      ? "#15803d"
+                      : investmentAdvice.verdict === "hold"
+                        ? "#1d4ed8"
+                        : "#b91c1c",
+                }}
+              >
+                {investmentAdvice.verdict === "good"
+                  ? t("INVESTMENT_GOOD")
+                  : investmentAdvice.verdict === "hold"
+                    ? t("INVESTMENT_HOLD")
+                    : t("INVESTMENT_AVOID")}
+              </div>
+              <div
+                style={{
+                  fontWeight: 600,
+                  fontSize: 14,
+                  color: "#ca8a04",
+                }}
+              >
+                {t("INVESTMENT_DISCLAIMER")}
+              </div>
+            </div>
+          )}
+        </Card>
+
+        {/* 7. Company profile */}
         <Card title={t("COMPANY_PROFILE")}>
           {prefetchCountdown > 0 ? (
             <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
