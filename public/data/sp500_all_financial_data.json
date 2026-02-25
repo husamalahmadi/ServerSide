@@ -642,11 +642,6 @@
         "outstanding_common_stocks": 230203873,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 6941180000
@@ -673,11 +668,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -706,11 +696,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1779562000
@@ -737,11 +722,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -5364,11 +5344,6 @@
         "outstanding_common_stocks": 313400000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 6231800000
@@ -5395,11 +5370,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -5428,11 +5398,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1143500000
@@ -5459,11 +5424,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -7201,11 +7161,6 @@
         "outstanding_common_stocks": 74849436,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 3268800000
@@ -7232,11 +7187,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -7265,11 +7215,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 686500000
@@ -7296,11 +7241,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -7617,11 +7557,6 @@
         "outstanding_common_stocks": 391121689,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 7235000000
@@ -7648,11 +7583,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -7681,11 +7611,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1454300000
@@ -7712,11 +7637,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -11122,11 +11042,6 @@
         "outstanding_common_stocks": 54800000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1883200000
@@ -11153,11 +11068,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -11186,11 +11096,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 634300000
@@ -11217,11 +11122,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -12994,11 +12894,6 @@
         "outstanding_common_stocks": 154884964,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 15365700000
@@ -13025,11 +12920,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -13058,11 +12948,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1181700000
@@ -13089,11 +12974,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -14419,11 +14299,6 @@
         "outstanding_common_stocks": 738990054,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 91070000000
@@ -14450,11 +14325,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -14483,11 +14353,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 8468000000
@@ -14514,11 +14379,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -14835,11 +14695,6 @@
         "outstanding_common_stocks": 248297345,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 5193000000
@@ -14866,11 +14721,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -14899,11 +14749,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1208000000
@@ -14930,11 +14775,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -17326,11 +17166,6 @@
             "value": 11735000000
           },
           {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
             "fiscal_date": "2022-12-31",
             "year": 2023,
             "value": 9646000000
@@ -17356,11 +17191,6 @@
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 2118000000
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
           },
           {
             "fiscal_date": "2022-12-31",
@@ -17390,11 +17220,6 @@
             "value": 915000000
           },
           {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
             "fiscal_date": "2022-12-31",
             "year": 2023,
             "value": 650000000
@@ -17420,11 +17245,6 @@
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 395000000
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
           },
           {
             "fiscal_date": "2022-12-31",
@@ -17524,11 +17344,6 @@
         "outstanding_common_stocks": 135863661,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 4362100000
@@ -17555,11 +17370,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -17588,11 +17398,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 555900000
@@ -17619,11 +17424,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -18980,11 +18780,6 @@
         "outstanding_common_stocks": 57596887,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 2131200000
@@ -19011,11 +18806,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -19044,11 +18834,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 355800000
@@ -19075,11 +18860,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -19812,11 +19592,6 @@
         "outstanding_common_stocks": 170341479,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 4767139000
@@ -19843,11 +19618,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -19876,11 +19646,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 702061000
@@ -19907,11 +19672,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -20020,11 +19780,6 @@
         "outstanding_common_stocks": 114512000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 11709000000
@@ -20051,11 +19806,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -20084,11 +19834,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 380000000
@@ -20115,11 +19860,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -20436,11 +20176,6 @@
         "outstanding_common_stocks": 54200000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 3265876000
@@ -20467,11 +20202,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -20500,11 +20230,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 453193000
@@ -20531,11 +20256,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -20644,11 +20364,6 @@
         "outstanding_common_stocks": 216057947,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1757978000
@@ -20675,11 +20390,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -20708,11 +20418,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 265642000
@@ -20739,11 +20444,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -21060,11 +20760,6 @@
         "outstanding_common_stocks": 26642641,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 3209074000
@@ -21091,11 +20786,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -21124,11 +20814,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 482160000
@@ -21155,11 +20840,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -21268,11 +20948,6 @@
         "outstanding_common_stocks": 1738871947,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 41950000000
@@ -21299,11 +20974,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -21332,11 +21002,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 6825000000
@@ -21363,11 +21028,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -21476,11 +21136,6 @@
         "outstanding_common_stocks": 1767384632,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 56334000000
@@ -21507,11 +21162,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -21540,11 +21190,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 11894000000
@@ -21571,11 +21216,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -24357,11 +23997,6 @@
         "outstanding_common_stocks": 263464000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 244384000000
@@ -24387,76 +24022,9 @@
             "value": 160550000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -24981,11 +24549,6 @@
         "outstanding_common_stocks": 706900000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 23875000000
@@ -25012,11 +24575,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -25045,11 +24603,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 4863000000
@@ -25076,11 +24629,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -25605,11 +25153,6 @@
         "outstanding_common_stocks": 580300000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 5439500000
@@ -25636,11 +25179,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -25669,11 +25207,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1480100000
@@ -25700,11 +25233,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -25812,70 +25340,8 @@
             "value": 121867000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2025-12-31",
@@ -26998,70 +26464,8 @@
             "value": 64888000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2024-12-31",
@@ -27176,11 +26580,6 @@
         "outstanding_common_stocks": 79851330,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 3897504000
@@ -27207,11 +26606,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -27240,11 +26634,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1128337000
@@ -27271,11 +26660,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -28008,11 +27392,6 @@
         "outstanding_common_stocks": 169600000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 15405000000
@@ -28039,11 +27418,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -28072,11 +27446,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 2269000000
@@ -28103,11 +27472,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -29225,11 +28589,6 @@
         "outstanding_common_stocks": 2482022536,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 64168000000
@@ -29256,11 +28615,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -29289,11 +28643,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 20221000000
@@ -29320,11 +28669,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -31624,11 +30968,6 @@
         "outstanding_common_stocks": 375708059,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 42879000000
@@ -31655,11 +30994,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -31688,11 +31022,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 7717000000
@@ -31719,11 +31048,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -33080,11 +32404,6 @@
         "outstanding_common_stocks": 198200000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 7678600000
@@ -33111,11 +32430,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -33144,11 +32458,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1528300000
@@ -33175,11 +32484,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -33496,11 +32800,6 @@
         "outstanding_common_stocks": 100000000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 5373200000
@@ -33527,11 +32826,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -33560,11 +32854,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 864500000
@@ -33591,11 +32880,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -34328,11 +33612,6 @@
         "outstanding_common_stocks": 259982912,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 6403000000
@@ -34359,11 +33638,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -34392,11 +33666,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1486000000
@@ -34423,11 +33692,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -36400,11 +35664,6 @@
         "outstanding_common_stocks": 1259285070,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 7003146000
@@ -36431,11 +35690,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -36464,11 +35718,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 2944616000
@@ -36495,11 +35744,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -36613,11 +35857,6 @@
             "value": 6131000000
           },
           {
-            "fiscal_date": "2024-01-31",
-            "year": 2025,
-            "value": null
-          },
-          {
             "fiscal_date": "2023-01-31",
             "year": 2024,
             "value": 5005000000
@@ -36643,11 +35882,6 @@
             "fiscal_date": "2025-01-31",
             "year": 2026,
             "value": 5553000000
-          },
-          {
-            "fiscal_date": "2024-01-31",
-            "year": 2025,
-            "value": null
           },
           {
             "fiscal_date": "2023-01-31",
@@ -36677,11 +35911,6 @@
             "value": 1369000000
           },
           {
-            "fiscal_date": "2024-01-31",
-            "year": 2025,
-            "value": null
-          },
-          {
             "fiscal_date": "2023-01-31",
             "year": 2024,
             "value": 989000000
@@ -36707,11 +35936,6 @@
             "fiscal_date": "2025-01-31",
             "year": 2026,
             "value": 1112000000
-          },
-          {
-            "fiscal_date": "2024-01-31",
-            "year": 2025,
-            "value": null
           },
           {
             "fiscal_date": "2023-01-31",
@@ -36771,11 +35995,6 @@
             "fiscal_date": "2025-01-31",
             "year": 2026,
             "value": 1505000000
-          },
-          {
-            "fiscal_date": "2024-01-31",
-            "year": 2025,
-            "value": null
           },
           {
             "fiscal_date": "2023-01-31",
@@ -37232,11 +36451,6 @@
         "outstanding_common_stocks": 130193660,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 20998700000
@@ -37263,11 +36477,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -37296,11 +36505,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1651300000
@@ -37327,11 +36531,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -38241,11 +37440,6 @@
         "outstanding_common_stocks": 325443373,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 2684275000
@@ -38272,11 +37466,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -38305,11 +37494,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 54284000
@@ -38336,11 +37520,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -38657,11 +37836,6 @@
         "outstanding_common_stocks": 130859709,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1330383000
@@ -38688,11 +37862,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -38721,11 +37890,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 90446000
@@ -38752,11 +37916,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -39697,11 +38856,6 @@
         "outstanding_common_stocks": 743648102,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 5955800000
@@ -39728,11 +38882,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -39761,11 +38910,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1803400000
@@ -39792,11 +38936,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -40914,11 +40053,6 @@
         "outstanding_common_stocks": 934735206,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 62753000000
@@ -40945,11 +40079,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -40978,11 +40107,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 10074000000
@@ -41009,11 +40133,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -45282,11 +44401,6 @@
         "outstanding_common_stocks": 106600000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 7039200000
@@ -45313,11 +44427,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -45346,11 +44455,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1996800000
@@ -45377,11 +44481,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -46946,11 +46045,6 @@
         "outstanding_common_stocks": 46950987,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 5670000000
@@ -46977,11 +46071,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -47010,11 +46099,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1041600000
@@ -47041,11 +46125,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -48818,11 +47897,6 @@
         "outstanding_common_stocks": 307955000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 4709248000
@@ -48849,11 +47923,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -48882,11 +47951,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1873459000
@@ -48913,11 +47977,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -50742,11 +49801,6 @@
         "outstanding_common_stocks": 42127067,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 977134000
@@ -50773,11 +49827,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -50806,11 +49855,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 14477000
@@ -50837,11 +49881,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -53623,11 +52662,6 @@
         "outstanding_common_stocks": 777661224,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 30357000000
@@ -53654,11 +52688,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -53687,11 +52716,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 7938000000
@@ -53718,11 +52742,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -54424,11 +53443,6 @@
         "outstanding_common_stocks": 375189145,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 11900809000
@@ -54455,11 +53469,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -54488,11 +53497,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 2705709000
@@ -54519,11 +53523,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -57336,11 +56335,6 @@
         "outstanding_common_stocks": 591539773,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 13441000000
@@ -57367,11 +56361,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -57400,11 +56389,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 2386000000
@@ -57431,11 +56415,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -57544,11 +56523,6 @@
         "outstanding_common_stocks": 518690000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 19128000000
@@ -57574,76 +56548,9 @@
             "value": 22261000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -57752,11 +56659,6 @@
         "outstanding_common_stocks": 260100000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 63515000000
@@ -57782,76 +56684,9 @@
             "value": 41909000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -57990,70 +56825,8 @@
             "value": 36239000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2025-12-31",
@@ -58198,70 +56971,8 @@
             "value": 43839000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2025-12-31",
@@ -58376,11 +57087,6 @@
         "outstanding_common_stocks": 91300000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 17264000000
@@ -58406,76 +57112,9 @@
             "value": 11899000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -59000,11 +57639,6 @@
         "outstanding_common_stocks": 359000000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 16930000000
@@ -59030,76 +57664,9 @@
             "value": 8291786000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -59208,11 +57775,6 @@
         "outstanding_common_stocks": 256976000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 11554900000
@@ -59239,11 +57801,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -59272,11 +57829,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 2282100000
@@ -59303,11 +57855,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -59446,70 +57993,8 @@
             "value": 9610500000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2025-12-31",
@@ -59624,11 +58109,6 @@
         "outstanding_common_stocks": 7212464345,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 101887000000
@@ -59654,76 +58134,9 @@
             "value": 85528000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -59862,70 +58275,8 @@
             "value": 327223000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2024-12-31",
@@ -60278,70 +58629,8 @@
             "value": 6173924000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2024-12-31",
@@ -60456,11 +58745,6 @@
         "outstanding_common_stocks": 688236000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 18258000000
@@ -60486,76 +58770,9 @@
             "value": 15472000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -60871,70 +59088,8 @@
             "value": 28593000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2024-12-31",
@@ -61257,11 +59412,6 @@
         "outstanding_common_stocks": 1776936770,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 19606000000
@@ -61287,76 +59437,9 @@
             "value": 11691000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -61495,70 +59578,8 @@
             "value": 34230000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2024-12-31",
@@ -61673,11 +59694,6 @@
         "outstanding_common_stocks": 155418513,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 11337000000
@@ -61703,76 +59719,9 @@
             "value": 7536000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -61881,11 +59830,6 @@
         "outstanding_common_stocks": 1747500000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 81089000000
@@ -61911,76 +59855,9 @@
             "value": 75494000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -62119,70 +59996,8 @@
             "value": 6905000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2025-12-31",
@@ -62920,70 +60735,8 @@
             "value": 2517265000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2024-12-31",
@@ -63128,70 +60881,8 @@
             "value": 8125354000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2024-12-31",
@@ -63722,11 +61413,6 @@
         "outstanding_common_stocks": 900048451,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 8253000000
@@ -63752,76 +61438,9 @@
             "value": 7243000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -64584,70 +62203,8 @@
             "value": 4527532000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2024-12-31",
@@ -64762,11 +62319,6 @@
         "outstanding_common_stocks": 299928511,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 53512000000
@@ -64792,76 +62344,9 @@
             "value": 44559000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -65000,70 +62485,8 @@
             "value": 20508000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2024-12-31",
@@ -65208,70 +62631,8 @@
             "value": 4815000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2025-12-31",
@@ -66040,70 +63401,8 @@
             "value": 119883000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2025-12-31",
@@ -66248,70 +63547,8 @@
             "value": 6180000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2024-12-31",
@@ -66426,11 +63663,6 @@
         "outstanding_common_stocks": 891451844,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 21640288000
@@ -66457,11 +63689,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -66490,11 +63717,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 926197000
@@ -66521,11 +63743,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -66664,70 +63881,8 @@
             "value": 13667000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2025-12-31",
@@ -66842,11 +63997,6 @@
         "outstanding_common_stocks": 153690781,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 9231000000
@@ -66872,76 +64022,9 @@
             "value": 5954761000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -67050,11 +64133,6 @@
         "outstanding_common_stocks": 37171508,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 817097000
@@ -67081,11 +64159,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -67114,11 +64187,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 340870000
@@ -67145,11 +64213,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -67704,70 +64767,8 @@
             "value": 68719000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2024-12-31",
@@ -67856,11 +64857,6 @@
             "value": 7088000000
           },
           {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
             "fiscal_date": "2022-12-31",
             "year": 2023,
             "value": 5468000000
@@ -67886,11 +64882,6 @@
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 5143000000
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
           },
           {
             "fiscal_date": "2022-12-31",
@@ -67952,11 +64943,6 @@
             "value": 2059000000
           },
           {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
             "fiscal_date": "2022-12-31",
             "year": 2023,
             "value": 1374000000
@@ -67984,11 +64970,6 @@
             "value": 3727000000
           },
           {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
             "fiscal_date": "2022-12-31",
             "year": 2023,
             "value": 2689000000
@@ -68014,11 +64995,6 @@
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 2521000000
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
           },
           {
             "fiscal_date": "2022-12-31",
@@ -68059,11 +65035,6 @@
         "outstanding_common_stocks": 1583000000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 57621000000
@@ -68089,76 +65060,9 @@
             "value": 45828000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -68683,11 +65587,6 @@
         "outstanding_common_stocks": 186338000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 8290400000
@@ -68713,76 +65612,9 @@
             "value": 6100800000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -69099,11 +65931,6 @@
         "outstanding_common_stocks": 404313875,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 20809000000
@@ -69129,76 +65956,9 @@
             "value": 16901000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -69337,70 +66097,8 @@
             "value": 16222100000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2024-12-31",
@@ -69515,11 +66213,6 @@
         "outstanding_common_stocks": 586400000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 75343000000
@@ -69545,76 +66238,9 @@
             "value": 42638100000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -69753,70 +66379,8 @@
             "value": 57030000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2025-12-31",
@@ -69961,70 +66525,8 @@
             "value": 7889000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-09-30",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-09-30",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-09-30",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-09-30",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-09-30",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-09-30",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-09-30",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-09-30",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-09-30",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-09-30",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-09-30",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-09-30",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2025-09-30",
@@ -70139,11 +66641,6 @@
         "outstanding_common_stocks": 868000000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 7083000000
@@ -70169,76 +66666,9 @@
             "value": 6275000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -70524,11 +66954,6 @@
         "outstanding_common_stocks": 279077907,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 12919000000
@@ -70554,76 +66979,9 @@
             "value": 11694000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -70762,70 +67120,8 @@
             "value": 11162000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2025-12-31",
@@ -71178,70 +67474,8 @@
             "value": 31981000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2025-12-31",
@@ -71356,11 +67590,6 @@
         "outstanding_common_stocks": 1262470000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 13278000000
@@ -71386,76 +67615,9 @@
             "value": 22705000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -71564,11 +67726,6 @@
         "outstanding_common_stocks": 1555000000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 27335000000
@@ -71594,76 +67751,9 @@
             "value": 23226000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -71980,11 +68070,6 @@
         "outstanding_common_stocks": 377156000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 13691128000
@@ -72010,76 +68095,9 @@
             "value": 8098562000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -72218,70 +68236,8 @@
             "value": 86832000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2024-12-31",
@@ -73228,11 +69184,6 @@
         "outstanding_common_stocks": 445363717,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 9316000000
@@ -73259,11 +69210,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -73292,11 +69238,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 7841000000
@@ -73323,11 +69264,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -73436,11 +69372,6 @@
         "outstanding_common_stocks": 83422000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 8278000000
@@ -73466,76 +69397,9 @@
             "value": 5670000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -73644,11 +69508,6 @@
         "outstanding_common_stocks": 308493000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 8897000000
@@ -73674,76 +69533,9 @@
             "value": 7478000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -73882,70 +69674,8 @@
             "value": 2702500000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
           {
             "fiscal_date": "2024-12-31",
@@ -74060,11 +69790,6 @@
         "outstanding_common_stocks": 94484339,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 4445600000
@@ -74090,76 +69815,9 @@
             "value": 3821100000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -74268,11 +69926,6 @@
         "outstanding_common_stocks": 38678117,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 2979593000
@@ -74298,76 +69951,9 @@
             "value": 2263905000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -74476,11 +70062,6 @@
         "outstanding_common_stocks": 101900000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 6120700000
@@ -74506,76 +70087,9 @@
             "value": 7080000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
-        "operating_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
+        "operating_income": [],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -74895,26 +70409,6 @@
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 346355
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
           }
         ],
         "gross_profit": [
@@ -77155,11 +72649,6 @@
         "outstanding_common_stocks": 283235653,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 15741400000
@@ -77186,11 +72675,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -77219,11 +72703,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 2613500000
@@ -77250,11 +72729,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -77779,11 +73253,6 @@
         "outstanding_common_stocks": 528038317,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 18619000000
@@ -77810,11 +73279,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -77843,11 +73307,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 476000000
@@ -77874,11 +73333,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -78996,11 +74450,6 @@
         "outstanding_common_stocks": 228858659,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 30734000000
@@ -79027,11 +74476,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -79060,11 +74504,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 2979000000
@@ -79091,11 +74530,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -79974,11 +75408,6 @@
         "outstanding_common_stocks": 146034859,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 17540390000
@@ -80005,11 +75434,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -80038,11 +75462,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 2107941000
@@ -80069,11 +75488,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -80598,11 +76012,6 @@
         "outstanding_common_stocks": 158747196,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 3770000000
@@ -80621,19 +76030,9 @@
             "fiscal_date": "2021-12-31",
             "year": 2022,
             "value": 181071
-          },
-          {
-            "fiscal_date": "2020-03-31",
-            "year": 2021,
-            "value": null
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -80662,11 +76061,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 760000000
@@ -80693,11 +76087,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -81222,11 +76611,6 @@
         "outstanding_common_stocks": 113421634,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 11801000000
@@ -81253,11 +76637,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -81286,11 +76665,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1494000000
@@ -81317,11 +76691,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -83301,38 +78670,7 @@
             "value": 15066000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2024-12-31",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-12-31",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-12-31",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-12-31",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-12-31",
-            "year": 2021,
-            "value": null
-          },
-          {
-            "fiscal_date": "2019-12-31",
-            "year": 2020,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
         "operating_income": [
           {
             "fiscal_date": "2024-12-31",
@@ -88471,11 +83809,6 @@
         "outstanding_common_stocks": 712154350,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 25920000000
@@ -88502,11 +83835,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -88535,11 +83863,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 11851000000
@@ -88566,11 +83889,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -88887,11 +84205,6 @@
         "outstanding_common_stocks": 61821362,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 10836900000
@@ -88918,11 +84231,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -88951,11 +84259,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 702900000
@@ -88982,11 +84285,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -91768,11 +87066,6 @@
         "outstanding_common_stocks": 528403595,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 14883231000
@@ -91799,11 +87092,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -91832,11 +87120,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1467532000
@@ -91863,11 +87146,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -92392,11 +87670,6 @@
         "outstanding_common_stocks": 103974479,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 7127961000
@@ -92423,11 +87696,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -92456,11 +87724,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1357181000
@@ -92487,11 +87750,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -100551,11 +95809,6 @@
         "outstanding_common_stocks": 674093047,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 2037014000
@@ -100582,11 +95835,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -100615,11 +95863,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 657536000
@@ -100646,11 +95889,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -101976,11 +97214,6 @@
         "outstanding_common_stocks": 325215870,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 5963798000
@@ -102007,11 +97240,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -102040,11 +97268,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 3092796000
@@ -102071,11 +97294,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -104856,38 +100074,7 @@
             "value": 12303000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-06-30",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-06-30",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-06-30",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-06-30",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-06-30",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-06-30",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
         "operating_income": [
           {
             "fiscal_date": "2025-06-30",
@@ -105064,38 +100251,7 @@
             "value": 12303000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-06-30",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-06-30",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-06-30",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-06-30",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-06-30",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-06-30",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
         "operating_income": [
           {
             "fiscal_date": "2025-06-30",
@@ -106226,38 +101382,7 @@
             "value": 9008000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-06-30",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-06-30",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-06-30",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-06-30",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-06-30",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-06-30",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
         "operating_income": [
           {
             "fiscal_date": "2025-06-30",
@@ -106434,38 +101559,7 @@
             "value": 9008000000
           }
         ],
-        "gross_profit": [
-          {
-            "fiscal_date": "2025-06-30",
-            "year": 2026,
-            "value": null
-          },
-          {
-            "fiscal_date": "2024-06-30",
-            "year": 2025,
-            "value": null
-          },
-          {
-            "fiscal_date": "2023-06-30",
-            "year": 2024,
-            "value": null
-          },
-          {
-            "fiscal_date": "2022-06-30",
-            "year": 2023,
-            "value": null
-          },
-          {
-            "fiscal_date": "2021-06-30",
-            "year": 2022,
-            "value": null
-          },
-          {
-            "fiscal_date": "2020-06-30",
-            "year": 2021,
-            "value": null
-          }
-        ],
+        "gross_profit": [],
         "operating_income": [
           {
             "fiscal_date": "2025-06-30",
@@ -108507,11 +103601,6 @@
         "outstanding_common_stocks": 1679151695,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 20444000000
@@ -108538,11 +103627,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -108571,11 +103655,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 11630000000
@@ -108602,11 +103681,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -109131,11 +104205,6 @@
         "outstanding_common_stocks": 193361047,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 53108000000
@@ -109162,11 +104231,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -109195,11 +104259,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 1617000000
@@ -109226,11 +104285,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -109963,11 +105017,6 @@
         "outstanding_common_stocks": 4301608845,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 47061000000
@@ -109994,11 +105043,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -110027,11 +105071,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 14022000000
@@ -110058,11 +105097,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -118000,11 +113034,6 @@
         "outstanding_common_stocks": 1980000000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 193414000000
@@ -118031,11 +113060,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -118064,11 +113088,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 18917000000
@@ -118095,11 +113114,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -118208,11 +113222,6 @@
         "outstanding_common_stocks": 1225168000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 54745000000
@@ -118239,11 +113248,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -118272,11 +113276,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 12783000000
@@ -118303,11 +113302,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -120311,11 +115305,6 @@
         "outstanding_common_stocks": 295000000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 138864000000
@@ -120342,11 +115331,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -120375,11 +115359,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 5248000000
@@ -120406,11 +115385,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -121767,11 +116741,6 @@
         "outstanding_common_stocks": 305009539,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 129881000000
@@ -121798,11 +116767,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -121831,11 +116795,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 3755000000
@@ -121862,11 +116821,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -121975,11 +116929,6 @@
         "outstanding_common_stocks": 1222000000,
         "sales": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 10503000000
@@ -122006,11 +116955,6 @@
           }
         ],
         "gross_profit": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
@@ -122039,11 +116983,6 @@
         ],
         "operating_income": [
           {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
-          {
             "fiscal_date": "2024-12-31",
             "year": 2025,
             "value": 3339000000
@@ -122070,11 +117009,6 @@
           }
         ],
         "net_income": [
-          {
-            "fiscal_date": "2025-12-31",
-            "year": 2026,
-            "value": null
-          },
           {
             "fiscal_date": "2024-12-31",
             "year": 2025,
