@@ -1,9 +1,12 @@
 """
-Fetch S&P 500 financial data with retry loop: regenerate JSON, detect missing companies,
-re-fetch missing from Twelve Data API until ALL companies have complete data.
+Fetch S&P 500 financial data from Twelve Data API.
 
-Reads ALL stocks from sp500_grouped_by_industry.json (by industry) and saves
-complete financial data to sp500_all_financial_data.json.
+Reads 603 stocks from sp500_grouped_by_industry.json, fetches data for each,
+and saves/overwrites sp500_all_financial_data.json.
+
+- Only keeps entries where value exists (removes null/empty)
+- Retries fetch once if data returns null; if still null after retry, removes that entry
+- Cleans all time-series arrays to exclude null values before saving
 
 Usage: python fetch_sp500_complete.py [--fresh]
   --fresh  Ignore existing output and regenerate from scratch
@@ -21,7 +24,18 @@ BASE_URL = "https://api.twelvedata.com"
 SP500_JSON_PATH = "public/data/sp500_grouped_by_industry.json"
 OUTPUT_PATH = "public/data/sp500_all_financial_data.json"
 DELAY_SECONDS = 1.5
-MAX_RETRIES_PER_COMPANY = 3  # Stop retrying after this many attempts per company
+FETCH_RETRIES = 2  # Retries per API call
+COMPANY_RETRY_ON_NULL = 1  # Extra company fetch if we get null entries
+
+
+TIME_SERIES_FIELDS = [
+    "sales",
+    "gross_profit",
+    "operating_income",
+    "net_income",
+    "equity",
+    "free_cash_flow",
+]
 
 
 def load_sp500_companies(path: str) -> list[dict]:
@@ -36,12 +50,12 @@ def load_sp500_companies(path: str) -> list[dict]:
                 "ticker": ticker,
                 "company": item["Company"],
                 "industry": industry,
-                "symbol": ticker,  # US stocks use ticker as symbol (e.g. AAPL)
+                "symbol": ticker,
             })
     return companies
 
 
-def fetch_endpoint(endpoint_name: str, symbol: str, retries: int = 2) -> dict:
+def fetch_endpoint(endpoint_name: str, symbol: str, retries: int = FETCH_RETRIES) -> dict:
     """Fetch from Twelve Data API. Retries on failure."""
     url = f"{BASE_URL}/{endpoint_name}"
     params = {"symbol": symbol, "apikey": API_KEY}
@@ -147,14 +161,29 @@ def fetch_company_data(symbol: str) -> dict:
     return result
 
 
-def has_full_data(data: dict) -> bool:
-    """Check if company has all required financial data."""
-    return (
-        data.get("enterprise_value") is not None
-        and data.get("outstanding_common_stocks") is not None
-        and (data.get("sales") or [])
-        and (data.get("equity") or [])
-    )
+def has_null_in_time_series(data: dict) -> bool:
+    """Check if any time-series array has entries with null value."""
+    for field in TIME_SERIES_FIELDS:
+        arr = data.get(field) or []
+        for item in arr:
+            if item is not None and isinstance(item, dict) and "value" in item:
+                if item["value"] is None:
+                    return True
+    return False
+
+
+def clean_null_entries(data: dict) -> dict:
+    """Remove any time-series entry where value is null. Only keep valid data."""
+    result = dict(data)
+    for field in TIME_SERIES_FIELDS:
+        arr = result.get(field)
+        if not isinstance(arr, list):
+            continue
+        result[field] = [
+            item for item in arr
+            if item is not None and isinstance(item, dict) and item.get("value") is not None
+        ]
+    return result
 
 
 def main():
@@ -171,69 +200,71 @@ def main():
     total = len(companies)
     print(f"Loaded {total} companies from {SP500_JSON_PATH}\n")
 
-    # Load existing output if present (unless --fresh)
+    # Load existing output to overwrite (unless --fresh)
     out = None
     if not fresh and out_path.exists():
         try:
             with open(out_path, encoding="utf-8") as f:
                 out = json.load(f)
-            print(f"Loaded existing data from {OUTPUT_PATH}")
+            print(f"Loaded existing data from {OUTPUT_PATH} - will update in place.\n")
         except Exception as e:
             print(f"Could not load existing file: {e}")
 
-    if out is None or "companies" not in out or len(out["companies"]) != total:
+    if out is None or "companies" not in out:
         out = {
             "meta": {"source": SP500_JSON_PATH, "total_companies": total, "currency": "USD"},
             "companies": [],
         }
-        for c in companies:
-            out["companies"].append({
+
+    # Build/ensure company list matches sp500_grouped_by_industry
+    ticker_to_idx = {c["ticker"]: i for i, c in enumerate(out.get("companies", []))}
+    out["meta"]["total_companies"] = total
+    out["meta"]["source"] = SP500_JSON_PATH
+
+    # Ensure we have all companies in order
+    if len(out["companies"]) != total:
+        out["companies"] = [
+            {
                 "ticker": c["ticker"],
                 "company": c["company"],
                 "industry": c["industry"],
                 "symbol": c["symbol"],
                 "data": {},
-            })
-        print("Starting fresh fetch for all companies.")
+            }
+            for c in companies
+        ]
     else:
-        out["meta"]["total_companies"] = total
+        # Update meta, keep order
+        for i, c in enumerate(companies):
+            out["companies"][i]["ticker"] = c["ticker"]
+            out["companies"][i]["company"] = c["company"]
+            out["companies"][i]["industry"] = c["industry"]
+            out["companies"][i]["symbol"] = c["symbol"]
 
-    round_num = 0
-    retry_counts = {c["ticker"]: 0 for c in companies}
+    # Fetch each company, retry once on null, clean nulls, save
+    for i, c in enumerate(companies):
+        ticker = c["ticker"]
+        print(f"[{i+1}/{total}] {ticker} ({c['company']}) - fetching...")
+        data = fetch_company_data(c["symbol"])
 
-    while True:
-        round_num += 1
-        missing = []
-        for i, c in enumerate(out["companies"]):
-            if not has_full_data(c.get("data", {})):
-                missing.append((i, c))
+        # Retry once if we got null entries in time-series
+        if has_null_in_time_series(data) and COMPANY_RETRY_ON_NULL > 0:
+            print(f"         -> nulls detected, retrying fetch...")
+            time.sleep(DELAY_SECONDS * 2)
+            data = fetch_company_data(c["symbol"])
 
-        if not missing:
-            print(f"\nAll {total} companies have complete data.")
-            break
+        # Remove null entries from all time-series arrays
+        data = clean_null_entries(data)
+        # Drop internal error key if present
+        data.pop("_error", None)
 
-        print(f"\n--- Round {round_num}: {len(missing)} companies with missing data ---")
+        out["companies"][i]["data"] = data
 
-        for idx, (i, c) in enumerate(missing):
-            ticker = c["ticker"]
-            if retry_counts.get(ticker, 0) >= MAX_RETRIES_PER_COMPANY:
-                print(f"  [{idx+1}/{len(missing)}] {ticker} - SKIP (max retries reached)")
-                continue
-            retry_counts[ticker] = retry_counts.get(ticker, 0) + 1
-            print(f"  [{idx+1}/{len(missing)}] {ticker} - refetching...")
-            out["companies"][i]["data"] = fetch_company_data(c["symbol"])
-
+        # Save after each company (incremental save)
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump(out, f, indent=2, ensure_ascii=False)
-        print(f"  Saved to {out_path}")
 
-        still_missing = sum(1 for c in out["companies"] if not has_full_data(c.get("data", {})))
-        if still_missing == len(missing):
-            print(f"\nWarning: {still_missing} companies still missing after retry. Some may not be available in Twelve Data.")
-            print("Stopping to avoid infinite loop. Run again to retry.")
-            break
-
-    print(f"\nFinal: {sum(1 for c in out['companies'] if has_full_data(c.get('data', {})))}/{total} companies with complete data")
+    print(f"\nDone. Saved {total} companies to {OUTPUT_PATH}")
     return 0
 
 
