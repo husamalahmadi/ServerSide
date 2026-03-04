@@ -13,6 +13,7 @@ import { PillLink } from "../components/PillLink.jsx";
 import { LangToggle } from "../components/LangToggle.jsx";
 import { RetryButton } from "../components/RetryButton.jsx";
 import { CompareBar, ChartBlock } from "../components/stock/StockCharts.jsx";
+import { StockNewsSidebar } from "../components/StockNewsSidebar.jsx";
 import { fmt2, fmtBill, trendText, calcTrend } from "../domain/formatting.js";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { useFavorites } from "../hooks/useFavorites.js";
@@ -315,9 +316,23 @@ export default function Stock() {
   const chartW = isMobile ? 320 : 380;
   const bigChartW = isMobile ? 320 : 480;
 
+  const companyDisplayName = (lang === "ar" && translatedProfile?.name) || profile?.name || company || "";
+
   return (
     <div style={{ background: "#f8fafc", minHeight: "100vh" }} dir={dir} lang={lang}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: 16, overflowX: "hidden" }}>
+      <div
+        style={{
+          maxWidth: isMobile ? 1100 : 1400,
+          margin: "0 auto",
+          padding: 16,
+          overflowX: "hidden",
+        display: "flex",
+        flexDirection: isMobile ? "column" : "row",
+        gap: 16,
+        alignItems: "flex-start",
+      }}
+    >
+        <div style={{ flex: 1, minWidth: 0, maxWidth: isMobile ? "100%" : 1100 }}>
         {/* Banner */}
         <div
           className="no-print"
@@ -945,6 +960,9 @@ export default function Stock() {
             </div>
           )}
         </Card>
+        </div>
+
+        <StockNewsSidebar ticker={ticker} companyName={companyDisplayName} t={t} dir={dir} isMobile={isMobile} />
       </div>
 
       <footer className="no-print" style={{ marginTop: 24, padding: "14px 4px", textAlign: "center", color: "#64748b", fontSize: 12 }}>

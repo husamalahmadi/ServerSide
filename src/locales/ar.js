@@ -97,4 +97,7 @@ export default {
   SHARE_REPORT: "مشاركة التقرير",
   SHARE_COPIED: "تم نسخ الرابط",
   PRINT_REPORT: "طباعة التقرير",
+  NEWS_SIDEBAR_TITLE: "الأخبار",
+  NEWS_NO_ARTICLES: "لا توجد أخبار.",
+  NEWS_FETCH_ERROR: "تعذر تحميل الأخبار.",
 };

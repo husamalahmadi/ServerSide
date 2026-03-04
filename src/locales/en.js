@@ -97,4 +97,7 @@ export default {
   SHARE_REPORT: "Share report",
   SHARE_COPIED: "Link copied to clipboard",
   PRINT_REPORT: "Print report",
+  NEWS_SIDEBAR_TITLE: "News",
+  NEWS_NO_ARTICLES: "No news found.",
+  NEWS_FETCH_ERROR: "Could not load news.",
 };
