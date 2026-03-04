@@ -350,7 +350,7 @@ export default function Stock() {
             minWidth: 0,
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0, flex: "1 1 320px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0, flex: "1 1 200px", maxWidth: isMobile ? "100%" : 420 }}>
             {logoUrl && !logoLoadError ? (
               <img
                 src={logoUrl}
@@ -360,14 +360,25 @@ export default function Stock() {
                 onError={() => setLogoLoadError(true)}
               />
             ) : null}
-            <div style={{ display: "grid", gap: 2, minWidth: 0 }}>
-              <div style={{ fontSize: 18, fontWeight: 900, overflowWrap: "anywhere" }}>
-                {(lang === "ar" && translatedProfile?.name) || profile?.name || company || t("NOT_AVAILABLE")}
+            <div style={{ display: "grid", gap: 2, minWidth: 0, overflow: "hidden" }}>
+              <div
+                style={{
+                  fontSize: 18,
+                  fontWeight: 900,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                }}
+                title={(lang === "ar" && translatedProfile?.name) || profile?.name || company || ""}
+              >
+                {company || (lang === "ar" && translatedProfile?.name) || profile?.name || t("NOT_AVAILABLE")}
                 {((lang === "ar" && translatedProfile?.industry) || profile?.industry) ? (
                   <span style={{ fontWeight: 600, opacity: 0.9 }}> – {(lang === "ar" && translatedProfile?.industry) || profile?.industry}</span>
                 ) : null}
               </div>
-              <div style={{ fontSize: 13, color: "#cbd5e1", overflowWrap: "anywhere" }}>
+              <div style={{ fontSize: 13, color: "#cbd5e1", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 <b>{t("TICKER")}:</b> {ticker} · <b>{t("REPORT_DATE")}:</b> {reportDate}
               </div>
             </div>
