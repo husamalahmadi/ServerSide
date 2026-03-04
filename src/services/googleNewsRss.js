@@ -14,9 +14,15 @@ function getProxyUrls(targetUrl) {
   ];
 }
 
-function buildRssUrl(ticker) {
-  const query = encodeURIComponent(`${ticker.trim()} stock`);
-  return `https://news.google.com/rss/search?q=${query}&hl=en-US&gl=US&ceid=US:en`;
+function buildRssUrl(ticker, companyName = "", market = "us") {
+  const searchTerm = market === "sa" && companyName?.trim()
+    ? companyName.trim()
+    : `${ticker.trim()} stock`;
+  const query = encodeURIComponent(searchTerm);
+  const hl = market === "sa" ? "ar" : "en-US";
+  const gl = market === "sa" ? "SA" : "US";
+  const ceid = market === "sa" ? "SA:ar" : "US:en";
+  return `https://news.google.com/rss/search?q=${query}&hl=${hl}&gl=${gl}&ceid=${ceid}`;
 }
 
 function parseRssXml(xmlText) {
@@ -99,10 +105,10 @@ async function fetchViaProxy(url) {
   throw lastError || new Error("Failed to fetch news");
 }
 
-export async function fetchStockNews({ ticker, companyName = "" }) {
+export async function fetchStockNews({ ticker, companyName = "", market = "us" }) {
   if (!ticker || typeof ticker !== "string") return [];
 
-  const rssUrl = buildRssUrl(ticker.trim());
+  const rssUrl = buildRssUrl(ticker.trim(), String(companyName).trim(), market === "sa" ? "sa" : "us");
   const text = await fetchViaProxy(rssUrl);
   return parseRssXml(text);
 }

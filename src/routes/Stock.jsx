@@ -973,9 +973,7 @@ export default function Stock() {
         </Card>
         </div>
 
-        {market === "us" ? (
-          <StockNewsSidebar ticker={ticker} companyName={companyDisplayName} t={t} dir={dir} isMobile={isMobile} />
-        ) : null}
+        <StockNewsSidebar ticker={ticker} companyName={companyDisplayName} market={market} t={t} dir={dir} isMobile={isMobile} />
       </div>
 
       <footer className="no-print" style={{ marginTop: 24, padding: "14px 4px", textAlign: "center", color: "#64748b", fontSize: 12 }}>

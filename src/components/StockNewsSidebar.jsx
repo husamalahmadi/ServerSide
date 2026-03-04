@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchStockNews } from "../services/googleNewsRss.js";
 
-export function StockNewsSidebar({ ticker, companyName = "", t, dir, isMobile = false }) {
+export function StockNewsSidebar({ ticker, companyName = "", market = "us", t, dir, isMobile = false }) {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -18,7 +18,7 @@ export function StockNewsSidebar({ ticker, companyName = "", t, dir, isMobile = 
     setArticles([]);
 
     let alive = true;
-    fetchStockNews({ ticker, companyName })
+    fetchStockNews({ ticker, companyName, market })
       .then((list) => {
         if (alive) {
           setArticles(list);
@@ -36,7 +36,7 @@ export function StockNewsSidebar({ ticker, companyName = "", t, dir, isMobile = 
       });
 
     return () => { alive = false; };
-  }, [ticker, companyName]);
+  }, [ticker, companyName, market]);
 
   useEffect(() => {
     loadNews();
