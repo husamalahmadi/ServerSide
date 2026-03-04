@@ -1,25 +1,28 @@
 /**
  * Fetches stock news from Google News RSS feed.
- * Uses a CORS proxy because news.google.com does not allow direct browser requests.
+ * Uses same-origin proxy (Vercel) or CORS proxies because news.google.com blocks direct browser requests.
  */
 
-const CORS_PROXIES = [
-  (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-  (url) => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
-];
+function getProxyUrls(targetUrl) {
+  const encoded = encodeURIComponent(targetUrl);
+  return [
+    () => `https://api.cors.syrins.tech/?url=${encoded}`,
+    () => `https://api.allorigins.win/get?url=${encoded}`,
+    () => `https://api.allorigins.win/raw?url=${encoded}`,
+    () => `https://corsproxy.io/?url=${encoded}`,
+    () => `${typeof window !== "undefined" ? window.location.origin : ""}/api/proxy-rss?url=${encoded}`,
+  ];
+}
 
-function buildRssUrl(ticker, companyName = "") {
-  const parts = [ticker.trim()];
-  if (companyName?.trim()) parts.push(companyName.trim());
-  parts.push("stock");
-  const query = encodeURIComponent(parts.join(" "));
+function buildRssUrl(ticker) {
+  const query = encodeURIComponent(`${ticker.trim()} stock`);
   return `https://news.google.com/rss/search?q=${query}&hl=en-US&gl=US&ceid=US:en`;
 }
 
 function parseRssXml(xmlText) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(xmlText, "text/xml");
-  const items = doc.querySelectorAll("item");
+  const items = doc.getElementsByTagName("item");
   const articles = [];
 
   for (const item of items) {
@@ -44,7 +47,23 @@ function parseRssXml(xmlText) {
     }
   }
 
-  // Sort newest to oldest
+  if (articles.length === 0 && xmlText.includes("<item>")) {
+    const itemRegex = /<item>([\s\S]*?)<\/item>/gi;
+    const titleRegex = /<title><!\[CDATA\[([\s\S]*?)\]\]><\/title>|<title>([^<]*)<\/title>/i;
+    const linkRegex = /<link>([^<]*)<\/link>/i;
+    let match;
+    while ((match = itemRegex.exec(xmlText)) !== null) {
+      const block = match[1];
+      const titleMatch = block.match(titleRegex);
+      const linkMatch = block.match(linkRegex);
+      const title = titleMatch ? (titleMatch[1] || titleMatch[2] || "").trim() : "";
+      const link = linkMatch ? linkMatch[1].trim() : "";
+      if (title && link && !title.includes("Google News")) {
+        articles.push({ title, link, date: null, source: "" });
+      }
+    }
+  }
+
   articles.sort((a, b) => (b.date?.getTime() ?? 0) - (a.date?.getTime() ?? 0));
   return articles;
 }
@@ -55,12 +74,23 @@ function parseRssXml(xmlText) {
  * @returns {Promise<{ title: string, link: string, date: Date | null, source: string }[]>}
  */
 async function fetchViaProxy(url) {
+  const proxies = getProxyUrls(url);
   let lastError = null;
-  for (const toProxyUrl of CORS_PROXIES) {
+  for (const getProxyUrl of proxies) {
     try {
-      const res = await fetch(toProxyUrl(url), { cache: "no-store" });
+      const proxyUrl = getProxyUrl();
+      if (!proxyUrl.startsWith("http")) continue;
+      const res = await fetch(proxyUrl, { cache: "no-store" });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const text = await res.text();
+      let text = await res.text();
+      if (proxyUrl.includes("allorigins.win/get")) {
+        try {
+          const json = JSON.parse(text);
+          text = json?.contents ?? "";
+        } catch {
+          /* use raw text */
+        }
+      }
       if (text && text.trim().length > 0) return text;
     } catch (e) {
       lastError = e;
@@ -72,7 +102,7 @@ async function fetchViaProxy(url) {
 export async function fetchStockNews({ ticker, companyName = "" }) {
   if (!ticker || typeof ticker !== "string") return [];
 
-  const rssUrl = buildRssUrl(ticker.trim(), String(companyName).trim());
+  const rssUrl = buildRssUrl(ticker.trim());
   const text = await fetchViaProxy(rssUrl);
   return parseRssXml(text);
 }

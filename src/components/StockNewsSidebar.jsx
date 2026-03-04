@@ -5,18 +5,19 @@ export function StockNewsSidebar({ ticker, companyName = "", t, dir, isMobile = 
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  useEffect(() => {
+  const loadNews = React.useCallback(() => {
     if (!ticker) {
       setArticles([]);
       setLoading(false);
       return;
     }
-    let alive = true;
     setLoading(true);
     setError("");
     setArticles([]);
 
+    let alive = true;
     fetchStockNews({ ticker, companyName })
       .then((list) => {
         if (alive) {
@@ -36,6 +37,10 @@ export function StockNewsSidebar({ ticker, companyName = "", t, dir, isMobile = 
 
     return () => { alive = false; };
   }, [ticker, companyName]);
+
+  useEffect(() => {
+    loadNews();
+  }, [loadNews, refreshKey]);
 
   const formatDate = (d) => {
     if (!d) return "";
@@ -69,9 +74,31 @@ export function StockNewsSidebar({ ticker, companyName = "", t, dir, isMobile = 
           fontSize: 18,
           fontWeight: 900,
           padding: "14px 14px 12px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 8,
         }}
       >
-        {t("NEWS_SIDEBAR_TITLE")}
+        <span>{t("NEWS_SIDEBAR_TITLE")}</span>
+        <button
+          type="button"
+          onClick={() => setRefreshKey((k) => k + 1)}
+          disabled={loading}
+          style={{
+            background: "transparent",
+            border: "1px solid rgba(255,255,255,0.5)",
+            color: "#fff",
+            borderRadius: 6,
+            padding: "4px 10px",
+            fontSize: 12,
+            fontWeight: 600,
+            cursor: loading ? "not-allowed" : "pointer",
+            opacity: loading ? 0.6 : 1,
+          }}
+        >
+          {t("NEWS_REFRESH")}
+        </button>
       </div>
       <div style={{ maxHeight: 560, overflowY: "auto", padding: 10 }}>
         {loading ? (
@@ -80,9 +107,47 @@ export function StockNewsSidebar({ ticker, companyName = "", t, dir, isMobile = 
           <div style={{ color: "#b91c1c", fontSize: 13, padding: 8 }}>
             {t("NEWS_FETCH_ERROR")}
             <div style={{ marginTop: 4, fontSize: 11, opacity: 0.9 }}>{error}</div>
+            <button
+              type="button"
+              onClick={() => setRefreshKey((k) => k + 1)}
+              style={{
+                display: "inline-block",
+                marginTop: 8,
+                padding: "6px 12px",
+                background: "#2563eb",
+                color: "#fff",
+                border: "none",
+                borderRadius: 8,
+                fontSize: 12,
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              {t("NEWS_REFRESH")}
+            </button>
           </div>
         ) : articles.length === 0 ? (
-          <div style={{ color: "#64748b", fontSize: 13, padding: 8 }}>{t("NEWS_NO_ARTICLES")}</div>
+          <div style={{ color: "#64748b", fontSize: 13, padding: 8 }}>
+            {t("NEWS_NO_ARTICLES")}
+            <button
+              type="button"
+              onClick={() => setRefreshKey((k) => k + 1)}
+              style={{
+                display: "inline-block",
+                marginTop: 8,
+                padding: "6px 12px",
+                background: "#2563eb",
+                color: "#fff",
+                border: "none",
+                borderRadius: 8,
+                fontSize: 12,
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              {t("NEWS_REFRESH")}
+            </button>
+          </div>
         ) : (
           <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
             {articles.map((a, i) => (

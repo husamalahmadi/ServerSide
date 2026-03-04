@@ -98,6 +98,7 @@ export default {
   SHARE_COPIED: "تم نسخ الرابط",
   PRINT_REPORT: "طباعة التقرير",
   NEWS_SIDEBAR_TITLE: "الأخبار",
-  NEWS_NO_ARTICLES: "لا توجد أخبار.",
+  NEWS_NO_ARTICLES: "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
   NEWS_FETCH_ERROR: "تعذر تحميل الأخبار.",
+  NEWS_REFRESH: "تحديث",
 };
