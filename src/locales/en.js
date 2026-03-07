@@ -97,6 +97,7 @@ export default {
   SHARE_REPORT: "Share report",
   SHARE_COPIED: "Link copied to clipboard",
   PRINT_REPORT: "Print report",
+  EXPORT_PDF: "Export PDF",
   NEWS_SIDEBAR_TITLE: "News",
   NEWS_NO_ARTICLES: "Something went wrong. Please try again.",
   NEWS_FETCH_ERROR: "Could not load news.",

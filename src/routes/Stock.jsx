@@ -18,6 +18,7 @@ import { fmt2, fmtBill, trendText, calcTrend } from "../domain/formatting.js";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { useFavorites } from "../hooks/useFavorites.js";
 import { getPrefetchDelayMs } from "../config/env.js";
+import { exportElementAsPdf } from "../utils/exportPdf.js";
 
 const PREFETCH_DELAY_SEC = Math.ceil(getPrefetchDelayMs() / 1000);
 
@@ -45,6 +46,21 @@ export default function Stock() {
     }
   };
   const handlePrint = () => window.print();
+  const [pdfExporting, setPdfExporting] = useState(false);
+  const reportContentRef = React.useRef(null);
+
+  const handleExportPdf = async () => {
+    if (!reportContentRef.current || pdfExporting) return;
+    setPdfExporting(true);
+    try {
+      const filename = `${ticker || "report"}-${new Date().toISOString().slice(0, 10)}.pdf`;
+      await exportElementAsPdf(reportContentRef.current, filename);
+    } catch (e) {
+      console.error("PDF export failed:", e);
+    } finally {
+      setPdfExporting(false);
+    }
+  };
 
   const [company, setCompany] = useState("");
   const [market, setMarket] = useState("us");
@@ -332,7 +348,7 @@ export default function Stock() {
         alignItems: "flex-start",
       }}
     >
-        <div style={{ flex: 1, minWidth: 0, maxWidth: isMobile ? "100%" : 1100 }}>
+        <div ref={reportContentRef} style={{ flex: 1, minWidth: 0, maxWidth: isMobile ? "100%" : 1100 }}>
         {/* Banner */}
         <div
           className="no-print"
@@ -452,6 +468,23 @@ export default function Stock() {
               }}
             >
               {t("PRINT_REPORT")}
+            </button>
+            <button
+              type="button"
+              onClick={handleExportPdf}
+              disabled={pdfExporting}
+              style={{
+                border: "1px solid #d1d5db",
+                borderRadius: 999,
+                padding: "6px 10px",
+                fontWeight: 700,
+                background: "#fff",
+                color: "#111827",
+                cursor: pdfExporting ? "not-allowed" : "pointer",
+                opacity: pdfExporting ? 0.6 : 1,
+              }}
+            >
+              {pdfExporting ? "…" : t("EXPORT_PDF")}
             </button>
             <PillLink to="/" ariaLabel={t("DASHBOARD")}>Trueprice.cash</PillLink>
             <LangToggle lang={lang} onToggle={toggleLang} t={t} />
