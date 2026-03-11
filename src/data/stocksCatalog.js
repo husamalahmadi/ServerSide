@@ -81,6 +81,14 @@ export async function getStocks({ market = "us" } = {}) {
   };
 }
 
+/** Returns all stocks from both US and TASI for unified search. */
+export async function getAllStocks() {
+  const cat = await ensureCatalog();
+  const combined = [...cat.us.list, ...cat.sa.list];
+  const industries = Array.from(new Set([...cat.us.inds, ...cat.sa.inds])).sort((a, b) => a.localeCompare(b));
+  return { items: combined, industries };
+}
+
 export async function getCompany(rawTicker) {
   const cat = await ensureCatalog();
   const up = String(rawTicker || "").toUpperCase();

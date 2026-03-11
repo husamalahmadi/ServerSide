@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const DEFAULT_TITLE = "Trueprice.cash";
+const DEFAULT_TITLE = "TruePrice.Cash";
 const DEFAULT_DESC = "Stock fair value, financial statements, and fundamentals. US and Saudi markets.";
 
 function setMeta(name, content, isProperty = false) {
@@ -20,7 +20,7 @@ function setMeta(name, content, isProperty = false) {
  */
 export function usePageMeta({ title, description } = {}) {
   useEffect(() => {
-    const newTitle = title ? `${title} – Trueprice.cash` : DEFAULT_TITLE;
+    const newTitle = title ? `${title} – TruePrice.Cash` : DEFAULT_TITLE;
     const newDesc = description || DEFAULT_DESC;
 
     document.title = newTitle;

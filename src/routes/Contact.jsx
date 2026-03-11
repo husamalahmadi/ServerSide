@@ -97,10 +97,10 @@ export default function Contact() {
   }
 
   return (
-    <div dir={dir} lang={lang} style={{ minHeight: "100vh", background: "#f8fafc" }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: 16 }}>
-        <PageHeader title="Trueprice.cash" subtitle={L.title}>
-          <PillLink to="/" ariaLabel="Dashboard">Trueprice.cash</PillLink>
+    <div dir={dir} lang={lang} style={{ minHeight: "100vh", background: "var(--tp-bg, #f5f2eb)", position: "relative", zIndex: 1 }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: 16, position: "relative", zIndex: 1 }}>
+        <PageHeader title="TruePrice.Cash" subtitle={L.title}>
+          <PillLink to="/" ariaLabel="Dashboard">TruePrice.Cash</PillLink>
         </PageHeader>
 
         <form
@@ -110,8 +110,8 @@ export default function Contact() {
           margin: "0 auto",
           display: "grid",
           gap: 12,
-          background: "#fff",
-          border: "1px solid #e5e7eb",
+          background: "var(--tp-surface, #fff)",
+          border: "1px solid var(--tp-border, #ddd8cc)",
           borderRadius: 12,
           padding: 16,
         }}
@@ -178,8 +178,8 @@ export default function Contact() {
             style={{
               padding: "8px 14px",
               borderRadius: 8,
-              border: "1px solid #111827",
-              background: "#111827",
+            border: "1px solid var(--tp-accent, #1a3a2a)",
+            background: "var(--tp-accent, #1a3a2a)",
               color: "#fff",
               fontWeight: 700,
               cursor: loading ? "not-allowed" : "pointer",
@@ -224,11 +224,11 @@ export default function Contact() {
             marginTop: 24,
             padding: "14px 4px",
             textAlign: "center",
-            color: "#64748b",
+            color: "var(--tp-muted, #8a8578)",
             fontSize: 12,
           }}
         >
-          © Trueprice.cash
+          © TruePrice.Cash
         </footer>
       </div>
     </div>

@@ -1,8 +1,8 @@
 export default {
   EN: "EN",
   AR: "AR",
-  REPORT: "Trueprice.cash - تقرير مالي",
-  DASHBOARD: "Trueprice.cash",
+  REPORT: "TruePrice.Cash - تقرير مالي",
+  DASHBOARD: "TruePrice.Cash",
   CONTACT_US: "اتصل بنا",
   ABOUT_US: "من نحن",
   TICKER: "رمز السهم",

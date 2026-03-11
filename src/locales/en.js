@@ -1,8 +1,8 @@
 export default {
   EN: "EN",
   AR: "AR",
-  REPORT: "Trueprice.cash Financial Report",
-  DASHBOARD: "Trueprice.cash",
+  REPORT: "TruePrice.Cash Financial Report",
+  DASHBOARD: "TruePrice.Cash",
   CONTACT_US: "Contact us",
   ABOUT_US: "About us",
   TICKER: "Ticker",

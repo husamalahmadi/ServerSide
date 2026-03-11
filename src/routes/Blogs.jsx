@@ -100,7 +100,7 @@ export default function Blogs() {
   const years = Object.keys(groupedPosts).map(Number).sort((a, b) => b - a); // Newest year first
 
   return (
-    <div dir={dir} lang={lang} style={{ minHeight: "100vh", background: "#f8fafc" }}>
+    <div dir={dir} lang={lang} style={{ minHeight: "100vh", background: "var(--tp-bg, #f5f2eb)", position: "relative", zIndex: 1 }}>
       <style>{`
         .tp-wrap, .tp-card, .tp-header, .tp-blog-list { box-sizing: border-box; }
         .tp-wrap * { box-sizing: border-box; }
@@ -119,20 +119,18 @@ export default function Blogs() {
         [dir="rtl"] .tp-content-wrap {
           flex-direction: row-reverse;
         }
-        .tp-card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:14px; box-shadow:0 1px 10px rgba(0,0,0,0.04); }
-        .tp-title { font-weight:900; margin-bottom:10px; }
-        .tp-muted { color:#64748b; }
-        .tp-danger { color:#b91c1c; }
+        .tp-card { background: var(--tp-surface, #fff); border: 1px solid var(--tp-border, #ddd8cc); border-radius: 16px; padding: 14px; box-shadow: 0 1px 10px rgba(0,0,0,0.04); }
+        .tp-title { font-weight: 900; margin-bottom: 10px; font-family: 'Playfair Display', serif; color: var(--tp-ink, #1a1a14); }
+        .tp-muted { color: var(--tp-muted, #8a8578); }
+        .tp-danger { color: var(--tp-red, #8b1a1a); }
 
         .tp-header {
-          border-radius: 18px;
-          background: linear-gradient(180deg, #0f172a, #111827);
-          padding: 14px 16px;
-          color: #fff;
-          box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+          border-bottom: 2px solid var(--tp-ink, #1a1a14);
+          padding: 20px 0 16px;
           display: flex;
-          align-items: center;
-          gap: 14px;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 12px;
           flex-wrap: wrap;
           min-width: 0;
         }
@@ -168,7 +166,7 @@ export default function Blogs() {
 
         .tp-blog-list { margin-top: 16px; }
         .tp-blog-item {
-          border: 1px solid #e5e7eb;
+          border: 1px solid var(--tp-border, #ddd8cc);
           border-radius: 14px;
           padding: 16px;
           background: #fff;
@@ -185,7 +183,8 @@ export default function Blogs() {
         .tp-blog-title {
           font-size: 20px;
           font-weight: 900;
-          color: #0f172a;
+          color: var(--tp-ink, #1a1a14);
+          font-family: 'Playfair Display', serif;
           margin-bottom: 8px;
           line-height: 1.3;
         }
@@ -211,8 +210,8 @@ export default function Blogs() {
         }
         
         .tp-tree-card {
-          background: #fff;
-          border: 1px solid #e5e7eb;
+          background: var(--tp-surface, #fff);
+          border: 1px solid var(--tp-border, #ddd8cc);
           border-radius: 14px;
           padding: 14px;
           box-shadow: 0 1px 10px rgba(0,0,0,0.04);
@@ -221,7 +220,8 @@ export default function Blogs() {
           font-weight: 900;
           font-size: 16px;
           margin-bottom: 12px;
-          color: #0f172a;
+          color: var(--tp-ink, #1a1a14);
+          font-family: 'Playfair Display', serif;
         }
         .tp-tree-year {
           margin-bottom: 16px;
@@ -285,8 +285,8 @@ export default function Blogs() {
       `}</style>
 
       <div className="tp-container">
-        <PageHeader title={t("BLOGS")}>
-          <PillLink to="/" ariaLabel={t("DASHBOARD")}>Trueprice.cash</PillLink>
+        <PageHeader title="TruePrice.Cash" subtitle={t("BLOGS")}>
+          <PillLink to="/" ariaLabel={t("DASHBOARD")}>TruePrice.Cash</PillLink>
           <PillLink to="/about" ariaLabel={t("ABOUT_US")}>{t("ABOUT_US")}</PillLink>
           <PillLink to="/contact" ariaLabel={t("CONTACT_US")}>{t("CONTACT_US")}</PillLink>
         </PageHeader>
@@ -405,11 +405,11 @@ export default function Blogs() {
             marginTop: 24,
             padding: "14px 4px",
             textAlign: "center",
-            color: "#64748b",
+            color: "var(--tp-muted, #8a8578)",
             fontSize: 12,
           }}
         >
-          © Trueprice.cash
+          © TruePrice.Cash
         </footer>
       </div>
     </div>

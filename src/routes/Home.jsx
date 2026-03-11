@@ -1,8 +1,8 @@
 // FILE: src/routes/Home.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
-import { getStocks } from "../data/stocksCatalog.js";
+import { getAllStocks } from "../data/stocksCatalog.js";
 import { PageHeader } from "../components/PageHeader.jsx";
 import { PillLink } from "../components/PillLink.jsx";
 import { LangToggle } from "../components/LangToggle.jsx";
@@ -13,15 +13,26 @@ function normalize(s) {
   return (s || "").toString().trim().toLowerCase();
 }
 
+const QUICK_PICKS = [
+  { ticker: "AAPL", name: "Apple", market: "us" },
+  { ticker: "MSFT", name: "Microsoft", market: "us" },
+  { ticker: "2222", name: "Saudi Aramco", market: "sa" },
+  { ticker: "1120", name: "Al Rajhi Bank", market: "sa" },
+  { ticker: "NVDA", name: "NVIDIA", market: "us" },
+  { ticker: "1180", name: "SNB", market: "sa" },
+  { ticker: "2010", name: "SABIC", market: "sa" },
+  { ticker: "AMZN", name: "Amazon", market: "us" },
+];
+
 export default function Home() {
   const { t, lang, dir, toggleLang } = useI18n();
   const navigate = useNavigate();
   const { favorites, isFavorite, toggleFavorite, removeFavorite } = useFavorites();
-  usePageMeta({ title: t("DASHBOARD"), description: t("MARKET_US") + " & " + t("MARKET_SA") + ". " + t("COMPANIES") + "." });
+  usePageMeta({ title: "TruePrice.Cash", description: t("MARKET_US") + " & " + t("MARKET_SA") + ". " + t("COMPANIES") + "." });
 
-  const [market, setMarket] = useState("us");
-  const [industry, setIndustry] = useState("all");
   const [q, setQ] = useState("");
+  const [suggestionsOpen, setSuggestionsOpen] = useState(false);
+  const wrapRef = useRef(null);
 
   const [state, setState] = useState({
     loading: true,
@@ -32,14 +43,11 @@ export default function Home() {
 
   useEffect(() => {
     let alive = true;
-
     async function run() {
       try {
         setState((s) => ({ ...s, loading: true, error: "" }));
-
-        const json = await getStocks({ market });
+        const json = await getAllStocks();
         if (!alive) return;
-
         setState({
           loading: false,
           error: "",
@@ -57,173 +65,251 @@ export default function Home() {
         }));
       }
     }
-
     run();
-    return () => {
-      alive = false;
-    };
-  }, [market, t]);
+    return () => { alive = false; };
+  }, [t]);
 
-  const industryOptions = useMemo(() => {
-    const unique = Array.from(new Set((state.industries || []).filter(Boolean)));
-    unique.sort((a, b) => a.localeCompare(b));
-    return unique;
-  }, [state.industries]);
-
-  const filtered = useMemo(() => {
+  const suggestions = useMemo(() => {
     const query = normalize(q);
-    const wantIndustry = industry !== "all" ? industry : "";
+    if (!query || query.length < 1) return [];
     const items = Array.isArray(state.items) ? state.items : [];
+    return items
+      .filter((it) => {
+        const name = normalize(it?.name);
+        const ticker = String(it?.ticker ?? "");
+        const tickerNorm = normalize(ticker);
+        return name.includes(query) || tickerNorm.includes(query) || ticker === q;
+      })
+      .slice(0, 8);
+  }, [state.items, q]);
 
-    return items.filter((it) => {
-      const name = normalize(it?.name);
-      const ticker = normalize(it?.ticker);
-      const ind = (it?.industry || "").toString();
-      const indNorm = normalize(ind);
+  const handleClickOutside = useCallback((e) => {
+    if (wrapRef.current && !wrapRef.current.contains(e.target)) {
+      setSuggestionsOpen(false);
+    }
+  }, []);
 
-      const matchesQuery =
-        !query ||
-        name.includes(query) ||
-        ticker.includes(query) ||
-        indNorm.includes(query);
-
-      const matchesIndustry = !wantIndustry || ind === wantIndustry;
-
-      return matchesQuery && matchesIndustry;
-    });
-  }, [state.items, industry, q]);
-
-  function resetFilters() {
-    setIndustry("all");
-    setQ("");
-  }
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [handleClickOutside]);
 
   function goToStock(ticker) {
+    setSuggestionsOpen(false);
+    setQ("");
     navigate(`/stock/${encodeURIComponent(ticker)}`);
   }
 
+  function pickSuggestion(it) {
+    setQ(String(it.ticker));
+    setSuggestionsOpen(false);
+    goToStock(it.ticker);
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (suggestions.length > 0) {
+        pickSuggestion(suggestions[0]);
+      } else if (q.trim()) {
+        const match = state.items.find(
+          (it) =>
+            String(it.ticker).toLowerCase() === q.trim().toLowerCase() ||
+            normalize(it.name).includes(normalize(q))
+        );
+        if (match) goToStock(match.ticker);
+      }
+    }
+  }
+
   return (
-    <div dir={dir} lang={lang} style={{ minHeight: "100vh", background: "#f8fafc" }}>
-      {/* Responsive fixes */}
+    <div dir={dir} lang={lang} style={{ minHeight: "100vh", position: "relative", zIndex: 1 }}>
       <style>{`
-        /* Global guardrails to prevent overflow on mobile */
-        .tp-wrap, .tp-card, .tp-header, .tp-filters, .tp-companies { box-sizing: border-box; }
-        .tp-wrap * { box-sizing: border-box; }
-        .tp-wrap { max-width: 1100px; margin: 0 auto; padding: 16px; }
-        .tp-card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:14px; box-shadow:0 1px 10px rgba(0,0,0,0.04); }
-        .tp-title { font-weight:900; margin-bottom:10px; }
-        .tp-muted { color:#64748b; }
-        .tp-danger { color:#b91c1c; }
-
-        /* Pills (for mobile flex) */
-        .tp-pill { max-width: 100%; }
-        @media (max-width: 520px) {
-          .tp-pill { flex: 1; }
-        }
-
-        /* Filters layout */
-        .tp-filters { margin-top: 16px; }
-        .tp-filters-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr 1.3fr;
-          gap: 12px;
-          align-items: end;
-          min-width: 0;
-        }
-        .tp-label { font-size: 12px; font-weight: 800; color: #334155; margin-bottom: 6px; }
-
-        .tp-market-row { display:flex; gap:10px; min-width:0; flex-wrap:wrap; }
-        .tp-market-btn {
-          flex: 1;
-          min-width: 140px; /* allows wrap instead of overflow */
-          border: 1px solid #e5e7eb;
-          border-radius: 12px;
-          padding: 10px 12px;
-          font-weight: 800;
-          cursor: pointer;
-          max-width: 100%;
-        }
-        .tp-market-btn--active { background:#0f172a; color:#fff; }
-        .tp-market-btn--idle { background:#fff; color:#0f172a; }
-
-        .tp-select, .tp-input {
-          width: 100%;
-          border: 1px solid #e5e7eb;
-          border-radius: 12px;
-          padding: 10px 12px;
-          background: #fff;
+        .tp-wrap { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+        .tp-search-section { padding: 40px 0 32px; border-bottom: 1px solid var(--tp-border); }
+        .tp-search-headline {
+          font-family: 'Playfair Display', serif;
+          font-size: clamp(22px, 4vw, 36px);
           font-weight: 700;
-          max-width: 100%;
-          min-width: 0; /* critical */
+          line-height: 1.2;
+          margin-bottom: 8px;
+          color: var(--tp-ink);
         }
-        .tp-input { font-weight: 600; }
-
-        .tp-search-row { display:flex; gap:10px; min-width:0; flex-wrap:wrap; }
-        .tp-reset-btn {
-          border: 1px solid #e5e7eb;
-          border-radius: 12px;
-          padding: 10px 14px;
-          background: #f8fafc;
-          font-weight: 800;
+        .tp-search-headline em { font-style: italic; color: var(--tp-gold); }
+        .tp-search-deck { font-size: 12px; color: var(--tp-muted); margin-bottom: 28px; line-height: 1.7; max-width: 520px; }
+        .tp-search-box {
+          display: flex;
+          gap: 0;
+          max-width: 560px;
+          border: 2px solid var(--tp-ink);
+          background: var(--tp-surface);
+        }
+        .tp-field-wrap { position: relative; flex: 1; }
+        .tp-ticker-field {
+          width: 100%;
+          border: none;
+          outline: none;
+          padding: 14px 18px;
+          font-family: 'IBM Plex Mono', monospace;
+          font-size: 16px;
+          letter-spacing: 2px;
+          background: transparent;
+          color: var(--tp-ink);
+        }
+        .tp-ticker-field::placeholder { color: var(--tp-muted); letter-spacing: 0; font-size: 13px; }
+        .tp-go-btn {
+          background: var(--tp-accent);
+          color: #fff;
+          border: none;
+          padding: 14px 28px;
+          font-family: 'Barlow', sans-serif;
+          font-weight: 700;
+          font-size: 13px;
+          letter-spacing: 2px;
           cursor: pointer;
-          min-width: 96px;
-          max-width: 100%;
+          transition: background 0.15s;
         }
-
-        /* Companies grid */
-        .tp-companies { margin-top: 16px; }
-        .tp-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        .tp-go-btn:hover { background: #2d5a40; }
+        .tp-suggestions {
+          position: absolute;
+          top: 100%; left: 0; right: 0;
+          background: var(--tp-surface);
+          border: 2px solid var(--tp-ink);
+          border-top: none;
+          z-index: 50;
+          display: none;
+        }
+        .tp-suggestions.open { display: block; }
+        .tp-sug-item {
+          padding: 10px 18px;
+          display: flex;
           gap: 12px;
-          min-width: 0;
+          align-items: center;
+          cursor: pointer;
+          font-size: 12px;
+          border-bottom: 1px solid var(--tp-border);
+          transition: background 0.1s;
         }
+        .tp-sug-item:last-child { border-bottom: none; }
+        .tp-sug-item:hover { background: var(--tp-surface2); }
+        .tp-sug-ticker { font-weight: 500; color: var(--tp-accent); min-width: 50px; }
+        .tp-sug-name { color: var(--tp-muted); }
+        .tp-quick-picks { margin-top: 16px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .tp-qp-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--tp-muted); }
+        .tp-qp-chip {
+          border: 1px solid var(--tp-border);
+          background: var(--tp-surface);
+          padding: 4px 12px;
+          font-size: 11px;
+          letter-spacing: 1px;
+          cursor: pointer;
+          transition: all 0.15s;
+          font-family: 'IBM Plex Mono', monospace;
+        }
+        .tp-qp-chip:hover { background: var(--tp-accent); color: #fff; border-color: var(--tp-accent); }
+        .tp-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 16px; color: var(--tp-ink); }
+        .tp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
         .tp-company {
           text-align: start;
-          border: 1px solid #e5e7eb;
-          border-radius: 14px;
+          border: 1px solid var(--tp-border);
           padding: 12px;
-          background: #fff;
+          background: var(--tp-surface);
           cursor: pointer;
-          max-width: 100%;
-          min-width: 0;
+          transition: all 0.15s;
         }
-        .tp-company-name { font-weight: 900; color:#0f172a; }
-        .tp-company-meta { font-size:12px; color:#64748b; margin-top:6px; line-height: 1.35; }
-        .tp-strong { font-weight:900; color:#111827; }
-
-        /* Mobile rules (fix overflow) */
-        @media (max-width: 820px) {
-          .tp-filters-grid { grid-template-columns: 1fr; }
-          .tp-search-row { flex-direction: column; }
-          .tp-reset-btn { width: 100%; min-width: 0; }
-          .tp-market-btn { min-width: 0; }
-        }
-        @media (max-width: 520px) {
-          .tp-wrap { padding: 12px; }
-          .tp-grid { grid-template-columns: 1fr; }
-        }
+        .tp-company:hover { border-color: var(--tp-accent); background: var(--tp-surface2); }
+        .tp-company-name { font-weight: 700; color: var(--tp-ink); font-family: 'Barlow', sans-serif; }
+        .tp-company-meta { font-size: 12px; color: var(--tp-muted); margin-top: 6px; line-height: 1.35; }
       `}</style>
 
       <div className="tp-wrap">
-        <PageHeader
-          title="Trueprice.cash"
-          subtitle={market === "us" ? t("MARKET_US") : t("MARKET_SA")}
-        >
-          <PillLink to="/blogs" ariaLabel={t("BLOGS")} className="tp-pill">
-            {t("BLOGS")}
-          </PillLink>
-          <PillLink to="/about" ariaLabel={t("ABOUT_US")} className="tp-pill">
-            {t("ABOUT_US")}
-          </PillLink>
-          <PillLink to="/contact" ariaLabel={t("CONTACT_US")} className="tp-pill">
-            {t("CONTACT_US")}
-          </PillLink>
+        <PageHeader title="TruePrice.Cash" subtitle="Equity Intelligence · US & TASI Markets">
+          <PillLink to="/blogs" ariaLabel={t("BLOGS")}>{t("BLOGS")}</PillLink>
+          <PillLink to="/about" ariaLabel={t("ABOUT_US")}>{t("ABOUT_US")}</PillLink>
+          <PillLink to="/contact" ariaLabel={t("CONTACT_US")}>{t("CONTACT_US")}</PillLink>
           <LangToggle lang={lang} onToggle={toggleLang} t={t} />
         </PageHeader>
 
+        {/* Search */}
+        <div className="tp-search-section">
+          <h1 className="tp-search-headline">
+            {lang === "ar" ? "تحليل عادل" : "Institutional-grade"}
+            <br />
+            <em>{lang === "ar" ? "أي سهم أمريكي أو سعودي" : "any US or TASI stock"}</em>
+          </h1>
+          <p className="tp-search-deck">
+            {lang === "ar"
+              ? "أدخل الرمز أو اسم الشركة. نحلل القوائم المالية ونقدّر القيمة العادلة."
+              : "Enter a ticker or company name. We analyze financials and estimate fair value — instantly."}
+          </p>
+
+          <div ref={wrapRef} style={{ position: "relative" }}>
+            <div className="tp-search-box">
+              <div className="tp-field-wrap">
+                <input
+                  className="tp-ticker-field"
+                  type="text"
+                  value={q}
+                  onChange={(e) => {
+                    setQ(e.target.value);
+                    setSuggestionsOpen(true);
+                  }}
+                  onFocus={() => setSuggestionsOpen(true)}
+                  onKeyDown={handleKeyDown}
+                  placeholder={t("SEARCH_PLACEHOLDER")}
+                  maxLength={20}
+                  autoComplete="off"
+                />
+                <div className={`tp-suggestions ${suggestionsOpen && suggestions.length > 0 ? "open" : ""}`}>
+                  {suggestions.map((it) => (
+                    <div
+                      key={`${it.ticker}-${it.market || ""}`}
+                      className="tp-sug-item"
+                      onClick={() => pickSuggestion(it)}
+                    >
+                      <span className="tp-sug-ticker">{it.ticker}</span>
+                      <span className="tp-sug-name">{it.name} · {it.market === "sa" ? "TASI" : "US"}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <button
+                type="button"
+                className="tp-go-btn"
+                onClick={() => {
+                  if (suggestions.length > 0) pickSuggestion(suggestions[0]);
+                  else if (q.trim()) {
+                    const match = state.items.find(
+                      (it) =>
+                        String(it.ticker).toLowerCase() === q.trim().toLowerCase() ||
+                        normalize(it.name).includes(normalize(q))
+                    );
+                    if (match) goToStock(match.ticker);
+                  }
+                }}
+              >
+                {lang === "ar" ? "تحليل →" : "ANALYZE →"}
+              </button>
+            </div>
+          </div>
+
+          <div className="tp-quick-picks">
+            <span className="tp-qp-label">{lang === "ar" ? "جرب:" : "Try:"}</span>
+            {QUICK_PICKS.map((p) => (
+              <span
+                key={p.ticker}
+                className="tp-qp-chip"
+                onClick={() => goToStock(p.ticker)}
+              >
+                {p.ticker}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Favorites */}
         {favorites.length > 0 ? (
-          <div className="tp-card tp-filters" style={{ marginBottom: 16 }}>
+          <div style={{ padding: "24px 0", borderBottom: "1px solid var(--tp-border)" }}>
             <div className="tp-title">{t("FAVORITES")}</div>
             <div className="tp-grid">
               {favorites.map((ticker) => (
@@ -237,9 +323,19 @@ export default function Home() {
                   <span className="tp-company-name">{ticker}</span>
                   <button
                     type="button"
-                    onClick={(e) => { e.stopPropagation(); removeFavorite(ticker); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeFavorite(ticker);
+                    }}
                     aria-label={t("REMOVE_FAVORITE")}
-                    style={{ padding: "4px 8px", borderRadius: 8, border: "1px solid #e5e7eb", background: "transparent", cursor: "pointer", fontSize: 12 }}
+                    style={{
+                      padding: "4px 8px",
+                      borderRadius: 8,
+                      border: "1px solid var(--tp-border)",
+                      background: "transparent",
+                      cursor: "pointer",
+                      fontSize: 12,
+                    }}
                   >
                     ✕
                   </button>
@@ -249,133 +345,16 @@ export default function Home() {
           </div>
         ) : null}
 
-        {/* Filters */}
-        <div className="tp-card tp-filters">
-          <div className="tp-title">{t("FILTERS")}</div>
-
-          <div className="tp-filters-grid">
-            {/* Market */}
-            <div>
-              <div className="tp-label">{t("MARKET")}</div>
-              <div className="tp-market-row">
-                <button
-                  type="button"
-                  onClick={() => setMarket("us")}
-                  className={`tp-market-btn ${market === "us" ? "tp-market-btn--active" : "tp-market-btn--idle"}`}
-                >
-                  {t("MARKET_US")}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMarket("sa")}
-                  className={`tp-market-btn ${market === "sa" ? "tp-market-btn--active" : "tp-market-btn--idle"}`}
-                >
-                  {t("MARKET_SA")}
-                </button>
-              </div>
-            </div>
-
-            {/* Industry */}
-            <div>
-              <div className="tp-label">{t("INDUSTRY")}</div>
-              <select
-                value={industry}
-                onChange={(e) => setIndustry(e.target.value)}
-                className="tp-select"
-              >
-                <option value="all">{t("INDUSTRY_ALL")}</option>
-                {industryOptions.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Search */}
-            <div>
-              <div className="tp-label">{t("SEARCH")}</div>
-              <div className="tp-search-row">
-                <input
-                  value={q}
-                  onChange={(e) => setQ(e.target.value)}
-                  placeholder={t("SEARCH_PLACEHOLDER")}
-                  className="tp-input"
-                />
-                <button type="button" onClick={resetFilters} className="tp-reset-btn">
-                  {t("RESET")}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Companies */}
-        <div className="tp-card tp-companies">
-          <div className="tp-title">
-            {t("COMPANIES")} ({filtered.length})
-          </div>
-
-          {state.loading ? (
-            <div className="tp-muted">{t("LOADING")}</div>
-          ) : state.error ? (
-            <div className="tp-danger">{state.error}</div>
-          ) : filtered.length === 0 ? (
-            <div className="tp-muted">{t("NO_MATCH")}</div>
-          ) : (
-            <div className="tp-grid">
-              {filtered.map((it) => (
-                <button
-                  key={`${it.ticker}-${it.market || market}`}
-                  onClick={() => goToStock(it.ticker)}
-                  className="tp-company"
-                  type="button"
-                  style={{ position: "relative" }}
-                >
-                  <button
-                    type="button"
-                    onClick={(e) => { e.stopPropagation(); toggleFavorite(it.ticker); }}
-                    aria-label={isFavorite(it.ticker) ? t("REMOVE_FAVORITE") : t("ADD_FAVORITE")}
-                    style={{
-                      position: "absolute",
-                      top: 8,
-                      right: 8,
-                      padding: 4,
-                      border: "none",
-                      background: "transparent",
-                      cursor: "pointer",
-                      fontSize: 16,
-                      color: isFavorite(it.ticker) ? "#b45309" : "#94a3b8",
-                    }}
-                  >
-                    {isFavorite(it.ticker) ? "★" : "☆"}
-                  </button>
-                  <div className="tp-company-name">{it.name}</div>
-                  <div className="tp-company-meta">
-                    <span className="tp-strong">{t("TICKER")}:</span> {it.ticker}
-                    {it.industry ? (
-                      <>
-                        {" "}
-                        · <span className="tp-strong">{t("INDUSTRY")}:</span> {it.industry}
-                      </>
-                    ) : null}
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
         <footer
           style={{
             marginTop: 24,
             padding: "14px 4px",
             textAlign: "center",
-            color: "#64748b",
+            color: "var(--tp-muted)",
             fontSize: 12,
           }}
         >
-          © Trueprice.cash
+          © TruePrice.Cash
         </footer>
       </div>
     </div>

@@ -335,7 +335,7 @@ export default function Stock() {
   const companyDisplayName = (lang === "ar" && translatedProfile?.name) || profile?.name || company || "";
 
   return (
-    <div style={{ background: "#f8fafc", minHeight: "100vh" }} dir={dir} lang={lang}>
+    <div style={{ background: "var(--tp-bg, #f5f2eb)", minHeight: "100vh" }} dir={dir} lang={lang}>
       <div
         style={{
           maxWidth: isMobile ? 1100 : 1400,
@@ -353,7 +353,7 @@ export default function Stock() {
         <div
           className="no-print"
           style={{
-            background: "#111827",
+            background: "var(--tp-accent, #1a3a2a)",
             color: "#fff",
             borderRadius: 16,
             padding: 14,
@@ -486,7 +486,7 @@ export default function Stock() {
             >
               {pdfExporting ? "…" : t("EXPORT_PDF")}
             </button>
-            <PillLink to="/" ariaLabel={t("DASHBOARD")}>Trueprice.cash</PillLink>
+            <PillLink to="/" ariaLabel={t("DASHBOARD")}>TruePrice.Cash</PillLink>
             <LangToggle lang={lang} onToggle={toggleLang} t={t} />
           </div>
         </div>
@@ -1011,8 +1011,8 @@ export default function Stock() {
         ) : null}
       </div>
 
-      <footer className="no-print" style={{ marginTop: 24, padding: "14px 4px", textAlign: "center", color: "#64748b", fontSize: 12 }}>
-        © Trueprice.cash
+      <footer className="no-print" style={{ marginTop: 24, padding: "14px 4px", textAlign: "center", color: "var(--tp-muted, #64748b)", fontSize: 12 }}>
+        © TruePrice.Cash
       </footer>
     </div>
   );
