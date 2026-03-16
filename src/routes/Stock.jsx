@@ -19,7 +19,6 @@ import { usePageMeta } from "../hooks/usePageMeta.js";
 import { useFavorites } from "../hooks/useFavorites.js";
 import { getPrefetchDelayMs } from "../config/env.js";
 import { exportElementAsPdf } from "../utils/exportPdf.js";
-import { analytics } from "../services/analyticsService.js";
 
 const PREFETCH_DELAY_SEC = Math.ceil(getPrefetchDelayMs() / 1000);
 
@@ -91,10 +90,8 @@ export default function Stock() {
         const cj = await getCompany(ticker);
         if (!alive) return;
         setCompany(cj?.name || "");
-        const mkt = cj?.market || "us";
-        setMarket(mkt);
+        setMarket(cj?.market || "us");
         setCurrency(cj?.currency || "USD");
-        analytics.trackStockView(ticker, mkt);
       } catch (e) {
         if (!alive) return;
         setHeaderError(String(e?.message || e));

@@ -33,8 +33,5 @@ yarn-error.log*
 # Cache
 .cache/
 
-# Analytics (user tracking data)
-data/analytics.json
-
 # Python
 __pycache__/

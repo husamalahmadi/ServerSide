@@ -1,10 +1,9 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { analyticsPlugin } from "./vite-plugin-analytics.mjs";
 
 export default defineConfig({
   base: "/",
-  plugins: [react(), analyticsPlugin()],
+  plugins: [react()],
   server: {
     port: 5173,
     open: true, // Automatically open browser
