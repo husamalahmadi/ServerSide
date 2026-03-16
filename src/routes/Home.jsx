@@ -8,6 +8,7 @@ import { PillLink } from "../components/PillLink.jsx";
 import { LangToggle } from "../components/LangToggle.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { useFavorites } from "../hooks/useFavorites.js";
+import { analytics } from "../services/analyticsService.js";
 
 function normalize(s) {
   return (s || "").toString().trim().toLowerCase();
@@ -103,6 +104,7 @@ export default function Home() {
   function pickSuggestion(it) {
     setQ(String(it.ticker));
     setSuggestionsOpen(false);
+    analytics.trackSearch(q, suggestions.length);
     goToStock(it.ticker);
   }
 
@@ -112,6 +114,7 @@ export default function Home() {
       if (suggestions.length > 0) {
         pickSuggestion(suggestions[0]);
       } else if (q.trim()) {
+        analytics.trackSearch(q.trim(), 0);
         const match = state.items.find(
           (it) =>
             String(it.ticker).toLowerCase() === q.trim().toLowerCase() ||
@@ -279,6 +282,7 @@ export default function Home() {
                 onClick={() => {
                   if (suggestions.length > 0) pickSuggestion(suggestions[0]);
                   else if (q.trim()) {
+                    analytics.trackSearch(q.trim(), 0);
                     const match = state.items.find(
                       (it) =>
                         String(it.ticker).toLowerCase() === q.trim().toLowerCase() ||
