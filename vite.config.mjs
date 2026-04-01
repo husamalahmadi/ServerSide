@@ -10,7 +10,8 @@ export default defineConfig({
     strictPort: false, // Try next available port if 5173 is taken
   },
   build: {
-    outDir: "output",
+    // Default `dist` matches Vercel/Cloudflare docs; avoids deploying empty `dist` on Pages.
+    outDir: "dist",
     emptyOutDir: true,
   },
 });

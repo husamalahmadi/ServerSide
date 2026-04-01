@@ -1,12 +1,12 @@
 # ServerSide
 
-Stocks financials web app (Vite + React). The production build is written to `output/`.
+Stocks financials web app (Vite + React). The production build is written to `dist/` (Vite default; matches Cloudflare’s Vite preset).
 
 ## Deploy on Vercel
 
 1. Push this repo to GitHub (already configured for [ServerSide](https://github.com/husamalahmadi/ServerSide)).
 2. In [Vercel](https://vercel.com), **Add New Project** → import **ServerSide**.
-3. Vercel reads `vercel.json` (`output` as the build output, SPA rewrites for React Router). Root directory: **.** (repo root).
+3. Vercel reads `vercel.json` (`dist` as the build output, SPA rewrites for React Router). Root directory: **.** (repo root).
 4. Under **Environment Variables**, add the same keys as in [`.env.example`](.env.example). At minimum set **`VITE_TWELVEDATA_API_KEY`**. Set **`VITE_API_URL`** to your deployed API base URL (not `localhost`) if you use auth, comments, or watchlists.
 5. Deploy. After the first deploy, add your Vercel URL to Google OAuth **Authorized JavaScript origins** and **redirect URIs** if you use Google sign-in through your API.
 
@@ -19,14 +19,17 @@ The Express API in `server/` is not run by Vercel; host it separately (e.g. Rail
 2. **Create a Pages project** — **Workers & Pages** → **Create** → **Pages** → **Connect to Git** → authorize GitHub and select the **ServerSide** repo.
 
 3. **Build settings** (first screen after picking the repo):
-   - **Framework preset:** None / Vite (either is fine).
+   - **Framework preset:** **Vite** (recommended) or **None**.
    - **Build command:** `npm run build`
-   - **Build output directory:** `output`
+   - **Build output directory:** **`dist`** — must match this repo (not `output`). If this is wrong, the site deploys without JS and shows a **blank page**.
    - **Root directory:** `/` (repo root).
+   - Optional: set **Environment variable** `NODE_VERSION` = `20` if the build fails on an old Node image.
 
 4. **Environment variables** — **Settings → Environment variables** (or add during setup). Add the same keys as [`.env.example`](.env.example). At minimum **`VITE_TWELVEDATA_API_KEY`**. Set **`VITE_API_URL`** to your deployed API base URL (HTTPS) if you use auth, comments, or watchlists — not `localhost`.
 
-5. **Deploy** — Save and deploy. The file [`public/_redirects`](public/_redirects) is copied into `output/` and tells Pages to serve `index.html` for client-side routes (React Router).
+5. **Deploy** — Save and deploy. The file [`public/_redirects`](public/_redirects) is copied into `dist/` and tells Pages to serve `index.html` for client-side routes (React Router).
+
+**Blank page after deploy?** In the browser, open **Developer tools → Network**, reload, and check `index.html` and `/assets/*.js`. If JS returns **HTML** instead of JavaScript, fix **Build output directory** to `dist`. If `index.html` references `/src/main.jsx`, the static deploy did not run `npm run build` or pointed at the wrong folder.
 
 6. **Custom domain** (optional) — **Custom domains** in the Pages project → add your domain and follow DNS instructions.
 

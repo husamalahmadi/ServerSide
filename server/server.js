@@ -392,8 +392,8 @@ app.get("/api/analytics/trending", (req, res) => {
   res.json({ trending: rows });
 });
 
-// Serve static build (output folder from Vite)
-const staticPath = join(__dirname, "..", "output");
+// Serve static build (dist folder from Vite)
+const staticPath = join(__dirname, "..", "dist");
 app.use(express.static(staticPath));
 app.get("*", (req, res, next) => {
   if (req.path.startsWith("/api") || req.path.startsWith("/auth")) return next();
