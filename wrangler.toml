@@ -1,0 +1,4 @@
+# Cloudflare Pages: publish directory (must match dashboard "Build output directory").
+# https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+compatibility_date = "2024-09-23"
+pages_build_output_dir = "dist"

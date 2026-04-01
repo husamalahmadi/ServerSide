@@ -1,9 +1,23 @@
+import { cpSync, existsSync } from "node:fs";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+/** Runs inside `vite build` even when the host uses `vite build` instead of `npm run build`. */
+function copyOutputToDistForPages() {
+  return {
+    name: "copy-output-to-dist",
+    closeBundle() {
+      if (!existsSync("dist") && existsSync("output")) {
+        cpSync("output", "dist", { recursive: true });
+        console.log("[vite] Copied output/ → dist/ (Cloudflare Pages expects dist/).");
+      }
+    },
+  };
+}
+
 export default defineConfig({
   base: "/",
-  plugins: [react()],
+  plugins: [react(), copyOutputToDistForPages()],
   server: {
     port: 5173,
     open: true, // Automatically open browser
