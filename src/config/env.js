@@ -48,14 +48,38 @@ export function getBaseUrl() {
  * the hostname is aligned with window.location.hostname so session cookies from
  * Google OAuth (which bind to the host you used) match fetch targets — mixing
  * localhost vs 127.0.0.1 otherwise drops auth on POST /api/... (e.g. comments).
+ *
+ * Production: if VITE_API_URL is unset, default to same origin (not localhost:3001),
+ * so deploys (e.g. Vercel) never build URLs like https://app.vercel.app:3001 (invalid).
+ * For a separate API host, set VITE_API_URL in the host dashboard (e.g. Railway URL).
  */
 export function getApiUrl() {
-  let u = get("VITE_API_URL", "http://localhost:3001").replace(/\/+$/, "");
+  let fromEnv = (import.meta.env.VITE_API_URL ?? "").toString().trim();
+  let u;
+  if (fromEnv) {
+    u = fromEnv.replace(/\/+$/, "");
+  } else if (typeof window !== "undefined" && import.meta.env.PROD) {
+    u = window.location.origin.replace(/\/+$/, "");
+  } else {
+    u = "http://localhost:3001".replace(/\/+$/, "");
+  }
+
   if (typeof window !== "undefined" && window.location?.hostname) {
     try {
       const parsed = new URL(u);
       if (parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1") {
         parsed.hostname = window.location.hostname;
+        const pageIsLocal =
+          window.location.hostname === "localhost" ||
+          window.location.hostname === "127.0.0.1";
+        // Do not keep dev API port (3001) when mapping to a real deployed hostname;
+        // Vercel/static hosts only serve HTTPS on 443, not :3001.
+        if (!pageIsLocal) {
+          parsed.port = "";
+          if (window.location.protocol === "https:") {
+            parsed.protocol = "https:";
+          }
+        }
         u = parsed.toString().replace(/\/+$/, "");
       }
     } catch {
