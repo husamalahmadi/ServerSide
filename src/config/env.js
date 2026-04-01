@@ -66,12 +66,13 @@ export function getApiUrl() {
 
   if (typeof window !== "undefined" && window.location?.hostname) {
     try {
-      const parsed = new URL(u);
+      const pageHost = window.location.hostname;
+      const pageIsLocal =
+        pageHost === "localhost" || pageHost === "127.0.0.1";
+      const parsed = new URL(u, window.location.origin);
+
       if (parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1") {
-        parsed.hostname = window.location.hostname;
-        const pageIsLocal =
-          window.location.hostname === "localhost" ||
-          window.location.hostname === "127.0.0.1";
+        parsed.hostname = pageHost;
         // Do not keep dev API port (3001) when mapping to a real deployed hostname;
         // Vercel/static hosts only serve HTTPS on 443, not :3001.
         if (!pageIsLocal) {
@@ -81,6 +82,23 @@ export function getApiUrl() {
           }
         }
         u = parsed.toString().replace(/\/+$/, "");
+      }
+
+      // Env may wrongly set full URL to https://<vercel-host>:3001 (host is not "localhost",
+      // so the branch above never runs). Strip dev ports whenever API host === page host.
+      const normalized = new URL(u, window.location.origin);
+      if (
+        !pageIsLocal &&
+        normalized.hostname === pageHost &&
+        (normalized.port === "3001" ||
+          normalized.port === "3000" ||
+          normalized.port === "5173")
+      ) {
+        normalized.port = "";
+        if (window.location.protocol === "https:") {
+          normalized.protocol = "https:";
+        }
+        u = normalized.toString().replace(/\/+$/, "");
       }
     } catch {
       /* ignore invalid VITE_API_URL */
