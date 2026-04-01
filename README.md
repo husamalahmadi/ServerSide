@@ -56,6 +56,8 @@ The Express API in `server/` is not run by Vercel; host it separately (e.g. Rail
 
 **Blank page after deploy?** In the browser, open **Developer tools → Network**, reload, and check `index.html` and `/assets/*.js`. If JS returns **HTML** instead of JavaScript, fix **Build output directory** to `dist`. If `index.html` references `/src/main.jsx`, the static deploy did not run `npm run build` or pointed at the wrong folder.
 
+**Build log still says `HEAD is now at 3fdc223` or writes to `output/` but errors on `dist`?** Your Pages project is deploying an **old commit**, not current `main`. In **Settings → Builds**, set **Production branch** to `main` and trigger a new deployment from the **latest** commit (or push a new commit). The build runs `npm run build`, which also copies `output/` → `dist/` when needed.
+
 6. **Custom domain** (optional) — **Custom domains** in the Pages project → add your domain and follow DNS instructions.
 
 7. **Leaving Vercel** — You can delete the Vercel project or leave it; `vercel.json` is ignored by Cloudflare. The API in `server/` still must be hosted separately; point `VITE_API_URL` at it and update Google OAuth origins for your **Pages** URL.
