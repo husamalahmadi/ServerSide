@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getApiUrl } from "../config/env.js";
+import { getApiUrl, hasExplicitViteApiUrl } from "../config/env.js";
 
 const AuthContext = createContext(null);
 
@@ -19,6 +19,12 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = () => {
+    // Static hosts (Cloudflare Pages, Vercel) do not run Express. Without VITE_API_URL,
+    // getApiUrl() is the same origin — /auth/google would load the SPA with no route → blank page.
+    if (import.meta.env.PROD && !hasExplicitViteApiUrl()) {
+      window.location.assign("/?auth=api_required");
+      return;
+    }
     window.location.href = `${getApiUrl()}/auth/google`;
   };
 

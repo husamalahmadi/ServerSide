@@ -1,6 +1,6 @@
 // FILE: src/routes/Home.jsx
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
 import { getAllStocks } from "../data/stocksCatalog.js";
 import { PageHeader } from "../components/PageHeader.jsx";
@@ -25,6 +25,8 @@ const QUICK_PICKS = [
 export default function Home() {
   const { t, lang, dir, toggleLang } = useI18n();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const authParam = searchParams.get("auth");
   usePageMeta({ title: "TruePrice.Cash", description: t("MARKET_US") + " & " + t("MARKET_SA") + ". " + t("COMPANIES") + "." });
 
   const [q, setQ] = useState("");
@@ -226,6 +228,97 @@ export default function Home() {
           <PillLink to="/contact" ariaLabel={t("CONTACT_US")}>{t("CONTACT_US")}</PillLink>
           <LangToggle lang={lang} onToggle={toggleLang} t={t} />
         </PageHeader>
+
+        {authParam === "api_required" && (
+          <div
+            role="status"
+            style={{
+              margin: "0 0 20px",
+              padding: "14px 16px",
+              background: "#fff7ed",
+              border: "1px solid #fdba74",
+              borderRadius: 10,
+              fontSize: 13,
+              color: "#9a3412",
+              lineHeight: 1.55,
+            }}
+          >
+            <strong>Sign-in needs the API server.</strong> Deploy <code style={{ fontSize: 12 }}>server/</code>{" "}
+            (Railway, Render, etc.), set <strong>VITE_API_URL</strong> in Cloudflare Pages to your API HTTPS URL,
+            redeploy, then try Google sign-in again.
+            <button
+              type="button"
+              onClick={() => {
+                searchParams.delete("auth");
+                setSearchParams(searchParams, { replace: true });
+              }}
+              style={{
+                marginLeft: 12,
+                padding: "4px 10px",
+                fontSize: 12,
+                cursor: "pointer",
+                borderRadius: 6,
+                border: "1px solid #ea580c",
+                background: "#fff",
+                color: "#9a3412",
+              }}
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
+        {authParam === "not_configured" && (
+          <div
+            role="status"
+            style={{
+              margin: "0 0 20px",
+              padding: "14px 16px",
+              background: "#fef2f2",
+              border: "1px solid #fecaca",
+              borderRadius: 10,
+              fontSize: 13,
+              color: "#991b1b",
+            }}
+          >
+            Google sign-in is not configured on the API (missing OAuth env vars).
+            <button
+              type="button"
+              onClick={() => {
+                searchParams.delete("auth");
+                setSearchParams(searchParams, { replace: true });
+              }}
+              style={{ marginLeft: 12, padding: "4px 10px", fontSize: 12, cursor: "pointer" }}
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
+        {authParam === "failed" && (
+          <div
+            role="status"
+            style={{
+              margin: "0 0 20px",
+              padding: "14px 16px",
+              background: "#fef2f2",
+              border: "1px solid #fecaca",
+              borderRadius: 10,
+              fontSize: 13,
+              color: "#991b1b",
+            }}
+          >
+            Google sign-in did not complete. Try again.
+            <button
+              type="button"
+              onClick={() => {
+                searchParams.delete("auth");
+                setSearchParams(searchParams, { replace: true });
+              }}
+              style={{ marginLeft: 12, padding: "4px 10px", fontSize: 12, cursor: "pointer" }}
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
 
         {/* Search */}
         <div className="tp-search-section">

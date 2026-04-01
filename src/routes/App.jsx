@@ -1,6 +1,6 @@
 // FILE: src/routes/App.jsx
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "../context/AuthContext.jsx";
 import { I18nProvider } from "../i18n.jsx";
 import { ErrorBoundary } from "../components/ErrorBoundary.jsx";
@@ -12,6 +12,7 @@ import AboutUs from "./AboutUs.jsx";
 import Blogs from "./Blogs.jsx";
 import Profile from "./Profile.jsx";
 import ProfileSetup from "./ProfileSetup.jsx";
+import AuthSignInHelp from "./AuthSignInHelp.jsx";
 
 export default function App() {
   return (
@@ -28,6 +29,8 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/blogs" element={<Blogs />} />
+            <Route path="/auth/*" element={<AuthSignInHelp />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
       </ErrorBoundary>

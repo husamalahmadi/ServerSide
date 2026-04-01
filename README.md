@@ -25,6 +25,8 @@ So production is **not** “the same as localhost with one URL” unless you set
 
 Understanding this explains blank pages (wrong `dist` folder), auth issues (API URL / OAuth still pointing at localhost), and why “two terminals locally” becomes “two services on the internet” unless you use option 2.
 
+**Google sign-in on Cloudflare Pages / Vercel:** The “Sign in with Google” button must open your **deployed API** (`/auth/google` on Express), not the static site. Set **`VITE_API_URL`** in the frontend project to that API’s HTTPS origin (even if you later use a single Node server for both UI and API, set it to the same public URL). Redeploy the frontend after adding it. Without this, the app cannot start OAuth.
+
 ## Deploy on Vercel
 
 1. Push this repo to GitHub (already configured for [ServerSide](https://github.com/husamalahmadi/ServerSide)).

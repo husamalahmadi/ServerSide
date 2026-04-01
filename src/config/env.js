@@ -43,6 +43,11 @@ export function getBaseUrl() {
   return get("BASE_URL", "/");
 }
 
+/** True if VITE_API_URL was set at build time (required for Google OAuth against a real API host). */
+export function hasExplicitViteApiUrl() {
+  return !!(import.meta.env.VITE_API_URL ?? "").toString().trim();
+}
+
 /**
  * API base URL. In the browser, if VITE_API_URL points at localhost or 127.0.0.1,
  * the hostname is aligned with window.location.hostname so session cookies from
