@@ -19,6 +19,39 @@ body {
   min-height: 100vh;
 }
 
+/* Google sign-in — matches header nav pills (PillLink: Blogs, About, Contact) */
+.tp-signin-google {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  box-sizing: border-box;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--tp-border, #ddd8cc);
+  background: var(--tp-surface, #fff);
+  color: var(--tp-ink, #1a1a14);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+.tp-signin-google:hover {
+  background: var(--tp-surface2, #f0ece2);
+  border-color: var(--tp-muted, #8a8578);
+}
+.tp-signin-google:active {
+  background: var(--tp-surface2, #f0ece2);
+}
+.tp-signin-google:focus-visible {
+  outline: 2px solid var(--tp-accent, #1a3a2a);
+  outline-offset: 2px;
+}
+
 /* Paper texture overlay */
 body::before {
   content: "";

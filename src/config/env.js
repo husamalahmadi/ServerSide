@@ -42,3 +42,25 @@ export function getPrefetchDelayMs() {
 export function getBaseUrl() {
   return get("BASE_URL", "/");
 }
+
+/**
+ * API base URL. In the browser, if VITE_API_URL points at localhost or 127.0.0.1,
+ * the hostname is aligned with window.location.hostname so session cookies from
+ * Google OAuth (which bind to the host you used) match fetch targets — mixing
+ * localhost vs 127.0.0.1 otherwise drops auth on POST /api/... (e.g. comments).
+ */
+export function getApiUrl() {
+  let u = get("VITE_API_URL", "http://localhost:3001").replace(/\/+$/, "");
+  if (typeof window !== "undefined" && window.location?.hostname) {
+    try {
+      const parsed = new URL(u);
+      if (parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1") {
+        parsed.hostname = window.location.hostname;
+        u = parsed.toString().replace(/\/+$/, "");
+      }
+    } catch {
+      /* ignore invalid VITE_API_URL */
+    }
+  }
+  return u;
+}

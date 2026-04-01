@@ -7,8 +7,6 @@ import { PageHeader } from "../components/PageHeader.jsx";
 import { PillLink } from "../components/PillLink.jsx";
 import { LangToggle } from "../components/LangToggle.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
-import { useFavorites } from "../hooks/useFavorites.js";
-
 function normalize(s) {
   return (s || "").toString().trim().toLowerCase();
 }
@@ -27,7 +25,6 @@ const QUICK_PICKS = [
 export default function Home() {
   const { t, lang, dir, toggleLang } = useI18n();
   const navigate = useNavigate();
-  const { favorites, isFavorite, toggleFavorite, removeFavorite } = useFavorites();
   usePageMeta({ title: "TruePrice.Cash", description: t("MARKET_US") + " & " + t("MARKET_SA") + ". " + t("COMPANIES") + "." });
 
   const [q, setQ] = useState("");
@@ -306,44 +303,6 @@ export default function Home() {
             ))}
           </div>
         </div>
-
-        {/* Favorites */}
-        {favorites.length > 0 ? (
-          <div style={{ padding: "24px 0", borderBottom: "1px solid var(--tp-border)" }}>
-            <div className="tp-title">{t("FAVORITES")}</div>
-            <div className="tp-grid">
-              {favorites.map((ticker) => (
-                <button
-                  key={ticker}
-                  type="button"
-                  onClick={() => goToStock(ticker)}
-                  className="tp-company"
-                  style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}
-                >
-                  <span className="tp-company-name">{ticker}</span>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      removeFavorite(ticker);
-                    }}
-                    aria-label={t("REMOVE_FAVORITE")}
-                    style={{
-                      padding: "4px 8px",
-                      borderRadius: 8,
-                      border: "1px solid var(--tp-border)",
-                      background: "transparent",
-                      cursor: "pointer",
-                      fontSize: 12,
-                    }}
-                  >
-                    ✕
-                  </button>
-                </button>
-              ))}
-            </div>
-          </div>
-        ) : null}
 
         <footer
           style={{

@@ -12,8 +12,8 @@ import { getSp500CompanyData, sp500ToValuationFormat } from "../services/sp500Da
 
 /**
  * Client-side replacement for GET /api/valuation/:ticker.
- * - TASI (SA): uses local tasi_all_financial_data.json for financials; twelvePrice for live price.
- * - US (S&P 500): uses local sp500_all_financial_data.json for financials; twelvePrice for live price.
+ * - TASI (SA): uses local tasi_financial_data.json for financials; twelvePrice for live price.
+ * - US (S&P 500): uses local sp500_financial_data.json for financials; twelvePrice for live price.
  * - Falls back to Twelve Data API when local data is empty/incomplete.
  * Caller can still cache the result in sessionStorage (as the UI already does).
  */

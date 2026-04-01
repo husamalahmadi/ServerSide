@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { UserBar } from "./UserBar.jsx";
 
 const headerStyle = {
   borderBottom: "2px solid var(--tp-ink, #1a1a14)",
@@ -51,11 +52,12 @@ export function PageHeader({ title, subtitle, children }) {
           <div style={mastheadSubStyle}>{subtitle}</div>
         ) : null}
       </div>
-      <div style={headerRightStyle}>
-        <div style={editionStyle}>US · TASI · Stock Fair Value</div>
-        <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "flex-end" }}>
+      <div style={{ ...headerRightStyle, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", justifyContent: "flex-end" }}>
+          <UserBar />
           {children}
         </div>
+        <div style={editionStyle}>US · TASI · Stock Fair Value</div>
       </div>
     </header>
   );

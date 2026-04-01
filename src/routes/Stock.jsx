@@ -16,7 +16,12 @@ import { CompareBar, ChartBlock } from "../components/stock/StockCharts.jsx";
 import { StockNewsSidebar } from "../components/StockNewsSidebar.jsx";
 import { fmt2, fmtBill, trendText, calcTrend } from "../domain/formatting.js";
 import { usePageMeta } from "../hooks/usePageMeta.js";
-import { useFavorites } from "../hooks/useFavorites.js";
+import { useAuth } from "../context/AuthContext.jsx";
+import { useTrackView } from "../hooks/useActivity.js";
+import { StockComments } from "../components/StockComments.jsx";
+import { WatchlistManager } from "../components/WatchlistManager.jsx";
+import { UserBar } from "../components/UserBar.jsx";
+import { GoogleGIcon } from "../components/GoogleGIcon.jsx";
 import { getPrefetchDelayMs } from "../config/env.js";
 import { exportElementAsPdf } from "../utils/exportPdf.js";
 
@@ -26,7 +31,8 @@ const PREFETCH_DELAY_SEC = Math.ceil(getPrefetchDelayMs() / 1000);
 export default function Stock() {
   const { ticker } = useParams();
   const { t, lang, dir, toggleLang } = useI18n();
-  const { isFavorite, toggleFavorite } = useFavorites();
+  const { user, login } = useAuth();
+  useTrackView(ticker);
   const [shareCopied, setShareCopied] = useState(false);
   usePageMeta({ title: ticker ? `${ticker} – ${t("REPORT")}` : t("REPORT"), description: t("FAIR_VALUE_SECTION") + ". " + t("EXEC_SUM") + "." });
   const isMobile = useIsMobile(700);
@@ -425,22 +431,6 @@ export default function Stock() {
             </div>
             <button
               type="button"
-              onClick={() => ticker && toggleFavorite(ticker)}
-              aria-label={isFavorite(ticker) ? t("REMOVE_FAVORITE") : t("ADD_FAVORITE")}
-              style={{
-                border: "1px solid #d1d5db",
-                borderRadius: 999,
-                padding: "6px 10px",
-                background: "#fff",
-                color: isFavorite(ticker) ? "#b45309" : "#6b7280",
-                cursor: "pointer",
-                fontSize: 16,
-              }}
-            >
-              {isFavorite(ticker) ? "★" : "☆"}
-            </button>
-            <button
-              type="button"
               onClick={handleShare}
               style={{
                 border: "1px solid #d1d5db",
@@ -486,6 +476,7 @@ export default function Stock() {
             >
               {pdfExporting ? "…" : t("EXPORT_PDF")}
             </button>
+            <UserBar />
             <PillLink to="/" ariaLabel={t("DASHBOARD")}>TruePrice.Cash</PillLink>
             <LangToggle lang={lang} onToggle={toggleLang} t={t} />
           </div>
@@ -602,6 +593,29 @@ export default function Stock() {
           )}
         </Card>
 
+        {!user ? (
+          <div
+            style={{
+              padding: 24,
+              textAlign: "center",
+              background: "#f8fafc",
+              borderRadius: 16,
+              border: "1px solid #e5e7eb",
+              marginBottom: 16,
+            }}
+          >
+            <p style={{ margin: "0 0 12px", fontSize: 16, color: "#374151" }}>
+              Sign in to view news, revenue & income graphs, watchlists, comments, and more.
+            </p>
+            <button type="button" onClick={login} className="tp-signin-google">
+              <GoogleGIcon size={13} />
+              Sign in with Google
+            </button>
+          </div>
+        ) : null}
+
+        {user ? (
+        <>
         {/* 3. Revenue & Income */}
         <Card title={`${t("REV_INC_TITLE")} (${currency})`}>
           {prefetchCountdown > 0 ? (
@@ -959,6 +973,9 @@ export default function Stock() {
           )}
         </Card>
 
+        <WatchlistManager ticker={ticker} t={t} />
+        <StockComments ticker={ticker} t={t} />
+
         {/* Appendix */}
         <Card title={t("APPENDIX")}>
           {prefetchCountdown > 0 ? (
@@ -1004,9 +1021,11 @@ export default function Stock() {
             </div>
           )}
         </Card>
+        </>
+        ) : null}
         </div>
 
-        {market === "us" ? (
+        {user && market === "us" ? (
           <StockNewsSidebar ticker={ticker} companyName={companyDisplayName} market={market} t={t} dir={dir} isMobile={isMobile} />
         ) : null}
       </div>
