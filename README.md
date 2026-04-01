@@ -2,6 +2,29 @@
 
 Stocks financials web app (Vite + React). The production build is written to `dist/` (Vite default; matches Cloudflare’s Vite preset).
 
+## Local development vs production (two processes)
+
+**On your machine (two terminals):**
+
+| What | Role | Typical command |
+|------|------|-----------------|
+| **Client** | Vite dev server: React, hot reload, serves `index.html` and proxies dev assets | `npm run dev` → often **http://localhost:5173** |
+| **Server** | Express in `server/`: REST API, Google OAuth, sessions, SQLite, comments, watchlists | `npm run server` or `cd server && npm run dev` → often **http://localhost:3001** |
+
+The browser loads the UI from **5173** and the React app calls the API using **`VITE_API_URL`** (e.g. `http://localhost:3001`). That is **two separate programs** talking over HTTP.
+
+**In production, static hosts (Vercel, Cloudflare Pages) only publish the client:**
+
+- They run `npm run build` and upload **`dist/`** (HTML, JS, CSS, `public/` files).
+- They **do not** run your Express `server/` — there is no Node process for your API on those platforms unless you add something else (Workers, Functions, etc.).
+
+So production is **not** “the same as localhost with one URL” unless you set it up that way:
+
+1. **Split (common):** Frontend on Vercel / Cloudflare Pages **+** API on **Railway, Render, Fly.io, VPS**, etc. Set **`VITE_API_URL`** to that API’s **HTTPS** base URL. Update Google OAuth origins for both the frontend URL and the API callback URL.
+2. **Single server (closest to “one localhost”):** Deploy **one** Node service that runs **`server/server.js`** after building the client. The server already serves **`dist/`** (see `express.static` in `server.js`) and falls back to `index.html` for SPA routes — **same origin** for UI and API, so you often omit **`VITE_API_URL`** or set it to the same origin. You still need a host that runs Node 24/7 (not Cloudflare Pages alone).
+
+Understanding this explains blank pages (wrong `dist` folder), auth issues (API URL / OAuth still pointing at localhost), and why “two terminals locally” becomes “two services on the internet” unless you use option 2.
+
 ## Deploy on Vercel
 
 1. Push this repo to GitHub (already configured for [ServerSide](https://github.com/husamalahmadi/ServerSide)).
