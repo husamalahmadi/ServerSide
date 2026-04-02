@@ -1,8 +1,11 @@
-# Optional Render Blueprint: https://render.com/docs/blueprint-spec
-# Set CLIENT_URL, SERVER_URL, SESSION_SECRET, Google OAuth, and Docker build args in the dashboard.
+# Render Blueprint: https://render.com/docs/blueprint-spec
+# Native Node (no Docker) — avoids "Dockerfile: no such file" on some Render builds.
+# Set in dashboard: CLIENT_URL, SERVER_URL, SESSION_SECRET, Google OAuth,
+# and Build-time VITE_* (VITE_API_URL = your service HTTPS URL, same as SERVER_URL).
 services:
   - type: web
     name: trueprice-api
-    runtime: docker
-    dockerfilePath: ./Dockerfile
+    runtime: node
+    buildCommand: npm install && npm run build && cd server && npm install
+    startCommand: cd server && npm start
     plan: free
