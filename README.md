@@ -69,9 +69,13 @@ When building the image, pass the same **`VITE_*`** values you use on Cloudflare
 
 ### 5. Cloudflare Pages (frontend)
 
-Add **`VITE_API_URL`** = your **`SERVER_URL`** (the API’s public HTTPS URL, no path). **Redeploy** the Pages project so the variable is baked into the build.
+Tell the browser where the API is (pick one):
 
-After the API is live and **`VITE_API_URL`** matches it, Google sign-in from the Cloudflare site will redirect to the API instead of showing the banner.
+- **A)** **Environment variables** (recommended): **`VITE_API_URL`** = same value as **`SERVER_URL`**. **Save** and **Redeploy** (required — Vite reads env at **build** time).
+- **B)** If you still see the sign-in banner after redeploying: edit **`public/runtime-config.js`** in GitHub, set  
+  `window.__TP_PUBLIC_API_URL__ = "https://your-api-host"` (your public API URL), commit, and let Pages rebuild. No Cloudflare env var needed for that path.
+
+After the API is live and one of the above is set, Google sign-in will use your API.
 
 ## Deploy on Cloudflare Pages (instead of Vercel)
 

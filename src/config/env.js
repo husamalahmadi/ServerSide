@@ -43,9 +43,23 @@ export function getBaseUrl() {
   return get("BASE_URL", "/");
 }
 
-/** True if VITE_API_URL was set at build time (required for Google OAuth against a real API host). */
+/** True if API base URL is known: build-time VITE_API_URL or public/runtime-config.js. */
 export function hasExplicitViteApiUrl() {
-  return !!(import.meta.env.VITE_API_URL ?? "").toString().trim();
+  if (!!(import.meta.env.VITE_API_URL ?? "").toString().trim()) return true;
+  if (typeof window !== "undefined") {
+    const rt = (window.__TP_PUBLIC_API_URL__ ?? "").toString().trim();
+    if (rt) return true;
+  }
+  return false;
+}
+
+function getResolvedApiUrlString() {
+  let s = (import.meta.env.VITE_API_URL ?? "").toString().trim();
+  if (typeof window !== "undefined") {
+    const rt = (window.__TP_PUBLIC_API_URL__ ?? "").toString().trim();
+    if (rt) s = rt;
+  }
+  return s;
 }
 
 /**
@@ -59,7 +73,7 @@ export function hasExplicitViteApiUrl() {
  * For a separate API host, set VITE_API_URL in the host dashboard (e.g. Railway URL).
  */
 export function getApiUrl() {
-  let fromEnv = (import.meta.env.VITE_API_URL ?? "").toString().trim();
+  let fromEnv = getResolvedApiUrlString();
   let u;
   if (fromEnv) {
     u = fromEnv.replace(/\/+$/, "");

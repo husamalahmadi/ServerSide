@@ -243,9 +243,10 @@ export default function Home() {
               lineHeight: 1.55,
             }}
           >
-            <strong>Sign-in needs the API server.</strong> Deploy <code style={{ fontSize: 12 }}>server/</code>{" "}
-            (Railway, Render, etc.), set <strong>VITE_API_URL</strong> in Cloudflare Pages to your API HTTPS URL,
-            redeploy, then try Google sign-in again.
+            <strong>Sign-in needs the API server URL.</strong> Deploy <code style={{ fontSize: 12 }}>server/</code>{" "}
+            (see README), then either set <strong>VITE_API_URL</strong> in Cloudflare Pages <em>and</em> redeploy,{" "}
+            or edit <code style={{ fontSize: 12 }}>public/runtime-config.js</code> in the repo (set{" "}
+            <code style={{ fontSize: 12 }}>window.__TP_PUBLIC_API_URL__</code> to your API HTTPS URL) and redeploy.
             <button
               type="button"
               onClick={() => {
