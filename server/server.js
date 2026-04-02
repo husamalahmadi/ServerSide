@@ -45,6 +45,19 @@ const CLIENT_URL = CLIENT_URL_RAW.split(",")[0].trim();
 const SERVER_URL = process.env.SERVER_URL || "http://localhost:3001";
 const SESSION_SECRET = process.env.SESSION_SECRET || "dev-secret-change-in-production";
 
+/** When frontend (e.g. Cloudflare) and API (e.g. Railway) differ, credentialed fetch needs SameSite=None. */
+function getSessionCookieSameSite() {
+  const override = process.env.SESSION_COOKIE_SAMESITE;
+  if (override === "none" || override === "lax" || override === "strict") return override;
+  if (process.env.NODE_ENV !== "production") return "lax";
+  try {
+    if (new URL(CLIENT_URL).origin !== new URL(SERVER_URL).origin) return "none";
+  } catch {
+    /* ignore */
+  }
+  return "lax";
+}
+
 /** Comma-separated in CLIENT_URL, or any localhost / 127.0.0.1 origin in non-production (fixes Vite on 5174+). */
 const corsAllowedOrigins = CLIENT_URL_RAW.split(",")
   .map((s) => s.trim())
@@ -106,6 +119,9 @@ passport.deserializeUser((id, done) => {
 });
 
 const app = express();
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+}
 app.use(
   cors({
     origin: corsOrigin,
@@ -113,6 +129,7 @@ app.use(
   })
 );
 app.use(express.json());
+const sessionSameSite = getSessionCookieSameSite();
 app.use(
   session({
     secret: SESSION_SECRET,
@@ -121,7 +138,7 @@ app.use(
     cookie: {
       secure: process.env.NODE_ENV === "production",
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: sessionSameSite,
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     },

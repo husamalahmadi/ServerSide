@@ -37,6 +37,42 @@ Understanding this explains blank pages (wrong `dist` folder), auth issues (API 
 
 The Express API in `server/` is not run by Vercel; host it separately (e.g. Railway, Render) and point `VITE_API_URL` at it.
 
+## Deploy the API (fixes “Sign-in needs the API server” on Cloudflare)
+
+The repo includes a root **`Dockerfile`** that builds the client and runs **`server/server.js`**. Deploy it to **Render**, **Railway**, or any Docker host.
+
+### 1. Create the API service
+
+- **Render:** New **Web Service** → connect **ServerSide** → **Docker** → use repo root `Dockerfile`. Or use [`render.yaml`](render.yaml) (Blueprint).
+- **Railway:** New project → **Deploy from GitHub** → pick repo → Railway detects `Dockerfile`.
+
+### 2. Runtime environment variables (on the API host)
+
+| Variable | Example | Purpose |
+|----------|---------|---------|
+| `CLIENT_URL` | `https://your-app.pages.dev` | Your **Cloudflare Pages** site URL (OAuth redirect back). |
+| `SERVER_URL` | `https://trueprice-api.onrender.com` | **Public HTTPS URL of this API** (must match the service URL). |
+| `SESSION_SECRET` | long random string | Session encryption. |
+| `GOOGLE_CLIENT_ID` | from Google Cloud | OAuth. |
+| `GOOGLE_CLIENT_SECRET` | from Google Cloud | OAuth. |
+
+`PORT` is usually injected by the host; the server reads `process.env.PORT`.
+
+### 3. Docker build arguments (optional but recommended)
+
+When building the image, pass the same **`VITE_*`** values you use on Cloudflare (e.g. `VITE_TWELVEDATA_API_KEY`) and set **`VITE_API_URL`** to the **same public URL as `SERVER_URL`**, so the copy of the app inside the container stays consistent. **Cloudflare** still needs its own env vars for the copy of the site users load from Pages.
+
+### 4. Google Cloud Console (OAuth client)
+
+- **Authorized JavaScript origins:** your Cloudflare origin (`https://….pages.dev` or custom domain).
+- **Authorized redirect URIs:** `https://<YOUR_SERVER_URL_HOST>/auth/google/callback` (exactly `SERVER_URL` + `/auth/google/callback`).
+
+### 5. Cloudflare Pages (frontend)
+
+Add **`VITE_API_URL`** = your **`SERVER_URL`** (the API’s public HTTPS URL, no path). **Redeploy** the Pages project so the variable is baked into the build.
+
+After the API is live and **`VITE_API_URL`** matches it, Google sign-in from the Cloudflare site will redirect to the API instead of showing the banner.
+
 ## Deploy on Cloudflare Pages (instead of Vercel)
 
 1. **Account** — Sign up at [dash.cloudflare.com](https://dash.cloudflare.com) (free tier is enough).

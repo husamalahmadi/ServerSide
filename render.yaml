@@ -1,0 +1,8 @@
+# Optional Render Blueprint: https://render.com/docs/blueprint-spec
+# Set CLIENT_URL, SERVER_URL, SESSION_SECRET, Google OAuth, and Docker build args in the dashboard.
+services:
+  - type: web
+    name: trueprice-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
