@@ -6,7 +6,8 @@ services:
   - type: web
     name: trueprice-api
     runtime: node
-    buildCommand: npm install && npm run build && cd server && npm install
-    # If the run instance has no dist/ (some hosts omit ignored build output), rebuild before start.
-    startCommand: bash -c 'if [ ! -f dist/index.html ]; then npm run build; fi && cd server && npm start'
+    # --include=dev: Vite lives in devDependencies; Render sets NODE_ENV=production and skips devDeps by default.
+    buildCommand: npm install --include=dev && npm run build && cd server && npm install
+    # If the run instance has no dist/, rebuild before start (needs Vite too).
+    startCommand: bash -c 'if [ ! -f dist/index.html ]; then npm install --include=dev && npm run build; fi && cd server && npm start'
     plan: free
