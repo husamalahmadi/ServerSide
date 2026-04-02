@@ -5,7 +5,7 @@ import cors from "cors";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import Database from "better-sqlite3";
-import { readFileSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { validateComment } from "./commentFilter.js";
@@ -411,6 +411,11 @@ app.get("/api/analytics/trending", (req, res) => {
 
 // Serve static build (dist folder from Vite)
 const staticPath = join(__dirname, "..", "dist");
+if (!existsSync(join(staticPath, "index.html"))) {
+  console.error(
+    `[static] Missing ${join(staticPath, "index.html")}. Run "npm run build" at repo root before starting the server.`
+  );
+}
 app.use(express.static(staticPath));
 app.get("*", (req, res, next) => {
   if (req.path.startsWith("/api") || req.path.startsWith("/auth")) return next();
