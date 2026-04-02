@@ -7,5 +7,6 @@ services:
     name: trueprice-api
     runtime: node
     buildCommand: npm install && npm run build && cd server && npm install
-    startCommand: cd server && npm start
+    # If the run instance has no dist/ (some hosts omit ignored build output), rebuild before start.
+    startCommand: bash -c 'if [ ! -f dist/index.html ]; then npm run build; fi && cd server && npm start'
     plan: free

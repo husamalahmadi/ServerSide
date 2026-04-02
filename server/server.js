@@ -419,7 +419,17 @@ if (!existsSync(join(staticPath, "index.html"))) {
 app.use(express.static(staticPath));
 app.get("*", (req, res, next) => {
   if (req.path.startsWith("/api") || req.path.startsWith("/auth")) return next();
-  res.sendFile(join(staticPath, "index.html"));
+  // Missing hashed files must not fall through to SPA HTML (wrong MIME / confusing errors).
+  if (req.path.startsWith("/assets")) {
+    return res.status(404).type("text/plain").send("Not found");
+  }
+  const indexHtml = join(staticPath, "index.html");
+  res.sendFile(indexHtml, (err) => {
+    if (err) {
+      console.error("[static] sendFile index.html failed:", err.message);
+      next(err);
+    }
+  });
 });
 
 const PORT = process.env.PORT || 3001;
