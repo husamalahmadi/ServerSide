@@ -43,16 +43,6 @@ export function getBaseUrl() {
   return get("BASE_URL", "/");
 }
 
-/** True if API base URL is known: build-time VITE_API_URL or public/runtime-config.js. */
-export function hasExplicitViteApiUrl() {
-  if (!!(import.meta.env.VITE_API_URL ?? "").toString().trim()) return true;
-  if (typeof window !== "undefined") {
-    const rt = (window.__TP_PUBLIC_API_URL__ ?? "").toString().trim();
-    if (rt) return true;
-  }
-  return false;
-}
-
 function getResolvedApiUrlString() {
   let s = (import.meta.env.VITE_API_URL ?? "").toString().trim();
   if (typeof window !== "undefined") {
@@ -60,6 +50,23 @@ function getResolvedApiUrlString() {
     if (rt) s = rt;
   }
   return s;
+}
+
+/**
+ * True if we should allow opening /auth/google (API URL is unambiguous).
+ * Build-time VITE_API_URL, runtime-config, or production same-origin (single deploy e.g. Render).
+ */
+export function hasExplicitViteApiUrl() {
+  if (!!(import.meta.env.VITE_API_URL ?? "").toString().trim()) return true;
+  if (typeof window !== "undefined") {
+    const rt = (window.__TP_PUBLIC_API_URL__ ?? "").toString().trim();
+    if (rt) return true;
+  }
+  // Production with no separate API URL: getApiUrl() uses window.location.origin — one host for SPA + API.
+  if (typeof window !== "undefined" && import.meta.env.PROD && !getResolvedApiUrlString()) {
+    return true;
+  }
+  return false;
 }
 
 /**
