@@ -1,8 +1,6 @@
 /**
- * Optional: set your deployed API base URL here (https, no trailing slash).
- * Use this if Google sign-in still asks for VITE_API_URL after setting Cloudflare env —
- * then redeploy. Example:
- *   window.__TP_PUBLIC_API_URL__ = "https://trueprice-api.onrender.com";
- * Leave empty to rely on VITE_API_URL from the build (Cloudflare Pages env vars).
+ * Optional: API base URL (https, no trailing slash) when the frontend is built without VITE_API_URL.
+ * Example: window.__TP_PUBLIC_API_URL__ = "https://your-api.onrender.com";
+ * Leave empty to use VITE_* from the build or the same origin as the page.
  */
 window.__TP_PUBLIC_API_URL__ = window.__TP_PUBLIC_API_URL__ || "";

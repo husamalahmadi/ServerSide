@@ -145,30 +145,8 @@ app.use(
   })
 );
 app.use(express.json());
-// Static assets before session — avoids touching session store on every hashed chunk request.
-// If the directory is missing, mounting express.static can call next(err) → default HTML 500 on /assets/*.
-if (existsSync(staticPath)) {
-  app.use(
-    express.static(staticPath, {
-      index: "index.html",
-      setHeaders(res, filePath) {
-        try {
-          if (!filePath) return;
-          const normalized = String(filePath).replace(/\\/g, "/");
-          if (normalized.endsWith("/index.html")) {
-            res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
-          } else {
-            res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-          }
-        } catch (e) {
-          console.error("[static] setHeaders:", e?.message || e);
-        }
-      },
-    })
-  );
-} else {
-  console.error(`[static] Directory missing — not mounting express.static: ${staticPath}`);
-}
+
+// Session + OAuth before express.static so /auth/google is never handled by static middleware first.
 const sessionSameSite = getSessionCookieSameSite();
 app.use(
   session({
@@ -209,6 +187,30 @@ app.post("/auth/logout", (req, res) => {
   req.logout(() => {});
   res.json({ ok: true });
 });
+
+// Static assets after OAuth. Hashed chunks do not need session (minor overhead on /assets/* is acceptable).
+if (existsSync(staticPath)) {
+  app.use(
+    express.static(staticPath, {
+      index: "index.html",
+      setHeaders(res, filePath) {
+        try {
+          if (!filePath) return;
+          const normalized = String(filePath).replace(/\\/g, "/");
+          if (normalized.endsWith("/index.html")) {
+            res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+          } else {
+            res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+          }
+        } catch (e) {
+          console.error("[static] setHeaders:", e?.message || e);
+        }
+      },
+    })
+  );
+} else {
+  console.error(`[static] Directory missing — not mounting express.static: ${staticPath}`);
+}
 
 // Require auth middleware
 const requireAuth = (req, res, next) => {
