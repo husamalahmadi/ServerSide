@@ -8,6 +8,6 @@ services:
     runtime: node
     # --include=dev: Vite lives in devDependencies; Render sets NODE_ENV=production and skips devDeps by default.
     buildCommand: npm install --include=dev && npm run build && cd server && npm install
-    # Always build on the run instance so dist/ exists even if the deploy artifact omits it.
-    startCommand: bash -c 'npm install --include=dev && npm run build && cd server && npm start'
+    # Same as package.json "render:start" — build client into server/static then run API.
+    startCommand: npm run render:start
     plan: free

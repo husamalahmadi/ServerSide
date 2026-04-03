@@ -140,7 +140,23 @@ app.use(
 );
 app.use(express.json());
 // Static assets before session — avoids touching session store on every hashed chunk request.
-app.use(express.static(staticPath));
+// If the directory is missing, mounting express.static can call next(err) → default HTML 500 on /assets/*.
+if (existsSync(staticPath)) {
+  app.use(
+    express.static(staticPath, {
+      index: "index.html",
+      setHeaders(res, filePath) {
+        if (filePath.replace(/\\/g, "/").endsWith("/index.html")) {
+          res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+        } else {
+          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+        }
+      },
+    })
+  );
+} else {
+  console.error(`[static] Directory missing — not mounting express.static: ${staticPath}`);
+}
 const sessionSameSite = getSessionCookieSameSite();
 app.use(
   session({
@@ -428,12 +444,23 @@ app.get("*", (req, res, next) => {
     return res.status(404).type("text/plain").send("Not found");
   }
   const indexHtml = join(staticPath, "index.html");
+  if (!existsSync(indexHtml)) {
+    return res.status(503).type("text/plain").send("Client build missing. Run npm run build at repo root.");
+  }
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
   res.sendFile(indexHtml, (err) => {
     if (err) {
       console.error("[static] sendFile index.html failed:", err.message);
       next(err);
     }
   });
+});
+
+// Avoid Express default HTML error pages (wrong MIME for /assets debugging).
+app.use((err, req, res, next) => {
+  console.error("[express]", err?.message || err);
+  if (res.headersSent) return next(err);
+  res.status(500).type("text/plain").send("Internal Server Error");
 });
 
 const PORT = process.env.PORT || 3001;

@@ -11,7 +11,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "server": "cd server && npm run dev",
-    "server:start": "cd server && node server.js"
+    "server:start": "cd server && node server.js",
+    "render:start": "npm install --include=dev && npm run build && cd server && npm start"
   },
   "dependencies": {
     "dompurify": "^3.3.1",
