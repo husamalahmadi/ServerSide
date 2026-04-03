@@ -27,6 +27,13 @@ export default function Home() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const authParam = searchParams.get("auth");
+  // Legacy ?auth=api_required (old client builds). Strip silently — do not show a banner.
+  useEffect(() => {
+    if (searchParams.get("auth") !== "api_required") return;
+    const next = new URLSearchParams(searchParams);
+    next.delete("auth");
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
   usePageMeta({ title: "TruePrice.Cash", description: t("MARKET_US") + " & " + t("MARKET_SA") + ". " + t("COMPANIES") + "." });
 
   const [q, setQ] = useState("");
@@ -229,45 +236,6 @@ export default function Home() {
           <LangToggle lang={lang} onToggle={toggleLang} t={t} />
         </PageHeader>
 
-        {authParam === "api_required" && (
-          <div
-            role="status"
-            style={{
-              margin: "0 0 20px",
-              padding: "14px 16px",
-              background: "#fff7ed",
-              border: "1px solid #fdba74",
-              borderRadius: 10,
-              fontSize: 13,
-              color: "#9a3412",
-              lineHeight: 1.55,
-            }}
-          >
-            <strong>Sign-in needs the API server URL.</strong> Deploy <code style={{ fontSize: 12 }}>server/</code>{" "}
-            (see README), then either set <strong>VITE_API_URL</strong> in Cloudflare Pages <em>and</em> redeploy,{" "}
-            or edit <code style={{ fontSize: 12 }}>public/runtime-config.js</code> in the repo (set{" "}
-            <code style={{ fontSize: 12 }}>window.__TP_PUBLIC_API_URL__</code> to your API HTTPS URL) and redeploy.
-            <button
-              type="button"
-              onClick={() => {
-                searchParams.delete("auth");
-                setSearchParams(searchParams, { replace: true });
-              }}
-              style={{
-                marginLeft: 12,
-                padding: "4px 10px",
-                fontSize: 12,
-                cursor: "pointer",
-                borderRadius: 6,
-                border: "1px solid #ea580c",
-                background: "#fff",
-                color: "#9a3412",
-              }}
-            >
-              Dismiss
-            </button>
-          </div>
-        )}
         {authParam === "not_configured" && (
           <div
             role="status"
