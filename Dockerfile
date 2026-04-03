@@ -22,10 +22,10 @@ FROM node:20-bookworm-slim
 RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ \
   && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
-COPY --from=frontend /app/dist ./dist
 COPY server/package.json server/package-lock.json ./server/
 RUN cd server && npm ci
 COPY server ./server
+COPY --from=frontend /app/server/static ./server/static
 ENV NODE_ENV=production
 EXPOSE 3001
 CMD ["node", "server/server.js"]

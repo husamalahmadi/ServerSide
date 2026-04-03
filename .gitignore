@@ -3,9 +3,9 @@ node_modules/
 
 # Build output
 output/
-# dist/ is intentionally NOT ignored: Render (and similar hosts) omit gitignored paths from the
-# deploy bundle, so Express would have no Vite build at runtime (blank page / 500 on assets).
-# Add dist/ to your local exclude if you prefer: .git/info/exclude
+dist/
+# Vite production bundle (served by Express from server/static)
+server/static/
 
 # Server database
 server/trueprice.db

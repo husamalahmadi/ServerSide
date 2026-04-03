@@ -2,14 +2,17 @@ import { cpSync, existsSync } from "node:fs";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-/** Runs inside `vite build` even when the host uses `vite build` instead of `npm run build`. */
-function copyOutputToDistForPages() {
+/** Vite build output next to Express (server/static). Avoids cwd/../dist confusion on Render. */
+const OUT_DIR = "server/static";
+
+/** If legacy output/ exists and build skipped, copy into OUT_DIR (Pages / older scripts). */
+function copyOutputFallback() {
   return {
-    name: "copy-output-to-dist",
+    name: "copy-output-fallback",
     closeBundle() {
-      if (!existsSync("dist") && existsSync("output")) {
-        cpSync("output", "dist", { recursive: true });
-        console.log("[vite] Copied output/ → dist/ (Cloudflare Pages expects dist/).");
+      if (!existsSync(OUT_DIR) && existsSync("output")) {
+        cpSync("output", OUT_DIR, { recursive: true });
+        console.log(`[vite] Copied output/ → ${OUT_DIR}/`);
       }
     },
   };
@@ -17,15 +20,14 @@ function copyOutputToDistForPages() {
 
 export default defineConfig({
   base: "/",
-  plugins: [react(), copyOutputToDistForPages()],
+  plugins: [react(), copyOutputFallback()],
   server: {
     port: 5173,
-    open: true, // Automatically open browser
-    strictPort: false, // Try next available port if 5173 is taken
+    open: true,
+    strictPort: false,
   },
   build: {
-    // Default `dist` matches Vercel/Cloudflare docs; avoids deploying empty `dist` on Pages.
-    outDir: "dist",
+    outDir: OUT_DIR,
     emptyOutDir: true,
   },
 });

@@ -118,30 +118,15 @@ passport.deserializeUser((id, done) => {
   done(null, user || null);
 });
 
-/** Vite outDir is repo ../dist; cwd on hosts may be repo root or server/. */
-function resolveStaticDir() {
-  const candidates = [
-    join(__dirname, "..", "dist"),
-    join(process.cwd(), "dist"),
-  ];
-  const cwdNorm = process.cwd().replace(/\\/g, "/");
-  if (cwdNorm.endsWith("/server")) {
-    candidates.push(join(process.cwd(), "..", "dist"));
-  }
-  for (const p of candidates) {
-    if (existsSync(join(p, "index.html"))) {
-      console.log(`[static] Serving Vite build from ${p}`);
-      return p;
-    }
-  }
-  const fallback = join(__dirname, "..", "dist");
+/** Vite `outDir` is `server/static` (same folder as this file) — works regardless of process.cwd(). */
+const staticPath = join(__dirname, "static");
+if (!existsSync(join(staticPath, "index.html"))) {
   console.error(
-    `[static] No dist/index.html found (cwd=${process.cwd()}). Tried: ${candidates.join(" | ")}`
+    `[static] Missing ${join(staticPath, "index.html")}. Run "npm run build" at repo root (Vite writes to server/static).`
   );
-  return fallback;
+} else {
+  console.log(`[static] Serving Vite build from ${staticPath}`);
 }
-
-const staticPath = resolveStaticDir();
 
 const app = express();
 if (process.env.NODE_ENV === "production") {
