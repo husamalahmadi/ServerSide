@@ -73,6 +73,12 @@ function isDevLocalOrigin(origin) {
 function corsOrigin(origin, callback) {
   if (!origin) return callback(null, true);
   if (corsAllowedOrigins.includes(origin)) return callback(null, true);
+  // Same host as the API (single Render URL for UI + API): subresource requests send Origin; must not 500 if CLIENT_URL only lists another host (e.g. Cloudflare).
+  try {
+    if (origin === new URL(SERVER_URL).origin) return callback(null, true);
+  } catch {
+    /* ignore invalid SERVER_URL */
+  }
   if (process.env.NODE_ENV !== "production" && isDevLocalOrigin(origin)) return callback(null, true);
   callback(new Error("Not allowed by CORS"));
 }
@@ -146,10 +152,16 @@ if (existsSync(staticPath)) {
     express.static(staticPath, {
       index: "index.html",
       setHeaders(res, filePath) {
-        if (filePath.replace(/\\/g, "/").endsWith("/index.html")) {
-          res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
-        } else {
-          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+        try {
+          if (!filePath) return;
+          const normalized = String(filePath).replace(/\\/g, "/");
+          if (normalized.endsWith("/index.html")) {
+            res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+          } else {
+            res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+          }
+        } catch (e) {
+          console.error("[static] setHeaders:", e?.message || e);
         }
       },
     })
