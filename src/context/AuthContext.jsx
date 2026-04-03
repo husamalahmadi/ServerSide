@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getApiUrl, hasExplicitViteApiUrl } from "../config/env.js";
+import { getApiUrl } from "../config/env.js";
 
 const AuthContext = createContext(null);
 
@@ -19,13 +19,9 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = () => {
-    // Without VITE_API_URL: block when we cannot resolve the API (e.g. split deploy with wrong build).
-    // Same-origin production (e.g. one Render URL) is allowed via hasExplicitViteApiUrl().
-    // !DEV matches any production build (including non-"production" Vite modes); PROD alone misses staging.
-    if (!import.meta.env.DEV && !hasExplicitViteApiUrl()) {
-      window.location.assign("/?auth=api_required");
-      return;
-    }
+    // Always send the browser to the API OAuth route. Do not block on heuristics (Vite env
+    // flags and same-origin checks vary by host and have caused false "api_required" redirects).
+    // Split frontend/API: set VITE_API_URL or public/runtime-config.js so getApiUrl() targets the API.
     window.location.href = `${getApiUrl()}/auth/google`;
   };
 
