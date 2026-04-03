@@ -279,9 +279,15 @@ export default function Home() {
               borderRadius: 10,
               fontSize: 13,
               color: "#991b1b",
+              lineHeight: 1.55,
             }}
           >
-            Google sign-in is not configured on the API (missing OAuth env vars).
+            <strong>Google sign-in is not configured on the server.</strong> In your API host (e.g. Render → your Web
+            Service → <strong>Environment</strong>), add <code style={{ fontSize: 12 }}>GOOGLE_CLIENT_ID</code> and{" "}
+            <code style={{ fontSize: 12 }}>GOOGLE_CLIENT_SECRET</code> from Google Cloud → Credentials → your{" "}
+            <em>OAuth 2.0 Client ID</em> (not the Blogger API key). Save and redeploy. In Google Cloud, set the OAuth{" "}
+            <strong>redirect URI</strong> to{" "}
+            <code style={{ fontSize: 11 }}>https://YOUR-API-HOST/auth/google/callback</code>.
             <button
               type="button"
               onClick={() => {
