@@ -135,11 +135,14 @@ export function hasExplicitViteApiUrl() {
     const rt = (window.__TP_PUBLIC_API_URL__ ?? "").toString().trim();
     if (rt) return true;
   }
-  if (typeof window !== "undefined" && import.meta.env.PROD) {
+  // Use !DEV, not PROD: Vite sets PROD only when mode === "production". Staging/preview
+  // builds (e.g. --mode staging) have PROD false but DEV false in the bundle — same-origin
+  // deploys would wrongly fail. In vite dev, DEV is true; getApiUrl() is localhost:3001
+  // vs page :5173 so api !== page and we still return false without VITE_API_URL.
+  if (typeof window !== "undefined" && !import.meta.env.DEV) {
     try {
-      const api = getApiUrl();
-      const page = window.location.origin;
-      if (api === page) return true;
+      const apiOrigin = new URL(getApiUrl(), window.location.href).origin;
+      if (apiOrigin === window.location.origin) return true;
     } catch {
       /* ignore */
     }

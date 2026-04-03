@@ -21,7 +21,8 @@ export function AuthProvider({ children }) {
   const login = () => {
     // Without VITE_API_URL: block when we cannot resolve the API (e.g. split deploy with wrong build).
     // Same-origin production (e.g. one Render URL) is allowed via hasExplicitViteApiUrl().
-    if (import.meta.env.PROD && !hasExplicitViteApiUrl()) {
+    // !DEV matches any production build (including non-"production" Vite modes); PROD alone misses staging.
+    if (!import.meta.env.DEV && !hasExplicitViteApiUrl()) {
       window.location.assign("/?auth=api_required");
       return;
     }
