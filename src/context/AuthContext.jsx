@@ -9,13 +9,47 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const apiUrl = getApiUrl();
-    fetch(`${apiUrl}/auth/me`, { credentials: "include" })
-      .then((r) => r.json())
-      .then((data) => {
-        setUser(data.user || null);
-      })
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false));
+
+    async function fetchMe() {
+      const r = await fetch(`${apiUrl}/auth/me`, { credentials: "include" });
+      return r.json();
+    }
+
+    // Split deploy (e.g. Cloudflare + Render): after OAuth redirect, cookie may not be sent on
+    // the first fetch yet; API may also be cold-starting. Retry until we get a user or give up.
+    let cancelled = false;
+    const delaysMs = [0, 400, 1200, 2500];
+
+    async function run() {
+      for (let i = 0; i < delaysMs.length; i++) {
+        if (cancelled) return;
+        if (delaysMs[i] > 0) {
+          await new Promise((r) => setTimeout(r, delaysMs[i]));
+        }
+        if (cancelled) return;
+        try {
+          const data = await fetchMe();
+          if (cancelled) return;
+          if (data.user) {
+            setUser(data.user);
+            setLoading(false);
+            return;
+          }
+          // user null — keep retrying (session may appear on next attempt)
+        } catch {
+          /* network error — keep retrying */
+        }
+      }
+      if (!cancelled) {
+        setUser(null);
+        setLoading(false);
+      }
+    }
+
+    run();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const login = () => {

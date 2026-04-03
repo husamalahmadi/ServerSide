@@ -15,10 +15,44 @@ export default function ProfileSetup() {
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
-  if (loading || !user) {
+  if (loading) {
     return (
       <div style={{ padding: 24, textAlign: "center", color: "#64748b" }}>
-        Loading… {!user && "Sign in to complete your profile."}
+        Loading…
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div style={{ padding: 24, maxWidth: 520, margin: "0 auto", color: "#374151", lineHeight: 1.6 }}>
+        <p style={{ marginBottom: 12 }}>
+          We couldn&apos;t confirm your sign-in yet. If the site is on <strong>Cloudflare</strong> and the API on{" "}
+          <strong>Render</strong>, set <code style={{ fontSize: 12 }}>VITE_API_URL</code> to your API&apos;s{" "}
+          <code style={{ fontSize: 12 }}>https://…</code> URL in Cloudflare <strong>Environment</strong>, redeploy, and
+          try again. Free hosts may also need a few seconds on first load.
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            window.location.href = `${getApiUrl()}/auth/google`;
+          }}
+          style={{
+            padding: "10px 16px",
+            fontSize: 14,
+            cursor: "pointer",
+            borderRadius: 8,
+            border: "1px solid #1a3a2a",
+            background: "#1a3a2a",
+            color: "#fff",
+            fontWeight: 600,
+          }}
+        >
+          Sign in with Google again
+        </button>
+        <p style={{ marginTop: 16, fontSize: 14 }}>
+          <PillLink to="/">← Home</PillLink>
+        </p>
       </div>
     );
   }
