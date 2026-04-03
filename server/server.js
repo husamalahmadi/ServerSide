@@ -118,6 +118,31 @@ passport.deserializeUser((id, done) => {
   done(null, user || null);
 });
 
+/** Vite outDir is repo ../dist; cwd on hosts may be repo root or server/. */
+function resolveStaticDir() {
+  const candidates = [
+    join(__dirname, "..", "dist"),
+    join(process.cwd(), "dist"),
+  ];
+  const cwdNorm = process.cwd().replace(/\\/g, "/");
+  if (cwdNorm.endsWith("/server")) {
+    candidates.push(join(process.cwd(), "..", "dist"));
+  }
+  for (const p of candidates) {
+    if (existsSync(join(p, "index.html"))) {
+      console.log(`[static] Serving Vite build from ${p}`);
+      return p;
+    }
+  }
+  const fallback = join(__dirname, "..", "dist");
+  console.error(
+    `[static] No dist/index.html found (cwd=${process.cwd()}). Tried: ${candidates.join(" | ")}`
+  );
+  return fallback;
+}
+
+const staticPath = resolveStaticDir();
+
 const app = express();
 if (process.env.NODE_ENV === "production") {
   app.set("trust proxy", 1);
@@ -129,6 +154,8 @@ app.use(
   })
 );
 app.use(express.json());
+// Static assets before session — avoids touching session store on every hashed chunk request.
+app.use(express.static(staticPath));
 const sessionSameSite = getSessionCookieSameSite();
 app.use(
   session({
@@ -409,14 +436,6 @@ app.get("/api/analytics/trending", (req, res) => {
   res.json({ trending: rows });
 });
 
-// Serve static build (dist folder from Vite)
-const staticPath = join(__dirname, "..", "dist");
-if (!existsSync(join(staticPath, "index.html"))) {
-  console.error(
-    `[static] Missing ${join(staticPath, "index.html")}. Run "npm run build" at repo root before starting the server.`
-  );
-}
-app.use(express.static(staticPath));
 app.get("*", (req, res, next) => {
   if (req.path.startsWith("/api") || req.path.startsWith("/auth")) return next();
   // Missing hashed files must not fall through to SPA HTML (wrong MIME / confusing errors).
