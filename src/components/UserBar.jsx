@@ -22,6 +22,7 @@ export function UserBar() {
   const { user, loading, login, logout } = useAuth();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
+  const signInNavigating = useRef(false);
 
   useEffect(() => {
     const handler = (e) => {
@@ -37,7 +38,15 @@ export function UserBar() {
 
   if (!user) {
     return (
-      <button type="button" onClick={login} className="tp-signin-google">
+      <button
+        type="button"
+        onClick={() => {
+          if (signInNavigating.current) return;
+          signInNavigating.current = true;
+          login();
+        }}
+        className="tp-signin-google"
+      >
         <GoogleGIcon size={13} />
         Sign in with Google
       </button>

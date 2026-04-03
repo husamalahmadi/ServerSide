@@ -5,6 +5,18 @@
     <meta charset="UTF-8" />
     <!-- Must load before the Vite bundle so window.__TP_PUBLIC_API_URL__ is set -->
     <script src="/runtime-config.js"></script>
+    <!-- Before React: remove legacy ?auth=api_required (cached old JS used to add it; avoids banner flash) -->
+    <script>
+      (function () {
+        try {
+          var u = new URL(location.href);
+          if (u.searchParams.get("auth") === "api_required") {
+            u.searchParams.delete("auth");
+            history.replaceState(history.state, "", u.pathname + u.search + u.hash);
+          }
+        } catch (e) {}
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>TruePrice.Cash – Stock fair value & fundamentals</title>
     <meta name="description" content="TruePrice.Cash helps investors with stock fair value, financial statements, and fundamentals. US and Saudi markets." />

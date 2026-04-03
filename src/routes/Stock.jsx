@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
 import { useIsMobile } from "../hooks/useIsMobile.js";
@@ -32,6 +32,7 @@ export default function Stock() {
   const { ticker } = useParams();
   const { t, lang, dir, toggleLang } = useI18n();
   const { user, login } = useAuth();
+  const signInNavigating = useRef(false);
   useTrackView(ticker);
   const [shareCopied, setShareCopied] = useState(false);
   usePageMeta({ title: ticker ? `${ticker} – ${t("REPORT")}` : t("REPORT"), description: t("FAIR_VALUE_SECTION") + ". " + t("EXEC_SUM") + "." });
@@ -607,7 +608,15 @@ export default function Stock() {
             <p style={{ margin: "0 0 12px", fontSize: 16, color: "#374151" }}>
               Sign in to view news, revenue & income graphs, watchlists, comments, and more.
             </p>
-            <button type="button" onClick={login} className="tp-signin-google">
+            <button
+              type="button"
+              onClick={() => {
+                if (signInNavigating.current) return;
+                signInNavigating.current = true;
+                login();
+              }}
+              className="tp-signin-google"
+            >
               <GoogleGIcon size={13} />
               Sign in with Google
             </button>

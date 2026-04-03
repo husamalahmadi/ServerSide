@@ -39,10 +39,17 @@ if (!portCols.includes("cash")) {
   });
 }
 
+/** Trailing slashes break OAuth redirects vs browser URL; normalize public URLs. */
+function normalizePublicUrl(s) {
+  const t = (s || "").trim();
+  if (!t) return t;
+  return t.replace(/\/+$/, "");
+}
+
 const CLIENT_URL_RAW = process.env.CLIENT_URL || "http://localhost:5173";
 /** First origin is used for OAuth redirects; allow comma-separated list for CORS. */
-const CLIENT_URL = CLIENT_URL_RAW.split(",")[0].trim();
-const SERVER_URL = process.env.SERVER_URL || "http://localhost:3001";
+const CLIENT_URL = normalizePublicUrl(CLIENT_URL_RAW.split(",")[0].trim());
+const SERVER_URL = normalizePublicUrl(process.env.SERVER_URL || "http://localhost:3001");
 const SESSION_SECRET = process.env.SESSION_SECRET || "dev-secret-change-in-production";
 
 /** When frontend (e.g. Cloudflare) and API (e.g. Railway) differ, credentialed fetch needs SameSite=None. */
@@ -60,7 +67,7 @@ function getSessionCookieSameSite() {
 
 /** Comma-separated in CLIENT_URL, or any localhost / 127.0.0.1 origin in non-production (fixes Vite on 5174+). */
 const corsAllowedOrigins = CLIENT_URL_RAW.split(",")
-  .map((s) => s.trim())
+  .map((s) => normalizePublicUrl(s.trim()))
   .filter(Boolean);
 function isDevLocalOrigin(origin) {
   try {
