@@ -53,23 +53,6 @@ function getResolvedApiUrlString() {
 }
 
 /**
- * True if we should allow opening /auth/google (API URL is unambiguous).
- * Build-time VITE_API_URL, runtime-config, or production same-origin (single deploy e.g. Render).
- */
-export function hasExplicitViteApiUrl() {
-  if (!!(import.meta.env.VITE_API_URL ?? "").toString().trim()) return true;
-  if (typeof window !== "undefined") {
-    const rt = (window.__TP_PUBLIC_API_URL__ ?? "").toString().trim();
-    if (rt) return true;
-  }
-  // Production with no separate API URL: getApiUrl() uses window.location.origin — one host for SPA + API.
-  if (typeof window !== "undefined" && import.meta.env.PROD && !getResolvedApiUrlString()) {
-    return true;
-  }
-  return false;
-}
-
-/**
  * API base URL. In the browser, if VITE_API_URL points at localhost or 127.0.0.1,
  * the hostname is aligned with window.location.hostname so session cookies from
  * Google OAuth (which bind to the host you used) match fetch targets — mixing
@@ -84,8 +67,16 @@ export function getApiUrl() {
   let u;
   if (fromEnv) {
     u = fromEnv.replace(/\/+$/, "");
-  } else if (typeof window !== "undefined" && import.meta.env.PROD) {
-    u = window.location.origin.replace(/\/+$/, "");
+  } else if (typeof window !== "undefined") {
+    // Vite dev (npm run dev): API usually on localhost:3001. Built bundle (any host): same origin as the page.
+    const isViteDev = import.meta.env.DEV;
+    const pageHost = window.location.hostname;
+    const pageIsLocal = pageHost === "localhost" || pageHost === "127.0.0.1";
+    if (isViteDev && pageIsLocal) {
+      u = "http://localhost:3001".replace(/\/+$/, "");
+    } else {
+      u = window.location.origin.replace(/\/+$/, "");
+    }
   } else {
     u = "http://localhost:3001".replace(/\/+$/, "");
   }
@@ -131,4 +122,27 @@ export function getApiUrl() {
     }
   }
   return u;
+}
+
+/**
+ * True if we should allow opening /auth/google (API URL is unambiguous).
+ * - VITE_API_URL or runtime-config set, or
+ * - Same-origin deploy: API base matches the page (single Render URL, etc.)
+ */
+export function hasExplicitViteApiUrl() {
+  if (!!(import.meta.env.VITE_API_URL ?? "").toString().trim()) return true;
+  if (typeof window !== "undefined") {
+    const rt = (window.__TP_PUBLIC_API_URL__ ?? "").toString().trim();
+    if (rt) return true;
+  }
+  if (typeof window !== "undefined" && import.meta.env.PROD) {
+    try {
+      const api = getApiUrl();
+      const page = window.location.origin;
+      if (api === page) return true;
+    } catch {
+      /* ignore */
+    }
+  }
+  return false;
 }

@@ -19,8 +19,8 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = () => {
-    // Static hosts (Cloudflare Pages, Vercel) do not run Express. Without VITE_API_URL,
-    // getApiUrl() is the same origin — /auth/google would load the SPA with no route → blank page.
+    // Without VITE_API_URL: block when we cannot resolve the API (e.g. split deploy with wrong build).
+    // Same-origin production (e.g. one Render URL) is allowed via hasExplicitViteApiUrl().
     if (import.meta.env.PROD && !hasExplicitViteApiUrl()) {
       window.location.assign("/?auth=api_required");
       return;
