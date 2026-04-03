@@ -27,10 +27,11 @@ export default function ProfileSetup() {
     return (
       <div style={{ padding: 24, maxWidth: 520, margin: "0 auto", color: "#374151", lineHeight: 1.6 }}>
         <p style={{ marginBottom: 12 }}>
-          We couldn&apos;t confirm your sign-in yet. If the site is on <strong>Cloudflare</strong> and the API on{" "}
-          <strong>Render</strong>, set <code style={{ fontSize: 12 }}>VITE_API_URL</code> to your API&apos;s{" "}
-          <code style={{ fontSize: 12 }}>https://…</code> URL in Cloudflare <strong>Environment</strong>, redeploy, and
-          try again. Free hosts may also need a few seconds on first load.
+          We couldn&apos;t load your session yet. If you use <strong>one Render service</strong> for both the site and
+          API, wait a few seconds (free tier cold start) and try the button below, or open your app again from the Render
+          dashboard. If the <strong>frontend and API are on different URLs</strong>, set{" "}
+          <code style={{ fontSize: 12 }}>VITE_API_URL</code> to your API&apos;s <code style={{ fontSize: 12 }}>https://…</code>{" "}
+          in the <strong>frontend</strong> build environment and redeploy.
         </p>
         <button
           type="button"
