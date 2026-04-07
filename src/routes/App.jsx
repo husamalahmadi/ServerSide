@@ -1,6 +1,7 @@
 // FILE: src/routes/App.jsx
-import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import React, { useEffect, useRef } from "react";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { trackPageView } from "../analytics.js";
 import { AuthProvider } from "../context/AuthContext.jsx";
 import { I18nProvider } from "../i18n.jsx";
 import { ErrorBoundary } from "../components/ErrorBoundary.jsx";
@@ -14,12 +15,26 @@ import Profile from "./Profile.jsx";
 import ProfileSetup from "./ProfileSetup.jsx";
 import AuthSignInHelp from "./AuthSignInHelp.jsx";
 
+function AnalyticsRouteSync() {
+  const location = useLocation();
+  const skipFirst = useRef(true);
+  useEffect(() => {
+    if (skipFirst.current) {
+      skipFirst.current = false;
+      return;
+    }
+    trackPageView();
+  }, [location.pathname, location.search]);
+  return null;
+}
+
 export default function App() {
   return (
     <AuthProvider>
       <I18nProvider>
         <ErrorBoundary>
         <BrowserRouter basename={import.meta.env.BASE_URL}>
+          <AnalyticsRouteSync />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/stock/:ticker" element={<Stock />} />

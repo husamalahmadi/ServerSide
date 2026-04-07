@@ -12,7 +12,10 @@ try {
   /* ignore */
 }
 import "./index.css";
+import { initAnalytics } from "./analytics.js";
 import App from "./routes/App.jsx";
+
+initAnalytics();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

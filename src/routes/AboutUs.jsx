@@ -61,6 +61,26 @@ export default function AboutUs() {
           </div>
         </div>
 
+        {import.meta.env.VITE_PUBLIC_TRAFFIC_DASHBOARD_URL ? (
+          <div
+            style={{
+              marginTop: 16,
+              textAlign: "center",
+              fontSize: 13,
+              color: "var(--tp-muted, #8a8578)",
+            }}
+          >
+            <a
+              href={import.meta.env.VITE_PUBLIC_TRAFFIC_DASHBOARD_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "var(--tp-ink, #1a1a14)", fontWeight: 600 }}
+            >
+              {lang === "ar" ? "لوحة الزيارات والمقاييس (للمستثمرين)" : "Public traffic & metrics (investors)"}
+            </a>
+          </div>
+        ) : null}
+
         <footer
           style={{
             marginTop: 24,

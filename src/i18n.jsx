@@ -8,6 +8,12 @@ const STORAGE_KEY = "lang";
 
 function getInitialLang() {
   if (typeof window === "undefined") return "en";
+  try {
+    const urlLang = new URLSearchParams(window.location.search).get("lang");
+    if (urlLang === "ar" || urlLang === "en") return urlLang;
+  } catch {
+    /* ignore invalid URL */
+  }
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored === "ar" || stored === "en") return stored;
   const browser = navigator.language || navigator.userLanguage || "";

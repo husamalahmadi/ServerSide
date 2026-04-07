@@ -1,5 +1,5 @@
 // FILE: src/routes/Blogs.jsx
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useI18n } from "../i18n.jsx";
 import { getBlogPosts } from "../services/bloggerService.js";
 import { PageHeader } from "../components/PageHeader.jsx";
@@ -7,6 +7,7 @@ import { PillLink } from "../components/PillLink.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { stripHtmlToText } from "../utils/sanitizeHtml.js";
 import { SafeHtml } from "../components/SafeHtml.jsx";
+import { buildBlogsSeo } from "../seo/structuredData.js";
 
 function formatDate(date, lang) {
   if (!date) return "";
@@ -64,13 +65,14 @@ function getMonthName(monthIndex, lang) {
 
 export default function Blogs() {
   const { t, lang, dir } = useI18n();
-  usePageMeta({ title: t("BLOGS"), description: t("BLOGS") + " – " + t("PUBLISHED") + "." });
   const [state, setState] = useState({
     loading: true,
     error: "",
     posts: [],
   });
   const [selectedPostId, setSelectedPostId] = useState(null);
+  const seo = useMemo(() => buildBlogsSeo({ lang, postsCount: state.posts.length }), [lang, state.posts.length]);
+  usePageMeta(seo);
 
   const loadBlogs = useCallback(async () => {
     try {

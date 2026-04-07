@@ -24,6 +24,7 @@ import { UserBar } from "../components/UserBar.jsx";
 import { GoogleGIcon } from "../components/GoogleGIcon.jsx";
 import { getPrefetchDelayMs } from "../config/env.js";
 import { exportElementAsPdf } from "../utils/exportPdf.js";
+import { buildStockSeo } from "../seo/structuredData.js";
 
 const PREFETCH_DELAY_SEC = Math.ceil(getPrefetchDelayMs() / 1000);
 
@@ -35,7 +36,6 @@ export default function Stock() {
   const signInNavigating = useRef(false);
   useTrackView(ticker);
   const [shareCopied, setShareCopied] = useState(false);
-  usePageMeta({ title: ticker ? `${ticker} – ${t("REPORT")}` : t("REPORT"), description: t("FAIR_VALUE_SECTION") + ". " + t("EXEC_SUM") + "." });
   const isMobile = useIsMobile(700);
 
   function copyToClipboard(text) {
@@ -340,6 +340,38 @@ export default function Stock() {
   const bigChartW = isMobile ? 320 : 480;
 
   const companyDisplayName = (lang === "ar" && translatedProfile?.name) || profile?.name || company || "";
+  const seo = useMemo(
+    () =>
+      buildStockSeo({
+        ticker,
+        companyName: companyDisplayName,
+        lang,
+        fairValue: fairAvg,
+        price,
+        currency,
+        market,
+      }),
+    [ticker, companyDisplayName, lang, fairAvg, price, currency, market]
+  );
+  usePageMeta(seo);
+
+  const analysisSummary = useMemo(() => {
+    const name = companyDisplayName || ticker;
+    const fairTxt = Number.isFinite(Number(fairAvg)) ? `${fmt2(fairAvg)} ${currency}` : t("NOT_AVAILABLE");
+    const priceTxt = Number.isFinite(Number(price)) ? `${fmt2(price)} ${currency}` : t("NOT_AVAILABLE");
+    if (lang === "ar") {
+      return [
+        `تحليل سهم ${name} (${ticker}) على TruePrice.Cash يركز على مقارنة السعر الحالي (${priceTxt}) بالقيمة العادلة التقديرية (${fairTxt}).`,
+        "المنهجية تعتمد على البيانات المالية الأساسية مثل الإيرادات والدخل التشغيلي وصافي الدخل والتدفق النقدي الحر لتقديم قراءة عملية للمستثمر.",
+        "هذا التقرير تعليمي ولا يُعد توصية شراء أو بيع، ويجب دعمه ببحثك الشخصي وإدارة المخاطر.",
+      ];
+    }
+    return [
+      `${name} (${ticker}) stock analysis on TruePrice.Cash compares current market price (${priceTxt}) against estimated fair value (${fairTxt}).`,
+      "The framework uses core fundamentals such as revenue, operating income, net income, and free cash flow to provide a practical investor snapshot.",
+      "This report is educational only and not financial advice; combine it with your own research and risk management.",
+    ];
+  }, [companyDisplayName, ticker, fairAvg, price, currency, lang, t]);
 
   return (
     <div style={{ background: "var(--tp-bg, #f5f2eb)", minHeight: "100vh" }} dir={dir} lang={lang}>
@@ -592,6 +624,14 @@ export default function Stock() {
               </div>
             </div>
           )}
+        </Card>
+
+        <Card title={lang === "ar" ? "ملف السهم" : "Stock Profile"}>
+          <div style={{ display: "grid", gap: 10, color: "#334155", lineHeight: 1.75, fontSize: 14 }}>
+            {analysisSummary.map((line) => (
+              <p key={line} style={{ margin: 0 }}>{line}</p>
+            ))}
+          </div>
         </Card>
 
         {!user ? (
