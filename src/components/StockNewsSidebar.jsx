@@ -111,24 +111,6 @@ export function StockNewsSidebar({ ticker, companyName = "", market = "us", t, d
         ) : articles.length === 0 ? (
           <div style={{ color: "#64748b", fontSize: 13, padding: 8 }}>
             {t("NEWS_NO_ARTICLES")}
-            <button
-              type="button"
-              onClick={() => setRefreshKey((k) => k + 1)}
-              style={{
-                display: "inline-block",
-                marginTop: 8,
-                padding: "6px 12px",
-                background: "#2563eb",
-                color: "#fff",
-                border: "none",
-                borderRadius: 8,
-                fontSize: 12,
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-            >
-              {t("NEWS_REFRESH")}
-            </button>
           </div>
         ) : (
           <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
