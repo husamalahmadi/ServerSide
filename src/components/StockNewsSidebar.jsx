@@ -106,7 +106,6 @@ export function StockNewsSidebar({ ticker, companyName = "", market = "us", t, d
         ) : error ? (
           <div style={{ color: "#b91c1c", fontSize: 13, padding: 8 }}>
             {t("NEWS_FETCH_ERROR")}
-            <div style={{ marginTop: 4, fontSize: 11, opacity: 0.9 }}>{error}</div>
           </div>
         ) : articles.length === 0 ? (
           <div style={{ color: "#64748b", fontSize: 13, padding: 8 }}>
