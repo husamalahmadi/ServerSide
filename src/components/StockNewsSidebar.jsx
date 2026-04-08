@@ -5,7 +5,6 @@ export function StockNewsSidebar({ ticker, companyName = "", market = "us", t, d
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [refreshKey, setRefreshKey] = useState(0);
 
   const loadNews = React.useCallback(() => {
     if (!ticker) {
@@ -40,7 +39,7 @@ export function StockNewsSidebar({ ticker, companyName = "", market = "us", t, d
 
   useEffect(() => {
     loadNews();
-  }, [loadNews, refreshKey]);
+  }, [loadNews]);
 
   const formatDate = (d) => {
     if (!d) return "";
