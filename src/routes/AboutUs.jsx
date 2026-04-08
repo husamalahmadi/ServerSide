@@ -6,7 +6,11 @@ import { usePageMeta } from "../hooks/usePageMeta.js";
 
 export default function AboutUs() {
   const { lang, dir, t } = useI18n();
-  usePageMeta({ title: t("ABOUT_US"), description: "TruePrice.Cash – " + t("ABOUT_US") + "." });
+  usePageMeta({
+    title: t("ABOUT_US"),
+    description: "TruePrice.Cash – " + t("ABOUT_US") + ".",
+    pathname: "/about",
+  });
 
   const content = useMemo(
     () => ({

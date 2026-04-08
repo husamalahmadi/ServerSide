@@ -464,11 +464,25 @@ app.get("*", (req, res, next) => {
   if (req.path.startsWith("/assets")) {
     return res.status(404).type("text/plain").send("Not found");
   }
+  const knownRoutePatterns = [
+    /^\/$/,
+    /^\/about\/?$/,
+    /^\/blogs\/?$/,
+    /^\/contact\/?$/,
+    /^\/profile\/?$/,
+    /^\/profile\/setup\/?$/,
+    /^\/profile\/[^/]+\/?$/,
+    /^\/stock\/[^/]+\/?$/,
+  ];
+  const isKnownSpaRoute = knownRoutePatterns.some((re) => re.test(req.path));
   const indexHtml = join(staticPath, "index.html");
   if (!existsSync(indexHtml)) {
     return res.status(503).type("text/plain").send("Client build missing. Run npm run build at repo root.");
   }
   res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  if (!isKnownSpaRoute) {
+    res.status(404);
+  }
   res.sendFile(indexHtml, (err) => {
     if (err) {
       console.error("[static] sendFile index.html failed:", err.message);

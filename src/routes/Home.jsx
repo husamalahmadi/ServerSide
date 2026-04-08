@@ -34,7 +34,11 @@ export default function Home() {
     next.delete("auth");
     setSearchParams(next, { replace: true });
   }, [searchParams, setSearchParams]);
-  usePageMeta({ title: "TruePrice.Cash", description: t("MARKET_US") + " & " + t("MARKET_SA") + ". " + t("COMPANIES") + "." });
+  usePageMeta({
+    title: "TruePrice.Cash",
+    description: t("MARKET_US") + " & " + t("MARKET_SA") + ". " + t("COMPANIES") + ".",
+    pathname: "/",
+  });
 
   const [q, setQ] = useState("");
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);

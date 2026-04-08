@@ -43,7 +43,7 @@ export default function Contact() {
     }),
     []
   )[lang] || {};
-  usePageMeta({ title: L.title, description: L.intro });
+  usePageMeta({ title: L.title, description: L.intro, pathname: "/contact" });
 
   const [email, setEmail] = useState("");
   const [topic, setTopic] = useState("");
