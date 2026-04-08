@@ -5,6 +5,7 @@ export function StockNewsSidebar({ ticker, companyName = "", market = "us", t, d
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const loadNews = React.useCallback(() => {
     if (!ticker) {
@@ -39,7 +40,7 @@ export function StockNewsSidebar({ ticker, companyName = "", market = "us", t, d
 
   useEffect(() => {
     loadNews();
-  }, [loadNews]);
+  }, [loadNews, refreshKey]);
 
   const formatDate = (d) => {
     if (!d) return "";
@@ -80,6 +81,24 @@ export function StockNewsSidebar({ ticker, companyName = "", market = "us", t, d
         }}
       >
         <span>{t("NEWS_SIDEBAR_TITLE")}</span>
+        <button
+          type="button"
+          onClick={() => setRefreshKey((k) => k + 1)}
+          disabled={loading}
+          style={{
+            background: "transparent",
+            border: "1px solid rgba(255,255,255,0.5)",
+            color: "#fff",
+            borderRadius: 6,
+            padding: "4px 10px",
+            fontSize: 12,
+            fontWeight: 600,
+            cursor: loading ? "not-allowed" : "pointer",
+            opacity: loading ? 0.6 : 1,
+          }}
+        >
+          {t("NEWS_REFRESH")}
+        </button>
       </div>
       <div style={{ maxHeight: 560, overflowY: "auto", padding: 10 }}>
         {loading ? (
