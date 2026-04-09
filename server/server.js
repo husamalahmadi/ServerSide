@@ -65,10 +65,24 @@ function getSessionCookieSameSite() {
   return "lax";
 }
 
-/** Comma-separated in CLIENT_URL, or any localhost / 127.0.0.1 origin in non-production (fixes Vite on 5174+). */
-const corsAllowedOrigins = CLIENT_URL_RAW.split(",")
-  .map((s) => normalizePublicUrl(s.trim()))
-  .filter(Boolean);
+/** Comma-separated in CLIENT_URL, plus known production web origins (custom domain + Render). */
+const EXTRA_CORS_ORIGINS = [
+  "https://trueprice.cash",
+  "https://www.trueprice.cash",
+  "https://trueprice-api.onrender.com",
+];
+const corsAllowedOrigins = [
+  ...new Set([
+    ...CLIENT_URL_RAW.split(",")
+      .map((s) => normalizePublicUrl(s.trim()))
+      .filter(Boolean),
+    ...EXTRA_CORS_ORIGINS,
+    ...(process.env.CORS_EXTRA_ORIGINS || "")
+      .split(",")
+      .map((s) => normalizePublicUrl(s.trim()))
+      .filter(Boolean),
+  ]),
+];
 function isDevLocalOrigin(origin) {
   try {
     const u = new URL(origin);
