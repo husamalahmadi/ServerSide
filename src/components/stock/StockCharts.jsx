@@ -64,6 +64,7 @@ export function LineChart({ title, series, w = 380, dir = "ltr" }) {
     max += d;
   }
   const ys = (v) => pad.t + (1 - (v - min) / (max - min)) * ih;
+  const dAttr = data.map((p, i) => `${i ? "L" : "M"} ${xs(i)} ${ys(p.value)}`).join(" ");
   const yTicks = [0, 1, 2, 3, 4].map((i) => {
     const ratio = i / 4;
     const value = max - (max - min) * ratio;
@@ -101,6 +102,7 @@ export function LineChart({ title, series, w = 380, dir = "ltr" }) {
         </g>
       ))}
       <line x1={pad.l} y1={h - pad.b} x2={w - pad.r} y2={h - pad.b} stroke="#e5e7eb" />
+      <path d={dAttr} fill="none" stroke="#0f4a5a" strokeWidth="2" />
       {data.map((p, i) => (
         <g key={`${p.label}-${i}`}>
           <circle cx={xs(i)} cy={ys(p.value)} r="3.5" fill="#0f4a5a" />
