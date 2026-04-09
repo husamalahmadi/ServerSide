@@ -64,7 +64,19 @@ export function LineChart({ title, series, w = 380, dir = "ltr" }) {
     max += d;
   }
   const ys = (v) => pad.t + (1 - (v - min) / (max - min)) * ih;
-  const dAttr = data.map((p, i) => `${i ? "L" : "M"} ${xs(i)} ${ys(p.value)}`).join(" ");
+  const yTicks = [0, 1, 2, 3, 4].map((i) => {
+    const ratio = i / 4;
+    const value = max - (max - min) * ratio;
+    return { value, y: pad.t + ih * ratio };
+  });
+
+  const formatCompact = (n) => {
+    const abs = Math.abs(Number(n) || 0);
+    if (abs >= 1_000_000_000) return `${(n / 1_000_000_000).toFixed(1)}B`;
+    if (abs >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+    if (abs >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
+    return `${Math.round(n)}`;
+  };
 
   return (
     <svg
@@ -75,8 +87,20 @@ export function LineChart({ title, series, w = 380, dir = "ltr" }) {
       <text x={w / 2} y={16} textAnchor="middle" style={{ fontSize: 14, fontWeight: 900 }}>
         {title}
       </text>
+      {yTicks.map((tick, i) => (
+        <g key={`y-${i}`}>
+          <line x1={pad.l} y1={tick.y} x2={w - pad.r} y2={tick.y} stroke="#eef2f7" />
+          <text
+            x={pad.l - 8}
+            y={tick.y + 3}
+            textAnchor="end"
+            style={{ fontSize: 10, fill: "#6b7280" }}
+          >
+            {formatCompact(tick.value)}
+          </text>
+        </g>
+      ))}
       <line x1={pad.l} y1={h - pad.b} x2={w - pad.r} y2={h - pad.b} stroke="#e5e7eb" />
-      <path d={dAttr} fill="none" stroke="#0f4a5a" strokeWidth="2" />
       {data.map((p, i) => (
         <g key={`${p.label}-${i}`}>
           <circle cx={xs(i)} cy={ys(p.value)} r="3.5" fill="#0f4a5a" />
