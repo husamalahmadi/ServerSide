@@ -4,6 +4,8 @@ import session from "express-session";
 import cors from "cors";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { RedisStore } from "connect-redis";
+import { createClient } from "redis";
 import Database from "better-sqlite3";
 import { existsSync, readFileSync } from "fs";
 import { fileURLToPath } from "url";
@@ -25,6 +27,7 @@ if (!cols.includes("profile_completed")) {
   db.exec("ALTER TABLE users ADD COLUMN profile_completed INTEGER DEFAULT 0");
   db.exec("UPDATE users SET profile_completed=1"); // Existing users already have profiles
 }
+if (!cols.includes("current_session_id")) db.exec("ALTER TABLE users ADD COLUMN current_session_id TEXT");
 const portCols = db.prepare("PRAGMA table_info(portfolios)").all().map((c) => c.name);
 if (!portCols.includes("cash")) {
   db.exec("ALTER TABLE portfolios ADD COLUMN cash REAL NOT NULL DEFAULT 100000");
@@ -51,6 +54,20 @@ const CLIENT_URL_RAW = process.env.CLIENT_URL || "http://localhost:5173";
 const CLIENT_URL = normalizePublicUrl(CLIENT_URL_RAW.split(",")[0].trim());
 const SERVER_URL = normalizePublicUrl(process.env.SERVER_URL || "http://localhost:3001");
 const SESSION_SECRET = process.env.SESSION_SECRET || "dev-secret-change-in-production";
+const IS_PROD = process.env.NODE_ENV === "production";
+const REDIS_URL = (process.env.REDIS_URL || "").trim();
+const CANONICAL_HOST = (process.env.CANONICAL_HOST || "trueprice.cash").trim().toLowerCase();
+const CANONICAL_ALIASES = new Set(
+  [`www.${CANONICAL_HOST}`, ...(process.env.CANONICAL_ALIASES || "").split(",")]
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean)
+);
+const FORCE_CANONICAL_HOST = process.env.FORCE_CANONICAL_HOST !== "false";
+const SINGLE_SESSION_PER_USER = process.env.SINGLE_SESSION_PER_USER === "true";
+
+if (IS_PROD && (!process.env.SESSION_SECRET || SESSION_SECRET === "dev-secret-change-in-production")) {
+  throw new Error("SESSION_SECRET must be set to a stable, long random value in production.");
+}
 
 /** When frontend (e.g. Cloudflare) and API (e.g. Railway) differ, credentialed fetch needs SameSite=None. */
 function getSessionCookieSameSite() {
@@ -156,8 +173,19 @@ if (!existsSync(join(staticPath, "index.html"))) {
 }
 
 const app = express();
-if (process.env.NODE_ENV === "production") {
+if (IS_PROD) {
   app.set("trust proxy", 1);
+}
+if (IS_PROD && FORCE_CANONICAL_HOST) {
+  app.use((req, res, next) => {
+    const hostHeader = (req.headers.host || "").toString().toLowerCase();
+    const host = hostHeader.split(":")[0];
+    if (!host || !CANONICAL_ALIASES.has(host)) return next();
+    const protoHeader = (req.headers["x-forwarded-proto"] || "").toString();
+    const proto = (protoHeader.split(",")[0] || req.protocol || "https").trim();
+    const location = `${proto}://${CANONICAL_HOST}${req.originalUrl || "/"}`;
+    return res.redirect(301, location);
+  });
 }
 app.use(
   cors({
@@ -169,13 +197,24 @@ app.use(express.json());
 
 // Session + OAuth before express.static so /auth/google is never handled by static middleware first.
 const sessionSameSite = getSessionCookieSameSite();
+let sessionStore;
+if (REDIS_URL) {
+  const redisClient = createClient({ url: REDIS_URL });
+  redisClient.on("error", (e) => console.error("[redis]", e?.message || e));
+  await redisClient.connect();
+  sessionStore = new RedisStore({ client: redisClient, prefix: "tp:sess:" });
+  console.log("[session] Using Redis session store");
+} else {
+  console.warn("[session] REDIS_URL not set; falling back to in-memory sessions (not persistent).");
+}
 app.use(
   session({
     secret: SESSION_SECRET,
+    store: sessionStore,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === "production",
+      secure: IS_PROD,
       httpOnly: true,
       sameSite: sessionSameSite,
       path: "/",
@@ -185,6 +224,17 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+if (SINGLE_SESSION_PER_USER) {
+  app.use((req, res, next) => {
+    if (!req.user || !req.sessionID) return next();
+    const row = db.prepare("SELECT current_session_id FROM users WHERE id=?").get(req.user.id);
+    const currentSessionId = row?.current_session_id || null;
+    if (!currentSessionId || currentSessionId === req.sessionID) return next();
+    req.logout(() => {});
+    req.session.destroy(() => {});
+    return res.status(401).json({ error: "Session expired. Signed in from another device." });
+  });
+}
 
 // Auth routes
 app.get("/auth/google", (req, res, next) => {
@@ -197,6 +247,9 @@ app.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: `${CLIENT_URL}/?auth=failed` }),
   (req, res) => {
+    if (req.user?.id && req.sessionID) {
+      db.prepare("UPDATE users SET current_session_id=?, updated_at=datetime('now') WHERE id=?").run(req.sessionID, req.user.id);
+    }
     const needsSetup = req.user && !req.user.profile_completed;
     res.redirect(needsSetup ? `${CLIENT_URL}/profile/setup` : CLIENT_URL);
   }
@@ -205,8 +258,17 @@ app.get("/auth/me", (req, res) => {
   res.json({ user: req.user || null });
 });
 app.post("/auth/logout", (req, res) => {
-  req.logout(() => {});
-  res.json({ ok: true });
+  const userId = req.user?.id ?? null;
+  const sid = req.sessionID || null;
+  req.logout(() => {
+    if (userId) {
+      db.prepare(
+        "UPDATE users SET current_session_id=NULL, updated_at=datetime('now') WHERE id=? AND (current_session_id IS NULL OR current_session_id=?)"
+      ).run(userId, sid);
+    }
+    req.session?.destroy(() => {});
+    res.json({ ok: true });
+  });
 });
 
 // Static assets after OAuth. Hashed chunks do not need session (minor overhead on /assets/* is acceptable).
