@@ -52,6 +52,7 @@ The repo includes a root **`Dockerfile`** that builds the client and runs **`ser
 |----------|---------|---------|
 | `CLIENT_URL` | `https://your-app.pages.dev` | Your **Cloudflare Pages** site URL (OAuth redirect back). |
 | `SERVER_URL` | `https://trueprice-api.onrender.com` | **Public HTTPS URL of this API** (must match the service URL). |
+| `DB_PATH` | `/var/data/trueprice.db` | SQLite file path. Use a persistent disk path in production. |
 | `SESSION_SECRET` | long random string | Session encryption. |
 | `REDIS_URL` | `redis://default:password@host:port` | Persistent session store (recommended: Render Key Value / Upstash). |
 | `CANONICAL_HOST` | `trueprice.cash` | Preferred host for 301 redirects (e.g. redirect `www` -> apex). |
@@ -60,6 +61,8 @@ The repo includes a root **`Dockerfile`** that builds the client and runs **`ser
 | `GOOGLE_CLIENT_SECRET` | from Google Cloud | OAuth. |
 
 `PORT` is usually injected by the host; the server reads `process.env.PORT`.
+
+For Render + SQLite durability, mount a persistent disk and set `DB_PATH=/var/data/trueprice.db`; otherwise SQLite resets on restarts/redeploys.
 
 ### 3. Docker build arguments (optional but recommended)
 

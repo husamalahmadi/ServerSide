@@ -7,13 +7,17 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { RedisStore } from "connect-redis";
 import { createClient } from "redis";
 import Database from "better-sqlite3";
-import { existsSync, readFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { validateComment } from "./commentFilter.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const dbPath = join(__dirname, "trueprice.db");
+const DB_PATH = (process.env.DB_PATH || "").trim();
+const dbPath = DB_PATH || join(__dirname, "trueprice.db");
+const dbDir = dirname(dbPath);
+if (dbDir && !existsSync(dbDir)) mkdirSync(dbDir, { recursive: true });
+console.log(`[db] Using SQLite at ${dbPath}`);
 const db = new Database(dbPath);
 
 // Init schema
