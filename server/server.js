@@ -66,7 +66,7 @@ const CANONICAL_ALIASES = new Set(
     .map((s) => s.trim().toLowerCase())
     .filter((s) => Boolean(s) && s !== CANONICAL_HOST)
 );
-const FORCE_CANONICAL_HOST = process.env.FORCE_CANONICAL_HOST !== "false";
+const FORCE_CANONICAL_HOST = process.env.FORCE_CANONICAL_HOST === "true";
 const SINGLE_SESSION_PER_USER = process.env.SINGLE_SESSION_PER_USER === "true";
 
 if (IS_PROD && (!process.env.SESSION_SECRET || SESSION_SECRET === "dev-secret-change-in-production")) {
@@ -182,6 +182,8 @@ if (IS_PROD) {
 }
 if (IS_PROD && FORCE_CANONICAL_HOST) {
   app.use((req, res, next) => {
+    // Cloudflare usually handles host/protocol redirects; skip app-level redirect to avoid ping-pong loops.
+    if (req.headers["cf-visitor"]) return next();
     const hostHeader = (req.headers.host || "").toString().toLowerCase();
     const host = hostHeader.split(":")[0];
     if (!host || host === CANONICAL_HOST) return next();
