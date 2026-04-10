@@ -11,6 +11,7 @@ import { existsSync, mkdirSync, readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { validateComment } from "./commentFilter.js";
+import SqliteStoreFactory from "better-sqlite3-session-store";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DB_PATH = (process.env.DB_PATH || "").trim();
@@ -213,7 +214,10 @@ if (REDIS_URL) {
   sessionStore = new RedisStore({ client: redisClient, prefix: "tp:sess:" });
   console.log("[session] Using Redis session store");
 } else {
-  console.warn("[session] REDIS_URL not set; falling back to in-memory sessions (not persistent).");
+  // Persist sessions in the same SQLite database so they survive PM2 restarts and deploys.
+  const SqliteStore = SqliteStoreFactory(session);
+  sessionStore = new SqliteStore({ client: db, expired: { clear: true, intervalMs: 15 * 60 * 1000 } });
+  console.log("[session] Using SQLite session store (persistent across restarts)");
 }
 app.use(
   session({
