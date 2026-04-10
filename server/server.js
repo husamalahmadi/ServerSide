@@ -64,7 +64,7 @@ const CANONICAL_HOST = (process.env.CANONICAL_HOST || "trueprice.cash").trim().t
 const CANONICAL_ALIASES = new Set(
   [`www.${CANONICAL_HOST}`, ...(process.env.CANONICAL_ALIASES || "").split(",")]
     .map((s) => s.trim().toLowerCase())
-    .filter(Boolean)
+    .filter((s) => Boolean(s) && s !== CANONICAL_HOST)
 );
 const FORCE_CANONICAL_HOST = process.env.FORCE_CANONICAL_HOST !== "false";
 const SINGLE_SESSION_PER_USER = process.env.SINGLE_SESSION_PER_USER === "true";
@@ -184,10 +184,12 @@ if (IS_PROD && FORCE_CANONICAL_HOST) {
   app.use((req, res, next) => {
     const hostHeader = (req.headers.host || "").toString().toLowerCase();
     const host = hostHeader.split(":")[0];
-    if (!host || !CANONICAL_ALIASES.has(host)) return next();
+    if (!host || host === CANONICAL_HOST) return next();
+    if (!CANONICAL_ALIASES.has(host)) return next();
     const protoHeader = (req.headers["x-forwarded-proto"] || "").toString();
     const proto = (protoHeader.split(",")[0] || req.protocol || "https").trim();
     const location = `${proto}://${CANONICAL_HOST}${req.originalUrl || "/"}`;
+    if (`${proto}://${host}${req.originalUrl || "/"}` === location) return next();
     return res.redirect(301, location);
   });
 }
