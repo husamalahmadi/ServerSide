@@ -316,17 +316,27 @@ const requireAuth = (req, res, next) => {
 // User profile: update own profile (picture comes from Google only, not editable)
 app.patch("/api/users/me", requireAuth, (req, res) => {
   const { handle, name, bio, dateOfBirth } = req.body || {};
+  const currentUser = db.prepare("SELECT * FROM users WHERE id=?").get(req.user.id);
   const updates = ["profile_completed=1", "updated_at=datetime('now')"];
   const params = [];
-  if (typeof handle === "string" && handle.trim()) {
+
+  // Username (handle) can only be set once — during initial profile setup.
+  // Once profile_completed=1, the handle is permanently locked.
+  if (!currentUser.profile_completed && typeof handle === "string" && handle.trim()) {
     const h = handle.trim().toLowerCase().replace(/[^a-z0-9_]/g, "");
     if (h.length >= 3 && h.length <= 30) {
       const existing = db.prepare("SELECT id FROM users WHERE handle=? AND id!=?").get(h, req.user.id);
       if (existing) return res.status(400).json({ error: "Username already taken" });
       updates.push("handle=?");
       params.push(h);
+    } else {
+      return res.status(400).json({ error: "Username must be 3–30 characters (letters, numbers, underscores)" });
     }
+  } else if (currentUser.profile_completed && handle !== undefined) {
+    // Silently ignore handle changes after profile is completed — frontend should not send it.
   }
+
+  // Display name, bio, and date of birth are always editable.
   if (typeof name === "string") { updates.push("name=?"); params.push(name.trim() || null); }
   if (typeof bio === "string") { updates.push("bio=?"); params.push(bio.trim() || null); }
   if (typeof dateOfBirth === "string") { updates.push("date_of_birth=?"); params.push(dateOfBirth.trim() || null); }
