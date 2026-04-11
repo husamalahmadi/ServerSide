@@ -53,7 +53,6 @@ export default function Profile() {
       .finally(() => setLoading(false));
   }, [apiUrl, urlHandle, currentUser?.handle, currentUser?.id, authLoading, navigate, location.key]);
 
-  /** Refetch when returning to this tab (e.g. after posting a comment on a stock page in another tab). */
   useEffect(() => {
     const handleToFetch = urlHandle || currentUser?.handle;
     if (!apiUrl || !handleToFetch || !currentUser || authLoading) return;
@@ -87,7 +86,6 @@ export default function Profile() {
     }
   }, [isOwnProfile, urlHandle, currentUser?.handle, navigate]);
 
-  /** Must run every render (before any early return) — Rules of Hooks. */
   const profileStockComments = useMemo(() => {
     if (!profile?.user) return [];
     const rows = (profile.comments || []).map((c) => ({
@@ -106,6 +104,7 @@ export default function Profile() {
 
   const handleSave = async (e) => {
     e.preventDefault();
+    // Username is locked after initial setup — handle is never sent to the server here.
     if (!currentUser) return;
     setError("");
     setSaving(true);
@@ -115,7 +114,7 @@ export default function Profile() {
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          handle: editForm.handle.trim().toLowerCase().replace(/[^a-z0-9_]/g, ""),
+          // handle intentionally omitted — username is permanent after initial setup
           name: editForm.name.trim(),
           bio: editForm.bio.trim(),
           dateOfBirth: editForm.dateOfBirth.trim(),
@@ -196,21 +195,38 @@ export default function Profile() {
               </div>
             )}
           </div>
+
           <div style={{ flex: 1, minWidth: 200 }}>
+            {/* Username — locked permanently after setup, shown greyed-out in edit mode */}
             <div style={{ fontSize: 24, fontWeight: 800 }}>
               {editMode ? (
-                <input
-                  type="text"
-                  value={editForm.handle}
-                  onChange={(e) => setEditForm((f) => ({ ...f, handle: e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "") }))}
-                  style={inputStyle}
-                  placeholder={t("PROFILE_USERNAME")}
-                />
+                <div>
+                  <input
+                    type="text"
+                    value={editForm.handle}
+                    readOnly
+                    disabled
+                    title="Username cannot be changed after it is set"
+                    style={{
+                      ...inputStyle,
+                      background: "#f1f5f9",
+                      cursor: "not-allowed",
+                      color: "#94a3b8",
+                    }}
+                  />
+                  <div style={{ fontSize: 11, color: "#94a3b8", marginTop: 3 }}>
+                    Username is permanent and cannot be changed.
+                  </div>
+                </div>
               ) : (
                 <>@{u.handle}</>
               )}
             </div>
-            <div style={{ color: "#64748b", marginTop: 4 }}>{editMode ? t("PROFILE_DISPLAY_NAME") : (u.name || "—")}</div>
+
+            {/* Display name */}
+            <div style={{ color: "#64748b", marginTop: 4 }}>
+              {editMode ? t("PROFILE_DISPLAY_NAME") : (u.name || "—")}
+            </div>
             {editMode && (
               <input
                 type="text"
@@ -220,6 +236,8 @@ export default function Profile() {
                 placeholder={t("PROFILE_DISPLAY_NAME")}
               />
             )}
+
+            {/* Bio */}
             {(u.bio || (editMode && editForm.bio !== undefined)) && (
               <div style={{ marginTop: 8, fontSize: 14, color: "#374151" }}>
                 {editMode ? (
@@ -235,12 +253,18 @@ export default function Profile() {
                 )}
               </div>
             )}
+
+            {/* Date of birth — display only when not editing */}
             {u.date_of_birth && !editMode && (
-              <div style={{ marginTop: 4, fontSize: 13, color: "#64748b" }}>{t("PROFILE_BIRTH_DATE")}: {u.date_of_birth}</div>
+              <div style={{ marginTop: 4, fontSize: 13, color: "#64748b" }}>
+                {t("PROFILE_BIRTH_DATE")}: {u.date_of_birth}
+              </div>
             )}
             {editMode && (
               <div style={{ marginTop: 8 }}>
-                <label style={{ display: "block", marginBottom: 4, fontSize: 13 }}>{t("PROFILE_DATE_OF_BIRTH")}</label>
+                <label style={{ display: "block", marginBottom: 4, fontSize: 13 }}>
+                  {t("PROFILE_DATE_OF_BIRTH")}
+                </label>
                 <input
                   type="date"
                   value={editForm.dateOfBirth}
@@ -249,6 +273,8 @@ export default function Profile() {
                 />
               </div>
             )}
+
+            {/* Edit / Save / Cancel — own profile only */}
             {isOwnProfile && (
               <div style={{ marginTop: 12 }}>
                 {editMode ? (
@@ -302,6 +328,7 @@ export default function Profile() {
                 )}
               </div>
             )}
+
             {error && <div style={{ color: "#b91c1c", marginTop: 8, fontSize: 14 }}>{error}</div>}
           </div>
         </div>
@@ -353,6 +380,7 @@ export default function Profile() {
         )}
       </Card>
 
+      {/* Stock comments */}
       <Card title={t("PROFILE_COMMENTS_AND_NOTES")}>
         <div style={{ fontSize: 13, color: "#64748b", marginBottom: 12 }}>
           {t("PROFILE_COMMENTS_AND_NOTES_HINT")}
