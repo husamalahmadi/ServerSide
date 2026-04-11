@@ -30,26 +30,26 @@ function AnalyticsRouteSync() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <I18nProvider>
-        <ErrorBoundary>
+    <I18nProvider>
+      <ErrorBoundary>
         <BrowserRouter basename={import.meta.env.BASE_URL}>
-          <AnalyticsRouteSync />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/stock/:ticker" element={<Stock />} />
-            <Route path="/profile/setup" element={<ProfileSetup />} />
-            <Route path="/profile/:handle" element={<Profile />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/blogs" element={<Blogs />} />
-            <Route path="/auth/*" element={<AuthSignInHelp />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+          <AuthProvider>
+            <AnalyticsRouteSync />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/stock/:ticker" element={<Stock />} />
+              <Route path="/profile/setup" element={<ProfileSetup />} />
+              <Route path="/profile/:handle" element={<Profile />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/about" element={<AboutUs />} />
+              <Route path="/blogs" element={<Blogs />} />
+              <Route path="/auth/*" element={<AuthSignInHelp />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </AuthProvider>
         </BrowserRouter>
       </ErrorBoundary>
     </I18nProvider>
-    </AuthProvider>
   );
 }

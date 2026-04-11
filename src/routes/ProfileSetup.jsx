@@ -27,12 +27,32 @@ export default function ProfileSetup() {
     return (
       <div style={{ padding: 24, maxWidth: 520, margin: "0 auto", color: "#374151", lineHeight: 1.6 }}>
         <p style={{ marginBottom: 12 }}>
-          We couldn&apos;t load your session yet. If you use <strong>one Render service</strong> for both the site and
-          API, wait a few seconds (free tier cold start) and try the button below, or open your app again from the Render
-          dashboard. If the <strong>frontend and API are on different URLs</strong>, set{" "}
-          <code style={{ fontSize: 12 }}>VITE_API_URL</code> to your API&apos;s <code style={{ fontSize: 12 }}>https://…</code>{" "}
-          in the <strong>frontend</strong> build environment and redeploy.
+          We couldn&apos;t confirm your session yet (this is <strong>not</strong> the same as the profile form below).
+          Wait a few seconds after sign-in (Render free tier cold start), then use <strong>Reload page</strong> or sign
+          in again. If the site is on a <strong>different domain</strong> than the API (e.g. Cloudflare + Render), the
+          app must call the API URL: set <code style={{ fontSize: 12 }}>VITE_API_URL</code> at build time or set{" "}
+          <code style={{ fontSize: 12 }}>window.__TP_PUBLIC_API_URL__</code> in{" "}
+          <code style={{ fontSize: 12 }}>runtime-config.js</code> to your API <code style={{ fontSize: 12 }}>https://…</code>{" "}
+          and redeploy.
         </p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            style={{
+              padding: "10px 16px",
+              fontSize: 14,
+              cursor: "pointer",
+              borderRadius: 8,
+              border: "1px solid #e5e7eb",
+              background: "#fff",
+              color: "#374151",
+              fontWeight: 600,
+            }}
+          >
+            Reload page
+          </button>
+        </div>
         <button
           type="button"
           onClick={() => {
@@ -112,7 +132,9 @@ export default function ProfileSetup() {
       </div>
       <Card title="Complete your profile">
         <p style={{ color: "#64748b", marginBottom: 16, fontSize: 14 }}>
-          Choose your username and add a few details. You can update these anytime.
+          You&apos;re signed in with Google. Choose a public <strong>username</strong> (it can&apos;t be changed
+          later), then add optional details. Display name, bio, and date of birth can be updated anytime from your
+          profile.
         </p>
         <form onSubmit={handleSave} style={{ display: "grid", gap: 16 }}>
           <div>

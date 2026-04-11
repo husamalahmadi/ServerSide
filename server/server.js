@@ -263,7 +263,11 @@ app.get(
       db.prepare("UPDATE users SET current_session_id=?, updated_at=datetime('now') WHERE id=?").run(req.sessionID, req.user.id);
     }
     const needsSetup = req.user && !req.user.profile_completed;
-    res.redirect(needsSetup ? `${CLIENT_URL}/profile/setup` : CLIENT_URL);
+    const rel = needsSetup ? "/profile/setup" : "/";
+    const target = new URL(rel, `${CLIENT_URL.replace(/\/+$/, "")}/`);
+    // Hint SPA to poll /auth/me longer (cold start + cross-origin cookie timing).
+    target.searchParams.set("tp_session", "1");
+    res.redirect(target.toString());
   }
 );
 app.get("/auth/me", (req, res) => {

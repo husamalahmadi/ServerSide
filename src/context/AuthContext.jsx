@@ -1,24 +1,50 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useRef, useCallback } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getApiUrl } from "../config/env.js";
 
 const AuthContext = createContext(null);
 
+async function fetchMeJson(apiUrl) {
+  const r = await fetch(`${apiUrl}/auth/me`, { credentials: "include", cache: "no-store" });
+  const ct = r.headers.get("content-type") || "";
+  if (!ct.includes("application/json")) {
+    throw new Error("non-json response");
+  }
+  return r.json();
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const navigateRef = useRef(navigate);
+  const pathnameRef = useRef(location.pathname);
+  const lastExtraFetchRef = useRef(0);
+  navigateRef.current = navigate;
+  pathnameRef.current = location.pathname;
+
+  const stripTpSessionParam = useCallback(() => {
+    try {
+      const sp = new URLSearchParams(window.location.search);
+      if (!sp.get("tp_session")) return;
+      sp.delete("tp_session");
+      const q = sp.toString();
+      const path = pathnameRef.current;
+      navigateRef.current(`${path}${q ? `?${q}` : ""}`, { replace: true });
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   useEffect(() => {
     const apiUrl = getApiUrl();
-
-    async function fetchMe() {
-      const r = await fetch(`${apiUrl}/auth/me`, { credentials: "include" });
-      return r.json();
-    }
-
-    // Split deploy (e.g. Cloudflare + Render): after OAuth redirect, cookie may not be sent on
-    // the first fetch yet; API may also be cold-starting. Retry until we get a user or give up.
     let cancelled = false;
-    const delaysMs = [0, 400, 1200, 2500];
+
+    const isFreshOAuth = new URLSearchParams(window.location.search).get("tp_session") === "1";
+    const delaysMs = isFreshOAuth
+      ? [0, 200, 500, 1000, 2000, 3500, 5000, 7500, 10000, 13000]
+      : [0, 300, 800, 1600, 3200, 5000];
 
     async function run() {
       for (let i = 0; i < delaysMs.length; i++) {
@@ -28,34 +54,57 @@ export function AuthProvider({ children }) {
         }
         if (cancelled) return;
         try {
-          const data = await fetchMe();
+          const data = await fetchMeJson(apiUrl);
           if (cancelled) return;
           if (data.user) {
             setUser(data.user);
             setLoading(false);
+            stripTpSessionParam();
             return;
           }
-          // user null — keep retrying (session may appear on next attempt)
         } catch {
-          /* network error — keep retrying */
+          /* session not ready yet — retry */
         }
       }
       if (!cancelled) {
         setUser(null);
         setLoading(false);
+        stripTpSessionParam();
       }
     }
 
     run();
+
+    const throttledExtra = () => {
+      if (cancelled) return;
+      const now = Date.now();
+      if (now - lastExtraFetchRef.current < 2500) return;
+      lastExtraFetchRef.current = now;
+      fetchMeJson(apiUrl)
+        .then((data) => {
+          if (cancelled || !data.user) return;
+          setUser(data.user);
+          setLoading(false);
+          stripTpSessionParam();
+        })
+        .catch(() => {});
+    };
+
+    const onFocus = () => throttledExtra();
+    const onVis = () => {
+      if (document.visibilityState === "visible") throttledExtra();
+    };
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onVis);
+
     return () => {
       cancelled = true;
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onVis);
     };
-  }, []);
+  }, [stripTpSessionParam]);
 
   const login = () => {
-    // Always send the browser to the API OAuth route. Do not block on heuristics (Vite env
-    // flags and same-origin checks vary by host and have caused false "api_required" redirects).
-    // Split frontend/API: set VITE_API_URL or public/runtime-config.js so getApiUrl() targets the API.
     window.location.href = `${getApiUrl()}/auth/google`;
   };
 
@@ -69,8 +118,7 @@ export function AuthProvider({ children }) {
 
   const refreshUser = async () => {
     try {
-      const r = await fetch(`${getApiUrl()}/auth/me`, { credentials: "include" });
-      const data = await r.json();
+      const data = await fetchMeJson(getApiUrl());
       setUser(data.user || null);
       return data.user;
     } catch {
