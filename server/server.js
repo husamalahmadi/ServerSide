@@ -282,8 +282,11 @@ app.post("/auth/logout", (req, res) => {
         "UPDATE users SET current_session_id=NULL, updated_at=datetime('now') WHERE id=? AND (current_session_id IS NULL OR current_session_id=?)"
       ).run(userId, sid);
     }
-    req.session?.destroy(() => {});
-    res.json({ ok: true });
+    req.session?.destroy(() => {
+      // Explicitly clear the session cookie so the browser does not send a dead session ID.
+      res.clearCookie("connect.sid", { path: "/", httpOnly: true, sameSite: getSessionCookieSameSite(), secure: IS_PROD });
+      res.json({ ok: true });
+    });
   });
 });
 
@@ -321,29 +324,33 @@ const requireAuth = (req, res, next) => {
 app.patch("/api/users/me", requireAuth, (req, res) => {
   const { handle, name, bio, dateOfBirth } = req.body || {};
   const currentUser = db.prepare("SELECT * FROM users WHERE id=?").get(req.user.id);
-  const updates = ["profile_completed=1", "updated_at=datetime('now')"];
+
+  // Start with only the timestamp — profile_completed=1 is only added when a valid handle is saved.
+  const updates = ["updated_at=datetime('now')"];
   const params = [];
 
-  // Username (handle) can only be set once — during initial profile setup.
-  // Once profile_completed=1, the handle is permanently locked.
-  if (!currentUser.profile_completed && typeof handle === "string" && handle.trim()) {
-    const h = handle.trim().toLowerCase().replace(/[^a-z0-9_]/g, "");
-    if (h.length >= 3 && h.length <= 30) {
+  if (!currentUser.profile_completed) {
+    // First-time setup: a valid handle is REQUIRED to mark the profile as complete.
+    if (typeof handle === "string" && handle.trim()) {
+      const h = handle.trim().toLowerCase().replace(/[^a-z0-9_]/g, "");
+      if (h.length < 3 || h.length > 30) {
+        return res.status(400).json({ error: "Username must be 3–30 characters (letters, numbers, underscores)" });
+      }
       const existing = db.prepare("SELECT id FROM users WHERE handle=? AND id!=?").get(h, req.user.id);
       if (existing) return res.status(400).json({ error: "Username already taken" });
-      updates.push("handle=?");
+      updates.push("handle=?", "profile_completed=1");
       params.push(h);
-    } else {
-      return res.status(400).json({ error: "Username must be 3–30 characters (letters, numbers, underscores)" });
     }
-  } else if (currentUser.profile_completed && handle !== undefined) {
-    // Silently ignore handle changes after profile is completed — frontend should not send it.
+    // If no handle is provided (e.g. partial save), we do NOT set profile_completed.
+    // The user will be prompted to complete their profile on next login.
   }
+  // Once profile_completed=1, handle is permanently locked — silently ignore any handle in body.
 
-  // Display name, bio, and date of birth are always editable.
+  // Display name, bio, and date of birth are always editable (before and after setup).
   if (typeof name === "string") { updates.push("name=?"); params.push(name.trim() || null); }
   if (typeof bio === "string") { updates.push("bio=?"); params.push(bio.trim() || null); }
   if (typeof dateOfBirth === "string") { updates.push("date_of_birth=?"); params.push(dateOfBirth.trim() || null); }
+
   params.push(req.user.id);
   db.prepare(`UPDATE users SET ${updates.join(", ")} WHERE id=?`).run(...params);
   const user = db.prepare("SELECT * FROM users WHERE id=?").get(req.user.id);

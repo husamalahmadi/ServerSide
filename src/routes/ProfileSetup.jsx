@@ -15,6 +15,13 @@ export default function ProfileSetup() {
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
+  // If the user already completed setup (e.g. they navigated here directly),
+  // send them straight to their profile — don't show the form again.
+  if (!loading && user?.profile_completed) {
+    navigate(`/profile/${user.handle}`, { replace: true });
+    return null;
+  }
+
   if (loading) {
     return (
       <div style={{ padding: 24, textAlign: "center", color: "#64748b" }}>
@@ -212,22 +219,11 @@ export default function ProfileSetup() {
             </button>
             <button
               type="button"
-              onClick={async () => {
-                setSaving(true);
-                try {
-                  await fetch(`${getApiUrl()}/api/users/me`, {
-                    method: "PATCH",
-                    credentials: "include",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ name: user.name }),
-                  });
-                  await refreshUser();
-                  navigate("/", { replace: true });
-                } catch {
-                  navigate("/", { replace: true });
-                } finally {
-                  setSaving(false);
-                }
+              onClick={() => {
+                // Just go home — do NOT call the API or set profile_completed.
+                // The user will be prompted to complete their profile on next login
+                // because profile_completed is still 0 in the database.
+                navigate("/", { replace: true });
               }}
               disabled={saving}
               style={{
