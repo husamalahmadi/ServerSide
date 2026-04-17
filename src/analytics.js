@@ -25,8 +25,21 @@ function sendGaPageView() {
   });
 }
 
+function gtagScriptAlreadyPresent(gaId) {
+  for (const el of document.querySelectorAll('script[src*="googletagmanager.com/gtag/js"]')) {
+    try {
+      if (new URL(el.src).searchParams.get("id") === gaId) return true;
+    } catch {
+      if (el.src.includes(encodeURIComponent(gaId)) || el.src.includes(gaId)) return true;
+    }
+  }
+  return false;
+}
+
 function loadGtag() {
   if (!GA_ID) return;
+  // index.html may already include the Google tag; avoid a second gtag.js load.
+  if (gtagScriptAlreadyPresent(GA_ID)) return;
   window.dataLayer = window.dataLayer || [];
   window.gtag = function gtag() {
     window.dataLayer.push(arguments);
