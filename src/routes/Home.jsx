@@ -135,59 +135,79 @@ export default function Home() {
   return (
     <div dir={dir} lang={lang} style={{ minHeight: "100vh", position: "relative", zIndex: 1 }}>
       <style>{`
-        .tp-wrap { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
-        .tp-search-section { padding: 40px 0 32px; border-bottom: 1px solid var(--tp-border); }
-        .tp-search-headline {
-          font-family: 'Playfair Display', serif;
-          font-size: clamp(22px, 4vw, 36px);
-          font-weight: 700;
-          line-height: 1.2;
-          margin-bottom: 8px;
-          color: var(--tp-ink);
+        .tp-wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+        .tp-search-section {
+          padding: 52px 0 40px;
+          border: 1px solid var(--tp-border);
+          border-radius: 16px;
+          background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+          margin-top: 24px;
         }
-        .tp-search-headline em { font-style: italic; color: var(--tp-gold); }
-        .tp-search-deck { font-size: 12px; color: var(--tp-muted); margin-bottom: 28px; line-height: 1.7; max-width: 520px; }
+        .tp-search-headline {
+          font-family: 'Inter', 'Barlow', sans-serif;
+          font-size: clamp(30px, 4vw, 54px);
+          font-weight: 800;
+          line-height: 1.1;
+          margin-bottom: 14px;
+          color: var(--tp-ink);
+          padding: 0 36px;
+        }
+        .tp-search-headline em { font-style: normal; color: var(--tp-accent); }
+        .tp-search-deck {
+          font-size: 16px;
+          color: var(--tp-muted);
+          margin-bottom: 28px;
+          line-height: 1.65;
+          max-width: 640px;
+          padding: 0 36px;
+        }
         .tp-search-box {
           display: flex;
           gap: 0;
-          max-width: 560px;
-          border: 2px solid var(--tp-ink);
+          max-width: 680px;
+          border: 1px solid var(--tp-border);
+          border-radius: 12px;
           background: var(--tp-surface);
+          margin: 0 36px;
+          box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
         }
         .tp-field-wrap { position: relative; flex: 1; }
         .tp-ticker-field {
           width: 100%;
           border: none;
           outline: none;
-          padding: 14px 18px;
-          font-family: 'IBM Plex Mono', monospace;
+          padding: 16px 18px;
+          font-family: 'Inter', sans-serif;
           font-size: 16px;
-          letter-spacing: 2px;
+          letter-spacing: 0.2px;
           background: transparent;
           color: var(--tp-ink);
         }
-        .tp-ticker-field::placeholder { color: var(--tp-muted); letter-spacing: 0; font-size: 13px; }
+        .tp-ticker-field::placeholder { color: var(--tp-muted); letter-spacing: 0; font-size: 14px; }
         .tp-go-btn {
-          background: var(--tp-accent);
+          background: #0f172a;
           color: #fff;
           border: none;
-          padding: 14px 28px;
-          font-family: 'Barlow', sans-serif;
+          padding: 16px 28px;
+          font-family: 'Inter', sans-serif;
           font-weight: 700;
           font-size: 13px;
-          letter-spacing: 2px;
+          letter-spacing: 0.8px;
           cursor: pointer;
           transition: background 0.15s;
+          border-radius: 0 12px 12px 0;
         }
-        .tp-go-btn:hover { background: #2d5a40; }
+        .tp-go-btn:hover { background: #1e293b; }
         .tp-suggestions {
           position: absolute;
           top: 100%; left: 0; right: 0;
           background: var(--tp-surface);
-          border: 2px solid var(--tp-ink);
+          border: 1px solid var(--tp-border);
           border-top: none;
           z-index: 50;
           display: none;
+          border-radius: 0 0 10px 10px;
+          box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
         }
         .tp-suggestions.open { display: block; }
         .tp-sug-item {
@@ -196,27 +216,28 @@ export default function Home() {
           gap: 12px;
           align-items: center;
           cursor: pointer;
-          font-size: 12px;
+          font-size: 13px;
           border-bottom: 1px solid var(--tp-border);
           transition: background 0.1s;
         }
         .tp-sug-item:last-child { border-bottom: none; }
         .tp-sug-item:hover { background: var(--tp-surface2); }
-        .tp-sug-ticker { font-weight: 500; color: var(--tp-accent); min-width: 50px; }
+        .tp-sug-ticker { font-weight: 700; color: var(--tp-accent); min-width: 50px; }
         .tp-sug-name { color: var(--tp-muted); }
-        .tp-quick-picks { margin-top: 16px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .tp-qp-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--tp-muted); }
+        .tp-quick-picks { margin-top: 18px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 0 36px; }
+        .tp-qp-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--tp-muted); }
         .tp-qp-chip {
           border: 1px solid var(--tp-border);
           background: var(--tp-surface);
-          padding: 4px 12px;
-          font-size: 11px;
-          letter-spacing: 1px;
+          padding: 6px 12px;
+          border-radius: 999px;
+          font-size: 12px;
+          letter-spacing: 0.2px;
           cursor: pointer;
           transition: all 0.15s;
-          font-family: 'IBM Plex Mono', monospace;
+          font-family: 'Inter', sans-serif;
         }
-        .tp-qp-chip:hover { background: var(--tp-accent); color: #fff; border-color: var(--tp-accent); }
+        .tp-qp-chip:hover { background: var(--tp-surface2); color: var(--tp-ink); border-color: var(--tp-muted); }
         .tp-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 16px; color: var(--tp-ink); }
         .tp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
         .tp-company {
@@ -230,6 +251,15 @@ export default function Home() {
         .tp-company:hover { border-color: var(--tp-accent); background: var(--tp-surface2); }
         .tp-company-name { font-weight: 700; color: var(--tp-ink); font-family: 'Barlow', sans-serif; }
         .tp-company-meta { font-size: 12px; color: var(--tp-muted); margin-top: 6px; line-height: 1.35; }
+        @media (max-width: 720px) {
+          .tp-search-headline,
+          .tp-search-deck,
+          .tp-search-box,
+          .tp-quick-picks { padding-left: 16px; padding-right: 16px; margin-left: 0; margin-right: 0; }
+          .tp-go-btn { padding: 14px 18px; }
+          .tp-search-headline { font-size: clamp(26px, 8vw, 38px); }
+          .tp-search-deck { font-size: 14px; }
+        }
       `}</style>
 
       <div className="tp-wrap">

@@ -25,6 +25,7 @@ import { GoogleGIcon } from "../components/GoogleGIcon.jsx";
 import { getPrefetchDelayMs } from "../config/env.js";
 import { exportElementAsPdf } from "../utils/exportPdf.js";
 import { buildStockSeo } from "../seo/structuredData.js";
+import { PageHeader } from "../components/PageHeader.jsx";
 
 const PREFETCH_DELAY_SEC = Math.ceil(getPrefetchDelayMs() / 1000);
 
@@ -375,11 +376,43 @@ export default function Stock() {
 
   return (
     <div style={{ background: "var(--tp-bg, #f5f2eb)", minHeight: "100vh" }} dir={dir} lang={lang}>
+      <style>{`
+        .tp-stock-wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+        .tp-stock-toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .tp-stock-hero {
+          background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+          color: var(--tp-ink, #0f172a);
+          border: 1px solid var(--tp-border, #e2e8f0);
+          borderRadius: 16px;
+          padding: 16px;
+          margin-bottom: 16px;
+          box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          flex-wrap: wrap;
+          min-width: 0;
+        }
+        .tp-stock-title { font-size: 24px; font-weight: 800; line-height: 1.25; color: var(--tp-ink, #0f172a); }
+        .tp-stock-sub { font-size: 13px; color: var(--tp-muted, #64748b); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .tp-stock-btn {
+          border: 1px solid var(--tp-border, #e2e8f0);
+          border-radius: 999px;
+          padding: 7px 12px;
+          font-weight: 600;
+          background: #fff;
+          color: #334155;
+          cursor: pointer;
+          font-size: 12px;
+          letter-spacing: 0.2px;
+        }
+        .tp-stock-btn:hover { background: #f8fafc; }
+      `}</style>
       <div
         style={{
-          maxWidth: isMobile ? 1100 : 1400,
+          maxWidth: isMobile ? 1120 : 1360,
           margin: "0 auto",
-          padding: 16,
+          padding: "0 0 16px",
           overflowX: "hidden",
         display: "flex",
         flexDirection: isMobile ? "column" : "row",
@@ -388,24 +421,23 @@ export default function Stock() {
       }}
     >
         <div ref={reportContentRef} style={{ flex: 1, minWidth: 0, maxWidth: isMobile ? "100%" : 1100 }}>
+        <div className="tp-stock-wrap">
+        <PageHeader title="TruePrice.Cash" subtitle="Equity Intelligence · US & TASI Markets">
+          <UserBar />
+          <PillLink to="/blogs" ariaLabel={t("BLOGS")}>{t("BLOGS")}</PillLink>
+          <PillLink to="/about" ariaLabel={t("ABOUT_US")}>{t("ABOUT_US")}</PillLink>
+          <PillLink to="/contact" ariaLabel={t("CONTACT_US")}>{t("CONTACT_US")}</PillLink>
+          <LangToggle lang={lang} onToggle={toggleLang} t={t} />
+        </PageHeader>
         {/* Banner */}
         <div
           className="no-print"
           style={{
-            background: "var(--tp-accent, #1a3a2a)",
-            color: "#fff",
-            borderRadius: 16,
-            padding: 14,
-            marginBottom: 16,
-            boxShadow: "0 1px 10px rgba(0,0,0,0.10)",
-            display: "flex",
-            alignItems: isMobile ? "stretch" : "center",
-            gap: 12,
-            flexWrap: "wrap",
-            minWidth: 0,
+            marginTop: 20,
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0, flex: "1 1 200px", maxWidth: isMobile ? "100%" : 420 }}>
+          <div className="tp-stock-hero" style={{ alignItems: isMobile ? "stretch" : "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0, flex: "1 1 200px", maxWidth: isMobile ? "100%" : 500 }}>
             {logoUrl && !logoLoadError ? (
               <img
                 src={logoUrl}
@@ -419,7 +451,7 @@ export default function Stock() {
               <div
                 style={{
                   fontSize: 18,
-                  fontWeight: 900,
+                  fontWeight: 800,
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
@@ -430,10 +462,10 @@ export default function Stock() {
               >
                 {company || (lang === "ar" && translatedProfile?.name) || profile?.name || t("NOT_AVAILABLE")}
                 {((lang === "ar" && translatedProfile?.industry) || profile?.industry) ? (
-                  <span style={{ fontWeight: 600, opacity: 0.9 }}> – {(lang === "ar" && translatedProfile?.industry) || profile?.industry}</span>
+                  <span style={{ fontWeight: 600, color: "#475569" }}> · {(lang === "ar" && translatedProfile?.industry) || profile?.industry}</span>
                 ) : null}
               </div>
-              <div style={{ fontSize: 13, color: "#cbd5e1", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              <div className="tp-stock-sub">
                 <b>{t("TICKER")}:</b> {ticker} · <b>{t("REPORT_DATE")}:</b> {reportDate}
               </div>
             </div>
@@ -443,75 +475,44 @@ export default function Stock() {
             className="no-print"
             style={{
               marginInlineStart: "auto",
-              display: "flex",
+              display: "grid",
               alignItems: "center",
-              gap: 12,
+              gap: 10,
               flexWrap: "wrap",
               justifyContent: isMobile ? "space-between" : "flex-end",
               width: isMobile ? "100%" : "auto",
               minWidth: 0,
             }}
           >
-            <div style={{ fontWeight: 800, overflowWrap: "anywhere" }}>
+            <div style={{ fontWeight: 800, color: "#0f172a", overflowWrap: "anywhere" }}>
               {t("PRICE")}:{" "}
               {headerError ? (
-                <span style={{ color: "#fecaca" }}>{headerError}</span>
+                <span style={{ color: "#dc2626" }}>{headerError}</span>
               ) : price == null ? (
                 t("LOADING")
               ) : (
                 `${fmt2(price)} ${currency}`
               )}
             </div>
-            <button
-              type="button"
-              onClick={handleShare}
-              style={{
-                border: "1px solid #d1d5db",
-                borderRadius: 999,
-                padding: "6px 10px",
-                fontWeight: 700,
-                background: "#fff",
-                color: "#111827",
-                cursor: "pointer",
-              }}
-            >
-              {shareCopied ? t("SHARE_COPIED") : t("SHARE_REPORT")}
-            </button>
-            <button
-              type="button"
-              onClick={handlePrint}
-              style={{
-                border: "1px solid #d1d5db",
-                borderRadius: 999,
-                padding: "6px 10px",
-                fontWeight: 700,
-                background: "#fff",
-                color: "#111827",
-                cursor: "pointer",
-              }}
-            >
-              {t("PRINT_REPORT")}
-            </button>
-            <button
-              type="button"
-              onClick={handleExportPdf}
-              disabled={pdfExporting}
-              style={{
-                border: "1px solid #d1d5db",
-                borderRadius: 999,
-                padding: "6px 10px",
-                fontWeight: 700,
-                background: "#fff",
-                color: "#111827",
-                cursor: pdfExporting ? "not-allowed" : "pointer",
-                opacity: pdfExporting ? 0.6 : 1,
-              }}
-            >
-              {pdfExporting ? "…" : t("EXPORT_PDF")}
-            </button>
-            <UserBar />
-            <PillLink to="/" ariaLabel={t("DASHBOARD")}>TruePrice.Cash</PillLink>
-            <LangToggle lang={lang} onToggle={toggleLang} t={t} />
+            <div className="tp-stock-toolbar">
+              <button type="button" onClick={handleShare} className="tp-stock-btn">
+                {shareCopied ? t("SHARE_COPIED") : t("SHARE_REPORT")}
+              </button>
+              <button type="button" onClick={handlePrint} className="tp-stock-btn">
+                {t("PRINT_REPORT")}
+              </button>
+              <button
+                type="button"
+                onClick={handleExportPdf}
+                disabled={pdfExporting}
+                className="tp-stock-btn"
+                style={{ cursor: pdfExporting ? "not-allowed" : "pointer", opacity: pdfExporting ? 0.6 : 1 }}
+              >
+                {pdfExporting ? "…" : t("EXPORT_PDF")}
+              </button>
+              <PillLink to="/" ariaLabel={t("DASHBOARD")}>TruePrice.Cash</PillLink>
+            </div>
+          </div>
           </div>
         </div>
 
@@ -1072,6 +1073,7 @@ export default function Stock() {
         </Card>
         </>
         ) : null}
+        </div>
         </div>
 
         {user && market === "us" ? (

@@ -2,21 +2,23 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const pillStyle = {
-  border: "1px solid var(--tp-border, #ddd8cc)",
-  borderRadius: 999,
-  padding: "6px 12px",
-  fontWeight: 700,
-  background: "var(--tp-surface, #fff)",
-  color: "var(--tp-ink, #1a1a14)",
+  border: "none",
+  borderRadius: 0,
+  padding: "2px 0",
+  fontWeight: 500,
+  background: "transparent",
+  color: "var(--tp-link, #4b5563)",
   textDecoration: "none",
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
   cursor: "pointer",
   whiteSpace: "nowrap",
-  fontFamily: "'IBM Plex Mono', monospace",
-  fontSize: 11,
-  letterSpacing: "1px",
+  fontFamily: "'Inter', 'Barlow', sans-serif",
+  fontSize: 14,
+  letterSpacing: "0",
+  borderBottom: "1px solid transparent",
+  transition: "color 0.15s, border-color 0.15s",
 };
 
 /**
@@ -27,7 +29,7 @@ export function PillLink({ to, children, ariaLabel, className }) {
     <Link
       to={to}
       aria-label={ariaLabel}
-      className={className}
+      className={className || "tp-nav-link"}
       style={pillStyle}
     >
       {children}
