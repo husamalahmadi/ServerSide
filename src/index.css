@@ -1,13 +1,12 @@
 /* TruePrice.Cash – Design system (ValuAI-inspired) */
 :root {
-  --tp-bg: #f8fafc;
+  --tp-bg: #f5f2eb;
   --tp-surface: #ffffff;
-  --tp-surface2: #f1f5f9;
-  --tp-border: #e2e8f0;
-  --tp-ink: #0f172a;
-  --tp-muted: #64748b;
-  --tp-accent: #2563eb;
-  --tp-link: #475569;
+  --tp-surface2: #f0ece2;
+  --tp-border: #ddd8cc;
+  --tp-ink: #1a1a14;
+  --tp-muted: #8a8578;
+  --tp-accent: #1a3a2a;
   --tp-gold: #b8860b;
   --tp-green: #2d6a4f;
   --tp-red: #8b1a1a;
@@ -18,7 +17,6 @@ body {
   background: var(--tp-bg);
   color: var(--tp-ink);
   min-height: 100vh;
-  font-family: "Inter", "Barlow", sans-serif;
 }
 
 /* Google sign-in — matches header nav pills (PillLink: Blogs, About, Contact) */
@@ -28,43 +26,30 @@ body {
   justify-content: center;
   gap: 5px;
   box-sizing: border-box;
-  padding: 2px 0;
-  border-radius: 0;
-  border: none;
-  border-bottom: 1px solid transparent;
-  background: transparent;
-  color: var(--tp-link, #475569);
-  font-family: "Inter", "Barlow", sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--tp-border, #ddd8cc);
+  background: var(--tp-surface, #fff);
+  color: var(--tp-ink, #1a1a14);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
   line-height: 1.2;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.15s, border-color 0.15s;
+  transition: background 0.15s, border-color 0.15s;
 }
 .tp-signin-google:hover {
-  color: var(--tp-ink, #0f172a);
-  border-color: currentColor;
+  background: var(--tp-surface2, #f0ece2);
+  border-color: var(--tp-muted, #8a8578);
 }
 .tp-signin-google:active {
-  color: var(--tp-ink, #0f172a);
+  background: var(--tp-surface2, #f0ece2);
 }
 .tp-signin-google:focus-visible {
-  outline: 2px solid var(--tp-accent, #2563eb);
+  outline: 2px solid var(--tp-accent, #1a3a2a);
   outline-offset: 2px;
-}
-
-.tp-nav-link:hover,
-.tp-nav-link:focus-visible {
-  color: var(--tp-ink, #0f172a) !important;
-  border-bottom-color: currentColor !important;
-}
-
-button[aria-label="Toggle language"]:hover,
-button[aria-label="Toggle language"]:focus-visible {
-  color: var(--tp-ink, #0f172a) !important;
-  border-bottom-color: currentColor !important;
 }
 
 /* Paper texture overlay */
@@ -72,7 +57,7 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 0;
 }

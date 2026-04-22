@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { UserBar } from "./UserBar.jsx";
 
 const headerStyle = {
-  borderBottom: "1px solid var(--tp-border, #e5e7eb)",
-  padding: "18px 0 14px",
+  borderBottom: "2px solid var(--tp-ink, #1a1a14)",
+  padding: "20px 0 16px",
   display: "flex",
-  alignItems: "center",
+  alignItems: "flex-end",
   justifyContent: "space-between",
   gap: 12,
   flexWrap: "wrap",
@@ -16,23 +16,24 @@ const headerStyle = {
 
 const mastheadStyle = { lineHeight: 1 };
 const mastheadTitleStyle = {
-  fontFamily: "'Barlow', 'Inter', sans-serif",
-  fontSize: "clamp(24px, 3.2vw, 34px)",
-  fontWeight: 800,
-  letterSpacing: "-0.5px",
-  color: "var(--tp-ink, #111827)",
+  fontFamily: "'Playfair Display', serif",
+  fontSize: "clamp(28px, 4vw, 44px)",
+  fontWeight: 900,
+  letterSpacing: "-1px",
+  color: "var(--tp-accent, #1a3a2a)",
 };
 const mastheadSubStyle = {
-  fontSize: 11,
-  letterSpacing: "1.2px",
+  fontSize: 10,
+  letterSpacing: "4px",
   textTransform: "uppercase",
   color: "var(--tp-muted, #8a8578)",
-  marginTop: 5,
+  marginTop: 4,
 };
 const headerRightStyle = { textAlign: "right" };
 const editionStyle = {
-  fontSize: 11,
-  letterSpacing: "0.2px",
+  fontSize: 10,
+  letterSpacing: "2px",
+  textTransform: "uppercase",
   color: "var(--tp-muted, #8a8578)",
   lineHeight: 1.8,
 };

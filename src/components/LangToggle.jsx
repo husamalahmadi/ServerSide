@@ -10,16 +10,14 @@ export function LangToggle({ lang, onToggle, t }) {
       aria-label="Toggle language"
       title="Toggle language"
       style={{
-        border: "none",
-        borderBottom: "1px solid transparent",
-        borderRadius: 0,
-        padding: "2px 0",
-        fontWeight: 500,
-        background: "transparent",
-        color: "var(--tp-link, #4b5563)",
+        border: "1px solid #d1d5db",
+        borderRadius: 999,
+        padding: "6px 10px",
+        fontWeight: 700,
+        background: "#ffffff",
+        color: "#111827",
         cursor: "pointer",
         flex: "0 0 auto",
-        fontSize: 14,
       }}
     >
       {active ? t("AR") : t("EN")}
