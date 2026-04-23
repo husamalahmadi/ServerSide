@@ -319,6 +319,13 @@ const requireAuth = (req, res, next) => {
   if (!req.user) return res.status(401).json({ error: "Unauthorized" });
   next();
 };
+const requireGoogleAuth = (req, res, next) => {
+  if (!req.user) return res.status(401).json({ error: "Unauthorized" });
+  if (!req.user.google_id) {
+    return res.status(403).json({ error: "Google sign-in required" });
+  }
+  next();
+};
 
 // User profile: update own profile (picture comes from Google only, not editable)
 app.patch("/api/users/me", requireAuth, (req, res) => {
@@ -430,7 +437,7 @@ app.get("/api/comments/:ticker", (req, res) => {
   const comments = rows.map((c) => ({ ...c, replies: byParent[c.id] || [] }));
   res.json({ comments });
 });
-app.post("/api/comments/:ticker", requireAuth, (req, res) => {
+app.post("/api/comments/:ticker", requireGoogleAuth, (req, res) => {
   const { ticker } = req.params;
   const { body, parentId } = req.body || {};
   if (!body || !body.trim()) return res.status(400).json({ error: "body required" });
@@ -443,7 +450,7 @@ app.post("/api/comments/:ticker", requireAuth, (req, res) => {
   const row = db.prepare("SELECT last_insert_rowid() as id").get();
   res.status(201).json({ id: row.id });
 });
-app.post("/api/comments/:id/like", requireAuth, (req, res) => {
+app.post("/api/comments/:id/like", requireGoogleAuth, (req, res) => {
   const id = parseInt(req.params.id, 10);
   const existing = db.prepare("SELECT id FROM comment_likes WHERE user_id=? AND comment_id=?").get(req.user.id, id);
   if (existing) {
@@ -454,7 +461,7 @@ app.post("/api/comments/:id/like", requireAuth, (req, res) => {
     res.json({ liked: true });
   }
 });
-app.delete("/api/comments/:id", requireAuth, (req, res) => {
+app.delete("/api/comments/:id", requireGoogleAuth, (req, res) => {
   const id = parseInt(req.params.id, 10);
   const c = db.prepare("SELECT * FROM comments WHERE id=?").get(id);
   if (!c) return res.status(404).json({ error: "Not found" });
@@ -492,7 +499,7 @@ app.get("/api/watchlists/:handle/:slug", (req, res) => {
     items: items.map((i) => ({ ticker: i.ticker, created_at: i.created_at || null })),
   });
 });
-app.post("/api/watchlists", requireAuth, (req, res) => {
+app.post("/api/watchlists", requireGoogleAuth, (req, res) => {
   const { name, isPublic = true } = req.body || {};
   if (!name || !name.trim()) return res.status(400).json({ error: "name required" });
   const slug = name.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
@@ -501,7 +508,7 @@ app.post("/api/watchlists", requireAuth, (req, res) => {
   const row = db.prepare("SELECT last_insert_rowid() as id").get();
   res.status(201).json({ id: row.id, name: name.trim(), slug: slug || "list", is_public: isPublic ? 1 : 0 });
 });
-app.put("/api/watchlists/:id/items", requireAuth, (req, res) => {
+app.put("/api/watchlists/:id/items", requireGoogleAuth, (req, res) => {
   const id = parseInt(req.params.id, 10);
   if (!Number.isFinite(id)) return res.status(400).json({ error: "invalid watchlist id" });
   const { ticker, action } = req.body || {};
@@ -524,7 +531,7 @@ app.put("/api/watchlists/:id/items", requireAuth, (req, res) => {
   db.prepare("DELETE FROM watchlist_items WHERE watchlist_id=? AND ticker=?").run(id, t);
   return res.json({ ok: true, ticker: t });
 });
-app.delete("/api/watchlists/:id", requireAuth, (req, res) => {
+app.delete("/api/watchlists/:id", requireGoogleAuth, (req, res) => {
   const id = parseInt(req.params.id, 10);
   const list = db.prepare("SELECT * FROM watchlists WHERE id=? AND user_id=?").get(id, req.user.id);
   if (!list) return res.status(404).json({ error: "Not found" });

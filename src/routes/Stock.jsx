@@ -634,37 +634,6 @@ export default function Stock() {
           </div>
         </Card>
 
-        {!user ? (
-          <div
-            style={{
-              padding: 24,
-              textAlign: "center",
-              background: "#f8fafc",
-              borderRadius: 16,
-              border: "1px solid #e5e7eb",
-              marginBottom: 16,
-            }}
-          >
-            <p style={{ margin: "0 0 12px", fontSize: 16, color: "#374151" }}>
-              Sign in to view news, revenue & income graphs, watchlists, comments, and more.
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                if (signInNavigating.current) return;
-                signInNavigating.current = true;
-                login();
-              }}
-              className="tp-signin-google"
-            >
-              <GoogleGIcon size={13} />
-              Sign in with Google
-            </button>
-          </div>
-        ) : null}
-
-        {user ? (
-        <>
         {/* 3. Revenue & Income */}
         <Card title={`${t("REV_INC_TITLE")} (${currency})`}>
           {prefetchCountdown > 0 ? (
@@ -712,7 +681,26 @@ export default function Stock() {
 
         {/* 5. Industry peers (EV-based fair value) – button + 8s wait */}
         <Card title={t("INDUSTRY_PEERS_EV")}>
-          {peersCountdown > 0 ? (
+          {!user ? (
+            <div style={{ display: "grid", gap: 12 }}>
+              <p style={{ margin: 0, color: "#374151", lineHeight: 1.5 }}>
+                Sign in with Google to compare this stock to its industry peers.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  if (signInNavigating.current) return;
+                  signInNavigating.current = true;
+                  login();
+                }}
+                className="tp-signin-google"
+                style={{ justifySelf: "start" }}
+              >
+                <GoogleGIcon size={13} />
+                Sign in with Google
+              </button>
+            </div>
+          ) : peersCountdown > 0 ? (
             <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
               <span>{t("PEERS_WAIT_8S")} {peersCountdown}s</span>
               <span style={{ fontSize: 13 }}>{t("PEERS_WAIT_HINT")}</span>
@@ -1070,11 +1058,9 @@ export default function Stock() {
             </div>
           )}
         </Card>
-        </>
-        ) : null}
         </div>
 
-        {user && market === "us" ? (
+        {market === "us" ? (
           <StockNewsSidebar ticker={ticker} companyName={companyDisplayName} market={market} t={t} dir={dir} isMobile={isMobile} />
         ) : null}
       </div>
