@@ -355,6 +355,11 @@ export default function Home() {
         }
         .tp-scr-row small { color: var(--tp-muted); font-size: 11px; }
         .tp-scr-inline { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 6px; align-items: center; min-width: 0; }
+        .tp-scr-hint {
+          margin: 2px 2px 0;
+          font-size: 11px;
+          color: var(--tp-muted);
+        }
         .tp-scr-table-wrap {
           border: 1px solid var(--tp-border);
           border-radius: 10px;
@@ -598,6 +603,9 @@ export default function Home() {
           ) : (
             <div className="tp-scr-layout">
               <ScreenerFilters t={t} filters={filters} setFilters={setFilters} sectors={screenerState.sectors} />
+              <div className="tp-scr-hint">
+                {lang === "ar" ? "لا حاجة لزر: النتائج تتحدث تلقائيًا عند تغيير المعايير." : "No button needed: results update automatically when you change criteria."}
+              </div>
               {screenerItems.length === 0 ? (
                 <div className="tp-scr-empty">{t("NO_MATCH")}</div>
               ) : (

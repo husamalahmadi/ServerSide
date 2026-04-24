@@ -1,5 +1,4 @@
 import React from "react";
-import { fmtBill } from "../../domain/formatting.js";
 
 export function ScreenerFilters({ t, filters, setFilters, sectors }) {
   const update = (key, value) => setFilters((f) => ({ ...f, [key]: value }));
@@ -66,9 +65,6 @@ export function ScreenerFilters({ t, filters, setFilters, sectors }) {
             onChange={(e) => update("marketCapMax", Number(e.target.value || 0))}
           />
         </div>
-        <small>
-          {fmtBill(filters.marketCapMin)} → {fmtBill(filters.marketCapMax)}
-        </small>
       </div>
       <div className="tp-scr-row">
         <label>{t("SCREENER_DISCOUNT_RANGE")}</label>
