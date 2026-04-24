@@ -329,14 +329,16 @@ export default function Home() {
           gap: 18px;
           color: var(--tp-muted);
         }
-        .tp-scr-layout { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 16px; align-items: start; }
+        .tp-scr-layout { display: grid; grid-template-columns: 1fr; gap: 12px; align-items: start; }
         .tp-scr-filters {
           border: 1px solid var(--tp-border);
           border-radius: 10px;
           background: var(--tp-surface);
           padding: 14px;
           display: grid;
+          grid-template-columns: repeat(6, minmax(150px, 1fr));
           gap: 12px;
+          align-items: end;
         }
         .tp-scr-row { display: grid; gap: 7px; }
         .tp-scr-row label { font-size: 11px; letter-spacing: 1px; color: var(--tp-muted); text-transform: uppercase; }
@@ -390,10 +392,16 @@ export default function Home() {
         .tp-scr-market-badge.us { color: #1d4ed8; background: #eff6ff; }
         .tp-scr-market-badge.sa { color: #166534; background: #ecfdf3; }
         .tp-scr-empty { border: 1px dashed var(--tp-border); padding: 20px; color: var(--tp-muted); text-align: center; }
+        @media (max-width: 1200px) {
+          .tp-scr-filters { grid-template-columns: repeat(3, minmax(180px, 1fr)); }
+        }
         @media (max-width: 980px) {
           .tp-wrap { padding: 0 14px; }
-          .tp-scr-layout { grid-template-columns: 1fr; }
+          .tp-scr-filters { grid-template-columns: repeat(2, minmax(150px, 1fr)); }
           .tp-scr-company-cell, .tp-scr-sector-cell { max-width: 140px; }
+        }
+        @media (max-width: 640px) {
+          .tp-scr-filters { grid-template-columns: 1fr; }
         }
         .tp-company {
           text-align: start;
