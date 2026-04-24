@@ -7,6 +7,10 @@ import { PageHeader } from "../components/PageHeader.jsx";
 import { PillLink } from "../components/PillLink.jsx";
 import { LangToggle } from "../components/LangToggle.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
+import { getScreenerDataset } from "../services/screenerService.js";
+import { useScreener } from "../hooks/useScreener.js";
+import { ScreenerFilters } from "../components/screener/ScreenerFilters.jsx";
+import { ScreenerResultsTable } from "../components/screener/ScreenerResultsTable.jsx";
 function normalize(s) {
   return (s || "").toString().trim().toLowerCase();
 }
@@ -50,6 +54,29 @@ export default function Home() {
     items: [],
     industries: [],
   });
+  const [screenerState, setScreenerState] = useState({
+    loading: true,
+    error: "",
+    items: [],
+    sectors: [],
+  });
+  const initialScreenerFilters = useMemo(() => {
+    const readNum = (k, fallback) => {
+      const v = Number(searchParams.get(k));
+      return Number.isFinite(v) ? v : fallback;
+    };
+    return {
+      market: searchParams.get("sm") || "all",
+      sector: searchParams.get("ss") || "all",
+      query: searchParams.get("sq") || "",
+      peMin: readNum("spemin", 0),
+      peMax: readNum("spemax", 60),
+      marketCapMin: readNum("smcmin", 0),
+      marketCapMax: readNum("smcmax", 5000000000000),
+      discountMin: readNum("sdmin", -80),
+      discountMax: readNum("sdmax", 200),
+    };
+  }, [searchParams]);
 
   useEffect(() => {
     let alive = true;
@@ -78,6 +105,60 @@ export default function Home() {
     run();
     return () => { alive = false; };
   }, [t]);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        setScreenerState({ loading: true, error: "", items: [], sectors: [] });
+        const data = await getScreenerDataset();
+        if (!alive) return;
+        setScreenerState({
+          loading: false,
+          error: "",
+          items: data?.items || [],
+          sectors: data?.sectors || [],
+        });
+      } catch {
+        if (!alive) return;
+        setScreenerState({ loading: false, error: t("SCREENER_LOAD_FAILED"), items: [], sectors: [] });
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [t]);
+
+  const { filters, setFilters, sortBy, sortDir, onSort, applyPreset, filteredCount, items: screenerItems } =
+    useScreener(screenerState.items, initialScreenerFilters);
+
+  useEffect(() => {
+    const next = new URLSearchParams(searchParams);
+    next.set("sm", filters.market);
+    next.set("ss", filters.sector);
+    if (filters.query) next.set("sq", filters.query);
+    else next.delete("sq");
+    next.set("spemin", String(filters.peMin));
+    next.set("spemax", String(filters.peMax));
+    next.set("smcmin", String(filters.marketCapMin));
+    next.set("smcmax", String(filters.marketCapMax));
+    next.set("sdmin", String(filters.discountMin));
+    next.set("sdmax", String(filters.discountMax));
+    if (next.toString() !== searchParams.toString()) {
+      setSearchParams(next, { replace: true });
+    }
+  }, [filters, searchParams, setSearchParams]);
+
+  const screenerSummary = useMemo(() => {
+    const rows = screenerItems || [];
+    if (!rows.length) return { avgDiscount: null, topSector: "—" };
+    const discounts = rows.map((r) => r.discountPct).filter((n) => Number.isFinite(n));
+    const avgDiscount = discounts.length ? discounts.reduce((s, n) => s + n, 0) / discounts.length : null;
+    const bySector = new Map();
+    rows.forEach((r) => bySector.set(r.sector, (bySector.get(r.sector) || 0) + 1));
+    const topSector = [...bySector.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] || "—";
+    return { avgDiscount, topSector };
+  }, [screenerItems]);
 
   const suggestions = useMemo(() => {
     const query = normalize(q);
@@ -219,6 +300,39 @@ export default function Home() {
         .tp-qp-chip:hover { background: var(--tp-accent); color: #fff; border-color: var(--tp-accent); }
         .tp-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 16px; color: var(--tp-ink); }
         .tp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+        .tp-screener-section { padding: 28px 0; border-bottom: 1px solid var(--tp-border); }
+        .tp-scr-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+        .tp-scr-count { font-size: 12px; color: var(--tp-muted); }
+        .tp-scr-presets { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+        .tp-scr-preset { border: 1px solid var(--tp-border); background: var(--tp-surface); padding: 5px 10px; font-size: 11px; cursor: pointer; }
+        .tp-scr-preset:hover { background: var(--tp-accent); color: #fff; border-color: var(--tp-accent); }
+        .tp-scr-summary {
+          position: sticky;
+          top: 0;
+          z-index: 10;
+          margin: 0 0 12px;
+          border: 1px solid var(--tp-border);
+          background: #fff;
+          padding: 8px 10px;
+          font-size: 12px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 14px;
+          color: var(--tp-muted);
+        }
+        .tp-scr-layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 14px; align-items: start; }
+        .tp-scr-filters { border: 1px solid var(--tp-border); background: var(--tp-surface); padding: 12px; display: grid; gap: 10px; }
+        .tp-scr-row { display: grid; gap: 6px; }
+        .tp-scr-row label { font-size: 11px; letter-spacing: 1px; color: var(--tp-muted); text-transform: uppercase; }
+        .tp-scr-row input, .tp-scr-row select { border: 1px solid var(--tp-border); padding: 8px; background: #fff; font-size: 13px; }
+        .tp-scr-inline { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; align-items: center; }
+        .tp-scr-table-wrap { border: 1px solid var(--tp-border); overflow: auto; background: var(--tp-surface); max-height: 620px; }
+        .tp-scr-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .tp-scr-table th, .tp-scr-table td { padding: 8px 10px; border-bottom: 1px solid var(--tp-border); text-align: start; white-space: nowrap; }
+        .tp-scr-table th { background: var(--tp-surface2); font-size: 11px; letter-spacing: .5px; text-transform: uppercase; color: var(--tp-muted); position: sticky; top: 0; }
+        .tp-scr-link { border: none; background: transparent; color: var(--tp-accent); cursor: pointer; font-weight: 700; font-family: 'IBM Plex Mono', monospace; }
+        .tp-scr-empty { border: 1px dashed var(--tp-border); padding: 20px; color: var(--tp-muted); text-align: center; }
+        @media (max-width: 980px) { .tp-scr-layout { grid-template-columns: 1fr; } }
         .tp-company {
           text-align: start;
           border: 1px solid var(--tp-border);
@@ -374,6 +488,53 @@ export default function Home() {
               </span>
             ))}
           </div>
+        </div>
+
+        <div className="tp-screener-section">
+          <div className="tp-scr-head">
+            <h2 className="tp-title" style={{ margin: 0 }}>{t("SCREENER_TITLE")}</h2>
+            <div className="tp-scr-count">{t("SCREENER_MATCHES")}: {filteredCount}</div>
+          </div>
+          <div className="tp-scr-presets">
+            <button type="button" className="tp-scr-preset" onClick={() => applyPreset("undervalued")}>
+              {t("SCREENER_PRESET_UNDERVALUE")}
+            </button>
+            <button type="button" className="tp-scr-preset" onClick={() => applyPreset("largecap")}>
+              {t("SCREENER_PRESET_LARGECAP")}
+            </button>
+            <button type="button" className="tp-scr-preset" onClick={() => applyPreset("tasi")}>
+              {t("SCREENER_PRESET_TASI")}
+            </button>
+            <button type="button" className="tp-scr-preset" onClick={() => applyPreset("reset")}>
+              {t("RESET")}
+            </button>
+          </div>
+          <div className="tp-scr-summary">
+            <span>{t("SCREENER_MATCHES")}: <b>{filteredCount}</b></span>
+            <span>{t("SCREENER_AVG_DISCOUNT")}: <b>{screenerSummary.avgDiscount == null ? "—" : `${screenerSummary.avgDiscount.toFixed(1)}%`}</b></span>
+            <span>{t("SCREENER_TOP_SECTOR")}: <b>{screenerSummary.topSector}</b></span>
+          </div>
+          {screenerState.loading ? (
+            <div className="tp-scr-empty">{t("LOADING")}</div>
+          ) : screenerState.error ? (
+            <div className="tp-scr-empty">{screenerState.error}</div>
+          ) : (
+            <div className="tp-scr-layout">
+              <ScreenerFilters t={t} filters={filters} setFilters={setFilters} sectors={screenerState.sectors} />
+              {screenerItems.length === 0 ? (
+                <div className="tp-scr-empty">{t("NO_MATCH")}</div>
+              ) : (
+                <ScreenerResultsTable
+                  t={t}
+                  items={screenerItems}
+                  sortBy={sortBy}
+                  sortDir={sortDir}
+                  onSort={onSort}
+                  onOpenTicker={goToStock}
+                />
+              )}
+            </div>
+          )}
         </div>
 
         <footer
