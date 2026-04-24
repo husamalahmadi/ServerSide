@@ -336,11 +336,11 @@ export default function Home() {
           background: var(--tp-surface);
           padding: 14px;
           display: grid;
-          grid-template-columns: repeat(6, minmax(150px, 1fr));
+          grid-template-columns: repeat(6, minmax(0, 1fr));
           gap: 12px;
           align-items: end;
         }
-        .tp-scr-row { display: grid; gap: 7px; }
+        .tp-scr-row { display: grid; gap: 7px; min-width: 0; }
         .tp-scr-row label { font-size: 11px; letter-spacing: 1px; color: var(--tp-muted); text-transform: uppercase; }
         .tp-scr-row input, .tp-scr-row select {
           border: 1px solid var(--tp-border);
@@ -348,9 +348,12 @@ export default function Home() {
           background: #fff;
           font-size: 13px;
           border-radius: 8px;
+          width: 100%;
+          min-width: 0;
+          box-sizing: border-box;
         }
         .tp-scr-row small { color: var(--tp-muted); font-size: 11px; }
-        .tp-scr-inline { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; align-items: center; }
+        .tp-scr-inline { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 6px; align-items: center; min-width: 0; }
         .tp-scr-table-wrap {
           border: 1px solid var(--tp-border);
           border-radius: 10px;
@@ -392,7 +395,7 @@ export default function Home() {
         .tp-scr-market-badge.us { color: #1d4ed8; background: #eff6ff; }
         .tp-scr-market-badge.sa { color: #166534; background: #ecfdf3; }
         .tp-scr-empty { border: 1px dashed var(--tp-border); padding: 20px; color: var(--tp-muted); text-align: center; }
-        @media (max-width: 1200px) {
+        @media (max-width: 1280px) {
           .tp-scr-filters { grid-template-columns: repeat(3, minmax(180px, 1fr)); }
         }
         @media (max-width: 980px) {
