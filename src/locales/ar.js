@@ -156,6 +156,7 @@ export default {
   SCREENER_PRESET_UNDERVALUE: "أسهم منخفضة التقييم",
   SCREENER_PRESET_LARGECAP: "شركات كبرى",
   SCREENER_PRESET_TASI: "تركيز السوق السعودي",
+  SCREENER_PRESET_US: "تركيز السوق الأمريكي",
   SCREENER_AVG_DISCOUNT: "متوسط الخصم",
   SCREENER_TOP_SECTOR: "أعلى قطاع",
 };

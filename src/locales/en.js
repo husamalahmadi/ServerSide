@@ -156,6 +156,7 @@ export default {
   SCREENER_PRESET_UNDERVALUE: "Undervalued",
   SCREENER_PRESET_LARGECAP: "Large Cap",
   SCREENER_PRESET_TASI: "TASI Focus",
+  SCREENER_PRESET_US: "US Focus",
   SCREENER_AVG_DISCOUNT: "Avg Discount",
   SCREENER_TOP_SECTOR: "Top Sector",
 };

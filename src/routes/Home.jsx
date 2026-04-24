@@ -9,7 +9,6 @@ import { LangToggle } from "../components/LangToggle.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { getScreenerDataset } from "../services/screenerService.js";
 import { useScreener } from "../hooks/useScreener.js";
-import { ScreenerFilters } from "../components/screener/ScreenerFilters.jsx";
 import { ScreenerResultsTable } from "../components/screener/ScreenerResultsTable.jsx";
 function normalize(s) {
   return (s || "").toString().trim().toLowerCase();
@@ -60,23 +59,6 @@ export default function Home() {
     items: [],
     sectors: [],
   });
-  const initialScreenerFilters = useMemo(() => {
-    const readNum = (k, fallback) => {
-      const v = Number(searchParams.get(k));
-      return Number.isFinite(v) ? v : fallback;
-    };
-    return {
-      market: searchParams.get("sm") || "all",
-      sector: searchParams.get("ss") || "all",
-      query: searchParams.get("sq") || "",
-      peMin: readNum("spemin", 0),
-      peMax: readNum("spemax", 60),
-      marketCapMin: readNum("smcmin", 0),
-      marketCapMax: readNum("smcmax", 5000000000000),
-      discountMin: readNum("sdmin", -80),
-      discountMax: readNum("sdmax", 200),
-    };
-  }, [searchParams]);
 
   useEffect(() => {
     let alive = true;
@@ -129,25 +111,7 @@ export default function Home() {
     };
   }, [t]);
 
-  const { filters, setFilters, sortBy, sortDir, onSort, applyPreset, filteredCount, items: screenerItems } =
-    useScreener(screenerState.items, initialScreenerFilters);
-
-  useEffect(() => {
-    const next = new URLSearchParams(searchParams);
-    next.set("sm", filters.market);
-    next.set("ss", filters.sector);
-    if (filters.query) next.set("sq", filters.query);
-    else next.delete("sq");
-    next.set("spemin", String(filters.peMin));
-    next.set("spemax", String(filters.peMax));
-    next.set("smcmin", String(filters.marketCapMin));
-    next.set("smcmax", String(filters.marketCapMax));
-    next.set("sdmin", String(filters.discountMin));
-    next.set("sdmax", String(filters.discountMax));
-    if (next.toString() !== searchParams.toString()) {
-      setSearchParams(next, { replace: true });
-    }
-  }, [filters, searchParams, setSearchParams]);
+  const { sortBy, sortDir, onSort, applyPreset, filteredCount, items: screenerItems } = useScreener(screenerState.items);
 
   const screenerSummary = useMemo(() => {
     const rows = screenerItems || [];
@@ -356,7 +320,7 @@ export default function Home() {
         .tp-scr-row small { color: var(--tp-muted); font-size: 11px; }
         .tp-scr-inline { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 6px; align-items: center; min-width: 0; }
         .tp-scr-hint {
-          margin: 2px 2px 0;
+          margin: 0 2px 2px;
           font-size: 11px;
           color: var(--tp-muted);
         }
@@ -587,6 +551,9 @@ export default function Home() {
             <button type="button" className="tp-scr-preset" onClick={() => applyPreset("tasi")}>
               {t("SCREENER_PRESET_TASI")}
             </button>
+            <button type="button" className="tp-scr-preset" onClick={() => applyPreset("us")}>
+              {t("SCREENER_PRESET_US")}
+            </button>
             <button type="button" className="tp-scr-preset" onClick={() => applyPreset("reset")}>
               {t("RESET")}
             </button>
@@ -602,9 +569,8 @@ export default function Home() {
             <div className="tp-scr-empty">{screenerState.error}</div>
           ) : (
             <div className="tp-scr-layout">
-              <ScreenerFilters t={t} filters={filters} setFilters={setFilters} sectors={screenerState.sectors} />
               <div className="tp-scr-hint">
-                {lang === "ar" ? "لا حاجة لزر: النتائج تتحدث تلقائيًا عند تغيير المعايير." : "No button needed: results update automatically when you change criteria."}
+                {lang === "ar" ? "اضغط أحد الأزرار بالأعلى لتشغيل الفرز. إعادة التعيين تعرض نتائج فارغة." : "Press one of the buttons above to run screening. Reset shows no results."}
               </div>
               {screenerItems.length === 0 ? (
                 <div className="tp-scr-empty">{t("NO_MATCH")}</div>

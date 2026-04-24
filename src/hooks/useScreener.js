@@ -1,27 +1,18 @@
 import { useMemo, useState } from "react";
-import { applyScreenerFilters, sortScreenerItems } from "../domain/screener.js";
+import { sortScreenerItems } from "../domain/screener.js";
 
-const DEFAULT_FILTERS = {
-  market: "all",
-  sector: "all",
-  query: "",
-  peMin: 0,
-  peMax: 60,
-  marketCapMin: 0,
-  marketCapMax: 5000000000000,
-  discountMin: -80,
-  discountMax: 200,
-};
-
-export function useScreener(items, initialFilters = null) {
-  const [filters, setFilters] = useState({
-    ...DEFAULT_FILTERS,
-    ...(initialFilters || {}),
-  });
+export function useScreener(items) {
+  const [activePreset, setActivePreset] = useState("reset");
   const [sortBy, setSortBy] = useState("discountPct");
   const [sortDir, setSortDir] = useState("desc");
 
-  const filtered = useMemo(() => applyScreenerFilters(items, filters), [items, filters]);
+  const filtered = useMemo(() => {
+    const rows = Array.isArray(items) ? items : [];
+    if (activePreset === "reset") return [];
+    if (activePreset === "tasi") return rows.filter((it) => it.market === "sa" && Number(it.discountPct) > 0);
+    if (activePreset === "us") return rows.filter((it) => it.market === "us" && Number(it.discountPct) > 0);
+    return rows.filter((it) => Number.isFinite(Number(it.discountPct)));
+  }, [items, activePreset]);
   const sorted = useMemo(() => sortScreenerItems(filtered, sortBy, sortDir), [filtered, sortBy, sortDir]);
 
   function onSort(nextSortBy) {
@@ -34,38 +25,13 @@ export function useScreener(items, initialFilters = null) {
   }
 
   function applyPreset(presetId) {
-    if (presetId === "undervalued") {
-      setFilters((f) => ({ ...f, discountMin: 15, discountMax: 300, peMin: 0, peMax: 30 }));
-      setSortBy("discountPct");
-      setSortDir("desc");
-      return;
-    }
-    if (presetId === "largecap") {
-      setFilters((f) => ({
-        ...f,
-        marketCapMin: 10000000000,
-        marketCapMax: 5000000000000,
-      }));
-      setSortBy("marketCap");
-      setSortDir("desc");
-      return;
-    }
-    if (presetId === "tasi") {
-      setFilters((f) => ({ ...f, market: "sa", discountMin: -80, discountMax: 300 }));
-      setSortBy("discountPct");
-      setSortDir("desc");
-      return;
-    }
-    if (presetId === "reset") {
-      setFilters({ ...DEFAULT_FILTERS });
-      setSortBy("discountPct");
-      setSortDir("desc");
-    }
+    setActivePreset(presetId);
+    setSortBy("discountPct");
+    setSortDir("desc");
   }
 
   return {
-    filters,
-    setFilters,
+    activePreset,
     sortBy,
     sortDir,
     onSort,
