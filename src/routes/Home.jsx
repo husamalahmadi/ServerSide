@@ -216,7 +216,7 @@ export default function Home() {
   return (
     <div dir={dir} lang={lang} style={{ minHeight: "100vh", position: "relative", zIndex: 1 }}>
       <style>{`
-        .tp-wrap { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+        .tp-wrap { max-width: 1220px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
         .tp-search-section { padding: 40px 0 32px; border-bottom: 1px solid var(--tp-border); }
         .tp-search-headline {
           font-family: 'Playfair Display', serif;
@@ -302,9 +302,17 @@ export default function Home() {
         .tp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
         .tp-screener-section { padding: 28px 0; border-bottom: 1px solid var(--tp-border); }
         .tp-scr-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
-        .tp-scr-count { font-size: 12px; color: var(--tp-muted); }
+        .tp-scr-count { font-size: 12px; color: var(--tp-muted); font-weight: 600; }
         .tp-scr-presets { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
-        .tp-scr-preset { border: 1px solid var(--tp-border); background: var(--tp-surface); padding: 5px 10px; font-size: 11px; cursor: pointer; }
+        .tp-scr-preset {
+          border: 1px solid var(--tp-border);
+          background: var(--tp-surface);
+          padding: 6px 11px;
+          font-size: 11px;
+          cursor: pointer;
+          border-radius: 999px;
+          font-weight: 600;
+        }
         .tp-scr-preset:hover { background: var(--tp-accent); color: #fff; border-color: var(--tp-accent); }
         .tp-scr-summary {
           position: sticky;
@@ -313,26 +321,80 @@ export default function Home() {
           margin: 0 0 12px;
           border: 1px solid var(--tp-border);
           background: #fff;
-          padding: 8px 10px;
+          border-radius: 10px;
+          padding: 10px 12px;
           font-size: 12px;
           display: flex;
           flex-wrap: wrap;
-          gap: 14px;
+          gap: 18px;
           color: var(--tp-muted);
         }
-        .tp-scr-layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 14px; align-items: start; }
-        .tp-scr-filters { border: 1px solid var(--tp-border); background: var(--tp-surface); padding: 12px; display: grid; gap: 10px; }
-        .tp-scr-row { display: grid; gap: 6px; }
+        .tp-scr-layout { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 16px; align-items: start; }
+        .tp-scr-filters {
+          border: 1px solid var(--tp-border);
+          border-radius: 10px;
+          background: var(--tp-surface);
+          padding: 14px;
+          display: grid;
+          gap: 12px;
+        }
+        .tp-scr-row { display: grid; gap: 7px; }
         .tp-scr-row label { font-size: 11px; letter-spacing: 1px; color: var(--tp-muted); text-transform: uppercase; }
-        .tp-scr-row input, .tp-scr-row select { border: 1px solid var(--tp-border); padding: 8px; background: #fff; font-size: 13px; }
+        .tp-scr-row input, .tp-scr-row select {
+          border: 1px solid var(--tp-border);
+          padding: 9px 10px;
+          background: #fff;
+          font-size: 13px;
+          border-radius: 8px;
+        }
+        .tp-scr-row small { color: var(--tp-muted); font-size: 11px; }
         .tp-scr-inline { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; align-items: center; }
-        .tp-scr-table-wrap { border: 1px solid var(--tp-border); overflow: auto; background: var(--tp-surface); max-height: 620px; }
+        .tp-scr-table-wrap {
+          border: 1px solid var(--tp-border);
+          border-radius: 10px;
+          overflow: auto;
+          background: var(--tp-surface);
+          max-height: 620px;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
         .tp-scr-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        .tp-scr-table th, .tp-scr-table td { padding: 8px 10px; border-bottom: 1px solid var(--tp-border); text-align: start; white-space: nowrap; }
-        .tp-scr-table th { background: var(--tp-surface2); font-size: 11px; letter-spacing: .5px; text-transform: uppercase; color: var(--tp-muted); position: sticky; top: 0; }
-        .tp-scr-link { border: none; background: transparent; color: var(--tp-accent); cursor: pointer; font-weight: 700; font-family: 'IBM Plex Mono', monospace; }
+        .tp-scr-table th, .tp-scr-table td { padding: 9px 10px; border-bottom: 1px solid var(--tp-border); text-align: start; white-space: nowrap; vertical-align: middle; }
+        .tp-scr-table thead th {
+          background: #f8f6f1;
+          font-size: 11px;
+          letter-spacing: .5px;
+          text-transform: uppercase;
+          color: var(--tp-muted);
+          position: sticky;
+          top: 0;
+          z-index: 2;
+        }
+        .tp-scr-table tbody tr:nth-child(even) { background: rgba(0,0,0,0.012); }
+        .tp-scr-table tbody tr:hover { background: #f4f8f4; }
+        .tp-scr-link { border: none; background: transparent; color: var(--tp-accent); cursor: pointer; font-weight: 700; font-family: 'IBM Plex Mono', monospace; padding: 0; }
+        .tp-scr-ticker-cell { font-family: 'IBM Plex Mono', monospace; font-weight: 600; }
+        .tp-scr-company-cell, .tp-scr-sector-cell { max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+        .tp-scr-num { text-align: end !important; font-variant-numeric: tabular-nums; }
+        .tp-scr-pos { color: #166534; font-weight: 700; }
+        .tp-scr-neg { color: #991b1b; font-weight: 700; }
+        .tp-scr-market-badge {
+          display: inline-block;
+          min-width: 48px;
+          text-align: center;
+          border-radius: 999px;
+          padding: 3px 8px;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: .4px;
+        }
+        .tp-scr-market-badge.us { color: #1d4ed8; background: #eff6ff; }
+        .tp-scr-market-badge.sa { color: #166534; background: #ecfdf3; }
         .tp-scr-empty { border: 1px dashed var(--tp-border); padding: 20px; color: var(--tp-muted); text-align: center; }
-        @media (max-width: 980px) { .tp-scr-layout { grid-template-columns: 1fr; } }
+        @media (max-width: 980px) {
+          .tp-wrap { padding: 0 14px; }
+          .tp-scr-layout { grid-template-columns: 1fr; }
+          .tp-scr-company-cell, .tp-scr-sector-cell { max-width: 140px; }
+        }
         .tp-company {
           text-align: start;
           border: 1px solid var(--tp-border);

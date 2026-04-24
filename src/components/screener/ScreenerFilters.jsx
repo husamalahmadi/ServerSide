@@ -36,9 +36,19 @@ export function ScreenerFilters({ t, filters, setFilters, sectors }) {
       <div className="tp-scr-row">
         <label>{t("SCREENER_PE_RANGE")}</label>
         <div className="tp-scr-inline">
-          <input type="number" value={filters.peMin} onChange={(e) => update("peMin", Number(e.target.value || 0))} />
+          <input
+            type="number"
+            step="0.1"
+            value={filters.peMin}
+            onChange={(e) => update("peMin", Number(e.target.value || 0))}
+          />
           <span>→</span>
-          <input type="number" value={filters.peMax} onChange={(e) => update("peMax", Number(e.target.value || 0))} />
+          <input
+            type="number"
+            step="0.1"
+            value={filters.peMax}
+            onChange={(e) => update("peMax", Number(e.target.value || 0))}
+          />
         </div>
       </div>
       <div className="tp-scr-row">
@@ -57,7 +67,7 @@ export function ScreenerFilters({ t, filters, setFilters, sectors }) {
           />
         </div>
         <small>
-          {fmtBill(filters.marketCapMin)} - {fmtBill(filters.marketCapMax)}
+          {fmtBill(filters.marketCapMin)} → {fmtBill(filters.marketCapMax)}
         </small>
       </div>
       <div className="tp-scr-row">
