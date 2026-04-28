@@ -19,12 +19,9 @@ const QUICK_PICKS = [
   { ticker: "MSFT", name: "Microsoft", market: "us" },
   { ticker: "2222", name: "Saudi Aramco", market: "sa" },
   { ticker: "1120", name: "Al Rajhi Bank", market: "sa" },
-  { ticker: "EGS60121C018", name: "Commercial International Bank", market: "eg" },
-  { ticker: "EGS380S1C017", name: "Talaat Moustafa Group", market: "eg" },
   { ticker: "NVDA", name: "NVIDIA", market: "us" },
   { ticker: "1180", name: "SNB", market: "sa" },
   { ticker: "2010", name: "SABIC", market: "sa" },
-  { ticker: "EGS745L1C014", name: "e-finance", market: "eg" },
   { ticker: "AMZN", name: "Amazon", market: "us" },
 ];
 
@@ -42,7 +39,7 @@ export default function Home() {
   }, [searchParams, setSearchParams]);
   usePageMeta({
     title: "TruePrice.Cash",
-    description: `${t("MARKET_US")} & ${t("MARKET_SA")} & ${t("MARKET_EG")}. ${t("COMPANIES")}.`,
+    description: t("MARKET_US") + " & " + t("MARKET_SA") + ". " + t("COMPANIES") + ".",
     pathname: "/",
   });
 
@@ -367,7 +364,6 @@ export default function Home() {
         }
         .tp-scr-market-badge.us { color: #1d4ed8; background: #eff6ff; }
         .tp-scr-market-badge.sa { color: #166534; background: #ecfdf3; }
-        .tp-scr-market-badge.eg { color: #7c2d12; background: #fff7ed; }
         .tp-scr-empty { border: 1px dashed var(--tp-border); padding: 20px; color: var(--tp-muted); text-align: center; }
         @media (max-width: 1180px) {
           .tp-scr-filters { grid-template-columns: repeat(12, minmax(0, 1fr)); }
@@ -397,7 +393,7 @@ export default function Home() {
       `}</style>
 
       <div className="tp-wrap">
-        <PageHeader title="TruePrice.Cash" subtitle="Equity Intelligence · US, TASI & EGX Markets">
+        <PageHeader title="TruePrice.Cash" subtitle="Equity Intelligence · US & TASI Markets">
           <PillLink to="/blogs" ariaLabel={t("BLOGS")}>{t("BLOGS")}</PillLink>
           <PillLink to="/about" ariaLabel={t("ABOUT_US")}>{t("ABOUT_US")}</PillLink>
           <PillLink to="/contact" ariaLabel={t("CONTACT_US")}>{t("CONTACT_US")}</PillLink>
@@ -468,7 +464,7 @@ export default function Home() {
           <h1 className="tp-search-headline">
             {lang === "ar" ? "تحليل عادل" : "Institutional-grade"}
             <br />
-            <em>{lang === "ar" ? "أي سهم أمريكي أو سعودي أو مصري" : "any US, TASI, or EGX stock"}</em>
+            <em>{lang === "ar" ? "أي سهم أمريكي أو سعودي" : "any US or TASI stock"}</em>
           </h1>
           <p className="tp-search-deck">
             {lang === "ar"
@@ -501,9 +497,7 @@ export default function Home() {
                       onClick={() => pickSuggestion(it)}
                     >
                       <span className="tp-sug-ticker">{it.ticker}</span>
-                      <span className="tp-sug-name">
-                        {it.name} · {it.market === "sa" ? "TASI" : it.market === "eg" ? "EGX" : "US"}
-                      </span>
+                      <span className="tp-sug-name">{it.name} · {it.market === "sa" ? "TASI" : "US"}</span>
                     </div>
                   ))}
                 </div>
@@ -556,9 +550,6 @@ export default function Home() {
             </button>
             <button type="button" className="tp-scr-preset" onClick={() => applyPreset("tasi")}>
               {t("SCREENER_PRESET_TASI")}
-            </button>
-            <button type="button" className="tp-scr-preset" onClick={() => applyPreset("egx")}>
-              {t("SCREENER_PRESET_EGX")}
             </button>
             <button type="button" className="tp-scr-preset" onClick={() => applyPreset("us")}>
               {t("SCREENER_PRESET_US")}

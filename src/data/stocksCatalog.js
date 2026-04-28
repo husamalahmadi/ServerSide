@@ -4,10 +4,9 @@ import { publicUrl } from "../utils/publicUrl.js";
 const DATA_FILES = {
   us: publicUrl("data/sp500_grouped_by_industry.json"),
   sa: publicUrl("data/tasi_grouped_by_industry.json"),
-  eg: publicUrl("data/egx_grouped_by_sector.json"),
 };
 
-export const CURRENCY_BY_MARKET = { us: "USD", sa: "SAR", eg: "EGP" };
+export const CURRENCY_BY_MARKET = { us: "USD", sa: "SAR" };
 
 async function fetchJson(url) {
   const res = await fetch(url, { cache: "no-store" });
@@ -31,7 +30,7 @@ function normalizeGrouped(grouped, { tickerUppercase, market }) {
   for (const [industry, items] of Object.entries(grouped || {})) {
     inds.push(industry);
     for (const it of items || []) {
-      const rawTicker = String(it?.Ticker ?? it?.ticker ?? it?.Symbol ?? it?.symbol ?? "").trim();
+      const rawTicker = String(it?.Ticker ?? it?.ticker ?? "").trim();
       const ticker = tickerUppercase ? rawTicker.toUpperCase() : rawTicker;
       const name = String(it?.Company ?? it?.name ?? "").trim();
       if (!ticker || !name) continue;
@@ -58,17 +57,12 @@ async function ensureCatalog() {
   if (_catalogPromise) return _catalogPromise;
 
   _catalogPromise = (async () => {
-    const [usRaw, saRaw, egRaw] = await Promise.all([
-      fetchJson(DATA_FILES.us),
-      fetchJson(DATA_FILES.sa),
-      fetchJson(DATA_FILES.eg),
-    ]);
+    const [usRaw, saRaw] = await Promise.all([fetchJson(DATA_FILES.us), fetchJson(DATA_FILES.sa)]);
 
     const us = normalizeGrouped(usRaw, { tickerUppercase: true, market: "us" });
     const sa = normalizeGrouped(saRaw, { tickerUppercase: false, market: "sa" });
-    const eg = normalizeGrouped(egRaw, { tickerUppercase: true, market: "eg" });
 
-    return { us, sa, eg };
+    return { us, sa };
   })();
 
   return _catalogPromise;
@@ -76,8 +70,8 @@ async function ensureCatalog() {
 
 export async function getStocks({ market = "us" } = {}) {
   const cat = await ensureCatalog();
-  const m = market === "sa" ? "sa" : market === "eg" ? "eg" : "us";
-  const pool = m === "sa" ? cat.sa : m === "eg" ? cat.eg : cat.us;
+  const m = market === "sa" ? "sa" : "us";
+  const pool = m === "sa" ? cat.sa : cat.us;
 
   return {
     market: m,
@@ -87,13 +81,11 @@ export async function getStocks({ market = "us" } = {}) {
   };
 }
 
-/** Returns all stocks from US, TASI, and EGX for unified search. */
+/** Returns all stocks from both US and TASI for unified search. */
 export async function getAllStocks() {
   const cat = await ensureCatalog();
-  const combined = [...cat.us.list, ...cat.sa.list, ...cat.eg.list];
-  const industries = Array.from(new Set([...cat.us.inds, ...cat.sa.inds, ...cat.eg.inds])).sort((a, b) =>
-    a.localeCompare(b)
-  );
+  const combined = [...cat.us.list, ...cat.sa.list];
+  const industries = Array.from(new Set([...cat.us.inds, ...cat.sa.inds])).sort((a, b) => a.localeCompare(b));
   return { items: combined, industries };
 }
 
@@ -121,17 +113,7 @@ export async function getCompany(rawTicker) {
     };
   }
 
-  const hitEG = cat.eg.byUpperTicker.get(up);
-  if (hitEG) {
-    return {
-      ticker: hitEG.ticker,
-      name: hitEG.name,
-      market: "eg",
-      currency: CURRENCY_BY_MARKET.eg,
-    };
-  }
-
-  throw new Error("Ticker not found in supported stock lists.");
+  throw new Error("Ticker not found in US/SA lists.");
 }
 
 export async function resolveMarketAndSymbol(rawTicker, requestedMarket) {
@@ -139,19 +121,18 @@ export async function resolveMarketAndSymbol(rawTicker, requestedMarket) {
 
   const tickerUS = String(rawTicker || "").toUpperCase();
   const tickerSA = String(rawTicker || "");
-  const tickerEG = String(rawTicker || "").toUpperCase();
 
-  let market = requestedMarket === "sa" ? "sa" : requestedMarket === "eg" ? "eg" : requestedMarket === "us" ? "us" : null;
+  let market =
+    requestedMarket === "sa" ? "sa" : requestedMarket === "us" ? "us" : null;
 
   if (!market) {
     if (cat.us.upperSet.has(tickerUS)) market = "us";
     else if (cat.sa.upperSet.has(tickerSA.toUpperCase())) market = "sa";
-    else if (cat.eg.upperSet.has(tickerUS)) market = "eg";
   }
   if (!market) return { ok: false };
 
-  const symbol = market === "us" ? tickerUS : market === "sa" ? `${tickerSA}:TADAWUL` : `${tickerEG}:EGX`;
+  const symbol = market === "us" ? tickerUS : `${tickerSA}:TADAWUL`;
   const currency = CURRENCY_BY_MARKET[market];
 
-  return { ok: true, market, symbol, tickerUS, tickerSA, tickerEG, currency };
+  return { ok: true, market, symbol, tickerUS, tickerSA, currency };
 }

@@ -2,7 +2,6 @@ import { publicUrl } from "../utils/publicUrl.js";
 
 const SP500_DATA_URL = publicUrl("data/sp500_financial_data.json");
 const TASI_DATA_URL = publicUrl("data/tasi_financial_data.json");
-const EGX_DATA_URL = publicUrl("data/egx_financial_data.json");
 
 let _screenerPromise = null;
 
@@ -13,7 +12,7 @@ function num(v) {
 
 function collectCompanies(json, market) {
   const out = [];
-  const industries = json?.industries || json?.sectors;
+  const industries = json?.industries;
   if (!industries || typeof industries !== "object") return out;
   for (const [sector, ind] of Object.entries(industries)) {
     const companies = ind?.companies;
@@ -68,15 +67,10 @@ async function fetchJson(url) {
 export async function getScreenerDataset() {
   if (_screenerPromise) return _screenerPromise;
   _screenerPromise = (async () => {
-    const [sp500, tasi, egx] = await Promise.all([
-      fetchJson(SP500_DATA_URL),
-      fetchJson(TASI_DATA_URL),
-      fetchJson(EGX_DATA_URL),
-    ]);
+    const [sp500, tasi] = await Promise.all([fetchJson(SP500_DATA_URL), fetchJson(TASI_DATA_URL)]);
     const us = collectCompanies(sp500, "us");
     const sa = collectCompanies(tasi, "sa");
-    const eg = collectCompanies(egx, "eg");
-    const items = [...us, ...sa, ...eg];
+    const items = [...us, ...sa];
     const sectors = Array.from(new Set(items.map((x) => x.sector).filter(Boolean))).sort((a, b) => a.localeCompare(b));
     return { items, sectors };
   })();

@@ -5,7 +5,6 @@ import { mergeFinancials } from "../domain/financials.js";
 import { twelveIncomeStatement, twelveBalanceSheet, twelveCashFlow } from "./twelveData.js";
 import { getTasiCompanyData, tasiToFinancialsFormat } from "./tasiDataService.js";
 import { getSp500CompanyData, sp500ToFinancialsFormat } from "./sp500DataService.js";
-import { getEgxCompanyData, egxToFinancialsFormat } from "./egxDataService.js";
 
 const DAYS_30_MS = 30 * 24 * 60 * 60 * 1000;
 
@@ -25,8 +24,7 @@ export async function getFinancialsCached({
   const r = await resolveMarketAndSymbol(ticker, market);
   if (!r.ok) throw new Error("Ticker not allowed.");
 
-  const resolvedTicker = r.market === "us" ? r.tickerUS : r.market === "sa" ? r.tickerSA : r.tickerEG;
-  const cacheKey = `local_fin_${r.market}_${resolvedTicker}`;
+  const cacheKey = `local_fin_${r.market}_${r.market === "us" ? r.tickerUS : r.tickerSA}`;
 
   const cached = getCached(cacheKey, { ttlMs, storage });
   if (cached) {
@@ -56,14 +54,6 @@ export async function getFinancialsCached({
       balance = b;
       cash = c;
     }
-  } else if (r.market === "eg") {
-    const egxData = await getEgxCompanyData(r.tickerEG);
-    if (egxData) {
-      const { income: i, balance: b, cash: c } = egxToFinancialsFormat(egxData);
-      income = i;
-      balance = b;
-      cash = c;
-    }
   }
 
   if (!income?.length && !balance?.length && !cash?.length) {
@@ -88,7 +78,7 @@ export async function getFinancialsCached({
     income,
     balance,
     cash,
-    ticker: resolvedTicker,
+    ticker: r.market === "us" ? r.tickerUS : r.tickerSA,
     warnings,
   });
 
@@ -97,7 +87,7 @@ export async function getFinancialsCached({
   const hasYears = Array.isArray(payload.years) && payload.years.length > 0;
   if (hasYears) {
     setCached(cacheKey, payload, { storage });
-    const src = r.market === "sa" ? "tasi" : r.market === "us" ? "sp500" : r.market === "eg" ? "egx" : "live";
+    const src = r.market === "sa" ? "tasi" : r.market === "us" ? "sp500" : "live";
     return { source: src, ...payload };
   }
 

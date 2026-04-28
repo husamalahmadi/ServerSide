@@ -9,7 +9,6 @@ import {
 } from "../services/twelveData.js";
 import { getTasiCompanyData, tasiToValuationFormat } from "../services/tasiDataService.js";
 import { getSp500CompanyData, sp500ToValuationFormat } from "../services/sp500DataService.js";
-import { getEgxCompanyData, egxToValuationFormat } from "../services/egxDataService.js";
 
 /**
  * Client-side replacement for GET /api/valuation/:ticker.
@@ -22,7 +21,7 @@ export async function computeValuation({ ticker, market } = {}) {
   const r = await resolveMarketAndSymbol(ticker, market);
   if (!r.ok) throw new Error("Ticker not allowed.");
 
-  const { market: resolvedMarket, symbol, tickerUS, tickerSA, tickerEG } = r;
+  const { market: resolvedMarket, symbol, tickerUS, tickerSA } = r;
 
   let statsJson = {};
   let bsJson = {};
@@ -51,24 +50,6 @@ export async function computeValuation({ ticker, market } = {}) {
     if (sp500Data) {
       const v = sp500ToValuationFormat(sp500Data);
       const d = sp500Data.data;
-      const hasUsableData =
-        v &&
-        d?.outstanding_common_stocks != null &&
-        d?.outstanding_common_stocks > 0 &&
-        (d?.enterprise_value != null ||
-          d?.market_capitalization != null ||
-          (d?.equity?.length > 0 && (d?.sales?.length > 0 || d?.net_income?.length > 0)));
-      if (v && hasUsableData) {
-        statsJson = { statistics: v.stats };
-        bsJson = { balance_sheet: v.balance_sheet };
-        isJson = { income_statement: v.income_statement };
-      }
-    }
-  } else if (resolvedMarket === "eg") {
-    const egxData = await getEgxCompanyData(tickerEG);
-    if (egxData) {
-      const v = egxToValuationFormat(egxData);
-      const d = egxData.data;
       const hasUsableData =
         v &&
         d?.outstanding_common_stocks != null &&
@@ -175,11 +156,11 @@ export async function computeValuation({ ticker, market } = {}) {
     fairPS = (priceToSales * sales) / sharesOutstanding;
   }
 
-  const currency = CURRENCY_BY_MARKET[resolvedMarket] || (resolvedMarket === "sa" ? "SAR" : resolvedMarket === "eg" ? "EGP" : "USD");
+  const currency = CURRENCY_BY_MARKET[resolvedMarket] || (resolvedMarket === "sa" ? "SAR" : "USD");
 
   return {
     source: "live",
-    ticker: resolvedMarket === "us" ? tickerUS : resolvedMarket === "sa" ? tickerSA : tickerEG,
+    ticker: resolvedMarket === "us" ? tickerUS : tickerSA,
     market: resolvedMarket,
     fetchedAt: new Date().toISOString(),
     currency,

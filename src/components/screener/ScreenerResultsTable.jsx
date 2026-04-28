@@ -39,8 +39,8 @@ export function ScreenerResultsTable({ t, items, sortBy, sortDir, onSort, onOpen
               </td>
               <td className="tp-scr-company-cell">{it.name}</td>
               <td>
-                <span className={`tp-scr-market-badge ${it.market === "sa" ? "sa" : it.market === "eg" ? "eg" : "us"}`}>
-                  {it.market === "sa" ? "TASI" : it.market === "eg" ? "EGX" : "US"}
+                <span className={`tp-scr-market-badge ${it.market === "sa" ? "sa" : "us"}`}>
+                  {it.market === "sa" ? "TASI" : "US"}
                 </span>
               </td>
               <td className="tp-scr-sector-cell">{it.sector}</td>
