@@ -57,7 +57,7 @@ export function PageHeader({ title, subtitle, children }) {
           <UserBar />
           {children}
         </div>
-        <div style={editionStyle}>US · TASI · Stock Fair Value</div>
+        <div style={editionStyle}>US · TASI · EGX · Stock Fair Value</div>
       </div>
     </header>
   );

@@ -10,6 +10,7 @@ export function useScreener(items) {
     const rows = Array.isArray(items) ? items : [];
     if (activePreset === "reset") return [];
     if (activePreset === "tasi") return rows.filter((it) => it.market === "sa" && Number(it.discountPct) > 0);
+    if (activePreset === "egx") return rows.filter((it) => it.market === "eg" && Number(it.discountPct) > 0);
     if (activePreset === "us") return rows.filter((it) => it.market === "us" && Number(it.discountPct) > 0);
     return rows.filter((it) => Number.isFinite(Number(it.discountPct)));
   }, [items, activePreset]);

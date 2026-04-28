@@ -238,15 +238,18 @@ export default function Stock() {
       try {
         const { items } = await getStocks({ market });
         if (!alive) return;
-        const tickerNorm = market === "us" ? (ticker || "").toUpperCase() : ticker;
-        const currentItem = items.find((i) => (market === "us" ? (i.ticker || "").toUpperCase() === tickerNorm : i.ticker === ticker));
+        const isUppercaseMarket = market === "us" || market === "eg";
+        const tickerNorm = isUppercaseMarket ? (ticker || "").toUpperCase() : ticker;
+        const currentItem = items.find((i) =>
+          isUppercaseMarket ? (i.ticker || "").toUpperCase() === tickerNorm : i.ticker === ticker
+        );
         const industry = currentItem?.industry;
         if (!industry) {
           if (alive) setPeers({ loading: false, error: "", list: [] });
           return;
         }
         const peerItems = items
-          .filter((i) => i.industry === industry && (market === "us" ? (i.ticker || "").toUpperCase() !== tickerNorm : i.ticker !== ticker))
+          .filter((i) => i.industry === industry && (isUppercaseMarket ? (i.ticker || "").toUpperCase() !== tickerNorm : i.ticker !== ticker))
           .slice(0, 8);
         const list = [];
         for (const peer of peerItems) {

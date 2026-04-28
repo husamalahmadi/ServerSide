@@ -1,0 +1,1949 @@
+{
+  "Agricultural Investments & Food": [
+    {
+      "Symbol": "EGS071L1C018",
+      "Company": "Atlas for Investment and Food",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG003M84676"
+    },
+    {
+      "Symbol": "EGS07DR1C012",
+      "Company": "GoGreen for Agricultural Investments Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG01NWL4W29"
+    },
+    {
+      "Symbol": "EGS07061C012",
+      "Company": "International Agricultural Products Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BM9ZK9"
+    },
+    {
+      "Symbol": "EGS07661C019",
+      "Company": "Lotus for Agricultural Investments Ltd.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG01B2SX646"
+    }
+  ],
+  "Agriculture & Land Reclamation": [
+    {
+      "Symbol": "EGS01081C016",
+      "Company": "General Company for Land Reclamation",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HZMK77"
+    },
+    {
+      "Symbol": "EGS01041C010",
+      "Company": "Ismailia National Food Industries Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000JN8LY6"
+    },
+    {
+      "Symbol": "EGS01071C017",
+      "Company": "Wadi Kom Ombo Land Reclamation S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BF4VG3"
+    }
+  ],
+  "Banking": [
+    {
+      "Symbol": "EGS60111C019",
+      "Company": "Abu Dhabi Islamic Bank Egypt",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HCW4T9"
+    },
+    {
+      "Symbol": "EGS60101C010",
+      "Company": "Al Baraka Bank Egypt E.S.C.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HCTQQ7"
+    },
+    {
+      "Symbol": "EGS60121C018",
+      "Company": "Commercial International Bank (Egypt) S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H19197"
+    },
+    {
+      "Symbol": "EGS60041C018",
+      "Company": "Credit Agricole Egypt",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HCTLY9"
+    },
+    {
+      "Symbol": "EGS60182C010",
+      "Company": "Egyptian Gulf Bank",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HD0KM3"
+    },
+    {
+      "Symbol": "EGS60241C014",
+      "Company": "Export Development Bank of Egypt",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000C2NK10"
+    },
+    {
+      "Symbol": "EGS60321C014",
+      "Company": "Faisal Islamic Bank of Egypt",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BCLTG6"
+    },
+    {
+      "Symbol": "EGS60322C012",
+      "Company": "Faisal Islamic Bank of Egypt",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HCTSR2"
+    },
+    {
+      "Symbol": "EGS60301C016",
+      "Company": "Housing & Development Bank",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BYB3T2"
+    },
+    {
+      "Symbol": "EGS60171C013.EGP",
+      "Company": "National Bank Of Kuwait- Egypt-",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS60081C014",
+      "Company": "Qatar National Bank S.A.Q.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1GTL4"
+    },
+    {
+      "Symbol": "EGS60231C015",
+      "Company": "Suez Canal Bank EJSC",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1J6W9"
+    },
+    {
+      "Symbol": "EGS600M1C017",
+      "Company": "United Bank Egypt",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG006K62D54"
+    }
+  ],
+  "Building Materials (Ceramics & Cement)": [
+    {
+      "Symbol": "EGS3C071C015",
+      "Company": "Al Ezz Ceramics & Porcelain Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BQ9W27"
+    },
+    {
+      "Symbol": "EGS3C151C015",
+      "Company": "Arab Ceramic Company S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HD0GG9"
+    },
+    {
+      "Symbol": "EGS3C0O1C016",
+      "Company": "Arabian Cement Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG005D6FJQ4"
+    },
+    {
+      "Symbol": "EGS3C251C013.EGP",
+      "Company": "Ezz Steel",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS3C111C019",
+      "Company": "General Company for Ceramics and Porcelain",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H18XM3"
+    },
+    {
+      "Symbol": "EGS3C161C014",
+      "Company": "Lecico Egypt S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BVZVQ3"
+    },
+    {
+      "Symbol": "EGS3C371C019",
+      "Company": "MISR Beni Suef Cement Company",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BXXZ28"
+    },
+    {
+      "Symbol": "EGS3C391C017",
+      "Company": "MISR Cement Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000DH94K7"
+    },
+    {
+      "Symbol": "EGS3C4P1C011",
+      "Company": "MISR INTERCONTINENTAL FOR GRANI",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS3C4L1C015",
+      "Company": "Medical Packaging Corporation",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG001YMS2T5"
+    },
+    {
+      "Symbol": "EGS3C401C014",
+      "Company": "Sinai Cement Company S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000C5Z5D0"
+    },
+    {
+      "Symbol": "EGS3C351C011",
+      "Company": "South Valley Cement Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BJQVG1"
+    },
+    {
+      "Symbol": "EGS3C181C012.EGP",
+      "Company": "Suez Cement",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS3C311C015.EGP",
+      "Company": "Torah Cement",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    }
+  ],
+  "Cement": [
+    {
+      "Symbol": "EGS3H051C012.EGP",
+      "Company": "Alexandria Cement",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    }
+  ],
+  "Chemicals & Fertilizers": [
+    {
+      "Symbol": "EGS520D1C015",
+      "Company": "International Co for Fertilizers & Chemicals",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000QZQCL5"
+    },
+    {
+      "Symbol": "EGS52041C018",
+      "Company": "Northern Upper Egypt Developers Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000PMNFD0"
+    },
+    {
+      "Symbol": "EGS521T1C016",
+      "Company": "Rekaz Financial Holding Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG0022HD590"
+    }
+  ],
+  "Construction": [
+    {
+      "Symbol": "EGS95001C011",
+      "Company": "Orascom Construction PLC",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG007JN4JV3"
+    }
+  ],
+  "Construction & Building Materials Trade": [
+    {
+      "Symbol": "EGS23141C012",
+      "Company": "Egyptian for Developing Building Materials Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000JX1Z25"
+    },
+    {
+      "Symbol": "EGS23OD1C015",
+      "Company": "Heibco for Commercial Investment",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG01Q6TK5Y0"
+    },
+    {
+      "Symbol": "EGS23111C015",
+      "Company": "Nasr Company for Civil Works",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000C9VYV3"
+    }
+  ],
+  "Consumer Finance": [
+    {
+      "Symbol": "EGS505Z1C018",
+      "Company": "U Consumer Finance S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG01V7VWX60"
+    }
+  ],
+  "Distribution & Trade": [
+    {
+      "Symbol": "EGS512O1C012",
+      "Company": "Ibnsina Pharma S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00HRWYZ07"
+    },
+    {
+      "Symbol": "EGS51191C012",
+      "Company": "Samad Misr - Egyfert",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000MCBH71"
+    }
+  ],
+  "Diversified Holdings": [
+    {
+      "Symbol": "EGS738I1C018",
+      "Company": "Contact Financial Holding LLC",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00LVDSH84"
+    },
+    {
+      "Symbol": "EGS739Z1C016",
+      "Company": "Marseille Almasreia Alkhaleg",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00202S1Z9"
+    },
+    {
+      "Symbol": "EGS73541C012",
+      "Company": "Qalaa Holdings S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BSHCH2"
+    },
+    {
+      "Symbol": "EGS73BR1C013",
+      "Company": "Speed Medical Company",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00NQ1Z1G0"
+    }
+  ],
+  "Education & Services": [
+    {
+      "Symbol": "EGS59U92C011",
+      "Company": "Gtex International Ltd.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG01M4WBLD2"
+    },
+    {
+      "Symbol": "EGS597R1C017",
+      "Company": "Taaleem Management Services",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00QD3Q5F5"
+    }
+  ],
+  "Electrical Equipment & Cables": [
+    {
+      "Symbol": "EGS3G111C015",
+      "Company": "El Arabia Engineering Industries Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BWRGB9"
+    },
+    {
+      "Symbol": "EGS3G0Z1C014",
+      "Company": "El Sewedy Electric Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000C81925"
+    },
+    {
+      "Symbol": "EGS3G231C011",
+      "Company": "Electro Cable Egypt Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1BB38"
+    }
+  ],
+  "Energy": [
+    {
+      "Symbol": "EGS490S1C014",
+      "Company": "Taqa Arabia Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG001CWPJT3"
+    }
+  ],
+  "Engineering & Industrial Projects": [
+    {
+      "Symbol": "EGS221U1C016",
+      "Company": "Al Fanar Contracting Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00423JKQ9"
+    },
+    {
+      "Symbol": "EGS22171C010",
+      "Company": "Industrial & Engineering Projects Ltd.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BYBYH7"
+    },
+    {
+      "Symbol": "EGS221V1C015",
+      "Company": "Mb Engineering Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG006T5Q433"
+    }
+  ],
+  "Engineering & Metals": [
+    {
+      "Symbol": "EGS3E1E1C013",
+      "Company": "Arab Valves Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000QC2KG0"
+    },
+    {
+      "Symbol": "EGS3E071C013.EGP",
+      "Company": "EGS3E071C013.EGP",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS3E181C010",
+      "Company": "Egypt Aluminium Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BZS7D9"
+    },
+    {
+      "Symbol": "EGS3E3B1C014",
+      "Company": "Integrated Engineering Group",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG006R1BKR8"
+    }
+  ],
+  "Engineering Industries": [
+    {
+      "Symbol": "EGS3F021C017",
+      "Company": "Engineering Industries Icon LLC",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BQF2S8"
+    }
+  ],
+  "Fertilizers & Chemicals": [
+    {
+      "Symbol": "EGS39061C014",
+      "Company": "MISR Fertilizers Production Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H24M49"
+    },
+    {
+      "Symbol": "EGS39011C019",
+      "Company": "Natural Gas & Mining Project Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000C1HT92"
+    }
+  ],
+  "Financial Services & Leasing": [
+    {
+      "Symbol": "EGS676N1C015",
+      "Company": "Al Tawfeek Leasing Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00830QH57"
+    },
+    {
+      "Symbol": "EGS67331C016",
+      "Company": "Alexandria National Company",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BCL9Z9"
+    },
+    {
+      "Symbol": "EGS675S1C011",
+      "Company": "Amer Group Holding",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG0018S9DF3"
+    },
+    {
+      "Symbol": "EGS67221C019",
+      "Company": "Arab Moltaka Investments Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HD1S45"
+    },
+    {
+      "Symbol": "EGS672I2C014",
+      "Company": "Concrete Fashion Group Ltd.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000CPSCZ5"
+    },
+    {
+      "Symbol": "EGS673Y1C015",
+      "Company": "Emaar Misr for Development S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BLGGC4"
+    },
+    {
+      "Symbol": "EGS673T1C012",
+      "Company": "Gb Corp",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000RJMX83"
+    },
+    {
+      "Symbol": "EGS67191C014",
+      "Company": "International Company for Investment & Development",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BM9XG9"
+    },
+    {
+      "Symbol": "EGS67001C015",
+      "Company": "Intl Company for Leasing S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BM9133"
+    },
+    {
+      "Symbol": "EGS67181C015",
+      "Company": "Odin Investments Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000GGZ9V4"
+    },
+    {
+      "Symbol": "EGS67031C012",
+      "Company": "Saudi Egyptian Investment & Finance Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HCZ7P3"
+    }
+  ],
+  "Food & Beverages": [
+    {
+      "Symbol": "EGS30211C014",
+      "Company": "Ajwa for Food Industries Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1FCY8"
+    },
+    {
+      "Symbol": "EGS30471C014",
+      "Company": "Alexandria Flour Mills Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BHWS48"
+    },
+    {
+      "Symbol": "EGS30221C013",
+      "Company": "Arab Dairy Products Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000K6VB77"
+    },
+    {
+      "Symbol": "EGS30031C016",
+      "Company": "Arabian Food Industries Co. (Domty)",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00BDZ9V23"
+    },
+    {
+      "Symbol": "EGS30581C010",
+      "Company": "Cairo Oils and Soap Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BGKJ07"
+    },
+    {
+      "Symbol": "EGS30201C015",
+      "Company": "Delta Sugar Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000C1J253"
+    },
+    {
+      "Symbol": "EGS30351C018",
+      "Company": "East Delta Flour Mills Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HMFHY1"
+    },
+    {
+      "Symbol": "EGS305I1C011",
+      "Company": "Edita Food Industries S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000N8GVJ0"
+    },
+    {
+      "Symbol": "EGS300L1C011",
+      "Company": "El Nasr for Manufacturing & Trading Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000QV8GC5"
+    },
+    {
+      "Symbol": "EGS30441C017",
+      "Company": "General Silos & Storage Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BYCW35"
+    },
+    {
+      "Symbol": "EGS30AJ1C016.EGP",
+      "Company": "International Dry Ice Company- ",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS30901C010",
+      "Company": "Juhayna Food Industries S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000QXN967"
+    },
+    {
+      "Symbol": "EGS30421C019",
+      "Company": "Middle & West Delta Flour Mills Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HGL1C6"
+    },
+    {
+      "Symbol": "EGS30401C011",
+      "Company": "Middle Egypt Flour Mills Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1GMR3"
+    },
+    {
+      "Symbol": "EGS30361C017",
+      "Company": "North Cairo Flour Mills Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1CKX4"
+    },
+    {
+      "Symbol": "EGS30AL1C012",
+      "Company": "Obour Land for Food Industries S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00DX80Y11"
+    },
+    {
+      "Symbol": "EGS30291C016",
+      "Company": "Sharkia National Food Company",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000K037S7"
+    },
+    {
+      "Symbol": "EGS30301C013.EGP",
+      "Company": "Souhag National Food Industries",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS30411C010",
+      "Company": "South Cairo and Giza Mills and Bakeries Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1JGF6"
+    },
+    {
+      "Symbol": "EGS30451C016",
+      "Company": "Upper Egypt Flour Mills Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HMFFV8"
+    }
+  ],
+  "Food Services": [
+    {
+      "Symbol": "EGS540S1C014",
+      "Company": "Gourmet Egypt.com Foods S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG01ZR81BF2"
+    }
+  ],
+  "Healthcare & Education": [
+    {
+      "Symbol": "EGS72081C010",
+      "Company": "Alexandria New Medical Center Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000JYXKK1"
+    },
+    {
+      "Symbol": "EGS72AQ1C016",
+      "Company": "Arab Company for Asset Management.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00L4H9C41"
+    },
+    {
+      "Symbol": "EGS72201C014",
+      "Company": "Cairo Educational Services Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000KBVPX6"
+    },
+    {
+      "Symbol": "EGS729J1C018",
+      "Company": "Cleopatra Hospital Group S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00CNG9CK4"
+    },
+    {
+      "Symbol": "EGS72011C017",
+      "Company": "Nozha International Hospital",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000JYSCH9"
+    },
+    {
+      "Symbol": "EGS72XL1C014",
+      "Company": "Premium Healthcare Group",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG01L533FF7"
+    },
+    {
+      "Symbol": "EGS729F1C012",
+      "Company": "The Egyptian Modern Education S",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    }
+  ],
+  "Industrial Development": [
+    {
+      "Symbol": "EGS3JM11C012",
+      "Company": "Gadwa Industrial Development Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG012TWL3V8"
+    },
+    {
+      "Symbol": "EGS3J041C011.EGP",
+      "Company": "Modern Company for water proofi",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    }
+  ],
+  "Industrial Holdings": [
+    {
+      "Symbol": "EGS46051C016",
+      "Company": "GMC Group for Industrial Companies, Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000FSGL43"
+    }
+  ],
+  "Insurance": [
+    {
+      "Symbol": "EGS63031C016",
+      "Company": "Delta Insurance",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BLF4H7"
+    },
+    {
+      "Symbol": "EGS63041C015",
+      "Company": "Mohandes Insurance Company",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1CNG7"
+    }
+  ],
+  "Investment & Holding Companies": [
+    {
+      "Symbol": "EGS697S1C015",
+      "Company": "A Capital Holding Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG01GVC7978"
+    },
+    {
+      "Symbol": "EGS694A1C018",
+      "Company": "Arab Developers Holding S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00B8KFCJ9"
+    },
+    {
+      "Symbol": "EGS691L1C018",
+      "Company": "Aspire Capital Holding For Financial Investments S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BDPMM8"
+    },
+    {
+      "Symbol": "EGS691T1C010",
+      "Company": "B Investments Holding",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG009S0FL42"
+    },
+    {
+      "Symbol": "EGS691G1C015",
+      "Company": "Beltone Holding S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000DNX089"
+    },
+    {
+      "Symbol": "EGS691D1C018",
+      "Company": "CI Capital Holding for Financial Investments S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000Q80ZH7"
+    },
+    {
+      "Symbol": "EGS698X1C017",
+      "Company": "Catalyst Partners Middle East",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG01QSN4GJ0"
+    },
+    {
+      "Symbol": "EGS696Z1C017",
+      "Company": "Certificates of Odin Egyptia Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG01FP603R8"
+    },
+    {
+      "Symbol": "EGS69101C011",
+      "Company": "Efg Holding S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000CY7GT7"
+    },
+    {
+      "Symbol": "EGS69082C013",
+      "Company": "Egypt Kuwait Holding Co. S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BTV7X7"
+    },
+    {
+      "Symbol": "EGS69081C023",
+      "Company": "Egypt Kuwait Holding Company S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG012MRM489"
+    },
+    {
+      "Symbol": "EGS694B1C017",
+      "Company": "Egyptian Real Estate Investment Fund",
+      "Currency": "EGP",
+      "Type": "REIT",
+      "FIGI": "BBG00KFZ0PP8"
+    },
+    {
+      "Symbol": "EGS69021C011",
+      "Company": "El Ahli Investment and Development",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BPV729"
+    },
+    {
+      "Symbol": "EGS69011C012",
+      "Company": "El Kahera El Watania Investment Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BVCYZ2"
+    },
+    {
+      "Symbol": "EGS69261C013",
+      "Company": "Grand Investment Capital Ltd.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000P46CG3"
+    },
+    {
+      "Symbol": "EGS69182C011",
+      "Company": "Naeem Holding Company S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000F3Z089"
+    },
+    {
+      "Symbol": "EGS696S1C016",
+      "Company": "Orascom Financial Holding S.A.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00Z6PN0H6"
+    },
+    {
+      "Symbol": "EGS693V1C014",
+      "Company": "Orascom Investment Holding S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG001LV8211"
+    },
+    {
+      "Symbol": "EGS691A1C011",
+      "Company": "Prime Holding Company",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000DNWW44"
+    },
+    {
+      "Symbol": "EGS690C1C010",
+      "Company": "Raya Holding for Financial Investments",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000C2Y8K4"
+    },
+    {
+      "Symbol": "EGS69191C012",
+      "Company": "Reacap Financial Investments S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000PNQ0K0"
+    },
+    {
+      "Symbol": "EGS691S1C011",
+      "Company": "Talaat Moustafa Group Holding S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000DL6Q22"
+    },
+    {
+      "Symbol": "EGS69071C016.EGP",
+      "Company": "The Holding Company for Financi",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    }
+  ],
+  "Maritime & Oil Services": [
+    {
+      "Symbol": "EGS44031C010",
+      "Company": "Canal Shipping Agencies Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HCTJN6"
+    },
+    {
+      "Symbol": "EGS44012C010",
+      "Company": "Maridive & Oil Services S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BS4947"
+    }
+  ],
+  "Media": [
+    {
+      "Symbol": "EGS78021C010",
+      "Company": "Egyptian Media Production Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BPNLG2"
+    }
+  ],
+  "Medical & Pharmaceutical Investment": [
+    {
+      "Symbol": "EGS3I0S1C019",
+      "Company": "International Company for Medical Investments",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG003T03QX4"
+    },
+    {
+      "Symbol": "EGS3I1D1C015",
+      "Company": "Union Pharmacist Company for Medicine Ltd.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00DZLJRD2"
+    }
+  ],
+  "Metals & Steel": [
+    {
+      "Symbol": "EGS3D031C018",
+      "Company": "Arab Aluminum Co. S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BYCNH0"
+    },
+    {
+      "Symbol": "EGS3D041C017.EGP",
+      "Company": "EL Ezz Aldekhela Steel  -   Ale",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS3D061C015",
+      "Company": "Egyptian Iron & Steel Company",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HD0CY8"
+    },
+    {
+      "Symbol": "EGS3D0C1C018",
+      "Company": "MISR National Steel Ataqa",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BFGTT1"
+    }
+  ],
+  "Mining & Quarries": [
+    {
+      "Symbol": "EGS10001C013",
+      "Company": "Asec Company for Mining S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000K76JR4"
+    },
+    {
+      "Symbol": "EGS102S1C014",
+      "Company": "Iron & Steel for Mines & Quarries Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG0116PS539"
+    }
+  ],
+  "Paper & Packaging": [
+    {
+      "Symbol": "EGS360A1C011",
+      "Company": "Al Ahram Co for Printing and Packaging",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BNC253"
+    },
+    {
+      "Symbol": "EGS36021C011",
+      "Company": "Rakta Paper Manufacturing Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1J418"
+    }
+  ],
+  "Pharmaceuticals & Healthcare Products": [
+    {
+      "Symbol": "EGS38191C010",
+      "Company": "Abou Kir Fertilizers & Chemicals Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H17HP6"
+    },
+    {
+      "Symbol": "EGS38461C017.EGP",
+      "Company": "Advanced Pharmaceutical Packagi",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS380P1C010",
+      "Company": "Alexandria Mineral Oils Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000F14G91"
+    },
+    {
+      "Symbol": "EGS38341C011",
+      "Company": "Alexandria Pharmaceutical Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H18VW6"
+    },
+    {
+      "Symbol": "EGS38321C013",
+      "Company": "Arab Pharmaceuticals Company",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BYC393"
+    },
+    {
+      "Symbol": "EGS38391C016",
+      "Company": "Cairo Pharmaceutical & Chemical Industries Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BYC5G0"
+    },
+    {
+      "Symbol": "EGS38201C017",
+      "Company": "Egypt Chemical Industries",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BM5YS8"
+    },
+    {
+      "Symbol": "EGS38381C017",
+      "Company": "Egyptian Financial & Industrial Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000G9F4D3"
+    },
+    {
+      "Symbol": "EGS38081C013",
+      "Company": "Egyptian International Pharmaceutical Industries Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000G1YHR5"
+    },
+    {
+      "Symbol": "EGS38331C012",
+      "Company": "El-Nile Co. for Pharmaceuticals & Chemical Industries S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1GXK6"
+    },
+    {
+      "Symbol": "EGS38251C012",
+      "Company": "Extracted Oils Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1F2Y0"
+    },
+    {
+      "Symbol": "EGS385S1C012",
+      "Company": "Ferchem Misr Co. for Fertilizers",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG0016RFYZ2"
+    },
+    {
+      "Symbol": "EGS38171C012",
+      "Company": "GlaxoSmithKline plc",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000C181F6"
+    },
+    {
+      "Symbol": "EGS38411C012",
+      "Company": "Kafr El Zayat Pesticides and Chemicals Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HCQS04"
+    },
+    {
+      "Symbol": "EGS38211C016",
+      "Company": "MISR Chemical Industries",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BNMBW2"
+    },
+    {
+      "Symbol": "EGS38421C011",
+      "Company": "MISR Oils & Soap Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HMDB76"
+    },
+    {
+      "Symbol": "EGS38351C010",
+      "Company": "Memphis Pharmaceuticals Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HGL3D1"
+    },
+    {
+      "Symbol": "EGS380G1C011",
+      "Company": "Minapharm Pharmaceuticals",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000JT0BF4"
+    },
+    {
+      "Symbol": "EGS380R1C018",
+      "Company": "October Pharma",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000JYSJS2"
+    },
+    {
+      "Symbol": "EGS38311C014.EGP",
+      "Company": "Paint & Chemicals Industries (P",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS382M1C011",
+      "Company": "Sabaa International Company for Pharmaceuticals and Chemical Industries",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG005D0B260"
+    },
+    {
+      "Symbol": "EGS380S1C017",
+      "Company": "Sidi Kerir Petrochemicals Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000C26W68"
+    },
+    {
+      "Symbol": "EGS381B1C015",
+      "Company": "Tenth of Ramadan Pharmaceutical Industries Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG006L8GPB0"
+    },
+    {
+      "Symbol": "EGS38161C013",
+      "Company": "Universal Electronics Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000MCBN14"
+    }
+  ],
+  "Plastics & Rubber": [
+    {
+      "Symbol": "EGS3A2Z1C015",
+      "Company": "El Badr Investment and Development S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000DPMQN2"
+    },
+    {
+      "Symbol": "EGS3A0A1C016.EGP",
+      "Company": "Modern Shorouk Printing & Packa",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS3A221C018",
+      "Company": "Rubex International For Plastics",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000JZX9N0"
+    }
+  ],
+  "Poultry & Livestock": [
+    {
+      "Symbol": "EGS02291C010",
+      "Company": "Al Khair River for Development Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG01498N917"
+    },
+    {
+      "Symbol": "EGS02051C018",
+      "Company": "Cairo Poultry Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HD0M94"
+    },
+    {
+      "Symbol": "EGS02211C018",
+      "Company": "Egypt for Poultry Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1B6N7"
+    },
+    {
+      "Symbol": "EGS02021C011",
+      "Company": "Ismailia Misr Poultry Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000JNGWV6"
+    },
+    {
+      "Symbol": "EGS02091C014",
+      "Company": "Mansoura Poultry Company",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000JNQ0P2"
+    }
+  ],
+  "Printing, Packaging & Tobacco": [
+    {
+      "Symbol": "EGS370W1C013",
+      "Company": "Delta for Printing & Packaging Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000DQWL50"
+    },
+    {
+      "Symbol": "EGS370O1C013",
+      "Company": "EGS370O1C013",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS37091C013",
+      "Company": "Eastern Co SAE",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1BGF4"
+    }
+  ],
+  "Real Estate": [
+    {
+      "Symbol": "EGS65AN1C018",
+      "Company": "Arab Development & Real Estate Company",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00737DX62"
+    },
+    {
+      "Symbol": "EGS65011C016",
+      "Company": "Arab Real Estate Investment",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00202PQ69"
+    },
+    {
+      "Symbol": "EGS65R01C015",
+      "Company": "Arabia for Investment and Development S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG01WLML9V9"
+    },
+    {
+      "Symbol": "EGS656M1C010",
+      "Company": "Bonyan for Development and Trade",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG01RXVKZG7"
+    },
+    {
+      "Symbol": "EGS65541C012",
+      "Company": "Cairo for Investment and Real Estate Development",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000KBY7B7"
+    },
+    {
+      "Symbol": "EGS65511C015",
+      "Company": "Copper For Commercial Investment",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000JX54B0"
+    },
+    {
+      "Symbol": "EGS65081C019",
+      "Company": "Development & Engineering Consultants Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BB9PW2"
+    },
+    {
+      "Symbol": "EGS65211C012",
+      "Company": "Egyptian Real Estate Group Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BN0FY5"
+    },
+    {
+      "Symbol": "EGS65341C017",
+      "Company": "Egyptians Housing and Development Company",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BZ37C7"
+    },
+    {
+      "Symbol": "EGS65771C015",
+      "Company": "El Arabia for Land Reclamation.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000NRKLN0"
+    },
+    {
+      "Symbol": "EGS65071C010",
+      "Company": "El Kahera Housing Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HCTG70"
+    },
+    {
+      "Symbol": "EGS65551C011",
+      "Company": "El Obour Real Estate Investment",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000J7DSJ7"
+    },
+    {
+      "Symbol": "EGS65091C018",
+      "Company": "El Shams Housing and Urbanization Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1CR69"
+    },
+    {
+      "Symbol": "EGS65AL1C010",
+      "Company": "First Investment Co. and Real Estate Ltd.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG004LDXB99"
+    },
+    {
+      "Symbol": "EGS65461C013",
+      "Company": "Gharbia Islamic Housing Development Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BPG0H5"
+    },
+    {
+      "Symbol": "EGS651B1C018",
+      "Company": "Gulf Canadian Real Estate Investment Company",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000MB9H94"
+    },
+    {
+      "Symbol": "EGS65591C017",
+      "Company": "Heliopolis Housing",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000HCW2M0"
+    },
+    {
+      "Symbol": "EGS659O1C015",
+      "Company": "MISR Kuwait Investment & Trading Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BBCG12"
+    },
+    {
+      "Symbol": "EGS65571C019",
+      "Company": "Madinet Masr for Housing and Development S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1GPH7"
+    },
+    {
+      "Symbol": "EGS65441C015",
+      "Company": "Mena Touristic & Real Estate Investment",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000C1HYM6"
+    },
+    {
+      "Symbol": "EGS65131C012",
+      "Company": "National Housing for Professional Syndicate",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000JX1NS4"
+    },
+    {
+      "Symbol": "EGS655L1C012",
+      "Company": "Palm Hills Developments S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000QK44T2"
+    },
+    {
+      "Symbol": "EGS65851C015",
+      "Company": "SIX OF OCTOBER DEVELOPMENT AND INVESTMENT CO SAE",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BSL5G3"
+    },
+    {
+      "Symbol": "EGS65061C011",
+      "Company": "United Housing & Development",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1KL90"
+    },
+    {
+      "Symbol": "EGS655Y1C017",
+      "Company": "Utopia Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000QZZLZ0"
+    }
+  ],
+  "Real Estate Investment & Development": [
+    {
+      "Symbol": "EGS21351C019",
+      "Company": "Arabia Investments Holding Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000R07W56"
+    },
+    {
+      "Symbol": "EGS21451C017.EGP",
+      "Company": "Delta Construction & Rebuilding",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS213S1C010",
+      "Company": "Egyptians for Investment and Urban Development S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG001Y2W857"
+    },
+    {
+      "Symbol": "EGS21531C016",
+      "Company": "Elsaeed Contracting & Real Estate Investment Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BYC008"
+    },
+    {
+      "Symbol": "EGS21541C015",
+      "Company": "Giza General Contracting & Real Estate Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BHX4J4"
+    },
+    {
+      "Symbol": "EGS214Q1C011",
+      "Company": "Ismailia Development and Real Estate Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG001R3J4J2"
+    },
+    {
+      "Symbol": "EGS21FW1C015",
+      "Company": "Pioneer Properties Urban Development",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG012TWDPP5"
+    },
+    {
+      "Symbol": "EGS21EB1C011",
+      "Company": "Tanmiya for Real Estate Investment Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG011CH6446"
+    },
+    {
+      "Symbol": "EGS21171C011",
+      "Company": "Zahraa El Maadi Investment & Development Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000K4N8G8"
+    }
+  ],
+  "Retail": [
+    {
+      "Symbol": "EGS53051C016",
+      "Company": "MISR Duty Free Shops Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BC6986"
+    }
+  ],
+  "Securities Brokerage": [
+    {
+      "Symbol": "EGS681D1C010",
+      "Company": "Egyptian Arabian Securities Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000P771D2"
+    },
+    {
+      "Symbol": "EGS681I1C015",
+      "Company": "El Orouba Securities Brokerage",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000CST6J9"
+    },
+    {
+      "Symbol": "EGS68181C014",
+      "Company": "Osool ESB Securities Brokerage",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BKC0X2"
+    }
+  ],
+  "Shipping": [
+    {
+      "Symbol": "EGS47021C018.EGP",
+      "Company": "United Arab Shipping",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    }
+  ],
+  "Specialty Investments": [
+    {
+      "Symbol": "EGS7D5P1C019",
+      "Company": "Act Financial Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00B5XLSB0"
+    },
+    {
+      "Symbol": "EGS7D231C010",
+      "Company": "EGS7D231C010",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS7D971C011",
+      "Company": "Macro Group Pharmaceuticals",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00ZVSTJ76"
+    }
+  ],
+  "Spinning & Weaving": [
+    {
+      "Symbol": "EGS32041C013",
+      "Company": "Alex Spinning & Weaving Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H18M65"
+    },
+    {
+      "Symbol": "EGS32221C011",
+      "Company": "Arab Cotton Ginning Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BYCKL1"
+    },
+    {
+      "Symbol": "EGS32331C018",
+      "Company": "Arab Polvara Spinning & Weaving Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000PQYVK6"
+    },
+    {
+      "Symbol": "EGS32161C019",
+      "Company": "Golden Textiles & Clothes Wool",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BN8YD9"
+    },
+    {
+      "Symbol": "EGS32131C012.EGP",
+      "Company": "Nile Cotton Ginning",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    }
+  ],
+  "Sports & Leisure": [
+    {
+      "Symbol": "EGS774M1C017",
+      "Company": "Fitness Prime For Health Clubs S.A.E",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG01M81GWP4"
+    }
+  ],
+  "Subscription Rights": [
+    {
+      "Symbol": "EGS924D1C017",
+      "Company": "AlKhair River for Development Agricultural Investment and Environmental Services Right",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG021CY5127"
+    },
+    {
+      "Symbol": "EGS924B1C019",
+      "Company": "EGS924B1C019",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS924C1C018",
+      "Company": "Subscription Rights of Arab Developers Holding -2",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG0217DTLC8"
+    }
+  ],
+  "Technology & IT": [
+    {
+      "Symbol": "EGS551D1C017",
+      "Company": "El-Barbary Investment Group",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000QZZK55"
+    },
+    {
+      "Symbol": "EGS550K1C019",
+      "Company": "International Business Machines Corporation",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00424MK47"
+    }
+  ],
+  "Technology & Telecom": [
+    {
+      "Symbol": "EGS745W1C011",
+      "Company": "Al Moasher for Programming",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000QZQB00"
+    },
+    {
+      "Symbol": "EGS74F71C015",
+      "Company": "Digitize for Investment & Technology Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG01MPG4440"
+    },
+    {
+      "Symbol": "EGS743O1C013",
+      "Company": "E-Finance Investment Group",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG012S18JD7"
+    },
+    {
+      "Symbol": "EGS745L1C014",
+      "Company": "Fawry for Banking & Payment Technology Services S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG00BDZ53B9"
+    },
+    {
+      "Symbol": "EGS74081C018.EGP",
+      "Company": "Global Telecom Holding",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS74191C015",
+      "Company": "Raya Contact Center SAE",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG0083C0H59"
+    },
+    {
+      "Symbol": "EGS740C1C010",
+      "Company": "Sues Canal Co for Technology Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000K264D3"
+    },
+    {
+      "Symbol": "EGS74801C019",
+      "Company": "Vertika Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG004FPM264"
+    }
+  ],
+  "Telecommunications": [
+    {
+      "Symbol": "EGS48271C018.EGP",
+      "Company": "Egypt - South Africa for Commun",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS48022C015",
+      "Company": "Egyptian Satellites Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BJQXT3"
+    },
+    {
+      "Symbol": "EGS48031C016",
+      "Company": "Telecom Egypt",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000C63GF7"
+    }
+  ],
+  "Textiles & Clothing": [
+    {
+      "Symbol": "EGS33321C018",
+      "Company": "Dice Sport & Casual Wear Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000GY5BJ7"
+    },
+    {
+      "Symbol": "EGS33061C010",
+      "Company": "El Nasr Clothes & Textiles KABO",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1F8B2"
+    },
+    {
+      "Symbol": "EGS33041C012",
+      "Company": "Oriental Weavers Carpet Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000BYCC39"
+    }
+  ],
+  "Tourism & Hotels": [
+    {
+      "Symbol": "EGS70011C019.EGP",
+      "Company": "Egyptian International Tourism ",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS70431C019",
+      "Company": "Egyptian Resorts Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000MB7912"
+    },
+    {
+      "Symbol": "EGS70H02C014",
+      "Company": "El Shams Pyramids For Hotels& T",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": ""
+    },
+    {
+      "Symbol": "EGS70R91C016",
+      "Company": "Elwadi for International and Financial Investment Co. S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG003FS3KB5"
+    },
+    {
+      "Symbol": "EGS70081C012",
+      "Company": "MISR Hotels Company",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000H1GK24"
+    },
+    {
+      "Symbol": "EGS70P91C010",
+      "Company": "Marsa Marsa Alam Development",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG003CDDFQ5"
+    },
+    {
+      "Symbol": "EGS70321C012",
+      "Company": "Orascom Development Egypt",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000C4Z3Z4"
+    },
+    {
+      "Symbol": "EGS70331C011",
+      "Company": "Pyramisa Hotels & Resorts",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000CKQV95"
+    },
+    {
+      "Symbol": "EGS70271C019",
+      "Company": "Remco for Touristic Villages.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000C31X32"
+    },
+    {
+      "Symbol": "EGS70281C018",
+      "Company": "Rowad Tourism Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000JZVYZ4"
+    },
+    {
+      "Symbol": "EGS70571C012",
+      "Company": "Sharm Dreams Co for Tourism",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000JZJRR2"
+    }
+  ],
+  "Tourism Services": [
+    {
+      "Symbol": "EGS79072C012",
+      "Company": "Transoceans Tours Inc.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000RGLCL1"
+    }
+  ],
+  "Trade & Industry": [
+    {
+      "Symbol": "EGS75011C014",
+      "Company": "MM Group for Industry and International Trade S.A.E.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000JVM1J3"
+    }
+  ],
+  "Transport & Logistics": [
+    {
+      "Symbol": "EGS42111C012",
+      "Company": "Alexandria Containers & Goods",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000JYWC57"
+    },
+    {
+      "Symbol": "EGS42051C010",
+      "Company": "Egytrans Transport & Logistics Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000C1J431"
+    },
+    {
+      "Symbol": "EGS42101C013",
+      "Company": "Port Said Containers and Cargo Handling Co.",
+      "Currency": "EGP",
+      "Type": "Common Stock",
+      "FIGI": "BBG000JZ1Y50"
+    }
+  ]
+}

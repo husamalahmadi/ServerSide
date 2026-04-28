@@ -10,13 +10,13 @@ export async function getLivePrice({ ticker, market } = {}) {
   const r = await resolveMarketAndSymbol(ticker, market);
   if (!r.ok) throw new Error("Ticker not allowed.");
 
-  const { symbol, currency, market: resolvedMarket, tickerUS, tickerSA } = r;
+  const { symbol, currency, market: resolvedMarket, tickerUS, tickerSA, tickerEG } = r;
   const j = await twelvePrice(symbol);
   const price = toNumber(j?.price) ?? 0;
 
   return {
     source: "live",
-    ticker: resolvedMarket === "us" ? tickerUS : tickerSA,
+    ticker: resolvedMarket === "us" ? tickerUS : resolvedMarket === "sa" ? tickerSA : tickerEG,
     market: resolvedMarket,
     price: Number.isFinite(price) ? price : 0,
     currency,
