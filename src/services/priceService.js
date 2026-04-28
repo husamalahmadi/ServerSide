@@ -1,5 +1,5 @@
 // FILE: client/src/services/priceService.js
-import { resolveMarketAndSymbol } from "../data/stocksCatalog.js";
+import { resolveMarketAndSymbol, buildSymbolCandidates } from "../data/stocksCatalog.js";
 import { toNumber } from "../domain/financials.js";
 import { twelvePrice } from "./twelveData.js";
 
@@ -10,8 +10,18 @@ export async function getLivePrice({ ticker, market } = {}) {
   const r = await resolveMarketAndSymbol(ticker, market);
   if (!r.ok) throw new Error("Ticker not allowed.");
 
-  const { symbol, currency, market: resolvedMarket, tickerUS, tickerSA, tickerEG } = r;
-  const j = await twelvePrice(symbol);
+  const { currency, market: resolvedMarket, tickerUS, tickerSA, tickerEG } = r;
+  const symbolCandidates = buildSymbolCandidates(r);
+  let j = {};
+  for (const s of symbolCandidates) {
+    try {
+      j = await twelvePrice(s);
+      const p = toNumber(j?.price);
+      if (Number.isFinite(p)) break;
+    } catch {
+      // Try next symbol format for EGX.
+    }
+  }
   const price = toNumber(j?.price) ?? 0;
 
   return {

@@ -1,6 +1,6 @@
 // FILE: client/src/services/financialsService.js
 import { getCached, setCached, delCached } from "../cache/browserCache.js";
-import { resolveMarketAndSymbol } from "../data/stocksCatalog.js";
+import { resolveMarketAndSymbol, buildSymbolCandidates } from "../data/stocksCatalog.js";
 import { mergeFinancials } from "../domain/financials.js";
 import { twelveIncomeStatement, twelveBalanceSheet, twelveCashFlow } from "./twelveData.js";
 import { getTasiCompanyData, tasiToFinancialsFormat } from "./tasiDataService.js";
@@ -67,20 +67,26 @@ export async function getFinancialsCached({
   }
 
   if (!income?.length && !balance?.length && !cash?.length) {
-    const symbol = r.symbol;
+    const symbolCandidates = buildSymbolCandidates(r);
+    const fetchForSymbol = async (fn, label) => {
+      let lastErr = null;
+      for (const s of symbolCandidates) {
+        try {
+          const out = await fn(s);
+          const annual = out?.[label];
+          if (Array.isArray(annual) && annual.length > 0) return out;
+          // keep trying other symbol formats if this one returned empty.
+        } catch (e) {
+          lastErr = e;
+        }
+      }
+      if (lastErr) warnings.push(`${label}: ${lastErr.message}`);
+      return null;
+    };
     [income, balance, cash] = await Promise.all([
-      twelveIncomeStatement(symbol, { period: "annual" }).catch((e) => {
-        warnings.push(`income_statement: ${e.message}`);
-        return null;
-      }),
-      twelveBalanceSheet(symbol, { period: "annual" }).catch((e) => {
-        warnings.push(`balance_sheet: ${e.message}`);
-        return null;
-      }),
-      twelveCashFlow(symbol, { period: "annual" }).catch((e) => {
-        warnings.push(`cash_flow: ${e.message}`);
-        return null;
-      }),
+      fetchForSymbol((s) => twelveIncomeStatement(s, { period: "annual" }), "income_statement"),
+      fetchForSymbol((s) => twelveBalanceSheet(s, { period: "annual" }), "balance_sheet"),
+      fetchForSymbol((s) => twelveCashFlow(s, { period: "annual" }), "cash_flow"),
     ]);
   }
 

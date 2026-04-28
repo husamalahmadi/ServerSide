@@ -1,4 +1,5 @@
 import { publicUrl } from "../utils/publicUrl.js";
+import { normalizeEgxTicker } from "../data/stocksCatalog.js";
 
 const EGX_DATA_URL = publicUrl("data/egx_financial_data.json");
 
@@ -120,7 +121,11 @@ async function loadEgxData() {
       const byTicker = new Map();
       for (const c of companies) {
         const t = String(c?.ticker ?? "").trim().toUpperCase();
-        if (t) byTicker.set(t, c);
+        if (t) {
+          byTicker.set(t, c);
+          const normalized = normalizeEgxTicker(t);
+          if (normalized && normalized !== t) byTicker.set(normalized, c);
+        }
       }
       const raw = { meta: json?.meta, companies };
       return { raw, byTicker };
@@ -134,7 +139,8 @@ async function loadEgxData() {
 export async function getEgxCompanyData(ticker) {
   const { byTicker } = await loadEgxData();
   const t = String(ticker ?? "").trim().toUpperCase();
-  return byTicker.get(t) ?? null;
+  const normalized = normalizeEgxTicker(t);
+  return byTicker.get(t) ?? byTicker.get(normalized) ?? null;
 }
 
 export function egxToFinancialsFormat(companyData) {

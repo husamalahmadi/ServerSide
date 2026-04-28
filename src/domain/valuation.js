@@ -1,5 +1,5 @@
 // FILE: client/src/domain/valuation.js
-import { resolveMarketAndSymbol, CURRENCY_BY_MARKET } from "../data/stocksCatalog.js";
+import { resolveMarketAndSymbol, CURRENCY_BY_MARKET, buildSymbolCandidates } from "../data/stocksCatalog.js";
 import { coalesce, toNumber } from "./financials.js";
 import {
   twelvePrice,
@@ -22,7 +22,8 @@ export async function computeValuation({ ticker, market } = {}) {
   const r = await resolveMarketAndSymbol(ticker, market);
   if (!r.ok) throw new Error("Ticker not allowed.");
 
-  const { market: resolvedMarket, symbol, tickerUS, tickerSA, tickerEG } = r;
+  const { market: resolvedMarket, tickerUS, tickerSA, tickerEG } = r;
+  const symbolCandidates = buildSymbolCandidates(r);
 
   let statsJson = {};
   let bsJson = {};
@@ -85,14 +86,42 @@ export async function computeValuation({ ticker, market } = {}) {
   }
 
   if (!statsJson?.statistics && !bsJson?.balance_sheet) {
+    const callFirstAvailable = async (fn, hasData) => {
+      for (const s of symbolCandidates) {
+        try {
+          const out = await fn(s);
+          if (!hasData || hasData(out)) return out;
+        } catch {
+          // Try next symbol format.
+        }
+      }
+      return {};
+    };
     [statsJson, bsJson, isJson] = await Promise.all([
-      twelveStatistics(symbol).catch(() => ({})),
-      twelveBalanceSheet(symbol).catch(() => ({})),
-      twelveIncomeStatement(symbol).catch(() => ({})),
+      callFirstAvailable((s) => twelveStatistics(s)),
+      callFirstAvailable(
+        (s) => twelveBalanceSheet(s),
+        (o) => Array.isArray(o?.balance_sheet) ? o.balance_sheet.length > 0 : Array.isArray(o?.balance_sheet?.annual) && o.balance_sheet.annual.length > 0
+      ),
+      callFirstAvailable(
+        (s) => twelveIncomeStatement(s),
+        (o) => Array.isArray(o?.income_statement) ? o.income_statement.length > 0 : Array.isArray(o?.income_statement?.annual) && o.income_statement.annual.length > 0
+      ),
     ]);
   }
 
-  const priceJson = await twelvePrice(symbol).catch(() => ({}));
+  let priceJson = {};
+  for (const s of symbolCandidates) {
+    try {
+      const out = await twelvePrice(s);
+      if (toNumber(out?.price) != null) {
+        priceJson = out;
+        break;
+      }
+    } catch {
+      // Try next symbol format.
+    }
+  }
 
   const stats = statsJson?.statistics || statsJson || {};
   const price = toNumber(priceJson?.price) ?? 0;
