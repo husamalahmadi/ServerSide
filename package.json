@@ -10,7 +10,6 @@
     "dev": "vite",
     "generate:sitemap": "node scripts/generate-sitemap.mjs",
     "build": "node scripts/generate-sitemap.mjs && vite build",
-    "egx:refetch": "python scripts/refetch-egx-data.py",
     "preview": "vite preview",
     "server": "cd server && npm run dev",
     "server:start": "cd server && node server.js",

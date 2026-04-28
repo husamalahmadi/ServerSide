@@ -9,13 +9,6 @@ const DATA_FILES = {
 
 export const CURRENCY_BY_MARKET = { us: "USD", sa: "SAR", eg: "EGP" };
 
-export function normalizeEgxTicker(rawTicker) {
-  return String(rawTicker || "")
-    .trim()
-    .toUpperCase()
-    .replace(/\.EGP$/i, "");
-}
-
 async function fetchJson(url) {
   const res = await fetch(url, { cache: "no-store" });
   const txt = await res.text();
@@ -39,11 +32,10 @@ function normalizeGrouped(grouped, { tickerUppercase, market }) {
     inds.push(industry);
     for (const it of items || []) {
       const rawTicker = String(it?.Ticker ?? it?.ticker ?? it?.Symbol ?? it?.symbol ?? "").trim();
-      const ticker = market === "eg" ? normalizeEgxTicker(rawTicker) : tickerUppercase ? rawTicker.toUpperCase() : rawTicker;
+      const ticker = tickerUppercase ? rawTicker.toUpperCase() : rawTicker;
       const name = String(it?.Company ?? it?.name ?? "").trim();
-      const figi = String(it?.FIGI ?? it?.figi ?? "").trim().toUpperCase();
       if (!ticker || !name) continue;
-      flat.push({ ticker, name, industry, market, figi: figi || null });
+      flat.push({ ticker, name, industry, market });
     }
   }
 
@@ -147,7 +139,7 @@ export async function resolveMarketAndSymbol(rawTicker, requestedMarket) {
 
   const tickerUS = String(rawTicker || "").toUpperCase();
   const tickerSA = String(rawTicker || "");
-  const tickerEG = normalizeEgxTicker(rawTicker);
+  const tickerEG = String(rawTicker || "").toUpperCase();
 
   let market = requestedMarket === "sa" ? "sa" : requestedMarket === "eg" ? "eg" : requestedMarket === "us" ? "us" : null;
 
@@ -158,34 +150,8 @@ export async function resolveMarketAndSymbol(rawTicker, requestedMarket) {
   }
   if (!market) return { ok: false };
 
-  const hitUS = cat.us.byUpperTicker.get(tickerUS);
-  const hitSA = cat.sa.byUpperTicker.get(tickerSA.toUpperCase());
-  const hitEG = cat.eg.byUpperTicker.get(tickerEG);
-  const figi = market === "us" ? hitUS?.figi || null : market === "sa" ? hitSA?.figi || null : hitEG?.figi || null;
-
-  // EGX endpoints in TwelveData are more reliable with bare ticker (without :EGX or .EGP).
-  const symbol = market === "us" ? tickerUS : market === "sa" ? `${tickerSA}:TADAWUL` : tickerEG;
+  const symbol = market === "us" ? tickerUS : market === "sa" ? `${tickerSA}:TADAWUL` : `${tickerEG}:EGX`;
   const currency = CURRENCY_BY_MARKET[market];
 
-  return { ok: true, market, symbol, tickerUS, tickerSA, tickerEG, figi, currency };
-}
-
-export function buildSymbolCandidates(resolved) {
-  if (!resolved?.ok) return [];
-  if (resolved.market === "eg") {
-    return [
-      resolved.symbol,
-      `${resolved.tickerEG}:EGX`,
-      `${resolved.tickerEG}.EGP`,
-      resolved.figi,
-    ].filter((v, i, a) => v && a.indexOf(v) === i);
-  }
-  if (resolved.market === "sa") {
-    return [
-      resolved.symbol,
-      resolved.tickerSA,
-      resolved.figi,
-    ].filter((v, i, a) => v && a.indexOf(v) === i);
-  }
-  return [resolved.symbol, resolved.figi].filter((v, i, a) => v && a.indexOf(v) === i);
+  return { ok: true, market, symbol, tickerUS, tickerSA, tickerEG, currency };
 }
