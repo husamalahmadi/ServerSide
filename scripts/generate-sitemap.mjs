@@ -33,6 +33,17 @@ function collectTickers(grouped, { tickerUppercase }) {
   return out;
 }
 
+function uniqueStable(items) {
+  const seen = new Set();
+  const out = [];
+  for (const item of items) {
+    if (seen.has(item)) continue;
+    seen.add(item);
+    out.push(item);
+  }
+  return out;
+}
+
 function escapeXml(s) {
   return String(s)
     .replace(/&/g, "&amp;")
@@ -70,7 +81,7 @@ function main() {
   for (const t of saTickers) {
     stockLocs.push(`${SITE}/stock/${encodeURIComponent(t)}`);
   }
-  stockLocs.sort((a, b) => a.localeCompare(b, "en"));
+  const uniqueStockLocs = uniqueStable(stockLocs).sort((a, b) => a.localeCompare(b, "en"));
 
   const lines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -80,14 +91,14 @@ function main() {
   for (const { loc, changefreq, priority } of staticPages) {
     lines.push(urlEntry(loc, changefreq, priority));
   }
-  for (const loc of stockLocs) {
+  for (const loc of uniqueStockLocs) {
     lines.push(urlEntry(loc, "weekly", "0.6"));
   }
 
   lines.push("</urlset>", "");
 
   writeFileSync(OUT, lines.join("\n"), "utf8");
-  console.log(`[sitemap] Wrote ${OUT} (${staticPages.length + stockLocs.length} URLs)`);
+  console.log(`[sitemap] Wrote ${OUT} (${staticPages.length + uniqueStockLocs.length} URLs)`);
 }
 
 main();
