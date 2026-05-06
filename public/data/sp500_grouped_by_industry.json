@@ -141,10 +141,6 @@
       "Company": "Burford Capital Limited"
     },
     {
-      "Ticker": "PX",
-      "Company": "P10, Inc."
-    },
-    {
       "Ticker": "CCID",
       "Company": "Carlyle Credit Income Fund"
     },
@@ -363,14 +359,6 @@
       "Company": "Pelthos Therapeutics Inc."
     },
     {
-      "Ticker": "BHVN",
-      "Company": "Biohaven Ltd."
-    },
-    {
-      "Ticker": "PHGE",
-      "Company": "BiomX Inc."
-    },
-    {
       "Ticker": "CANF",
       "Company": "Can-Fite BioPharma Ltd. - American Depositary Receipt"
     }
@@ -485,10 +473,6 @@
       "Company": "Verizon"
     },
     {
-      "Ticker": "PARA",
-      "Company": "Paramount Global"
-    },
-    {
       "Ticker": "TKO",
       "Company": "TKO Group Holdings"
     },
@@ -539,10 +523,6 @@
     {
       "Ticker": "PSKY",
       "Company": "Paramount Skydance"
-    },
-    {
-      "Ticker": "IPG",
-      "Company": "Interpublic Group of Companies (The)"
     }
   ],
   "Computer Hardware": [
@@ -989,10 +969,6 @@
       "Company": "Estée Lauder Companies (The)"
     },
     {
-      "Ticker": "K",
-      "Company": "Kellanova"
-    },
-    {
       "Ticker": "STZ",
       "Company": "Constellation Brands"
     },
@@ -1079,12 +1055,6 @@
     {
       "Ticker": "TBBB",
       "Company": "Bbb Foods Inc."
-    }
-  ],
-  "Drug Manufacturers - General": [
-    {
-      "Ticker": "AZNCF",
-      "Company": "AstraZeneca PLC"
     }
   ],
   "Drug Manufacturers - Specialty & Generic": [
@@ -1315,10 +1285,6 @@
     {
       "Ticker": "CINF",
       "Company": "Cincinnati Financial"
-    },
-    {
-      "Ticker": "FI",
-      "Company": "Fiserv"
     },
     {
       "Ticker": "EVR",
@@ -1637,14 +1603,6 @@
       "Company": "Franklin Resources"
     },
     {
-      "Ticker": "MMC",
-      "Company": "Marsh McLennan"
-    },
-    {
-      "Ticker": "SNV",
-      "Company": "Synovus Financial"
-    },
-    {
       "Ticker": "MA",
       "Company": "Mastercard"
     },
@@ -1687,28 +1645,8 @@
       "Company": "Harmony Gold Mining Co. Ltd. - Sponsored ADR"
     },
     {
-      "Ticker": "SA",
-      "Company": "Seabridge Gold Inc."
-    },
-    {
       "Ticker": "GROY",
       "Company": "Gold Royalty Corp"
-    },
-    {
-      "Ticker": "ARMN",
-      "Company": "Aris Mining Corp."
-    },
-    {
-      "Ticker": "AUST",
-      "Company": "Austin Gold Corp."
-    },
-    {
-      "Ticker": "THM",
-      "Company": "International Tower Hill Mines Ltd."
-    },
-    {
-      "Ticker": "GLDG",
-      "Company": "Goldmining Inc."
     },
     {
       "Ticker": "GFI",
@@ -2889,14 +2827,6 @@
     {
       "Ticker": "AS",
       "Company": "Amer Sports, Inc."
-    },
-    {
-      "Ticker": "BOWL",
-      "Company": "Lucky Strike Entertainment Corp."
-    },
-    {
-      "Ticker": "DVD",
-      "Company": "Dover Motorsports Inc"
     }
   ],
   "Lodging": [
@@ -3145,10 +3075,6 @@
   ],
   "Oil & Gas Drilling": [
     {
-      "Ticker": "SOC",
-      "Company": "Sable Offshore Corp."
-    },
-    {
       "Ticker": "SDRL",
       "Company": "Seadrill Limited"
     }
@@ -3257,16 +3183,8 @@
       "Company": "Energy Transfer LP"
     },
     {
-      "Ticker": "SMLP",
-      "Company": "Summit Midstream Partners LP"
-    },
-    {
       "Ticker": "NAT",
       "Company": "Nordic American Tankers Ltd."
-    },
-    {
-      "Ticker": "EURN",
-      "Company": "Euronav NV"
     },
     {
       "Ticker": "LPG",
@@ -3301,10 +3219,6 @@
   ],
   "Other Industrial Metals & Mining": [
     {
-      "Ticker": "TMQ",
-      "Company": "Trilogy Metals Inc."
-    },
-    {
       "Ticker": "TII",
       "Company": "Titan Mining Corporation"
     },
@@ -3325,14 +3239,6 @@
     {
       "Ticker": "MUX",
       "Company": "McEwen Mining Inc."
-    },
-    {
-      "Ticker": "NEWP",
-      "Company": "New Pacific Metals Corp."
-    },
-    {
-      "Ticker": "PLG",
-      "Company": "Platinum Group Metals Ltd."
     }
   ],
   "Packaged Foods": [
@@ -3361,10 +3267,6 @@
   ],
   "Paper & Paper Products": [
     {
-      "Ticker": "GLT",
-      "Company": "Magnera Corp."
-    },
-    {
       "Ticker": "CLW",
       "Company": "Clearwater Paper Corporation"
     }
@@ -3376,10 +3278,6 @@
     }
   ],
   "Publishing": [
-    {
-      "Ticker": "GCI",
-      "Company": "Gannett Co., Inc."
-    },
     {
       "Ticker": "NYT",
       "Company": "New York Times Co."
@@ -3423,14 +3321,6 @@
     {
       "Ticker": "XRN-B",
       "Company": "Chiron Real Estate Inc."
-    },
-    {
-      "Ticker": "GMRE-B",
-      "Company": "Global Medical REIT Inc."
-    },
-    {
-      "Ticker": "GMRE.PR.A",
-      "Company": "Global Medical REIT Inc"
     }
   ],
   "REIT - Hotel & Motel": [
@@ -3473,10 +3363,6 @@
     {
       "Ticker": "AHT",
       "Company": "Ashford Hospitality Trust, Inc."
-    },
-    {
-      "Ticker": "INN.PR.D",
-      "Company": "Summit Hotel Properties Inc"
     }
   ],
   "REIT - Industrial": [
@@ -3541,10 +3427,6 @@
     {
       "Ticker": "CHMI.PR.A",
       "Company": "Cherry Hill Mortgage Investment Corp"
-    },
-    {
-      "Ticker": "SACH-A",
-      "Company": "Sachem Capital Corp."
     },
     {
       "Ticker": "ABR.PR.E",
@@ -3975,119 +3857,7 @@
       "Company": "Intest Corporation"
     }
   ],
-  "Semiconductors": [
-    {
-      "Ticker": "WOLF",
-      "Company": "Wolfspeed, Inc."
-    }
-  ],
-  "Shell Companies": [
-    {
-      "Ticker": "AVAN.UN",
-      "Company": "Avanti Acquisition Corp."
-    },
-    {
-      "Ticker": "PIAI",
-      "Company": "Prime Impact Acquisition I"
-    },
-    {
-      "Ticker": "EQHA.UN",
-      "Company": "EQ Health Acquisition Corp."
-    },
-    {
-      "Ticker": "DGNR",
-      "Company": "Dragoneer Growth Opportunities Corp"
-    },
-    {
-      "Ticker": "TRAD.UN",
-      "Company": "TRAD.UN"
-    },
-    {
-      "Ticker": "KWAC.UN",
-      "Company": "Kingswood Acquisition Corp."
-    },
-    {
-      "Ticker": "SOUL.UN",
-      "Company": "SOULPOWER ACQUISITION CORP UNIT"
-    },
-    {
-      "Ticker": "AAQC.UN",
-      "Company": "Accelerate Acquisition Corp."
-    },
-    {
-      "Ticker": "LGV",
-      "Company": "Longview Acquisition Corp. II"
-    },
-    {
-      "Ticker": "HUGS.UN",
-      "Company": "USHG Acquisition Corp."
-    },
-    {
-      "Ticker": "HTPA.UN",
-      "Company": "Highland Transcend Partners I Corp."
-    },
-    {
-      "Ticker": "BCSS.UN",
-      "Company": "BCSS.UN"
-    },
-    {
-      "Ticker": "LEGT",
-      "Company": "Legato Merger Corp III"
-    },
-    {
-      "Ticker": "HIGA.UN",
-      "Company": "H.I.G. Acquisition Corp."
-    },
-    {
-      "Ticker": "SOUL",
-      "Company": "Soulpower Acquisition Corp."
-    },
-    {
-      "Ticker": "TRAD",
-      "Company": "APEX Tech Acquisition Inc."
-    },
-    {
-      "Ticker": "AAQC",
-      "Company": "Accelerate Acquisition Corp."
-    },
-    {
-      "Ticker": "PGSS",
-      "Company": "Pegasus Digital Mobility Acquisition Corp."
-    },
-    {
-      "Ticker": "PIPP.UN",
-      "Company": "Pine Island Acquisition Corp."
-    },
-    {
-      "Ticker": "PMVC",
-      "Company": "PMV Consumer Acquisition Corp"
-    },
-    {
-      "Ticker": "ENPC.UN",
-      "Company": "Executive Network Partnering Corporation"
-    },
-    {
-      "Ticker": "AEXA",
-      "Company": "American Exceptionalism Acquisition Corp. A"
-    },
-    {
-      "Ticker": "BACA.UN",
-      "Company": "Berenson Acquisition Corp. I"
-    },
-    {
-      "Ticker": "BCSS",
-      "Company": "Bain Capital GSS Investment Corp."
-    },
-    {
-      "Ticker": "KWAC",
-      "Company": "Kingswood Acquisition Corp."
-    }
-  ],
   "Silver": [
-    {
-      "Ticker": "HLSCF",
-      "Company": "Highlander Silver Corp."
-    },
     {
       "Ticker": "EXK",
       "Company": "Endeavour Silver Corp."
@@ -4095,10 +3865,6 @@
     {
       "Ticker": "SVM",
       "Company": "Silvercorp Metals Inc."
-    },
-    {
-      "Ticker": "HSLV",
-      "Company": "Highlander Silver Corp."
     }
   ],
   "Software - Application": [
@@ -4211,10 +3977,6 @@
       "Company": "Core Molding Technologies, Inc."
     },
     {
-      "Ticker": "CITR",
-      "Company": "General Enterprise Ventures Inc."
-    },
-    {
       "Ticker": "SSL",
       "Company": "Sasol Ltd Sponsored ADR"
     },
@@ -4237,10 +3999,6 @@
     {
       "Ticker": "SXT",
       "Company": "Sensient Technologies Corporation"
-    },
-    {
-      "Ticker": "TSE",
-      "Company": "Trinseo PLC"
     },
     {
       "Ticker": "KWR",
@@ -4281,10 +4039,6 @@
     {
       "Ticker": "CHPT",
       "Company": "ChargePoint Holdings, Inc."
-    },
-    {
-      "Ticker": "CSPR",
-      "Company": "Casper Sleep Inc"
     }
   ],
   "Staffing & Employment Services": [
@@ -4371,278 +4125,26 @@
   ],
   "Unknown": [
     {
-      "Ticker": "DTG",
-      "Company": "DTE Energy Co. Preferred Stock 4.375%"
-    },
-    {
-      "Ticker": "ATHS",
-      "Company": "Athene Holding Ltd. Preferred Stock 7.25%"
-    },
-    {
-      "Ticker": "VGII",
-      "Company": "Virgin Group Acquisition Corp. II"
-    },
-    {
-      "Ticker": "MH.PR.A",
-      "Company": "Maiden Holdings Ltd"
-    },
-    {
-      "Ticker": "LEGO.UN",
-      "Company": "LEGO.UN"
-    },
-    {
-      "Ticker": "AFGE",
-      "Company": "American Financial Group Preferred Stock 4.5%"
-    },
-    {
-      "Ticker": "TCPA",
-      "Company": "TransCanada PipeLines Limited Cumulative Redeemable First Preferred Shares, Series 11"
-    },
-    {
       "Ticker": "PCG.PR.X",
       "Company": "PG&E Corp"
-    },
-    {
-      "Ticker": "GLU.PR.B",
-      "Company": "Gabelli Global Utility & Income Trust"
-    },
-    {
-      "Ticker": "BKSY.WT",
-      "Company": "BlackSky Technology Inc. Redeemable Warrants, each whole Warrant exercisable for one share of Class A Common Stock"
     },
     {
       "Ticker": "TBB",
       "Company": "AT&T Inc. Preferred Stock 5.35%"
     },
     {
-      "Ticker": "CMSC",
-      "Company": "CMS Energy Corp. Preferred Stock 5.875% 2078"
-    },
-    {
-      "Ticker": "F.PR.B",
-      "Company": "Ford Motor Co"
-    },
-    {
-      "Ticker": "SCE-N",
-      "Company": "SCE Trust VIII 6.95% Trust"
-    },
-    {
-      "Ticker": "CLNC",
-      "Company": "Colony Credit Real Estate Inc"
-    },
-    {
-      "Ticker": "ENO",
-      "Company": "Entergy New Orleans LLC Preferred Stock 5.5%"
-    },
-    {
-      "Ticker": "MHLA",
-      "Company": "Maiden Holdings, Ltd."
-    },
-    {
-      "Ticker": "IONQ.WT",
-      "Company": "IonQ, Inc. Redeemable warrants, each whole warrant exercisable for one share of Common Stock, each at an exercise price of $11.50 per share"
-    },
-    {
-      "Ticker": "GME.WT",
-      "Company": "GameStop Corp. WT"
-    },
-    {
-      "Ticker": "RZB",
-      "Company": "Reinsurance Group of America 5.75% Preferred Stock"
-    },
-    {
-      "Ticker": "LANV.WT",
-      "Company": "Lanvin Group Holdings Limited Redeemable Warrants, each whole warrant exercisable for one Ordinary Share at an exercise price of $11.50"
-    },
-    {
-      "Ticker": "LEGO.WT",
-      "Company": "LEGO.WT"
-    },
-    {
-      "Ticker": "PCG.PR.H",
-      "Company": "Pacific Gas & Electric Co"
-    },
-    {
       "Ticker": "RWTRP",
       "Company": "Redwood Trust, Inc."
     },
     {
-      "Ticker": "MHNC",
-      "Company": "Maiden Holdings North America Ltd. 7.75% Preferred Stock"
-    },
-    {
-      "Ticker": "FRC.PR.L",
-      "Company": "First Republic Bank"
-    },
-    {
-      "Ticker": "PERF.WT",
-      "Company": "Perfect Corp. Warrants, each exercisable for one Class A Ordinary Share at a price of $11.50 per share"
-    },
-    {
-      "Ticker": "BTN",
-      "Company": "Ballantyne Strong Inc"
-    },
-    {
-      "Ticker": "VACI.WT",
-      "Company": "Viking Acquisition Corp. I WT"
-    },
-    {
-      "Ticker": "RWTQ",
-      "Company": "Redwood Trust, Inc."
-    },
-    {
-      "Ticker": "F.PR.D",
-      "Company": "Ford Motor Company 6.500% Notes"
-    },
-    {
-      "Ticker": "VAL.WT",
-      "Company": "Valaris Limited Warrants"
-    },
-    {
-      "Ticker": "GNS.RT",
-      "Company": "Genius Group Limited"
-    },
-    {
-      "Ticker": "EONR.WT",
-      "Company": "EON Resources Inc WT"
-    },
-    {
-      "Ticker": "BNH",
-      "Company": "Brookfield Finance Inc. Preferred Stock 4.625%"
-    },
-    {
-      "Ticker": "BNJ",
-      "Company": "Brookfield Finance I UK PLC Preferred Stock, 4.5% Perpetual"
-    },
-    {
-      "Ticker": "RWTP",
-      "Company": "Redwood Trust Inc. 9.125% Preferred Stock"
-    },
-    {
-      "Ticker": "NTEST.I",
-      "Company": "NTEST-I"
-    },
-    {
-      "Ticker": "PTR",
-      "Company": "PetroChina Co Ltd"
-    },
-    {
-      "Ticker": "MGRE",
-      "Company": "Affiliated Managers Group 6.75% Preferred Stock"
-    },
-    {
-      "Ticker": "NTEST.H",
-      "Company": "NTEST-H"
-    },
-    {
-      "Ticker": "CLBR.WT",
-      "Company": "Colombier Acquisition Corp. Warrants, each exercisable for one share of Class A common stock at an exercise price of $11.50 per share"
-    },
-    {
-      "Ticker": "AGO.PR.E",
-      "Company": "Assured Guaranty Municipal Holdings Inc"
-    },
-    {
-      "Ticker": "SCE.PR.G",
-      "Company": "SCE Trust II"
-    },
-    {
-      "Ticker": "INFQ.WT",
-      "Company": "INFQ.WT"
-    },
-    {
-      "Ticker": "BAMR",
-      "Company": "Brookfield Asset Management Reinsurance Partners Ltd."
-    },
-    {
-      "Ticker": "GLU.PR.A",
-      "Company": "Gabelli Global Utility & Income Trust"
-    },
-    {
-      "Ticker": "DTW",
-      "Company": "DTE Energy Co. Preferred Stock 5.25% 12/01/2077"
-    },
-    {
-      "Ticker": "TE.WT",
-      "Company": "T1 Energy Inc. WT"
-    },
-    {
-      "Ticker": "SCE-M",
-      "Company": "SCE Trust VII 7.50% Trust"
-    },
-    {
-      "Ticker": "INSW.PR.A",
-      "Company": "International Seaways Inc"
-    },
-    {
-      "Ticker": "PCG.PR.I",
-      "Company": "Pacific Gas & Electric Co"
-    },
-    {
-      "Ticker": "DTK",
-      "Company": "DTE Energy Company 6.25% Junior Subordinated Debentures, Series H, due October 1, 2085"
-    },
-    {
-      "Ticker": "PTEST.X",
-      "Company": "PTEST-X"
-    },
-    {
-      "Ticker": "SYN",
-      "Company": "Synthetic Biologics Inc"
-    },
-    {
-      "Ticker": "ENPC",
-      "Company": "Executive Network Partnering Corp"
-    },
-    {
-      "Ticker": "NXG.RI",
-      "Company": "NXG NextGen Infrastructure Inco"
-    },
-    {
-      "Ticker": "UZF",
-      "Company": "U.S. Cellular Corporation 5.5% Preferred Stock"
-    },
-    {
-      "Ticker": "AVK.RI",
-      "Company": "Advent Convertible and Income F"
-    },
-    {
-      "Ticker": "F.PR.C",
-      "Company": "Ford Motor Co"
-    },
-    {
-      "Ticker": "AIZN",
-      "Company": "Assurant Inc. Preferred Stock 5.25%"
-    },
-    {
       "Ticker": "AHL.PR.F",
       "Company": "Aspen Insurance Holdings Limited"
-    },
-    {
-      "Ticker": "PTEST.Z",
-      "Company": "PTEST-Z"
-    },
-    {
-      "Ticker": "CMSA",
-      "Company": "CMS Energy Corp. Preferred Stock 5.625% 03/15/2078"
-    },
-    {
-      "Ticker": "SCE.PR.L",
-      "Company": "SCE Trust VI"
     }
   ],
   "Uranium": [
     {
       "Ticker": "LEU",
       "Company": "Centrus Energy Corp."
-    },
-    {
-      "Ticker": "NXE",
-      "Company": "NexGen Energy Ltd."
-    },
-    {
-      "Ticker": "JAGU",
-      "Company": "Jaguar Uranium Corp."
     }
   ],
   "Utilities": [
@@ -4848,10 +4350,6 @@
     }
   ],
   "Waste Management": [
-    {
-      "Ticker": "AMBI",
-      "Company": "Ambipar Emergency Response Inc."
-    },
     {
       "Ticker": "AWX",
       "Company": "Avalon Holdings Corp."
