@@ -6,7 +6,7 @@ import { getCompany, getStocks, resolveMarketAndSymbol } from "../data/stocksCat
 import { getLivePrice } from "../services/priceService.js";
 import { getFinancialsCached } from "../services/financialsService.js";
 import { computeValuation } from "../domain/valuation.js";
-import { yfProfileAndLogo } from "../services/yahooFinance.js";
+import { twelveLogo, twelveProfile } from "../services/twelveData.js";
 import { translateToArabic } from "../services/translateService.js";
 import { Card } from "../components/Card.jsx";
 import { PillLink } from "../components/PillLink.jsx";
@@ -169,17 +169,15 @@ export default function Stock() {
       try {
         const r = await resolveMarketAndSymbol(ticker, market);
         if (!r.ok || !alive) return;
-
-        const yfSymbol = r.market === "sa" ? `${r.tickerSA}.SR` : r.tickerUS;
-        const profileRes = await yfProfileAndLogo(yfSymbol);
+        const symbol = r.symbol;
+        const [logoRes, profileRes] = await Promise.all([
+          twelveLogo(symbol),
+          twelveProfile(symbol),
+        ]);
         if (!alive) return;
-
-        setLogoUrl(typeof profileRes?.logoUrl === "string" ? profileRes.logoUrl : null);
-        setProfile(
-          profileRes && typeof profileRes === "object" && Object.keys(profileRes).length > 0
-            ? profileRes
-            : null
-        );
+        const base = logoRes?.logo_base;
+        setLogoUrl(base && typeof base === "string" ? base : null);
+        setProfile(profileRes && typeof profileRes === "object" ? profileRes : null);
       } catch {
         if (!alive) return;
         setLogoUrl(null);
