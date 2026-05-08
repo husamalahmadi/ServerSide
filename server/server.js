@@ -581,6 +581,51 @@ const YF_HEADERS = {
   Accept: "application/json",
   "Accept-Language": "en-US,en;q=0.9",
 };
+const yfClient = new yahooFinance();
+
+let _yfCrumb = null;
+let _yfCookie = null;
+let _yfCrumbExpiry = 0;
+
+async function getYFCrumb() {
+  if (_yfCrumb && Date.now() < _yfCrumbExpiry) return { crumb: _yfCrumb, cookie: _yfCookie };
+
+  const homeRes = await fetch("https://finance.yahoo.com/", {
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      "Accept-Language": "en-US,en;q=0.5",
+    },
+    redirect: "follow",
+  });
+  const setCookieList = homeRes.headers.getSetCookie?.() || [];
+  const cookieHeader =
+    setCookieList.length > 0
+      ? setCookieList.map((c) => c.split(";")[0]).join("; ")
+      : (homeRes.headers.get("set-cookie") || "")
+          .split(",")
+          .map((c) => c.split(";")[0])
+          .filter(Boolean)
+          .join("; ");
+
+  const crumbRes = await fetch("https://query1.finance.yahoo.com/v1/test/getcrumb", {
+    headers: {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+      Accept: "*/*",
+      Cookie: cookieHeader,
+    },
+  });
+  const crumb = (await crumbRes.text()).trim();
+  if (!crumb || crumb.includes("Unauthorized") || crumb.length > 64) {
+    throw new Error("Failed to get Yahoo Finance crumb");
+  }
+
+  _yfCrumb = crumb;
+  _yfCookie = cookieHeader;
+  _yfCrumbExpiry = Date.now() + 55 * 60 * 1000;
+  return { crumb: _yfCrumb, cookie: _yfCookie };
+}
 
 app.get("/api/yf/price/:symbol", async (req, res) => {
   const symbol = req.params.symbol;
@@ -605,9 +650,32 @@ app.get("/api/yf/profile/:symbol", async (req, res) => {
   const symbol = req.params.symbol;
   try {
     const data = await yfCached(`profile:${symbol}`, 6 * 3600_000, async () => {
-      const result = await yahooFinance.quoteSummary(symbol, { modules: ["assetProfile", "quoteType"] });
-      const ap = result?.assetProfile ?? {};
-      const qt = result?.quoteType ?? {};
+      let ap = {};
+      let qt = {};
+
+      if (typeof yfClient.quoteSummary === "function") {
+        const result = await yfClient.quoteSummary(symbol, { modules: ["assetProfile", "quoteType"] });
+        ap = result?.assetProfile ?? {};
+        qt = result?.quoteType ?? {};
+      } else {
+        const { crumb, cookie } = await getYFCrumb();
+        const url = `https://query1.finance.yahoo.com/v11/finance/quoteSummary/${encodeURIComponent(symbol)}?modules=assetProfile%2CquoteType&crumb=${encodeURIComponent(crumb)}`;
+        const r = await fetch(url, {
+          headers: {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            Accept: "application/json",
+            "Accept-Language": "en-US,en;q=0.9",
+            Cookie: cookie,
+          },
+        });
+        if (!r.ok) throw new Error(`Yahoo profile HTTP ${r.status}`);
+        const j = await r.json();
+        const result = j?.quoteSummary?.result?.[0];
+        if (!result) throw new Error("Yahoo profile: no result");
+        ap = result.assetProfile ?? {};
+        qt = result.quoteType ?? {};
+      }
+
       const ceo = (ap.companyOfficers ?? []).find(
         (o) => /ceo|chief exec/i.test(o.title ?? "")
       )?.name ?? null;
@@ -634,6 +702,10 @@ app.get("/api/yf/profile/:symbol", async (req, res) => {
     });
     res.json(data);
   } catch (err) {
+    if (err?.message?.includes("401") || err?.message?.toLowerCase?.().includes("crumb")) {
+      _yfCrumb = null;
+      _yfCrumbExpiry = 0;
+    }
     console.error("[yf/profile]", symbol, err.message);
     res.status(502).json({ error: err.message });
   }
