@@ -565,6 +565,84 @@ app.get("/api/feed", requireAuth, (req, res) => {
   ).all(...ids);
   res.json({ items: rows });
 });
+// ── Yahoo Finance proxy ──────────────────────────────────────────────────────
+const _yfCache = new Map();
+function yfCached(key, ttlMs, fn) {
+  const hit = _yfCache.get(key);
+  if (hit && Date.now() - hit.ts < ttlMs) return Promise.resolve(hit.data);
+  return fn().then((data) => {
+    _yfCache.set(key, { data, ts: Date.now() });
+    return data;
+  });
+}
+const YF_HEADERS = {
+  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+  Accept: "application/json",
+  "Accept-Language": "en-US,en;q=0.9",
+};
+
+app.get("/api/yf/price/:symbol", async (req, res) => {
+  const symbol = req.params.symbol;
+  try {
+    const data = await yfCached(`price:${symbol}`, 60_000, async () => {
+      const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d&includePrePost=false`;
+      const r = await fetch(url, { headers: YF_HEADERS });
+      if (!r.ok) throw new Error(`Yahoo price HTTP ${r.status}`);
+      const j = await r.json();
+      const meta = j?.chart?.result?.[0]?.meta;
+      if (!meta) throw new Error("Yahoo price: no result");
+      return { price: meta.regularMarketPrice ?? null, currency: meta.currency ?? "USD" };
+    });
+    res.json(data);
+  } catch (err) {
+    console.error("[yf/price]", symbol, err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
+
+app.get("/api/yf/profile/:symbol", async (req, res) => {
+  const symbol = req.params.symbol;
+  try {
+    const data = await yfCached(`profile:${symbol}`, 6 * 3600_000, async () => {
+      const url = `https://query2.finance.yahoo.com/v11/finance/quoteSummary/${encodeURIComponent(symbol)}?modules=assetProfile%2CquoteType`;
+      const r = await fetch(url, { headers: YF_HEADERS });
+      if (!r.ok) throw new Error(`Yahoo profile HTTP ${r.status}`);
+      const j = await r.json();
+      const result = j?.quoteSummary?.result?.[0];
+      if (!result) throw new Error("Yahoo profile: no result");
+      const ap = result.assetProfile ?? {};
+      const qt = result.quoteType ?? {};
+      const ceo = (ap.companyOfficers ?? []).find(
+        (o) => /ceo|chief exec/i.test(o.title ?? "")
+      )?.name ?? null;
+      let logoUrl = null;
+      if (ap.website) {
+        try {
+          const domain = new URL(ap.website).hostname.replace(/^www\./, "");
+          logoUrl = `https://logo.clearbit.com/${domain}`;
+        } catch {}
+      }
+      return {
+        symbol: qt.symbol ?? symbol,
+        name: qt.longName ?? qt.shortName ?? null,
+        industry: ap.industry ?? null,
+        sector: ap.sector ?? null,
+        description: ap.longBusinessSummary ?? null,
+        city: ap.city ?? null,
+        country: ap.country ?? null,
+        CEO: ceo,
+        website: ap.website ?? null,
+        phone: ap.phone ?? null,
+        logoUrl,
+      };
+    });
+    res.json(data);
+  } catch (err) {
+    console.error("[yf/profile]", symbol, err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
+// ── End Yahoo Finance proxy ───────────────────────────────────────────────────
 app.get("/api/analytics/trending", (req, res) => {
   const rows = db.prepare(
     `SELECT ticker, COUNT(*) as views FROM activity_log

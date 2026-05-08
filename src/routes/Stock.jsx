@@ -169,13 +169,17 @@ export default function Stock() {
       try {
         const r = await resolveMarketAndSymbol(ticker, market);
         if (!r.ok || !alive) return;
+
         const yfSymbol = r.market === "sa" ? `${r.tickerSA}.SR` : r.tickerUS;
         const profileRes = await yfProfileAndLogo(yfSymbol);
-        const logoRes = profileRes?.logoUrl ? { logo_base: profileRes.logoUrl } : null;
         if (!alive) return;
-        const base = logoRes?.logo_base;
-        setLogoUrl(base && typeof base === "string" ? base : null);
-        setProfile(profileRes && typeof profileRes === "object" ? profileRes : null);
+
+        setLogoUrl(typeof profileRes?.logoUrl === "string" ? profileRes.logoUrl : null);
+        setProfile(
+          profileRes && typeof profileRes === "object" && Object.keys(profileRes).length > 0
+            ? profileRes
+            : null
+        );
       } catch {
         if (!alive) return;
         setLogoUrl(null);
