@@ -627,14 +627,6 @@ async function getYFCrumb() {
   return { crumb: _yfCrumb, cookie: _yfCookie };
 }
 
-async function getYahooBasicQuote(symbol) {
-  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbol)}`;
-  const r = await fetch(url, { headers: YF_HEADERS });
-  if (!r.ok) throw new Error(`Yahoo basic quote HTTP ${r.status}`);
-  const j = await r.json();
-  return j?.quoteResponse?.result?.[0] || null;
-}
-
 app.get("/api/yf/price/:symbol", async (req, res) => {
   const symbol = req.params.symbol;
   try {
@@ -715,36 +707,7 @@ app.get("/api/yf/profile/:symbol", async (req, res) => {
       _yfCrumbExpiry = 0;
     }
     console.error("[yf/profile]", symbol, err.message);
-    try {
-      // Fallback: still return a Yahoo-derived partial profile instead of null,
-      // so the UI does not degrade to "No data" when quoteSummary is blocked.
-      const q = await getYahooBasicQuote(symbol);
-      if (!q) throw new Error("Yahoo basic quote: no result");
-      const website = q?.website || null;
-      let logoUrl = null;
-      if (website) {
-        try {
-          const domain = new URL(website).hostname.replace(/^www\./, "");
-          logoUrl = `https://logo.clearbit.com/${domain}`;
-        } catch {}
-      }
-      return res.json({
-        symbol: q?.symbol ?? symbol,
-        name: q?.longName ?? q?.shortName ?? symbol,
-        industry: null,
-        sector: null,
-        description: null,
-        city: null,
-        country: q?.region ?? null,
-        CEO: null,
-        website,
-        phone: null,
-        logoUrl,
-      });
-    } catch (fallbackErr) {
-      console.error("[yf/profile:fallback]", symbol, fallbackErr?.message || fallbackErr);
-      res.status(502).json({ error: err.message });
-    }
+    res.status(502).json({ error: err.message });
   }
 });
 // ── End Yahoo Finance proxy ───────────────────────────────────────────────────
