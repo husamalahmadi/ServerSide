@@ -1,4 +1,4 @@
-import "dotenv/config";
+import dotenv from "dotenv";
 import express from "express";
 import session from "express-session";
 import cors from "cors";
@@ -15,6 +15,12 @@ import yahooFinance from "yahoo-finance2";
 import SqliteStoreFactory from "better-sqlite3-session-store";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+// Load env from repo root first, then server/.env (later file wins — keeps FMP_API_KEY next to server.js).
+dotenv.config({ path: join(__dirname, "..", ".env") });
+dotenv.config({ path: join(__dirname, ".env") });
+if (!(process.env.FMP_API_KEY || "").trim()) {
+  console.warn("[fmp] FMP_API_KEY is unset — stock quotes/profiles will fail until you set it (server/.env or repo-root .env).");
+}
 const DB_PATH = (process.env.DB_PATH || "").trim();
 const dbPath = DB_PATH || join(__dirname, "trueprice.db");
 const dbDir = dirname(dbPath);
@@ -711,6 +717,94 @@ app.get("/api/yf/profile/:symbol", async (req, res) => {
   }
 });
 // ── End Yahoo Finance proxy ───────────────────────────────────────────────────
+
+// ── Financial Modeling Prep (stable API) ─────────────────────────────────────
+const FMP_STABLE_BASE = "https://financialmodelingprep.com/stable";
+
+function fmpApiKey() {
+  const k = (process.env.FMP_API_KEY || "").trim();
+  return k || null;
+}
+
+function mapFmpProfileRow(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  let logoUrl = typeof raw.image === "string" && raw.image.startsWith("http") ? raw.image : null;
+  if (!logoUrl && raw.website) {
+    try {
+      const domain = new URL(raw.website).hostname.replace(/^www\./, "");
+      logoUrl = `https://logo.clearbit.com/${domain}`;
+    } catch {
+      /* ignore */
+    }
+  }
+  return {
+    symbol: raw.symbol ?? null,
+    name: raw.companyName ?? raw.name ?? null,
+    industry: raw.industry ?? null,
+    sector: raw.sector ?? null,
+    description: raw.description ?? null,
+    city: raw.city ?? null,
+    country: raw.country ?? null,
+    CEO: raw.ceo ?? null,
+    website: raw.website ?? null,
+    phone: raw.phone ?? null,
+    logoUrl,
+  };
+}
+
+app.get("/api/fmp/profile/:symbol", async (req, res) => {
+  const key = fmpApiKey();
+  if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  const symbol = decodeURIComponent(req.params.symbol);
+  try {
+    const data = await yfCached(`fmp:profile:${symbol}`, 6 * 3600_000, async () => {
+      const url = `${FMP_STABLE_BASE}/profile?${new URLSearchParams({ symbol, apikey: key })}`;
+      const r = await fetch(url);
+      if (!r.ok) throw new Error(`FMP profile HTTP ${r.status}`);
+      const arr = await r.json();
+      if (arr && typeof arr === "object" && !Array.isArray(arr) && (arr["Error Message"] || arr.error)) {
+        throw new Error(String(arr["Error Message"] || arr.error));
+      }
+      const row = Array.isArray(arr) ? arr[0] : arr;
+      if (!row || typeof row !== "object") throw new Error("FMP profile: empty");
+      const mapped = mapFmpProfileRow(row);
+      if (!mapped) throw new Error("FMP profile: map failed");
+      return mapped;
+    });
+    res.json(data);
+  } catch (err) {
+    console.error("[fmp/profile]", symbol, err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
+
+app.get("/api/fmp/quote/:symbol", async (req, res) => {
+  const key = fmpApiKey();
+  if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  const symbol = decodeURIComponent(req.params.symbol);
+  try {
+    const data = await yfCached(`fmp:quote:${symbol}`, 60_000, async () => {
+      const url = `${FMP_STABLE_BASE}/quote?${new URLSearchParams({ symbol, apikey: key })}`;
+      const r = await fetch(url);
+      if (!r.ok) throw new Error(`FMP quote HTTP ${r.status}`);
+      const arr = await r.json();
+      if (arr && typeof arr === "object" && !Array.isArray(arr) && (arr["Error Message"] || arr.error)) {
+        throw new Error(String(arr["Error Message"] || arr.error));
+      }
+      const row = Array.isArray(arr) ? arr[0] : arr;
+      if (!row || typeof row !== "object") throw new Error("FMP quote: empty");
+      const p = Number(row.price);
+      if (!Number.isFinite(p)) throw new Error("FMP quote: invalid price");
+      return { price: p, currency: row.currency ?? null };
+    });
+    res.json(data);
+  } catch (err) {
+    console.error("[fmp/quote]", symbol, err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
+// ── End Financial Modeling Prep ───────────────────────────────────────────────
+
 app.get("/api/analytics/trending", (req, res) => {
   const rows = db.prepare(
     `SELECT ticker, COUNT(*) as views FROM activity_log

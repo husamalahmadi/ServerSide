@@ -2,11 +2,12 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useParams, Link } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
 import { useIsMobile } from "../hooks/useIsMobile.js";
-import { getCompany, getStocks, resolveMarketAndSymbol } from "../data/stocksCatalog.js";
+import { getCompany, getStocks, resolveMarketAndSymbol, fmpSymbolFromResolved } from "../data/stocksCatalog.js";
 import { getLivePrice } from "../services/priceService.js";
 import { getFinancialsCached } from "../services/financialsService.js";
 import { computeValuation } from "../domain/valuation.js";
-import { twelveLogo, twelveProfile } from "../services/twelveData.js";
+import { twelveLogo } from "../services/twelveData.js";
+import { fmpProfile } from "../services/fmpService.js";
 import { translateToArabic } from "../services/translateService.js";
 import { Card } from "../components/Card.jsx";
 import { PillLink } from "../components/PillLink.jsx";
@@ -170,12 +171,14 @@ export default function Stock() {
         const r = await resolveMarketAndSymbol(ticker, market);
         if (!r.ok || !alive) return;
         const symbol = r.symbol;
+        const fmpSym = fmpSymbolFromResolved(r);
         const [logoRes, profileRes] = await Promise.all([
           twelveLogo(symbol),
-          twelveProfile(symbol),
+          fmpSym ? fmpProfile(fmpSym) : Promise.resolve(null),
         ]);
         if (!alive) return;
-        const base = logoRes?.logo_base;
+        const fromFmp = profileRes?.logoUrl && typeof profileRes.logoUrl === "string" ? profileRes.logoUrl : null;
+        const base = fromFmp || logoRes?.logo_base;
         setLogoUrl(base && typeof base === "string" ? base : null);
         setProfile(profileRes && typeof profileRes === "object" ? profileRes : null);
       } catch {

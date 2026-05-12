@@ -1,7 +1,7 @@
 # Render Blueprint: https://render.com/docs/blueprint-spec
 # Native Node (no Docker) — avoids "Dockerfile: no such file" on some Render builds.
-# Set in dashboard: CLIENT_URL, SERVER_URL, SESSION_SECRET, Google OAuth,
-# and Build-time VITE_* (VITE_API_URL = your service HTTPS URL, same as SERVER_URL).
+# Set in dashboard: FMP_API_KEY (quotes + stock profile), CLIENT_URL, SERVER_URL, SESSION_SECRET,
+# Google OAuth, and build-time VITE_* (VITE_API_URL = your API HTTPS URL if the UI is on another host).
 services:
   - type: web
     name: trueprice-api

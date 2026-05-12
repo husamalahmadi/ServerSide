@@ -1,7 +1,7 @@
 ﻿// FILE: client/src/services/priceService.js
-import { resolveMarketAndSymbol } from "../data/stocksCatalog.js";
+import { resolveMarketAndSymbol, fmpSymbolFromResolved } from "../data/stocksCatalog.js";
 import { toNumber } from "../domain/financials.js";
-import { twelvePrice } from "./twelveData.js";
+import { fmpQuote } from "./fmpService.js";
 
 /**
  * Client-side replacement for GET /api/price/:ticker
@@ -10,8 +10,11 @@ export async function getLivePrice({ ticker, market } = {}) {
   const r = await resolveMarketAndSymbol(ticker, market);
   if (!r.ok) throw new Error("Ticker not allowed.");
 
-  const { symbol, currency, market: resolvedMarket, tickerUS, tickerSA } = r;
-  const j = await twelvePrice(symbol);
+  const fmpSym = fmpSymbolFromResolved(r);
+  if (!fmpSym) throw new Error("Ticker not allowed.");
+
+  const { currency, market: resolvedMarket, tickerUS, tickerSA } = r;
+  const j = await fmpQuote(fmpSym);
   const price = toNumber(j?.price) ?? 0;
 
   return {

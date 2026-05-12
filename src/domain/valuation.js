@@ -1,19 +1,19 @@
 // FILE: client/src/domain/valuation.js
-import { resolveMarketAndSymbol, CURRENCY_BY_MARKET } from "../data/stocksCatalog.js";
+import { resolveMarketAndSymbol, CURRENCY_BY_MARKET, fmpSymbolFromResolved } from "../data/stocksCatalog.js";
 import { coalesce, toNumber } from "./financials.js";
 import {
-  twelvePrice,
   twelveStatistics,
   twelveBalanceSheet,
   twelveIncomeStatement,
 } from "../services/twelveData.js";
+import { fmpQuote } from "../services/fmpService.js";
 import { getTasiCompanyData, tasiToValuationFormat } from "../services/tasiDataService.js";
 import { getSp500CompanyData, sp500ToValuationFormat } from "../services/sp500DataService.js";
 
 /**
  * Client-side replacement for GET /api/valuation/:ticker.
- * - TASI (SA): uses local tasi_financial_data.json for financials; twelvePrice for live price.
- * - US (S&P 500): uses local sp500_financial_data.json for financials; twelvePrice for live price.
+ * - TASI (SA): uses local tasi_financial_data.json for financials; FMP quote for live price.
+ * - US (S&P 500): uses local sp500_financial_data.json for financials; FMP quote for live price.
  * - Falls back to Twelve Data API when local data is empty/incomplete.
  * Caller can still cache the result in sessionStorage (as the UI already does).
  */
@@ -22,6 +22,7 @@ export async function computeValuation({ ticker, market } = {}) {
   if (!r.ok) throw new Error("Ticker not allowed.");
 
   const { market: resolvedMarket, symbol, tickerUS, tickerSA } = r;
+  const fmpSym = fmpSymbolFromResolved(r);
 
   let statsJson = {};
   let bsJson = {};
@@ -73,7 +74,7 @@ export async function computeValuation({ ticker, market } = {}) {
     ]);
   }
 
-  const priceJson = await twelvePrice(symbol).catch(() => ({}));
+  const priceJson = fmpSym ? await fmpQuote(fmpSym).catch(() => ({})) : {};
 
   const stats = statsJson?.statistics || statsJson || {};
   const price = toNumber(priceJson?.price) ?? 0;

@@ -136,3 +136,9 @@ export async function resolveMarketAndSymbol(rawTicker, requestedMarket) {
 
   return { ok: true, market, symbol, tickerUS, tickerSA, currency };
 }
+
+/** Financial Modeling Prep `symbol` query: US uses ticker as-is; Tadawul (TASI) uses `{ticker}.SR`. */
+export function fmpSymbolFromResolved(r) {
+  if (!r?.ok) return null;
+  return r.market === "us" ? r.tickerUS : `${r.tickerSA}.SR`;
+}
