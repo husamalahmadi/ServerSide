@@ -5,98 +5,15 @@
  */
 
 import { publicUrl } from "../utils/publicUrl.js";
+import { normalizeCompanyFinancialRecord } from "../domain/companyFinancialNormalize.js";
 
 const TASI_DATA_URL = publicUrl("data/tasi_financial_data.json");
 
 let _tasiPromise = null;
 
-/** Legacy shape from tasi_all_financial_data.json (flat data.* series). */
-function isLegacyTasiCompanyShape(data) {
-  if (!data) return false;
-  if (data.statistics?.statistics || data.income_statement?.income_statement) return false;
-  return true;
-}
-
-/**
- * Converts tasi_financial_data.json (industries + Twelve-style endpoints) into the same
- * company shape as tasi_all_financial_data.json so existing transforms stay unchanged.
- */
-function normalizeTasiCompanyRecord(c) {
-  if (!c?.data || isLegacyTasiCompanyShape(c.data)) return c;
-
-  const d = c.data;
-  const st = d.statistics?.statistics ?? d.statistics;
-  const vm = st?.valuations_metrics || {};
-  const ss = st?.stock_statistics || {};
-  const fin = st?.financials || {};
-  const bs = d.balance_sheet?.balance_sheet || [];
-  const isRows = d.income_statement?.income_statement || [];
-  const cfRows = d.cash_flow?.cash_flow || [];
-
-  const bs0 = bs[0] || {};
-  const ca = bs0.assets?.current_assets || {};
-  const cl = bs0.liabilities?.current_liabilities || {};
-  const ncl = bs0.liabilities?.non_current_liabilities || {};
-
-  const sales = isRows.map((r) => ({
-    fiscal_date: r.fiscal_date,
-    year: r.year,
-    value: r.sales,
-  }));
-  const gross_profit = isRows.map((r) => ({
-    fiscal_date: r.fiscal_date,
-    year: r.year,
-    value: r.gross_profit,
-  }));
-  const operating_income = isRows.map((r) => ({
-    fiscal_date: r.fiscal_date,
-    year: r.year,
-    value: r.operating_income,
-  }));
-  const net_income = isRows.map((r) => ({
-    fiscal_date: r.fiscal_date,
-    year: r.year,
-    value: r.net_income,
-  }));
-  const equity = bs.map((row) => ({
-    fiscal_date: row.fiscal_date,
-    year: row.year,
-    value: row.shareholders_equity?.total_shareholders_equity,
-  }));
-  const free_cash_flow = cfRows.map((r) => ({
-    fiscal_date: r.fiscal_date,
-    year: r.year,
-    value: r.free_cash_flow,
-  }));
-
-  return {
-    ...c,
-    ticker: c.ticker,
-    company: c.company_name || c.company,
-    industry: c.industry,
-    symbol: c.symbol || c.ticker_full || c.ticker,
-    data: {
-      enterprise_value: vm.enterprise_value,
-      market_capitalization: vm.market_capitalization,
-      forward_pe: vm.forward_pe,
-      price_to_sales_ttm: vm.price_to_sales_ttm,
-      outstanding_common_stocks: ss.shares_outstanding,
-      long_term_debt: ncl.long_term_debt ?? fin.total_debt_mrq,
-      short_term_debt: cl.short_term_debt,
-      cash_and_cash_equivalents: ca.cash_and_cash_equivalents ?? fin.total_cash_mrq,
-      sales,
-      gross_profit,
-      operating_income,
-      net_income,
-      equity,
-      free_cash_flow,
-    },
-  };
-}
-
 function companiesFromTasiJson(json) {
   if (Array.isArray(json?.companies)) {
-    return json.companies.map(normalizeTasiCompanyRecord);
+    return json.companies.map(normalizeCompanyFinancialRecord);
   }
   const out = [];
   const industries = json?.industries;
@@ -105,7 +22,7 @@ function companiesFromTasiJson(json) {
       const cmap = ind?.companies;
       if (!cmap || typeof cmap !== "object") continue;
       for (const c of Object.values(cmap)) {
-        out.push(normalizeTasiCompanyRecord(c));
+        out.push(normalizeCompanyFinancialRecord(c));
       }
     }
   }
