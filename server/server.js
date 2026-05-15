@@ -574,6 +574,16 @@ app.get("/api/feed", requireAuth, (req, res) => {
 // ── Financial Modeling Prep (stable API) ─────────────────────────────────────
 const FMP_STABLE_BASE = "https://financialmodelingprep.com/stable";
 
+const _fmpCache = new Map();
+function cachedFmp(key, ttlMs, fn) {
+  const hit = _fmpCache.get(key);
+  if (hit && Date.now() - hit.ts < ttlMs) return Promise.resolve(hit.data);
+  return fn().then((data) => {
+    _fmpCache.set(key, { data, ts: Date.now() });
+    return data;
+  });
+}
+
 function fmpApiKey() {
   const k = (process.env.FMP_API_KEY || "").trim();
   return k || null;
@@ -610,7 +620,7 @@ app.get("/api/fmp/profile/:symbol", async (req, res) => {
   if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
   const symbol = decodeURIComponent(req.params.symbol);
   try {
-    const data = await yfCached(`fmp:profile:${symbol}`, 6 * 3600_000, async () => {
+    const data = await cachedFmp(`fmp:profile:${symbol}`, 6 * 3600_000, async () => {
       const url = `${FMP_STABLE_BASE}/profile?${new URLSearchParams({ symbol, apikey: key })}`;
       const r = await fetch(url);
       if (!r.ok) throw new Error(`FMP profile HTTP ${r.status}`);
@@ -636,7 +646,7 @@ app.get("/api/fmp/quote/:symbol", async (req, res) => {
   if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
   const symbol = decodeURIComponent(req.params.symbol);
   try {
-    const data = await yfCached(`fmp:quote:${symbol}`, 60_000, async () => {
+    const data = await cachedFmp(`fmp:quote:${symbol}`, 60_000, async () => {
       const url = `${FMP_STABLE_BASE}/quote?${new URLSearchParams({ symbol, apikey: key })}`;
       const r = await fetch(url);
       if (!r.ok) throw new Error(`FMP quote HTTP ${r.status}`);
