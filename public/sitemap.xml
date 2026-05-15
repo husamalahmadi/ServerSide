@@ -156,6 +156,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://trueprice.cash/stock/1323</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://trueprice.cash/stock/1810</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -197,6 +202,11 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/2001</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/2002</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -396,6 +406,16 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://trueprice.cash/stock/2287</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/2288</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://trueprice.cash/stock/2290</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -452,6 +472,16 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/2382</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/3001</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/3002</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -576,6 +606,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://trueprice.cash/stock/4010</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://trueprice.cash/stock/4011</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -611,7 +646,22 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://trueprice.cash/stock/4018</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/4019</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://trueprice.cash/stock/4020</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/4021</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -726,6 +776,21 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://trueprice.cash/stock/4145</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/4146</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/4148</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://trueprice.cash/stock/4150</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -786,6 +851,16 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://trueprice.cash/stock/4193</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/4194</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://trueprice.cash/stock/4200</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -832,6 +907,11 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/4263</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/4265</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -892,6 +972,11 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/4324</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/4325</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -986,7 +1071,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/4350</loc>
+    <loc>https://trueprice.cash/stock/4701</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1042,6 +1127,11 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/6017</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/6019</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1121,6 +1211,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://trueprice.cash/stock/7211</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://trueprice.cash/stock/8010</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -1161,7 +1256,17 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://trueprice.cash/stock/8080</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://trueprice.cash/stock/8100</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/8110</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1226,6 +1331,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://trueprice.cash/stock/8270</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://trueprice.cash/stock/8280</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -1246,7 +1356,617 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://trueprice.cash/stock/8312</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://trueprice.cash/stock/8313</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9300</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9510</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9511</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9512</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9513</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9514</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9515</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9516</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9517</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9518</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9519</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9520</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9521</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9522</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9523</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9524</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9525</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9526</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9527</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9528</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9529</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9530</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9531</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9532</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9533</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9534</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9535</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9536</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9537</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9538</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9539</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9540</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9541</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9542</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9543</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9544</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9545</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9546</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9547</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9548</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9549</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9550</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9551</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9552</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9553</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9555</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9556</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9557</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9558</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9559</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9560</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9561</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9562</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9563</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9564</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9565</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9566</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9567</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9568</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9569</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9570</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9571</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9572</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9574</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9575</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9576</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9577</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9578</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9579</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9580</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9581</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9583</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9584</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9585</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9586</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9587</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9588</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9589</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9590</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9591</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9592</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9593</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9594</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9595</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9596</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9597</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9598</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9599</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9600</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9601</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9602</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9603</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9604</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9605</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9606</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9607</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9608</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9610</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9611</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9612</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9613</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9614</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9615</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9617</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9618</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9619</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9620</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9621</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9622</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9624</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9625</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9626</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9627</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9628</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9630</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9631</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9635</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9637</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9649</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9650</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/stock/9651</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1296,16 +2016,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/ABR.PR.E</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/ABR.PR.F</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/ABT</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -1342,11 +2052,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/ACR</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/ACR-C</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1421,17 +2126,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/AHL.PR.F</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/AHT</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/AHT.PR.D</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1461,7 +2156,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/AKO.B</loc>
+    <loc>https://trueprice.cash/stock/AKO-B</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1522,11 +2217,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/AMGN</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/AMH.PR.H</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1641,42 +2331,12 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/ASB.PR.E</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/ASB.PR.F</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/ASH</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://trueprice.cash/stock/ASR</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/ATH-E</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/ATH.PR.A</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/ATH.PR.B</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/ATH.PR.D</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1731,11 +2391,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/AXIA-</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/AXON</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -1767,16 +2422,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/BAC</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/BAC.PR.Q</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/BAC.PR.S</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1846,7 +2491,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/BF.B</loc>
+    <loc>https://trueprice.cash/stock/BF-B</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1881,11 +2526,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/BHR.PR.D</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/BIIB</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -1896,7 +2536,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/BIO.B</loc>
+    <loc>https://trueprice.cash/stock/BIO-B</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1936,16 +2576,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/BOH-B</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/BOH.PR.A</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/BR</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -1956,7 +2586,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/BRK.B</loc>
+    <loc>https://trueprice.cash/stock/BRK-B</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -1972,11 +2602,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/BSX</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/BUDA</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -2196,16 +2821,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/CHMI.PR.A</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/CHMI.PR.B</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/CHPT</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -2257,16 +2872,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/CLDT</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/CLDT-A</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/CLDT.PR.A</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -2486,11 +3091,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/CTA.PR.B</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/CTAS</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -2591,11 +3191,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/DCOM-</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/DD</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -2672,11 +3267,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/DLR</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/DLR.PR.L</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -2826,11 +3416,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/EFC.PR.D</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/EFX</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -2936,16 +3521,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/EPR.PR.C</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/EPR.PR.E</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/EPRT</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -2992,11 +3567,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/ESTC</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/ET-I</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -3102,11 +3672,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/FBRT</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/FBRT.PR.E</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -3266,16 +3831,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/GAB.PR.H</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/GAB.PR.K</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/GAP</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -3386,16 +3941,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/GNL-D</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/GNL-E</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/GNRC</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -3436,11 +3981,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/GRBK.PR.A</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/GRMN</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -3452,16 +3992,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/GS</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/GS.PR.A</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/GS.PR.D</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -3861,21 +4391,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/JPM.PR.K</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/JPM.PR.L</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/JPM.PR.M</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/KB</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -4036,11 +4551,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/LFT.PR.A</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/LGL</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -4181,11 +4691,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/MAIR</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/MAN</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -4281,11 +4786,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/MFA-C</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/MFC</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -4361,12 +4861,12 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/MOG.A</loc>
+    <loc>https://trueprice.cash/stock/MOG-A</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/MOG.B</loc>
+    <loc>https://trueprice.cash/stock/MOG-B</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -4521,11 +5021,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/NCV.PR.A</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/NDAQ</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -4537,21 +5032,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/NEE</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/NEE-S</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/NEE-T</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/NEE-V</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -4587,21 +5067,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/NKE</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/NLY.PR.F</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/NLY.PR.G</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/NLY.PR.I</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -4657,16 +5122,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/NSA</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/NSA-B</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/NSA.PR.A</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -4846,7 +5301,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/PBR.A</loc>
+    <loc>https://trueprice.cash/stock/PBR-A</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -4861,22 +5316,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/PCG.PR.X</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/PDM</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/PEB.PR.G</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/PEB.PR.H</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -4937,11 +5377,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/PINE</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/PINE-A</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -5071,37 +5506,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/PSA.PR.O</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/PSA.PR.P</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/PSA.PR.Q</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/PSA.PR.R</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/PSBD</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/PSEC-A</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/PSEC.PR.A</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -5196,16 +5601,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/RC.PR.C</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/RC.PR.E</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/RCL</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -5232,11 +5627,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/RITM</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/RITM-C</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -5331,21 +5721,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/RWT-A</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/RWT.PR.A</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/RWTRP</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/RYAM</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -5371,16 +5746,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/SB.PR.C</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/SB.PR.D</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/SBAC</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -5402,11 +5767,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/SCHW</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/SCHW.PR.D</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -5681,16 +6041,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/T.PR.A</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/T.PR.C</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/TAC</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -5856,11 +6206,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/TRTN-D</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/TRU</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -5982,11 +6327,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/UMH</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/UMH.PR.D</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -6156,11 +6496,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/stock/WAL.PR.A</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://trueprice.cash/stock/WAT</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -6172,11 +6507,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/WBS</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/WBS.PR.F</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -6332,16 +6662,6 @@
   </url>
   <url>
     <loc>https://trueprice.cash/stock/XPER</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/XRN-A</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trueprice.cash/stock/XRN-B</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
