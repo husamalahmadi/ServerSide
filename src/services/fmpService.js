@@ -30,3 +30,15 @@ export async function fmpProfile(fmpSymbol) {
     return null;
   }
 }
+
+/**
+ * Latest annual ratios via Express `/api/fmp/ratios/:symbol` (FMP stable ratios).
+ * @returns {Promise<{ priceToEarningsRatio?: number|null, priceToSalesRatio?: number|null }>}
+ */
+export async function fmpRatios(fmpSymbol) {
+  const url = `${getApiUrl()}/api/fmp/ratios/${encodeURIComponent(fmpSymbol)}`;
+  const res = await fetch(url, { cache: "no-store", credentials: "include" });
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(json?.error || `HTTP ${res.status}`);
+  return json;
+}

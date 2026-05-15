@@ -666,6 +666,38 @@ app.get("/api/fmp/quote/:symbol", async (req, res) => {
     res.status(502).json({ error: err.message });
   }
 });
+
+app.get("/api/fmp/ratios/:symbol", async (req, res) => {
+  const key = fmpApiKey();
+  if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  const symbol = decodeURIComponent(req.params.symbol);
+  try {
+    const data = await cachedFmp(`fmp:ratios:${symbol}`, 6 * 3600_000, async () => {
+      const url = `${FMP_STABLE_BASE}/ratios?${new URLSearchParams({ symbol, apikey: key })}`;
+      const r = await fetch(url);
+      if (!r.ok) throw new Error(`FMP ratios HTTP ${r.status}`);
+      const arr = await r.json();
+      if (arr && typeof arr === "object" && !Array.isArray(arr) && (arr["Error Message"] || arr.error)) {
+        throw new Error(String(arr["Error Message"] || arr.error));
+      }
+      if (!Array.isArray(arr) || !arr.length) throw new Error("FMP ratios: empty");
+      const row = arr[0];
+      const pe = Number(row.priceToEarningsRatio);
+      const ps = Number(row.priceToSalesRatio);
+      return {
+        symbol: row.symbol ?? symbol,
+        date: row.date ?? null,
+        fiscalYear: row.fiscalYear ?? null,
+        priceToEarningsRatio: Number.isFinite(pe) ? pe : null,
+        priceToSalesRatio: Number.isFinite(ps) ? ps : null,
+      };
+    });
+    res.json(data);
+  } catch (err) {
+    console.error("[fmp/ratios]", symbol, err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
 // ── End Financial Modeling Prep ───────────────────────────────────────────────
 
 app.get("/api/analytics/trending", (req, res) => {

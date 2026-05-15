@@ -1,14 +1,14 @@
 // FILE: client/src/domain/valuation.js
 import { resolveMarketAndSymbol, CURRENCY_BY_MARKET, fmpSymbolFromResolved } from "../data/stocksCatalog.js";
 import { coalesce, toNumber } from "./financials.js";
-import { fmpQuote } from "../services/fmpService.js";
+import { fmpQuote, fmpRatios } from "../services/fmpService.js";
 import { getTasiCompanyData, tasiToValuationFormat } from "../services/tasiDataService.js";
 import { getSp500CompanyData, sp500ToValuationFormat } from "../services/sp500DataService.js";
 
 /**
  * Client-side replacement for GET /api/valuation/:ticker.
- * - TASI (SA): uses local tasi_financial_data.json for financials; FMP quote for live price.
- * - US (S&P 500): uses local sp500_financial_data.json for financials; FMP quote for live price.
+ * - TASI (SA): uses local tasi_financial_data.json for financials; FMP quote + ratios for live inputs.
+ * - US (S&P 500): uses local sp500_financial_data.json for financials; FMP quote + ratios for live inputs.
  * Caller can still cache the result in sessionStorage (as the UI already does).
  */
 export async function computeValuation({ ticker, market } = {}) {
@@ -60,7 +60,9 @@ export async function computeValuation({ ticker, market } = {}) {
     }
   }
 
-  const priceJson = fmpSym ? await fmpQuote(fmpSym).catch(() => ({})) : {};
+  const [priceJson, ratiosJson] = fmpSym
+    ? await Promise.all([fmpQuote(fmpSym).catch(() => ({})), fmpRatios(fmpSym).catch(() => ({}))])
+    : [{}, {}];
 
   const stats = statsJson?.statistics || statsJson || {};
   const price = toNumber(priceJson?.price) ?? 0;
@@ -120,10 +122,27 @@ export async function computeValuation({ ticker, market } = {}) {
 
   const enterpriseValue = evFromStats || Math.max(0, marketCap + totalDebtApprox - cashEq);
 
-  const forwardPE = coalesce(stats?.valuations_metrics?.forward_pe);
   const netIncome = coalesce(is0?.net_income, is0?.net_income_loss);
-  const priceToSales = coalesce(stats?.valuations_metrics?.price_to_sales_ttm);
   const sales = coalesce(is0?.sales, is0?.revenue, is0?.total_revenue);
+  const eps = coalesce(is0?.eps);
+
+  const peFromFmp = toNumber(ratiosJson?.priceToEarningsRatio);
+  const psFromFmp = toNumber(ratiosJson?.priceToSalesRatio);
+  const peFromLocal = coalesce(stats?.valuations_metrics?.forward_pe, stats?.valuations_metrics?.trailing_pe);
+  const psFromLocal = coalesce(stats?.valuations_metrics?.price_to_sales_ttm);
+  const peDerived = price > 0 && eps > 0 ? price / eps : 0;
+  const psDerived = price > 0 && sharesOutstanding > 0 && sales > 0 ? (price * sharesOutstanding) / sales : 0;
+
+  function pickPositiveRatio(...candidates) {
+    for (const v of candidates) {
+      const n = toNumber(v);
+      if (n != null && n > 0) return n;
+    }
+    return 0;
+  }
+
+  const forwardPE = pickPositiveRatio(peFromFmp, peFromLocal, peDerived);
+  const priceToSales = pickPositiveRatio(psFromFmp, psFromLocal, psDerived);
 
   const totalEquityRaw =
     bs0?.shareholders_equity?.total_shareholders_equity ??
