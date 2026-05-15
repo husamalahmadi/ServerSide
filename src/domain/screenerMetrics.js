@@ -8,8 +8,8 @@ function latestRow(rows) {
   return rows[0];
 }
 
-/** Twelve Data / yfinance statistics block. */
-function metricsFromTwelveData(c) {
+/** Legacy statistics block (valuations_metrics on company.data). */
+function metricsFromLegacyStatistics(c) {
   const st = c?.data?.statistics?.statistics || {};
   const vm = st?.valuations_metrics || {};
   const fin = st?.financials || {};
@@ -77,7 +77,7 @@ export function screenerRowFromCompany(c, market, sector) {
   const ticker = market === "us" ? tickerRaw.toUpperCase() : tickerRaw;
   if (!ticker) return null;
 
-  const metrics = isFmpCompanyData(c?.data) ? metricsFromFmp(c) : metricsFromTwelveData(c);
+  const metrics = isFmpCompanyData(c?.data) ? metricsFromFmp(c) : metricsFromLegacyStatistics(c);
 
   return {
     ticker,

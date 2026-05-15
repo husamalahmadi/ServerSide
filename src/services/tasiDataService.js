@@ -1,7 +1,7 @@
 // FILE: client/src/services/tasiDataService.js
 /**
  * Loads TASI financial data from local tasi_financial_data.json.
- * Used instead of Twelve Data API for SA (TASI) companies - except stock price.
+ * Loads SA (TASI) company financials from local JSON; live price via FMP.
  */
 
 import { publicUrl } from "../utils/publicUrl.js";
@@ -126,7 +126,7 @@ export function tasiToFinancialsFormat(companyData) {
 }
 
 /**
- * Transform TASI data into format expected by valuation.js (same structure as Twelve Data API).
+ * Transform TASI data into format expected by valuation.js.
  * { stats, balance_sheet, income_statement } for first/latest year
  */
 export function tasiToValuationFormat(companyData) {

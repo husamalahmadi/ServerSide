@@ -9,7 +9,7 @@ function periodFromRow(r) {
   return { fiscal_date, year };
 }
 
-/** Unwrap statement rows from Twelve-style `{ meta, income_statement: [] }` or a bare FMP array. */
+/** Unwrap statement rows from nested `{ meta, income_statement: [] }` or a bare FMP array. */
 export function statementRows(block) {
   if (!block) return [];
   if (Array.isArray(block)) return block;
@@ -26,7 +26,7 @@ function hasFlatNormalizedSeries(d) {
 }
 
 /**
- * Normalizes company.data from Twelve, FMP, or hybrid shapes into flat series
+ * Normalizes company.data from nested or FMP shapes into flat series
  * expected by tasiToFinancialsFormat / sp500ToFinancialsFormat.
  */
 export function normalizeCompanyFinancialRecord(c) {

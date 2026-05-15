@@ -2,7 +2,6 @@
 import { getCached, setCached, delCached } from "../cache/browserCache.js";
 import { resolveMarketAndSymbol } from "../data/stocksCatalog.js";
 import { mergeFinancials } from "../domain/financials.js";
-import { twelveIncomeStatement, twelveBalanceSheet, twelveCashFlow } from "./twelveData.js";
 import { getTasiCompanyData, tasiToFinancialsFormat } from "./tasiDataService.js";
 import { getSp500CompanyData, sp500ToFinancialsFormat } from "./sp500DataService.js";
 
@@ -12,7 +11,6 @@ const DAYS_30_MS = 30 * 24 * 60 * 60 * 1000;
  * Client-side replacement for GET /api/financials/:ticker.
  * - TASI (SA): uses local tasi_financial_data.json (no API).
  * - US (S&P 500): uses local sp500_financial_data.json (no API).
- * - Falls back to Twelve Data API when local data is empty.
  * - Only caches when years.length > 0 (same as server behavior).
  */
 export async function getFinancialsCached({
@@ -57,21 +55,7 @@ export async function getFinancialsCached({
   }
 
   if (!income?.length && !balance?.length && !cash?.length) {
-    const symbol = r.symbol;
-    [income, balance, cash] = await Promise.all([
-      twelveIncomeStatement(symbol, { period: "annual" }).catch((e) => {
-        warnings.push(`income_statement: ${e.message}`);
-        return null;
-      }),
-      twelveBalanceSheet(symbol, { period: "annual" }).catch((e) => {
-        warnings.push(`balance_sheet: ${e.message}`);
-        return null;
-      }),
-      twelveCashFlow(symbol, { period: "annual" }).catch((e) => {
-        warnings.push(`cash_flow: ${e.message}`);
-        return null;
-      }),
-    ]);
+    warnings.push("no_local_financial_data");
   }
 
   const merged = mergeFinancials({

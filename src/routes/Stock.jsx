@@ -6,7 +6,6 @@ import { getCompany, getStocks, resolveMarketAndSymbol, fmpSymbolFromResolved } 
 import { getLivePrice } from "../services/priceService.js";
 import { getFinancialsCached } from "../services/financialsService.js";
 import { computeValuation } from "../domain/valuation.js";
-import { twelveLogo } from "../services/twelveData.js";
 import { fmpProfile } from "../services/fmpService.js";
 import { translateToArabic } from "../services/translateService.js";
 import { Card } from "../components/Card.jsx";
@@ -89,7 +88,7 @@ export default function Stock() {
 
   const reportDate = useMemo(() => new Date().toLocaleDateString(), []);
 
-  // Company info: immediate (no TwelveData)
+  // Company info: FMP profile (logo + metadata)
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -170,16 +169,12 @@ export default function Stock() {
       try {
         const r = await resolveMarketAndSymbol(ticker, market);
         if (!r.ok || !alive) return;
-        const symbol = r.symbol;
         const fmpSym = fmpSymbolFromResolved(r);
-        const [logoRes, profileRes] = await Promise.all([
-          twelveLogo(symbol),
-          fmpSym ? fmpProfile(fmpSym) : Promise.resolve(null),
-        ]);
+        const profileRes = fmpSym ? await fmpProfile(fmpSym) : null;
         if (!alive) return;
-        const fromFmp = profileRes?.logoUrl && typeof profileRes.logoUrl === "string" ? profileRes.logoUrl : null;
-        const base = fromFmp || logoRes?.logo_base;
-        setLogoUrl(base && typeof base === "string" ? base : null);
+        const logo =
+          profileRes?.logoUrl && typeof profileRes.logoUrl === "string" ? profileRes.logoUrl : null;
+        setLogoUrl(logo);
         setProfile(profileRes && typeof profileRes === "object" ? profileRes : null);
       } catch {
         if (!alive) return;

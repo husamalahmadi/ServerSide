@@ -32,7 +32,7 @@ Understanding this explains blank pages (wrong `dist` folder), auth issues (API 
 1. Push this repo to GitHub (already configured for [ServerSide](https://github.com/husamalahmadi/ServerSide)).
 2. In [Vercel](https://vercel.com), **Add New Project** → import **ServerSide**.
 3. Vercel reads `vercel.json` (`dist` as the build output, SPA rewrites for React Router). Root directory: **.** (repo root).
-4. Under **Environment Variables**, add the same keys as in [`.env.example`](.env.example). At minimum set **`VITE_TWELVEDATA_API_KEY`**. Set **`VITE_API_URL`** to your deployed API base URL (not `localhost`) if you use auth, comments, or watchlists.
+4. Under **Environment Variables**, add the same keys as in [`.env.example`](.env.example). Set **`VITE_API_URL`** to your deployed API base URL (not `localhost`) if you use auth, comments, or watchlists.
 5. Deploy. After the first deploy, add your Vercel URL to Google OAuth **Authorized JavaScript origins** and **redirect URIs** if you use Google sign-in through your API.
 
 The Express API in `server/` is not run by Vercel; host it separately (e.g. Railway, Render) and point `VITE_API_URL` at it.
@@ -66,7 +66,7 @@ For Render + SQLite durability, mount a persistent disk and set `DB_PATH=/var/da
 
 ### 3. Docker build arguments (optional but recommended)
 
-When building the image, pass the same **`VITE_*`** values you use on Cloudflare (e.g. `VITE_TWELVEDATA_API_KEY`) and set **`VITE_API_URL`** to the **same public URL as `SERVER_URL`**, so the copy of the app inside the container stays consistent. **Cloudflare** still needs its own env vars for the copy of the site users load from Pages.
+When building the image, pass the same **`VITE_*`** values you use on Cloudflare and set **`VITE_API_URL`** to the **same public URL as `SERVER_URL`**, so the copy of the app inside the container stays consistent. **Cloudflare** still needs its own env vars for the copy of the site users load from Pages. Set **`FMP_API_KEY`** on the API host for live quotes and profiles.
 
 ### 4. Google Cloud Console (OAuth client)
 
@@ -96,7 +96,7 @@ After the API is live and one of the above is set, Google sign-in will use your 
    - **Root directory:** `/` (repo root).
    - Optional: set **Environment variable** `NODE_VERSION` = `20` if the build fails on an old Node image.
 
-4. **Environment variables** — **Settings → Environment variables** (or add during setup). Add the same keys as [`.env.example`](.env.example). At minimum **`VITE_TWELVEDATA_API_KEY`**. Set **`VITE_API_URL`** to your deployed API base URL (HTTPS) if you use auth, comments, or watchlists — not `localhost`.
+4. **Environment variables** — **Settings → Environment variables** (or add during setup). Add the same keys as [`.env.example`](.env.example). Set **`VITE_API_URL`** to your deployed API base URL (HTTPS) if you use auth, comments, or watchlists — not `localhost`.
 
 5. **Deploy** — Save and deploy. The file [`public/_redirects`](public/_redirects) is copied into `dist/` and tells Pages to serve `index.html` for client-side routes (React Router).
 

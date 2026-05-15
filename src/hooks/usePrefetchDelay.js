@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 /**
- * Delay before starting TwelveData fetches.
+ * Delay before starting deferred financial/valuation fetches.
  * resetToken (ticker) restarts timer when user navigates to a new stock.
  *
  * @param {number} delayMs

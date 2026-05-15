@@ -8,12 +8,6 @@ function get(key, defaultValue = "") {
   return v;
 }
 
-export function getTwelveDataApiKey() {
-  const k = get("VITE_TWELVEDATA_API_KEY");
-  if (!k) throw new Error("Missing VITE_TWELVEDATA_API_KEY in .env");
-  return k;
-}
-
 export function getBloggerBlogId() {
   const id = get("VITE_BLOGGER_BLOG_ID");
   if (!id) throw new Error("Missing VITE_BLOGGER_BLOG_ID in .env");

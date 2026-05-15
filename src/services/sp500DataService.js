@@ -1,7 +1,7 @@
 // FILE: client/src/services/sp500DataService.js
 /**
  * Loads S&P 500 financial data from local sp500_financial_data.json.
- * Used instead of Twelve Data API for US (S&P 500) companies - except stock price.
+ * Loads US (S&P 500) company financials from local JSON; live price via FMP.
  */
 
 import { publicUrl } from "../utils/publicUrl.js";
@@ -126,7 +126,7 @@ export function sp500ToFinancialsFormat(companyData) {
 }
 
 /**
- * Transform S&P 500 data into format expected by valuation.js (same structure as Twelve Data API).
+ * Transform S&P 500 data into format expected by valuation.js.
  * { stats, balance_sheet, income_statement } for first/latest year
  */
 export function sp500ToValuationFormat(companyData) {
