@@ -23,7 +23,7 @@
       "Company": "CPI Aerostructures Inc."
     },
     {
-      "Ticker": "MOG.B",
+      "Ticker": "MOG-B",
       "Company": "Moog Inc."
     },
     {
@@ -31,7 +31,7 @@
       "Company": "MDA Space Ltd."
     },
     {
-      "Ticker": "MOG.A",
+      "Ticker": "MOG-A",
       "Company": "Moog Inc."
     },
     {
@@ -47,10 +47,6 @@
     {
       "Ticker": "ENFY",
       "Company": "Enlightify Inc."
-    },
-    {
-      "Ticker": "CTA.PR.B",
-      "Company": "EI du Pont de Nemours & Co"
     }
   ],
   "Airports & Air Services": [
@@ -97,10 +93,6 @@
   ],
   "Asset Management": [
     {
-      "Ticker": "NCV.PR.A",
-      "Company": "AllianzGI Convertible & Income Fund"
-    },
-    {
       "Ticker": "NCDL",
       "Company": "Nuveen Churchill Direct Lending Corp."
     },
@@ -125,16 +117,8 @@
       "Company": "Acadian Asset Management Inc."
     },
     {
-      "Ticker": "GAB.PR.H",
-      "Company": "Gabelli Equity Trust Inc"
-    },
-    {
       "Ticker": "FSK",
       "Company": "FS KKR Capital Corp."
-    },
-    {
-      "Ticker": "PSEC.PR.A",
-      "Company": "Prospect Capital Corporation"
     },
     {
       "Ticker": "BUR",
@@ -143,14 +127,6 @@
     {
       "Ticker": "CCID",
       "Company": "Carlyle Credit Income Fund"
-    },
-    {
-      "Ticker": "GAB.PR.K",
-      "Company": "Gabelli Equity Trust Inc"
-    },
-    {
-      "Ticker": "PSEC-A",
-      "Company": "Prospect Capital Corporation 5."
     }
   ],
   "Auto & Truck Dealerships": [
@@ -201,32 +177,12 @@
   ],
   "Banks - Diversified": [
     {
-      "Ticker": "BAC.PR.Q",
-      "Company": "Bank of America Corporation Dep"
-    },
-    {
-      "Ticker": "JPM.PR.L",
-      "Company": "JPMorgan Chase & Co."
-    },
-    {
-      "Ticker": "JPM.PR.M",
-      "Company": "JPMorgan Chase & Co."
-    },
-    {
-      "Ticker": "JPM.PR.K",
-      "Company": "JPMorgan Chase & Co."
-    },
-    {
       "Ticker": "BBVA",
       "Company": "Banco Bilbao Vizcaya Argentaria, S.A."
     },
     {
       "Ticker": "BCS",
       "Company": "Barclays PLC Sponsored ADR"
-    },
-    {
-      "Ticker": "BAC.PR.S",
-      "Company": "Bank of America Corporation"
     }
   ],
   "Banks - Regional": [
@@ -251,10 +207,6 @@
       "Company": "Equity Bancshares Inc."
     },
     {
-      "Ticker": "WBS.PR.F",
-      "Company": "Webster Financial Corp"
-    },
-    {
       "Ticker": "KB",
       "Company": "KB Financial Group Inc. - Depositary Receipt (Common Stock)"
     },
@@ -275,32 +227,16 @@
       "Company": "First BanCorp Puerto Rico"
     },
     {
-      "Ticker": "WAL.PR.A",
-      "Company": "Western Alliance Bancorporation"
-    },
-    {
       "Ticker": "BRBS",
       "Company": "Blue Ridge Bankshares Inc."
-    },
-    {
-      "Ticker": "DCOM-",
-      "Company": "Dime Community Bancshares, Inc."
     },
     {
       "Ticker": "ASB",
       "Company": "Associated Banc-Corp"
     },
     {
-      "Ticker": "ASB.PR.F",
-      "Company": "Associated Banc-Corp"
-    },
-    {
       "Ticker": "WAL",
       "Company": "Western Alliance Bancorporation"
-    },
-    {
-      "Ticker": "BOH.PR.A",
-      "Company": "Bank of Hawaii Corporation Depo"
     },
     {
       "Ticker": "SHG",
@@ -321,14 +257,6 @@
     {
       "Ticker": "SFBS",
       "Company": "ServisFirst Bancshares Inc."
-    },
-    {
-      "Ticker": "ASB.PR.E",
-      "Company": "Associated Banc-Corp"
-    },
-    {
-      "Ticker": "BOH-B",
-      "Company": "Bank of Hawaii Corporation"
     }
   ],
   "Beverages - Non-Alcoholic": [
@@ -337,12 +265,8 @@
       "Company": "Coca-Cola FEMSA S.A.B. de C.V. ADR"
     },
     {
-      "Ticker": "AKO.B",
+      "Ticker": "AKO-B",
       "Company": "Embotelladora Andina S.A. ADR"
-    },
-    {
-      "Ticker": "BUDA",
-      "Company": "Buda Juice, Inc."
     }
   ],
   "Biotechnology": [
@@ -379,10 +303,6 @@
   ],
   "Building Products & Equipment": [
     {
-      "Ticker": "MAIR",
-      "Company": "Madison Air Solutions Corp"
-    },
-    {
       "Ticker": "NX",
       "Company": "Quanex Building Products Corporation"
     }
@@ -395,18 +315,6 @@
     {
       "Ticker": "PJT",
       "Company": "PJT Partners Inc."
-    },
-    {
-      "Ticker": "GS.PR.A",
-      "Company": "Goldman Sachs Group Inc-The"
-    },
-    {
-      "Ticker": "GS.PR.D",
-      "Company": "Goldman Sachs Group Inc-The"
-    },
-    {
-      "Ticker": "SCHW.PR.D",
-      "Company": "Charles Schwab Corp-The"
     },
     {
       "Ticker": "HLI",
@@ -909,7 +817,7 @@
       "Company": "Bunge Global"
     },
     {
-      "Ticker": "BF.B",
+      "Ticker": "BF-B",
       "Company": "Brown–Forman"
     },
     {
@@ -1483,7 +1391,7 @@
       "Company": "KKR & Co."
     },
     {
-      "Ticker": "BRK.B",
+      "Ticker": "BRK-B",
       "Company": "Berkshire Hathaway"
     },
     {
@@ -2709,14 +2617,6 @@
   ],
   "Insurance - Life": [
     {
-      "Ticker": "ATH.PR.A",
-      "Company": "Athene Holding Ltd"
-    },
-    {
-      "Ticker": "ATH-E",
-      "Company": "Athene Holding Ltd. Depositary "
-    },
-    {
       "Ticker": "MFC",
       "Company": "Manulife Financial Corporation"
     },
@@ -2727,14 +2627,6 @@
     {
       "Ticker": "PUK",
       "Company": "Prudential plc ADR"
-    },
-    {
-      "Ticker": "ATH.PR.B",
-      "Company": "Athene Holding Ltd"
-    },
-    {
-      "Ticker": "ATH.PR.D",
-      "Company": "Athene Holding Ltd."
     }
   ],
   "Insurance - Property & Casualty": [
@@ -2845,10 +2737,6 @@
       "Company": "Costamare Inc."
     },
     {
-      "Ticker": "SB.PR.D",
-      "Company": "Safe Bulkers Inc"
-    },
-    {
       "Ticker": "BWLP",
       "Company": "BW LPG Limited"
     },
@@ -2859,10 +2747,6 @@
     {
       "Ticker": "SB",
       "Company": "Safe Bulkers Inc."
-    },
-    {
-      "Ticker": "SB.PR.C",
-      "Company": "Safe Bulkers Inc"
     }
   ],
   "Materials": [
@@ -3015,7 +2899,7 @@
   ],
   "Medical Devices": [
     {
-      "Ticker": "BIO.B",
+      "Ticker": "BIO-B",
       "Company": "Bio-Rad Laboratories, Inc."
     },
     {
@@ -3165,7 +3049,7 @@
       "Company": "Suncor Energy Inc."
     },
     {
-      "Ticker": "PBR.A",
+      "Ticker": "PBR-A",
       "Company": "Petróleo Brasileiro S.A. Petrobras Pref ADR"
     }
   ],
@@ -3177,10 +3061,6 @@
     {
       "Ticker": "WES",
       "Company": "Western Midstream Partners, LP"
-    },
-    {
-      "Ticker": "ET-I",
-      "Company": "Energy Transfer LP"
     },
     {
       "Ticker": "NAT",
@@ -3285,14 +3165,6 @@
   ],
   "REIT - Diversified": [
     {
-      "Ticker": "GNL-D",
-      "Company": "Global Net Lease, Inc. 7.50% Series D Cumulative Redeemable Perpetual Preferred Stock"
-    },
-    {
-      "Ticker": "GNL-E",
-      "Company": "Global Net Lease, Inc. 7.375% Series E Cumulative Redeemable Perpetual Preferred Stock"
-    },
-    {
       "Ticker": "SAFE",
       "Company": "Safehold Inc."
     },
@@ -3313,48 +3185,16 @@
     {
       "Ticker": "HR",
       "Company": "Healthcare Realty Trust Incorporated"
-    },
-    {
-      "Ticker": "XRN-A",
-      "Company": "Chiron Real Estate Inc."
-    },
-    {
-      "Ticker": "XRN-B",
-      "Company": "Chiron Real Estate Inc."
     }
   ],
   "REIT - Hotel & Motel": [
-    {
-      "Ticker": "CLDT.PR.A",
-      "Company": "Chatham Lodging Trust"
-    },
     {
       "Ticker": "XHR",
       "Company": "Xenia Hotels & Resorts Inc."
     },
     {
-      "Ticker": "PEB.PR.G",
-      "Company": "Pebblebrook Hotel Trust"
-    },
-    {
-      "Ticker": "AHT.PR.D",
-      "Company": "Ashford Hospitality Trust Inc"
-    },
-    {
-      "Ticker": "BHR.PR.D",
-      "Company": "Braemar Hotels & Resorts Inc"
-    },
-    {
       "Ticker": "PK",
       "Company": "Park Hotels & Resorts Inc."
-    },
-    {
-      "Ticker": "PEB.PR.H",
-      "Company": "Pebblebrook Hotel Trust"
-    },
-    {
-      "Ticker": "CLDT-A",
-      "Company": "Chatham Lodging Trust"
     },
     {
       "Ticker": "CLDT",
@@ -3367,94 +3207,18 @@
   ],
   "REIT - Industrial": [
     {
-      "Ticker": "PSA.PR.Q",
-      "Company": "Public Storage"
-    },
-    {
-      "Ticker": "PSA.PR.P",
-      "Company": "Public Storage"
-    },
-    {
-      "Ticker": "NSA-B",
-      "Company": "National Storage Affiliates Trust"
-    },
-    {
       "Ticker": "COLD",
       "Company": "Americold Realty Trust"
     },
     {
       "Ticker": "NSA",
       "Company": "National Storage Affiliates Trust"
-    },
-    {
-      "Ticker": "NSA.PR.A",
-      "Company": "National Storage Affiliates Trust"
-    },
-    {
-      "Ticker": "PSA.PR.R",
-      "Company": "Public Storage Depositary Share"
-    },
-    {
-      "Ticker": "PSA.PR.O",
-      "Company": "Public Storage"
     }
   ],
   "REIT - Mortgage": [
     {
-      "Ticker": "RC.PR.C",
-      "Company": "Ready Capital Corporation"
-    },
-    {
-      "Ticker": "NLY.PR.G",
-      "Company": "Annaly Capital Management Inc"
-    },
-    {
-      "Ticker": "NLY.PR.I",
-      "Company": "Annaly Capital Management Inc"
-    },
-    {
       "Ticker": "CHMI",
       "Company": "Cherry Hill Mortgage Investment Corporation"
-    },
-    {
-      "Ticker": "ACR-C",
-      "Company": "ACRES Commercial Realty Corp. 8"
-    },
-    {
-      "Ticker": "ABR.PR.F",
-      "Company": "Arbor Realty Trust 6.25% Series"
-    },
-    {
-      "Ticker": "CHMI.PR.A",
-      "Company": "Cherry Hill Mortgage Investment Corp"
-    },
-    {
-      "Ticker": "ABR.PR.E",
-      "Company": "Arbor Realty Trust, Inc."
-    },
-    {
-      "Ticker": "EFC.PR.D",
-      "Company": "Ellington Financial Inc."
-    },
-    {
-      "Ticker": "NLY.PR.F",
-      "Company": "Annaly Capital Management Inc"
-    },
-    {
-      "Ticker": "RITM-C",
-      "Company": "Rithm Capital Corp."
-    },
-    {
-      "Ticker": "LFT.PR.A",
-      "Company": "Lument Finance Trust, Inc."
-    },
-    {
-      "Ticker": "RWT.PR.A",
-      "Company": "Redwood Trust, Inc."
-    },
-    {
-      "Ticker": "FBRT.PR.E",
-      "Company": "Franklin BSP Realty Trust, Inc."
     },
     {
       "Ticker": "FBRT",
@@ -3465,16 +3229,8 @@
       "Company": "Chimera Investment Corporation"
     },
     {
-      "Ticker": "CHMI.PR.B",
-      "Company": "Cherry Hill Mortgage Investment Corp"
-    },
-    {
       "Ticker": "RITM",
       "Company": "Rithm Capital Corp."
-    },
-    {
-      "Ticker": "RC.PR.E",
-      "Company": "Ready Capital Corporation"
     },
     {
       "Ticker": "GPMT",
@@ -3487,14 +3243,6 @@
     {
       "Ticker": "SACH",
       "Company": "Sachem Capital Corp."
-    },
-    {
-      "Ticker": "RWT-A",
-      "Company": "Redwood Trust, Inc."
-    },
-    {
-      "Ticker": "MFA-C",
-      "Company": "MFA Financial Inc."
     },
     {
       "Ticker": "MFA",
@@ -3545,16 +3293,8 @@
       "Company": "BRT Apartments Corp."
     },
     {
-      "Ticker": "UMH.PR.D",
-      "Company": "UMH Properties Inc"
-    },
-    {
       "Ticker": "SUI",
       "Company": "Sun Communities Inc."
-    },
-    {
-      "Ticker": "AMH.PR.H",
-      "Company": "American Homes 4 Rent"
     }
   ],
   "REIT - Retail": [
@@ -3581,25 +3321,9 @@
     {
       "Ticker": "FCPT",
       "Company": "Four Corners Property Trust Inc."
-    },
-    {
-      "Ticker": "PINE-A",
-      "Company": "Alpine Income Property Trust, Inc."
     }
   ],
   "REIT - Specialty": [
-    {
-      "Ticker": "DLR.PR.L",
-      "Company": "Digital Realty Trust Inc"
-    },
-    {
-      "Ticker": "EPR.PR.C",
-      "Company": "EPR Properties"
-    },
-    {
-      "Ticker": "EPR.PR.E",
-      "Company": "EPR Properties"
-    },
     {
       "Ticker": "EPR",
       "Company": "EPR Properties"
@@ -3779,10 +3503,6 @@
       "Company": "Ryder System Inc."
     },
     {
-      "Ticker": "TRTN-D",
-      "Company": "Triton International Limited 6."
-    },
-    {
       "Ticker": "PRG",
       "Company": "Prog Holdings Inc."
     },
@@ -3792,10 +3512,6 @@
     }
   ],
   "Residential Construction": [
-    {
-      "Ticker": "GRBK.PR.A",
-      "Company": "Green Brick Partners, Inc."
-    },
     {
       "Ticker": "TPH",
       "Company": "Tri Pointe Homes Inc."
@@ -4087,16 +3803,8 @@
       "Company": "KT Corporation"
     },
     {
-      "Ticker": "T.PR.A",
-      "Company": "AT&T Inc"
-    },
-    {
       "Ticker": "TV",
       "Company": "Grupo Televisa S.A.B. Sponsored ADR"
-    },
-    {
-      "Ticker": "T.PR.C",
-      "Company": "Tutor Perini Corp"
     },
     {
       "Ticker": "LUMN",
@@ -4125,20 +3833,8 @@
   ],
   "Unknown": [
     {
-      "Ticker": "PCG.PR.X",
-      "Company": "PG&E Corp"
-    },
-    {
       "Ticker": "TBB",
       "Company": "AT&T Inc. Preferred Stock 5.35%"
-    },
-    {
-      "Ticker": "RWTRP",
-      "Company": "Redwood Trust, Inc."
-    },
-    {
-      "Ticker": "AHL.PR.F",
-      "Company": "Aspen Insurance Holdings Limited"
     }
   ],
   "Uranium": [
@@ -4295,20 +3991,8 @@
       "Company": "TxnM Energy Inc."
     },
     {
-      "Ticker": "NEE-S",
-      "Company": "NextEra Energy, Inc."
-    },
-    {
-      "Ticker": "NEE-V",
-      "Company": "NextEra Energy, Inc."
-    },
-    {
       "Ticker": "SOMN",
       "Company": "Southern Company"
-    },
-    {
-      "Ticker": "NEE-T",
-      "Company": "NextEra Energy Inc."
     },
     {
       "Ticker": "ELPC",
@@ -4343,10 +4027,6 @@
     {
       "Ticker": "AXIA",
       "Company": "AXIA Energia Sponsored ADR Preferred"
-    },
-    {
-      "Ticker": "AXIA-",
-      "Company": "AXIA Energia"
     }
   ],
   "Waste Management": [

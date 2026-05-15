@@ -55,6 +55,42 @@
     {
       "Ticker": 4324,
       "Company": "بنان"
+    },
+    {
+      "Ticker": 4325,
+      "Company": "Umm Al Qura for Development and Construction Co."
+    },
+    {
+      "Ticker": 9511,
+      "Company": "Sumou Real Estate Company"
+    },
+    {
+      "Ticker": 9519,
+      "Company": "Banan Real Estate Company"
+    },
+    {
+      "Ticker": 9521,
+      "Company": "Inmar Company for Real Estate Development and Investment"
+    },
+    {
+      "Ticker": 9535,
+      "Company": "Ladun Investment Company"
+    },
+    {
+      "Ticker": 9547,
+      "Company": "Rawasi Albina Investment Co."
+    },
+    {
+      "Ticker": 9568,
+      "Company": "Mayar Holding Co."
+    },
+    {
+      "Ticker": 9591,
+      "Company": "View United Real Estate Development Co."
+    },
+    {
+      "Ticker": 9610,
+      "Company": "First Avenue for Real Estate De"
     }
   ],
   "إنتاج الأغذية": [
@@ -133,6 +169,66 @@
     {
       "Ticker": 6090,
       "Company": "جازادكو"
+    },
+    {
+      "Ticker": 2287,
+      "Company": "Arabian Company for Agricultural and Industrial Investment"
+    },
+    {
+      "Ticker": 2288,
+      "Company": "Nofoth Food Products Company"
+    },
+    {
+      "Ticker": 9515,
+      "Company": "Fesh Fash Snack Food Production Company"
+    },
+    {
+      "Ticker": 9532,
+      "Company": "Aljouf Mineral Water Bottling Co."
+    },
+    {
+      "Ticker": 9536,
+      "Company": "Arabian Food & Dairy Factories Company"
+    },
+    {
+      "Ticker": 9556,
+      "Company": "Nofoth Food Products Company"
+    },
+    {
+      "Ticker": 9559,
+      "Company": "Balady Poultry Trading Co."
+    },
+    {
+      "Ticker": 9562,
+      "Company": "Foods Gate Trading Co."
+    },
+    {
+      "Ticker": 9564,
+      "Company": "Horizon Food Co."
+    },
+    {
+      "Ticker": 9567,
+      "Company": "Ghida Al-Sultan Company"
+    },
+    {
+      "Ticker": 9569,
+      "Company": "Almuneef Company for Trade, Industry, Agriculture and Contracting"
+    },
+    {
+      "Ticker": 9612,
+      "Company": "Sama Healthy Water Factory Co."
+    },
+    {
+      "Ticker": 9615,
+      "Company": "Mufeed Company"
+    },
+    {
+      "Ticker": 9617,
+      "Company": "Arabica Star Co."
+    },
+    {
+      "Ticker": 9650,
+      "Company": "Sahat Almajd Trading Co."
     }
   ],
   "الإعلام والترفيه": [
@@ -331,6 +427,22 @@
     {
       "Ticker": 8313,
       "Company": "رسن"
+    },
+    {
+      "Ticker": 8080,
+      "Company": "SABB Takaful Company"
+    },
+    {
+      "Ticker": 8110,
+      "Company": "Saudi Indian Company for Cooperative Insurance Wafa Insurance"
+    },
+    {
+      "Ticker": 8270,
+      "Company": "Buruj Cooperative Insurance Company"
+    },
+    {
+      "Ticker": 8312,
+      "Company": "Alinma Tokio Marine Company"
     }
   ],
   "التطبيقات وخدمات التقنية": [
@@ -353,6 +465,62 @@
     {
       "Ticker": 7204,
       "Company": "توبي"
+    },
+    {
+      "Ticker": 7211,
+      "Company": "Saudi Azm for Communication and Information Technology Company"
+    },
+    {
+      "Ticker": 9522,
+      "Company": "Alhasoob Co."
+    },
+    {
+      "Ticker": 9524,
+      "Company": "Advance International Company for Communication and Information Technology"
+    },
+    {
+      "Ticker": 9526,
+      "Company": "Jahez International Company for Information Systems Technology"
+    },
+    {
+      "Ticker": 9534,
+      "Company": "Saudi Azm for Communication and Information Technology Company"
+    },
+    {
+      "Ticker": 9538,
+      "Company": "Naseej for Technology Co."
+    },
+    {
+      "Ticker": 9550,
+      "Company": "Sure Global Tech Company"
+    },
+    {
+      "Ticker": 9557,
+      "Company": "Edarat Communication and Information Technology Co."
+    },
+    {
+      "Ticker": 9558,
+      "Company": "Alqemam for Computer Systems Co."
+    },
+    {
+      "Ticker": 9561,
+      "Company": "Knowledge Net Company"
+    },
+    {
+      "Ticker": 9595,
+      "Company": "WSM for Information Technology"
+    },
+    {
+      "Ticker": 9614,
+      "Company": "Purity for Information Technology Company"
+    },
+    {
+      "Ticker": 9621,
+      "Company": "Digital Research Company"
+    },
+    {
+      "Ticker": 9637,
+      "Company": "Axelerated Solutions for Inform"
     }
   ],
   "الخدمات الإستهلاكية": [
@@ -411,6 +579,46 @@
     {
       "Ticker": 6017,
       "Company": "جاهز"
+    },
+    {
+      "Ticker": 4010,
+      "Company": "Dur Hospitality Company"
+    },
+    {
+      "Ticker": 6019,
+      "Company": "Al Masar Al Shamil Education Co"
+    },
+    {
+      "Ticker": 9520,
+      "Company": "Shatirah House Restaurant Co."
+    },
+    {
+      "Ticker": 9541,
+      "Company": "Academy Of Learning Company"
+    },
+    {
+      "Ticker": 9542,
+      "Company": "Keir International Co."
+    },
+    {
+      "Ticker": 9577,
+      "Company": "Dar Almarkabah for Renting Cars Co."
+    },
+    {
+      "Ticker": 9579,
+      "Company": "Intelligent Oud Company for Trading"
+    },
+    {
+      "Ticker": 9590,
+      "Company": "Armah Sports Co."
+    },
+    {
+      "Ticker": 9598,
+      "Company": "Al Mohafaza Company for Educati"
+    },
+    {
+      "Ticker": 9603,
+      "Company": "Horizon Educational Co."
     }
   ],
   "الخدمات التجارية والمهنية": [
@@ -441,6 +649,70 @@
     {
       "Ticker": 6004,
       "Company": "كاتريون"
+    },
+    {
+      "Ticker": 4146,
+      "Company": "Gas Arabian Services Co."
+    },
+    {
+      "Ticker": 9514,
+      "Company": "Mohammed Hasan AlNaqool Sons Co."
+    },
+    {
+      "Ticker": 9543,
+      "Company": "Saudi Networkers Services Company"
+    },
+    {
+      "Ticker": 9545,
+      "Company": "International Human Resources Company"
+    },
+    {
+      "Ticker": 9549,
+      "Company": "Abdulaziz and Mansour Ibrahim Albabtin Co."
+    },
+    {
+      "Ticker": 9551,
+      "Company": "Knowledge Tower"
+    },
+    {
+      "Ticker": 9560,
+      "Company": "Waja Company"
+    },
+    {
+      "Ticker": 9571,
+      "Company": "Munawla Cargo Co. Ltd."
+    },
+    {
+      "Ticker": 9578,
+      "Company": "Atlas Elevators General Trading and Contracting Co."
+    },
+    {
+      "Ticker": 9581,
+      "Company": "Clean Life Co."
+    },
+    {
+      "Ticker": 9589,
+      "Company": "Fad International Company"
+    },
+    {
+      "Ticker": 9606,
+      "Company": "Altharwah Albashariyyah Co."
+    },
+    {
+      "Ticker": 9613,
+      "Company": "Shalfa Facilities Management Company"
+    },
+    {
+      "Ticker": 9619,
+      "Company": "Multi Business Group Co."
+    },
+    {
+      "Ticker": 9625,
+      "Company": "Itmam Consultancy Co."
+    },
+    {
+      "Ticker": 9651,
+      "Company": "Abdul Aziz Al-Tuwaijri Trading Company"
     }
   ],
   "الخدمات المالية": [
@@ -479,6 +751,30 @@
     {
       "Ticker": 4280,
       "Company": "المملكة"
+    },
+    {
+      "Ticker": 4701,
+      "Company": "Alkhabeer Growth A - Alkhabeer Growth And Income Fund"
+    },
+    {
+      "Ticker": 9584,
+      "Company": "Riyal Investment and Development Co."
+    },
+    {
+      "Ticker": 9585,
+      "Company": "Mulkia Investment Co."
+    },
+    {
+      "Ticker": 9586,
+      "Company": "Osool and Bakheet Investment Co."
+    },
+    {
+      "Ticker": 9596,
+      "Company": "Quara Finance Co."
+    },
+    {
+      "Ticker": 9602,
+      "Company": "Yaqeen Capital Co."
     }
   ],
   "الرعاية الصحية": [
@@ -521,6 +817,70 @@
     {
       "Ticker": 4017,
       "Company": "فقيه الطبية"
+    },
+    {
+      "Ticker": 4018,
+      "Company": "Almoosa Health Company"
+    },
+    {
+      "Ticker": 4019,
+      "Company": "Specialized Medical Company"
+    },
+    {
+      "Ticker": 4021,
+      "Company": "Canadian Medical Center Co."
+    },
+    {
+      "Ticker": 9518,
+      "Company": "Canadian General Medical Center Complex Company"
+    },
+    {
+      "Ticker": 9527,
+      "Company": "Ame Company For Medical Supplies"
+    },
+    {
+      "Ticker": 9530,
+      "Company": "Arabian International Healthcare Holding Company"
+    },
+    {
+      "Ticker": 9546,
+      "Company": "Naba Alsaha Medical Services Company"
+    },
+    {
+      "Ticker": 9572,
+      "Company": "Al-Razi Medical Co."
+    },
+    {
+      "Ticker": 9574,
+      "Company": "Professional Medical Expertise Co."
+    },
+    {
+      "Ticker": 9587,
+      "Company": "Lana Medical Co."
+    },
+    {
+      "Ticker": 9592,
+      "Company": "Almujtama Alraida Medical Co."
+    },
+    {
+      "Ticker": 9594,
+      "Company": "Al-Modawat Specialized Medical Co."
+    },
+    {
+      "Ticker": 9604,
+      "Company": "Miral Dental Clinics Co."
+    },
+    {
+      "Ticker": 9620,
+      "Company": "Balsm Alofoq Medical Co."
+    },
+    {
+      "Ticker": 9626,
+      "Company": "Basma Adeem Medical Co."
+    },
+    {
+      "Ticker": 9627,
+      "Company": "Twareat Medical Care Co."
     }
   ],
   "السلع الرأسمالية": [
@@ -583,6 +943,42 @@
     {
       "Ticker": 4144,
       "Company": "رؤوم"
+    },
+    {
+      "Ticker": 9510,
+      "Company": "National Building and Marketing Co."
+    },
+    {
+      "Ticker": 9517,
+      "Company": "MOBI Industry Co."
+    },
+    {
+      "Ticker": 9525,
+      "Company": "Alwasail Industrial Company"
+    },
+    {
+      "Ticker": 9533,
+      "Company": "Saudi Parts Center Company"
+    },
+    {
+      "Ticker": 9540,
+      "Company": "National Environmental Recycling Company"
+    },
+    {
+      "Ticker": 9570,
+      "Company": "Tam Development Co."
+    },
+    {
+      "Ticker": 9575,
+      "Company": "Marble Design Co."
+    },
+    {
+      "Ticker": 9597,
+      "Company": "Leaf Global Environmental Services Co."
+    },
+    {
+      "Ticker": 9608,
+      "Company": "Al Ashghal Al Moysra Co."
     }
   ],
   "السلع طويلة الاجل": [
@@ -609,6 +1005,22 @@
     {
       "Ticker": 4180,
       "Company": "مجموعة فتيحي"
+    },
+    {
+      "Ticker": 4145,
+      "Company": "Al Obeikan Glass Company"
+    },
+    {
+      "Ticker": 4148,
+      "Company": "Alwasail Industrial Company"
+    },
+    {
+      "Ticker": 9531,
+      "Company": "Al Obeikan Glass Company"
+    },
+    {
+      "Ticker": 9537,
+      "Company": "Amwaj International Company"
     }
   ],
   "الصناديق العقارية المتداولة": [
@@ -685,8 +1097,8 @@
       "Company": "الإنماء ريت الفندقي"
     },
     {
-      "Ticker": 4350,
-      "Company": "الإستثمار ريت"
+      "Ticker": 9300,
+      "Company": "Alwaha REIT Fund"
     }
   ],
   "الطاقة": [
@@ -743,12 +1155,36 @@
     {
       "Ticker": 5110,
       "Company": "كهرباء السعودية"
+    },
+    {
+      "Ticker": 9516,
+      "Company": "Natural Gas Distribution Company"
+    },
+    {
+      "Ticker": 9528,
+      "Company": "Gas Arabian Services Company"
     }
   ],
   "المنتجات المنزلية و الشخصية": [
     {
       "Ticker": 4165,
       "Company": "الماجد للعود"
+    },
+    {
+      "Ticker": 9565,
+      "Company": "Meyar Company"
+    },
+    {
+      "Ticker": 9576,
+      "Company": "Paper Home Co."
+    },
+    {
+      "Ticker": 9593,
+      "Company": "Pan Gulf Marketing Co."
+    },
+    {
+      "Ticker": 9622,
+      "Company": "Shmoh Almadi Co."
     }
   ],
   "المواد الأساسية": [
@@ -927,6 +1363,82 @@
     {
       "Ticker": 3092,
       "Company": "اسمنت الرياض"
+    },
+    {
+      "Ticker": 1323,
+      "Company": "United Carton Industries Company"
+    },
+    {
+      "Ticker": 2002,
+      "Company": "National Petrochemical Company"
+    },
+    {
+      "Ticker": 3001,
+      "Company": "Hail Cement Company"
+    },
+    {
+      "Ticker": 3002,
+      "Company": "Najran Cement Company"
+    },
+    {
+      "Ticker": 9512,
+      "Company": "Riyadh Cement Company"
+    },
+    {
+      "Ticker": 9513,
+      "Company": "Watani Iron Steel Co."
+    },
+    {
+      "Ticker": 9523,
+      "Company": "Group Five Pipe Saudi Ltd."
+    },
+    {
+      "Ticker": 9539,
+      "Company": "Aqaseem Factory for Chemicals and Plastics Co."
+    },
+    {
+      "Ticker": 9548,
+      "Company": "Arabian Plastic Industrial Company Limited"
+    },
+    {
+      "Ticker": 9553,
+      "Company": "Molan Steel Company"
+    },
+    {
+      "Ticker": 9563,
+      "Company": "Bena Steel Industries Co."
+    },
+    {
+      "Ticker": 9566,
+      "Company": "Saudi Lime Industries Co."
+    },
+    {
+      "Ticker": 9580,
+      "Company": "Al Rashid Industrial Co."
+    },
+    {
+      "Ticker": 9583,
+      "Company": "United Mining Industries Co."
+    },
+    {
+      "Ticker": 9588,
+      "Company": "Riyadh Steel Co."
+    },
+    {
+      "Ticker": 9605,
+      "Company": "Neft Alsharq Company for Chemical Industries"
+    },
+    {
+      "Ticker": 9607,
+      "Company": "ASG Plastic Factory Co."
+    },
+    {
+      "Ticker": 9611,
+      "Company": "Arabian United Float Glass Company"
+    },
+    {
+      "Ticker": 9624,
+      "Company": "Alshehili Company for metal industries"
     }
   ],
   "النقل": [
@@ -991,6 +1503,22 @@
     {
       "Ticker": 4164,
       "Company": "النهدي"
+    },
+    {
+      "Ticker": 4194,
+      "Company": "Marketing Home Group Company for Trading Company"
+    },
+    {
+      "Ticker": 9544,
+      "Company": "Future Care Trading Co."
+    },
+    {
+      "Ticker": 9601,
+      "Company": "Mohammed Hadi Al Rasheed and Partners Co."
+    },
+    {
+      "Ticker": 9631,
+      "Company": "Hedab Alkhaleej Trading Co."
     }
   ],
   "تجزئة وتوزيع السلع الكمالية": [
@@ -1025,6 +1553,54 @@
     {
       "Ticker": 4240,
       "Company": "سينومي ريتل"
+    },
+    {
+      "Ticker": 4193,
+      "Company": "Nice One Beauty Digital Marketing Company"
+    },
+    {
+      "Ticker": 4265,
+      "Company": "Cherry Trading Co."
+    },
+    {
+      "Ticker": 9529,
+      "Company": "Raoom trading Company"
+    },
+    {
+      "Ticker": 9552,
+      "Company": "Saudi Top Trading Co."
+    },
+    {
+      "Ticker": 9555,
+      "Company": "Leen Alkhair Trading Company"
+    },
+    {
+      "Ticker": 9599,
+      "Company": "Taqat Mineral Trading Co."
+    },
+    {
+      "Ticker": 9600,
+      "Company": "Qomel Co."
+    },
+    {
+      "Ticker": 9618,
+      "Company": "Al-Fakhera Men's Tailoring Company"
+    },
+    {
+      "Ticker": 9628,
+      "Company": "Lamasat Co."
+    },
+    {
+      "Ticker": 9630,
+      "Company": "Ratio Speciality Company for Trading"
+    },
+    {
+      "Ticker": 9635,
+      "Company": "Dkhoun National Trading Co."
+    },
+    {
+      "Ticker": 9649,
+      "Company": "Jamjoom Fashion Trading Company"
     }
   ]
 }
