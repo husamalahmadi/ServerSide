@@ -1,5 +1,5 @@
 import { getApiUrl } from "../config/env.js";
-import { collectScreenerItems } from "../domain/screenerMetrics.js";
+import { collectScreenerItems, isUsableScreenerRow } from "../domain/screenerMetrics.js";
 import { publicUrl } from "../utils/publicUrl.js";
 
 const SCREENER_US_URL = publicUrl("data/screener_us.json");
@@ -37,14 +37,23 @@ async function loadMarketItems(screenerUrl, fullDataUrl, market) {
   return collectScreenerItems(full, market);
 }
 
+function screenerPayloadUsable(items) {
+  if (!Array.isArray(items) || !items.length) return false;
+  const usable = items.filter(isUsableScreenerRow).length;
+  return usable / items.length >= 0.5;
+}
+
 async function loadFromApi() {
   const url = `${getApiUrl()}/api/screener`;
   const res = await fetch(url, { cache: "no-store", credentials: "include" });
   const json = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(json?.error || `Screener API HTTP ${res.status}`);
   if (!Array.isArray(json?.items)) throw new Error("Screener API: invalid payload");
+  if (!screenerPayloadUsable(json.items)) {
+    throw new Error("Screener API returned incomplete metrics");
+  }
   return {
-    items: json.items,
+    items: json.items.filter(isUsableScreenerRow),
     sectors: Array.isArray(json.sectors) ? json.sectors : [],
     meta: json.meta || null,
   };
@@ -55,7 +64,7 @@ async function loadFromPublicFallback() {
     loadMarketItems(SCREENER_US_URL, SP500_DATA_URL, "us"),
     loadMarketItems(SCREENER_SA_URL, TASI_DATA_URL, "sa"),
   ]);
-  const items = [...us, ...sa];
+  const items = [...us, ...sa].filter(isUsableScreenerRow);
   const sectors = Array.from(new Set(items.map((x) => x.sector).filter(Boolean))).sort((a, b) =>
     a.localeCompare(b)
   );

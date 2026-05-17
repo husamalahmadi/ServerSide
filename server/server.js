@@ -18,6 +18,7 @@ import {
 import { fetchFmpFinancialsBundle, fmpApiKey, FMP_STABLE_BASE } from "./fmpFetch.js";
 import { createScreenerStore, resolveScreenerDir } from "./screenerStore.js";
 import { buildAllScreeners } from "./buildScreenerFromFmp.js";
+import { isUsableScreenerRow } from "../src/domain/screenerMetrics.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { validateComment } from "./commentFilter.js";
@@ -763,11 +764,18 @@ app.get("/api/fmp/financials/:symbol", async (req, res) => {
 });
 
 function mergeScreenerResponse(usItems, saItems, meta) {
-  const items = [...(usItems || []), ...(saItems || [])];
+  const items = [...(usItems || []), ...(saItems || [])].filter(isUsableScreenerRow);
   const sectors = Array.from(new Set(items.map((x) => x.sector).filter(Boolean))).sort((a, b) =>
     a.localeCompare(b)
   );
   return { items, sectors, meta };
+}
+
+function screenerDiskPayloadUsable(usItems, saItems) {
+  const all = [...(usItems || []), ...(saItems || [])];
+  if (!all.length) return false;
+  const usable = all.filter(isUsableScreenerRow).length;
+  return usable / all.length >= 0.5;
 }
 
 function loadStaticScreenerFallback() {
@@ -825,7 +833,16 @@ app.get("/api/screener", (req, res) => {
 
     if (force) scheduleScreenerRebuildIfNeeded(true);
 
-    if (usItems?.length && saItems?.length && !usExpired && !saExpired && !force) {
+    const diskUsable = screenerDiskPayloadUsable(usItems, saItems);
+
+    if (
+      diskUsable &&
+      usItems?.length &&
+      saItems?.length &&
+      !usExpired &&
+      !saExpired &&
+      !force
+    ) {
       return res.json(
         mergeScreenerResponse(usItems, saItems, {
           source: "disk",
@@ -835,7 +852,7 @@ app.get("/api/screener", (req, res) => {
       );
     }
 
-    if (usItems?.length || saItems?.length) {
+    if (diskUsable && (usItems?.length || saItems?.length)) {
       scheduleScreenerRebuildIfNeeded(force || usExpired || saExpired);
       return res.json(
         mergeScreenerResponse(usItems || [], saItems || [], {
@@ -846,6 +863,11 @@ app.get("/api/screener", (req, res) => {
           rebuilding: Boolean(screenerRebuildPromise),
         })
       );
+    }
+
+    if ((usItems?.length || saItems?.length) && !diskUsable) {
+      console.warn("[screener] disk cache has incomplete metrics; using static fallback and rebuilding");
+      scheduleScreenerRebuildIfNeeded(true);
     }
 
     const fallback = loadStaticScreenerFallback();

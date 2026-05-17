@@ -1,7 +1,7 @@
 import { readFileSync, existsSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
-import { screenerRowFromCompany } from "../src/domain/screenerMetrics.js";
+import { screenerRowFromCompany, isUsableScreenerRow } from "../src/domain/screenerMetrics.js";
 import { fetchFmpFinancialsBundle } from "./fmpFetch.js";
 import { validateFmpFinancialsBundle } from "./fmpFinancialsStore.js";
 
@@ -110,7 +110,7 @@ export async function buildScreenerMarket(market, opts) {
     }
 
     const row = screenerRowFromCompany(companyFromBundle(entry, bundle), market, entry.sector);
-    if (row && (row.marketCap != null || row.fairValue != null || row.pe != null)) {
+    if (isUsableScreenerRow(row)) {
       items.push(row);
     } else {
       skipped += 1;
@@ -133,14 +133,36 @@ export async function buildScreenerMarket(market, opts) {
   };
 }
 
+function marketBuildUsable(items, catalogSize) {
+  if (!items?.length) return false;
+  const usable = items.filter(isUsableScreenerRow).length;
+  if (usable / items.length < 0.5) return false;
+  if (catalogSize > 0 && items.length / catalogSize < 0.1) return false;
+  return true;
+}
+
 export async function buildAllScreeners({ apiKey, financialsStore, screenerStore, delayMs }) {
   const us = await buildScreenerMarket("us", { apiKey, financialsStore, delayMs });
-  const usSaved = screenerStore.write("us", us.items, { buildStats: us.stats });
-  console.log(`[screener/build] wrote US ${usSaved.filePath} (${us.items.length} items)`);
+  let usSaved = null;
+  if (marketBuildUsable(us.items, us.stats.catalog)) {
+    usSaved = screenerStore.write("us", us.items, { buildStats: us.stats });
+    console.log(`[screener/build] wrote US ${usSaved.filePath} (${us.items.length} items)`);
+  } else {
+    console.warn(
+      `[screener/build] skip US disk write — only ${us.items.length}/${us.stats.catalog} usable rows`
+    );
+  }
 
   const sa = await buildScreenerMarket("sa", { apiKey, financialsStore, delayMs });
-  const saSaved = screenerStore.write("sa", sa.items, { buildStats: sa.stats });
-  console.log(`[screener/build] wrote SA ${saSaved.filePath} (${sa.items.length} items)`);
+  let saSaved = null;
+  if (marketBuildUsable(sa.items, sa.stats.catalog)) {
+    saSaved = screenerStore.write("sa", sa.items, { buildStats: sa.stats });
+    console.log(`[screener/build] wrote SA ${saSaved.filePath} (${sa.items.length} items)`);
+  } else {
+    console.warn(
+      `[screener/build] skip SA disk write — only ${sa.items.length}/${sa.stats.catalog} usable rows`
+    );
+  }
 
   return { us, sa, usSaved, saSaved };
 }

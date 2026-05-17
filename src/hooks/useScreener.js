@@ -9,9 +9,15 @@ export function useScreener(items) {
   const filtered = useMemo(() => {
     const rows = Array.isArray(items) ? items : [];
     if (activePreset === "reset") return [];
+    if (activePreset === "undervalued") {
+      return rows.filter((it) => Number(it.discountPct) > 0);
+    }
+    if (activePreset === "largecap") {
+      return rows.filter((it) => Number(it.marketCap) >= 10_000_000_000);
+    }
     if (activePreset === "tasi") return rows.filter((it) => it.market === "sa" && Number(it.discountPct) > 0);
     if (activePreset === "us") return rows.filter((it) => it.market === "us" && Number(it.discountPct) > 0);
-    return rows.filter((it) => Number.isFinite(Number(it.discountPct)));
+    return rows;
   }, [items, activePreset]);
   const sorted = useMemo(() => sortScreenerItems(filtered, sortBy, sortDir), [filtered, sortBy, sortDir]);
 

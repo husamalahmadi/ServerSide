@@ -3,6 +3,17 @@ function num(v) {
   return Number.isFinite(n) ? n : null;
 }
 
+function isPositive(n) {
+  const x = num(n);
+  return x != null && x > 0;
+}
+
+/** Row has enough data to show in the screener table. */
+export function isUsableScreenerRow(row) {
+  if (!row?.ticker) return false;
+  return isPositive(row.marketCap);
+}
+
 function latestRow(rows) {
   if (!Array.isArray(rows) || !rows.length) return null;
   return rows[0];
@@ -31,7 +42,13 @@ function metricsFromLegacyStatistics(c) {
       ? ((fairValue - priceApprox) / priceApprox) * 100
       : null;
 
-  return { pe, marketCap, fairValue, priceApprox, discountPct };
+  return {
+    pe: isPositive(pe) ? pe : null,
+    marketCap: isPositive(marketCap) ? marketCap : null,
+    fairValue: isPositive(fairValue) ? fairValue : null,
+    priceApprox: isPositive(priceApprox) ? priceApprox : null,
+    discountPct,
+  };
 }
 
 /** Financial Modeling Prep arrays on company.data. */
@@ -58,7 +75,13 @@ function metricsFromFmp(c) {
       ? ((fairValue - priceApprox) / priceApprox) * 100
       : null;
 
-  return { pe, marketCap, fairValue, priceApprox, discountPct };
+  return {
+    pe: isPositive(pe) ? pe : null,
+    marketCap: isPositive(marketCap) ? marketCap : null,
+    fairValue: isPositive(fairValue) ? fairValue : null,
+    priceApprox: isPositive(priceApprox) ? priceApprox : null,
+    discountPct,
+  };
 }
 
 function isFmpCompanyData(data) {
@@ -97,7 +120,7 @@ export function collectScreenerItems(json, market) {
     if (!companies || typeof companies !== "object") continue;
     for (const c of Object.values(companies)) {
       const row = screenerRowFromCompany(c, market, sector);
-      if (row) out.push(row);
+      if (isUsableScreenerRow(row)) out.push(row);
     }
   }
   return out;
