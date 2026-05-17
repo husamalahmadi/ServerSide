@@ -1,5 +1,16 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync, unlinkSync } from "fs";
-import { join } from "path";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
+
+const _serverDir = dirname(fileURLToPath(import.meta.url));
+
+export function resolveFmpFinancialsDir() {
+  const explicit = (process.env.FMP_FINANCIALS_DIR || "").trim();
+  if (explicit) return explicit;
+  const dbPath = (process.env.DB_PATH || "").trim();
+  if (dbPath.startsWith("/var/data")) return join("/var/data", "fmp-financials");
+  return join(_serverDir, "data", "fmp-financials");
+}
 
 /** @typedef {{ symbol: string, companyName?: string|null, fetchedAt: string, expiresAt: string, income: object[], balance: object[], cash: object[], enterpriseValues: object[], source?: string }} FinancialsCacheRecord */
 
@@ -102,7 +113,7 @@ export function createFinancialsStore(cacheDir) {
       }
     }
     writeFileSync(path, JSON.stringify(record, null, 2), "utf8");
-    return { ...record, source: "disk" };
+    return { ...record, source: "disk", filePath: path };
   }
 
   function toResponse(record, source) {
@@ -119,7 +130,7 @@ export function createFinancialsStore(cacheDir) {
     };
   }
 
-  return { readRecord, isExpired, writeRecord, toResponse, cacheDir };
+  return { readRecord, isExpired, writeRecord, toResponse, cacheDir, findRecordPath };
 }
 
 /**

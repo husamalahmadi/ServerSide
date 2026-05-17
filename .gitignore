@@ -10,8 +10,12 @@ server/static/
 # Server database
 server/trueprice.db
 
-# Per-ticker FMP financial snapshots (generated at runtime)
-server/data/fmp-financials/
+# Per-ticker FMP financial snapshots (generated at runtime; folder kept via .gitkeep)
+server/data/fmp-financials/*
+!server/data/fmp-financials/.gitkeep
+# FMP screener snapshots (screener_us.json / screener_sa.json, 3-month TTL)
+server/data/screener/*
+!server/data/screener/.gitkeep
 
 # Environment variables
 .env

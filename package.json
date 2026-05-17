@@ -10,6 +10,7 @@
     "dev": "vite",
     "generate:sitemap": "node scripts/generate-sitemap.mjs",
     "build:screener": "node scripts/build-screener-data.mjs",
+    "build:screener:fmp": "node scripts/build-screener-from-fmp.mjs",
     "build": "node scripts/generate-sitemap.mjs && node scripts/build-screener-data.mjs && vite build",
     "preview": "vite preview",
     "server": "cd server && npm run dev",

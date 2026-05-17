@@ -10,10 +10,14 @@ import Database from "better-sqlite3";
 import { existsSync, mkdirSync, readFileSync } from "fs";
 import {
   createFinancialsStore,
+  resolveFmpFinancialsDir,
   validateFmpFinancialsBundle,
   INCOMPLETE_DATA_CODE,
   INCOMPLETE_USER_MESSAGE,
 } from "./fmpFinancialsStore.js";
+import { fetchFmpFinancialsBundle, fmpApiKey, FMP_STABLE_BASE } from "./fmpFetch.js";
+import { createScreenerStore, resolveScreenerDir } from "./screenerStore.js";
+import { buildAllScreeners } from "./buildScreenerFromFmp.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { validateComment } from "./commentFilter.js";
@@ -578,9 +582,15 @@ app.get("/api/feed", requireAuth, (req, res) => {
   res.json({ items: rows });
 });
 // ── Financial Modeling Prep (stable API) ─────────────────────────────────────
-const FMP_STABLE_BASE = "https://financialmodelingprep.com/stable";
-const FMP_FINANCIALS_DIR = join(__dirname, "data", "fmp-financials");
+const FMP_FINANCIALS_DIR = resolveFmpFinancialsDir();
 const fmpFinancialsStore = createFinancialsStore(FMP_FINANCIALS_DIR);
+console.log(`[fmp] Per-ticker financials cache directory: ${FMP_FINANCIALS_DIR}`);
+
+const SCREENER_DIR = resolveScreenerDir();
+const screenerStore = createScreenerStore(SCREENER_DIR);
+console.log(`[screener] Data directory: ${SCREENER_DIR}`);
+
+let screenerRebuildPromise = null;
 
 const _fmpCache = new Map();
 function cachedFmp(key, ttlMs, fn) {
@@ -590,28 +600,6 @@ function cachedFmp(key, ttlMs, fn) {
     _fmpCache.set(key, { data, ts: Date.now() });
     return data;
   });
-}
-
-function fmpApiKey() {
-  const k = (process.env.FMP_API_KEY || "").trim();
-  return k || null;
-}
-
-async function fmpFetchStableArray(path, symbol, key) {
-  const url = `${FMP_STABLE_BASE}/${path}?${new URLSearchParams({ symbol, apikey: key })}`;
-  const r = await fetch(url);
-  if (!r.ok) throw new Error(`FMP ${path} HTTP ${r.status}`);
-  const data = await r.json();
-  if (data && typeof data === "object" && !Array.isArray(data) && (data["Error Message"] || data.error)) {
-    throw new Error(String(data["Error Message"] || data.error));
-  }
-  return Array.isArray(data) ? data : [];
-}
-
-function fmpFilterAnnualRows(rows) {
-  if (!Array.isArray(rows) || !rows.length) return [];
-  const fy = rows.filter((row) => row?.period === "FY" || row?.period == null);
-  return fy.length ? fy : rows;
 }
 
 function mapFmpProfileRow(raw) {
@@ -724,39 +712,6 @@ app.get("/api/fmp/ratios/:symbol", async (req, res) => {
   }
 });
 
-async function fetchFmpFinancialsBundle(symbol, key) {
-  const results = await Promise.allSettled([
-    fmpFetchStableArray("income-statement", symbol, key),
-    fmpFetchStableArray("balance-sheet-statement", symbol, key),
-    fmpFetchStableArray("cash-flow-statement", symbol, key),
-    fmpFetchStableArray("enterprise-values", symbol, key),
-    fmpFetchStableArray("profile", symbol, key),
-  ]);
-
-  const pick = (i) => (results[i].status === "fulfilled" ? results[i].value : []);
-  const income = fmpFilterAnnualRows(pick(0));
-  const balance = fmpFilterAnnualRows(pick(1));
-  const cash = fmpFilterAnnualRows(pick(2));
-  const enterpriseValues = fmpFilterAnnualRows(pick(3));
-  const profileRows = pick(4);
-  const profileRow = Array.isArray(profileRows) ? profileRows[0] : null;
-  const companyName = profileRow?.companyName ?? profileRow?.name ?? null;
-
-  const fetchErrors = results
-    .map((r, i) => (r.status === "rejected" ? ["income", "balance", "cash", "enterprise_values", "profile"][i] : null))
-    .filter(Boolean);
-
-  return {
-    symbol,
-    companyName,
-    income,
-    balance,
-    cash,
-    enterpriseValues,
-    fetchErrors,
-  };
-}
-
 app.get("/api/fmp/financials/:symbol", async (req, res) => {
   const key = fmpApiKey();
   if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
@@ -767,6 +722,7 @@ app.get("/api/fmp/financials/:symbol", async (req, res) => {
     if (!forceRefresh) {
       const cached = fmpFinancialsStore.readRecord(symbol);
       if (cached?.record && !fmpFinancialsStore.isExpired(cached.record)) {
+        console.log(`[fmp/financials] disk hit ${symbol} -> ${cached.path}`);
         return res.json(fmpFinancialsStore.toResponse(cached.record, "disk"));
       }
     }
@@ -774,16 +730,19 @@ app.get("/api/fmp/financials/:symbol", async (req, res) => {
     const bundle = await fetchFmpFinancialsBundle(symbol, key);
 
     if (bundle.fetchErrors?.length) {
+      const issues = bundle.fetchErrors.map((e) => `fetch_failed_${e}`);
+      console.warn(`[fmp/financials] incomplete ${symbol} (fetch):`, issues.join(", "));
       return res.status(422).json({
         error: INCOMPLETE_USER_MESSAGE,
         code: INCOMPLETE_DATA_CODE,
         retry: true,
-        issues: bundle.fetchErrors.map((e) => `fetch_failed_${e}`),
+        issues,
       });
     }
 
     const validation = validateFmpFinancialsBundle(bundle);
     if (!validation.ok) {
+      console.warn(`[fmp/financials] incomplete ${symbol} (validation):`, validation.issues.join(", "));
       return res.status(422).json({
         error: INCOMPLETE_USER_MESSAGE,
         code: INCOMPLETE_DATA_CODE,
@@ -793,10 +752,116 @@ app.get("/api/fmp/financials/:symbol", async (req, res) => {
     }
 
     const saved = fmpFinancialsStore.writeRecord(symbol, bundle.companyName, bundle);
+    console.log(
+      `[fmp/financials] saved ${symbol} (${bundle.companyName || "no name"}) -> ${saved.filePath || FMP_FINANCIALS_DIR}`
+    );
     res.json(fmpFinancialsStore.toResponse(saved, "fmp"));
   } catch (err) {
     console.error("[fmp/financials]", symbol, err.message);
     res.status(502).json({ error: err.message });
+  }
+});
+
+function mergeScreenerResponse(usItems, saItems, meta) {
+  const items = [...(usItems || []), ...(saItems || [])];
+  const sectors = Array.from(new Set(items.map((x) => x.sector).filter(Boolean))).sort((a, b) =>
+    a.localeCompare(b)
+  );
+  return { items, sectors, meta };
+}
+
+function loadStaticScreenerFallback() {
+  const base = join(__dirname, "static", "data");
+  const readItems = (file, market) => {
+    const path = join(base, file);
+    if (!existsSync(path)) return [];
+    const json = JSON.parse(readFileSync(path, "utf8"));
+    const items = json?.items;
+    if (!Array.isArray(items)) return [];
+    return items.map((row) => ({
+      ...row,
+      market: row.market || market,
+      ticker: market === "us" ? String(row.ticker || "").toUpperCase() : String(row.ticker || ""),
+    }));
+  };
+  const us = readItems("screener_us.json", "us");
+  const sa = readItems("screener_sa.json", "sa");
+  if (!us.length && !sa.length) return null;
+  return mergeScreenerResponse(us, sa, { source: "static-bundle", stale: true });
+}
+
+function scheduleScreenerRebuildIfNeeded(needed) {
+  if (!needed) return;
+  const key = fmpApiKey();
+  if (!key) {
+    console.warn("[screener] skip rebuild: FMP_API_KEY not configured");
+    return;
+  }
+  if (screenerRebuildPromise) return;
+  const delayMs = Number(process.env.SCREENER_FMP_DELAY_MS || 350);
+  console.log("[screener] starting background FMP rebuild (US + SA)…");
+  screenerRebuildPromise = buildAllScreeners({
+    apiKey: key,
+    financialsStore: fmpFinancialsStore,
+    screenerStore,
+    delayMs,
+  })
+    .then(() => console.log("[screener] background rebuild finished"))
+    .catch((err) => console.error("[screener] background rebuild failed:", err.message))
+    .finally(() => {
+      screenerRebuildPromise = null;
+    });
+}
+
+app.get("/api/screener", (req, res) => {
+  try {
+    const usHit = screenerStore.read("us");
+    const saHit = screenerStore.read("sa");
+    const usItems = usHit?.record?.items;
+    const saItems = saHit?.record?.items;
+    const usExpired = !usHit?.record || screenerStore.isExpired(usHit.record);
+    const saExpired = !saHit?.record || screenerStore.isExpired(saHit.record);
+    const force = req.query.refresh === "1" || req.query.refresh === "true";
+
+    if (force) scheduleScreenerRebuildIfNeeded(true);
+
+    if (usItems?.length && saItems?.length && !usExpired && !saExpired && !force) {
+      return res.json(
+        mergeScreenerResponse(usItems, saItems, {
+          source: "disk",
+          us: usHit.record.meta,
+          sa: saHit.record.meta,
+        })
+      );
+    }
+
+    if (usItems?.length || saItems?.length) {
+      scheduleScreenerRebuildIfNeeded(force || usExpired || saExpired);
+      return res.json(
+        mergeScreenerResponse(usItems || [], saItems || [], {
+          source: "disk-stale",
+          stale: true,
+          us: usHit?.record?.meta ?? null,
+          sa: saHit?.record?.meta ?? null,
+          rebuilding: Boolean(screenerRebuildPromise),
+        })
+      );
+    }
+
+    const fallback = loadStaticScreenerFallback();
+    if (fallback) {
+      scheduleScreenerRebuildIfNeeded(true);
+      return res.json({ ...fallback, rebuilding: Boolean(screenerRebuildPromise) });
+    }
+
+    scheduleScreenerRebuildIfNeeded(true);
+    return res.status(503).json({
+      error: "Screener data is being built from FMP. Please try again in a few minutes.",
+      rebuilding: Boolean(screenerRebuildPromise),
+    });
+  } catch (err) {
+    console.error("[screener]", err.message);
+    res.status(500).json({ error: err.message });
   }
 });
 // ── End Financial Modeling Prep ───────────────────────────────────────────────

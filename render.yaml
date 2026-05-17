@@ -14,6 +14,10 @@ services:
     envVars:
       - key: DB_PATH
         value: /var/data/trueprice.db
+      - key: FMP_FINANCIALS_DIR
+        value: /var/data/fmp-financials
+      - key: SCREENER_DATA_DIR
+        value: /var/data/screener
     disk:
       name: data
       mountPath: /var/data
