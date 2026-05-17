@@ -18,7 +18,7 @@ import {
 import { fetchFmpFinancialsBundle, fmpApiKey, FMP_STABLE_BASE } from "./fmpFetch.js";
 import { createScreenerStore, resolveScreenerDir } from "./screenerStore.js";
 import { buildAllScreeners } from "./buildScreenerFromFmp.js";
-import { isUsableScreenerRow } from "../src/domain/screenerMetrics.js";
+import { isUsableScreenerRow, screenerMarketUsable } from "../src/domain/screenerMetrics.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { validateComment } from "./commentFilter.js";
@@ -771,33 +771,6 @@ function mergeScreenerResponse(usItems, saItems, meta) {
   return { items, sectors, meta };
 }
 
-function screenerDiskPayloadUsable(usItems, saItems) {
-  const all = [...(usItems || []), ...(saItems || [])];
-  if (!all.length) return false;
-  const usable = all.filter(isUsableScreenerRow).length;
-  return usable / all.length >= 0.5;
-}
-
-function loadStaticScreenerFallback() {
-  const base = join(__dirname, "static", "data");
-  const readItems = (file, market) => {
-    const path = join(base, file);
-    if (!existsSync(path)) return [];
-    const json = JSON.parse(readFileSync(path, "utf8"));
-    const items = json?.items;
-    if (!Array.isArray(items)) return [];
-    return items.map((row) => ({
-      ...row,
-      market: row.market || market,
-      ticker: market === "us" ? String(row.ticker || "").toUpperCase() : String(row.ticker || ""),
-    }));
-  };
-  const us = readItems("screener_us.json", "us");
-  const sa = readItems("screener_sa.json", "sa");
-  if (!us.length && !sa.length) return null;
-  return mergeScreenerResponse(us, sa, { source: "static-bundle", stale: true });
-}
-
 function scheduleScreenerRebuildIfNeeded(needed) {
   if (!needed) return;
   const key = fmpApiKey();
@@ -821,6 +794,19 @@ function scheduleScreenerRebuildIfNeeded(needed) {
     });
 }
 
+function ensureScreenerCacheWarm() {
+  const usHit = screenerStore.read("us");
+  const saHit = screenerStore.read("sa");
+  const usOk = screenerMarketUsable(usHit?.record?.items);
+  const saOk = screenerMarketUsable(saHit?.record?.items);
+  const usExpired = !usHit?.record || screenerStore.isExpired(usHit.record);
+  const saExpired = !saHit?.record || screenerStore.isExpired(saHit.record);
+  if (!usOk || !saOk || usExpired || saExpired) {
+    console.log("[screener] FMP cache missing, expired, or incomplete — scheduling build");
+    scheduleScreenerRebuildIfNeeded(true);
+  }
+}
+
 app.get("/api/screener", (req, res) => {
   try {
     const usHit = screenerStore.read("us");
@@ -833,31 +819,16 @@ app.get("/api/screener", (req, res) => {
 
     if (force) scheduleScreenerRebuildIfNeeded(true);
 
-    const diskUsable = screenerDiskPayloadUsable(usItems, saItems);
+    const usOk = screenerMarketUsable(usItems);
+    const saOk = screenerMarketUsable(saItems);
 
-    if (
-      diskUsable &&
-      usItems?.length &&
-      saItems?.length &&
-      !usExpired &&
-      !saExpired &&
-      !force
-    ) {
+    if (usOk || saOk) {
+      const stale = force || usExpired || saExpired || !usOk || !saOk;
+      if (stale) scheduleScreenerRebuildIfNeeded(true);
       return res.json(
-        mergeScreenerResponse(usItems, saItems, {
-          source: "disk",
-          us: usHit.record.meta,
-          sa: saHit.record.meta,
-        })
-      );
-    }
-
-    if (diskUsable && (usItems?.length || saItems?.length)) {
-      scheduleScreenerRebuildIfNeeded(force || usExpired || saExpired);
-      return res.json(
-        mergeScreenerResponse(usItems || [], saItems || [], {
-          source: "disk-stale",
-          stale: true,
+        mergeScreenerResponse(usOk ? usItems : [], saOk ? saItems : [], {
+          source: stale ? "disk-stale" : "disk",
+          stale,
           us: usHit?.record?.meta ?? null,
           sa: saHit?.record?.meta ?? null,
           rebuilding: Boolean(screenerRebuildPromise),
@@ -865,18 +836,13 @@ app.get("/api/screener", (req, res) => {
       );
     }
 
-    if ((usItems?.length || saItems?.length) && !diskUsable) {
-      console.warn("[screener] disk cache has incomplete metrics; using static fallback and rebuilding");
+    if (usItems?.length || saItems?.length) {
+      console.warn("[screener] disk cache has incomplete metrics; rebuilding from FMP");
+      scheduleScreenerRebuildIfNeeded(true);
+    } else {
       scheduleScreenerRebuildIfNeeded(true);
     }
 
-    const fallback = loadStaticScreenerFallback();
-    if (fallback) {
-      scheduleScreenerRebuildIfNeeded(true);
-      return res.json({ ...fallback, rebuilding: Boolean(screenerRebuildPromise) });
-    }
-
-    scheduleScreenerRebuildIfNeeded(true);
     return res.status(503).json({
       error: "Screener data is being built from FMP. Please try again in a few minutes.",
       rebuilding: Boolean(screenerRebuildPromise),
@@ -941,4 +907,5 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running at ${SERVER_URL}`);
   console.log(`Client: ${CLIENT_URL}`);
+  ensureScreenerCacheWarm();
 });

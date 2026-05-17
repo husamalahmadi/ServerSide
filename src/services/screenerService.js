@@ -1,90 +1,58 @@
 import { getApiUrl } from "../config/env.js";
-import { collectScreenerItems, isUsableScreenerRow } from "../domain/screenerMetrics.js";
-import { publicUrl } from "../utils/publicUrl.js";
-
-const SCREENER_US_URL = publicUrl("data/screener_us.json");
-const SCREENER_SA_URL = publicUrl("data/screener_sa.json");
-const SP500_DATA_URL = publicUrl("data/sp500_financial_data.json");
-const TASI_DATA_URL = publicUrl("data/tasi_financial_data.json");
+import { isUsableScreenerRow } from "../domain/screenerMetrics.js";
 
 let _screenerPromise = null;
 
-async function fetchJson(url) {
-  const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Failed to fetch ${url} (${res.status})`);
-  return res.json();
+/** Clear in-memory screener fetch (e.g. after manual refresh). */
+export function clearScreenerCache() {
+  _screenerPromise = null;
 }
 
-function itemsFromScreenerPayload(json, market) {
-  const items = json?.items;
-  if (!Array.isArray(items)) return null;
-  return items.map((row) => ({
-    ...row,
-    market: row.market || market,
-    ticker: market === "us" ? String(row.ticker || "").toUpperCase() : String(row.ticker || ""),
-  }));
-}
-
-async function loadMarketItems(screenerUrl, fullDataUrl, market) {
+/**
+ * Homepage screener — served from GET /api/screener (FMP-built disk cache on server).
+ */
+export async function getScreenerDataset() {
+  if (_screenerPromise) return _screenerPromise;
+  _screenerPromise = loadFromApi();
   try {
-    const compact = await fetchJson(screenerUrl);
-    const fromCompact = itemsFromScreenerPayload(compact, market);
-    if (fromCompact?.length) return fromCompact;
-  } catch {
-    /* fall back to full financial dump */
+    return await _screenerPromise;
+  } catch (err) {
+    _screenerPromise = null;
+    throw err;
   }
-  const full = await fetchJson(fullDataUrl);
-  return collectScreenerItems(full, market);
-}
-
-function screenerPayloadUsable(items) {
-  if (!Array.isArray(items) || !items.length) return false;
-  const usable = items.filter(isUsableScreenerRow).length;
-  return usable / items.length >= 0.5;
 }
 
 async function loadFromApi() {
   const url = `${getApiUrl()}/api/screener`;
   const res = await fetch(url, { cache: "no-store", credentials: "include" });
   const json = await res.json().catch(() => ({}));
+
+  if (res.status === 503) {
+    const err = new Error(
+      json?.error || "Screener data is being built from FMP. Please try again in a few minutes."
+    );
+    err.code = "SCREENER_BUILDING";
+    err.rebuilding = Boolean(json?.rebuilding);
+    throw err;
+  }
+
   if (!res.ok) throw new Error(json?.error || `Screener API HTTP ${res.status}`);
   if (!Array.isArray(json?.items)) throw new Error("Screener API: invalid payload");
-  if (!screenerPayloadUsable(json.items)) {
-    throw new Error("Screener API returned incomplete metrics");
+
+  const items = json.items.filter(isUsableScreenerRow);
+  if (!items.length) {
+    const err = new Error(
+      json?.error || "Screener data is being built from FMP. Please try again in a few minutes."
+    );
+    err.code = "SCREENER_BUILDING";
+    err.rebuilding = Boolean(json?.rebuilding);
+    throw err;
   }
+
   return {
-    items: json.items.filter(isUsableScreenerRow),
+    items,
     sectors: Array.isArray(json.sectors) ? json.sectors : [],
     meta: json.meta || null,
+    rebuilding: Boolean(json.rebuilding),
   };
-}
-
-async function loadFromPublicFallback() {
-  const [us, sa] = await Promise.all([
-    loadMarketItems(SCREENER_US_URL, SP500_DATA_URL, "us"),
-    loadMarketItems(SCREENER_SA_URL, TASI_DATA_URL, "sa"),
-  ]);
-  const items = [...us, ...sa].filter(isUsableScreenerRow);
-  const sectors = Array.from(new Set(items.map((x) => x.sector).filter(Boolean))).sort((a, b) =>
-    a.localeCompare(b)
-  );
-  return { items, sectors, meta: { source: "public-fallback" } };
-}
-
-export async function getScreenerDataset() {
-  if (_screenerPromise) return _screenerPromise;
-  _screenerPromise = (async () => {
-    try {
-      return await loadFromApi();
-    } catch (apiErr) {
-      console.warn("[screener] API failed, using public fallback:", apiErr?.message || apiErr);
-      try {
-        return await loadFromPublicFallback();
-      } catch (fallbackErr) {
-        _screenerPromise = null;
-        throw fallbackErr;
-      }
-    }
-  })();
-  return _screenerPromise;
 }

@@ -101,9 +101,15 @@ export default function Home() {
           items: data?.items || [],
           sectors: data?.sectors || [],
         });
-      } catch {
+      } catch (e) {
         if (!alive) return;
-        setScreenerState({ loading: false, error: t("SCREENER_LOAD_FAILED"), items: [], sectors: [] });
+        const building = e?.code === "SCREENER_BUILDING";
+        setScreenerState({
+          loading: false,
+          error: t(building ? "SCREENER_BUILDING" : "SCREENER_LOAD_FAILED"),
+          items: [],
+          sectors: [],
+        });
       }
     })();
     return () => {

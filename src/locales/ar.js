@@ -149,6 +149,7 @@ export default {
   SCREENER_TITLE: "فلتر الأسهم",
   SCREENER_MATCHES: "النتائج",
   SCREENER_LOAD_FAILED: "فشل تحميل بيانات الفلتر.",
+  SCREENER_BUILDING: "جاري تحميل بيانات الفلتر من FMP. حدّث الصفحة بعد بضع دقائق.",
   SCREENER_MARKET: "السوق",
   SCREENER_ALL_MARKETS: "كل الأسواق",
   SCREENER_SEARCH_PLACEHOLDER: "فلترة بالرمز أو اسم الشركة...",

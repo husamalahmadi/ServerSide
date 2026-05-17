@@ -14,6 +14,13 @@ export function isUsableScreenerRow(row) {
   return isPositive(row.marketCap);
 }
 
+/** True when at least half of a market's screener rows have usable metrics. */
+export function screenerMarketUsable(items) {
+  if (!Array.isArray(items) || !items.length) return false;
+  const usable = items.filter(isUsableScreenerRow).length;
+  return usable / items.length >= 0.5;
+}
+
 function latestRow(rows) {
   if (!Array.isArray(rows) || !rows.length) return null;
   return rows[0];
@@ -91,7 +98,7 @@ function isFmpCompanyData(data) {
 }
 
 /**
- * @param {object} c company record from financial_data.json
+ * @param {object} c company record (FMP statement bundles on company.data)
  * @param {"us"|"sa"} market
  * @param {string} sector
  */

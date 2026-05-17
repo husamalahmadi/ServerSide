@@ -149,6 +149,7 @@ export default {
   SCREENER_TITLE: "Stock Screener",
   SCREENER_MATCHES: "Matches",
   SCREENER_LOAD_FAILED: "Failed to load screener data.",
+  SCREENER_BUILDING: "Screener is loading financial data from FMP. Refresh the page in a few minutes.",
   SCREENER_MARKET: "Market",
   SCREENER_ALL_MARKETS: "All markets",
   SCREENER_SEARCH_PLACEHOLDER: "Filter by ticker or company...",

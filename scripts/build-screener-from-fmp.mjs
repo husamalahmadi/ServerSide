@@ -1,6 +1,6 @@
 /**
- * Build screener_us.json and screener_sa.json from FMP (3-month snapshots on server disk).
- * Run from repo root: node scripts/build-screener-from-fmp.mjs [us|sa|all] [--limit N]
+ * Build US/SA screener snapshots from FMP into server disk cache (SCREENER_DATA_DIR).
+ * Run from repo root: npm run build:screener -- [us|sa|all] [--limit N]
  */
 import dotenv from "dotenv";
 import { join, dirname } from "path";

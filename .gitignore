@@ -13,9 +13,15 @@ server/trueprice.db
 # Per-ticker FMP financial snapshots (generated at runtime; folder kept via .gitkeep)
 server/data/fmp-financials/*
 !server/data/fmp-financials/.gitkeep
-# FMP screener snapshots (screener_us.json / screener_sa.json, 3-month TTL)
+# FMP screener snapshots (3-month TTL on server disk)
 server/data/screener/*
 !server/data/screener/.gitkeep
+
+# Legacy bulk financial + public screener JSON (replaced by FMP API + server cache)
+public/data/sp500_financial_data.json
+public/data/tasi_financial_data.json
+public/data/screener_us.json
+public/data/screener_sa.json
 
 # Environment variables
 .env
