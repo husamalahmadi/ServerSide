@@ -86,7 +86,11 @@ export default {
   PE_BASED: "P/E based",
   EQUITY_PER_SHARE: "Equity / share",
   ERR_STATEMENTS: "Failed to load financial statements.",
+  ERR_STATEMENTS_RETRY:
+    "Some financial data could not be loaded completely. This is usually temporary — please try again.",
   ERR_VALUATION: "Failed to load valuation.",
+  ERR_VALUATION_RETRY:
+    "Valuation could not be calculated because some data is missing. Please try again in a moment.",
   BLOGS: "Blogs",
   ERR_LOAD_BLOGS: "Failed to load blogs.",
   READ_MORE: "Read more",

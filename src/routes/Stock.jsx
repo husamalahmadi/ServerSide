@@ -6,6 +6,7 @@ import { getCompany, getStocks, resolveMarketAndSymbol, fmpSymbolFromResolved } 
 import { getLivePrice } from "../services/priceService.js";
 import { getFinancialsCached } from "../services/financialsService.js";
 import { computeValuation } from "../domain/valuation.js";
+import { isFmpRetryError } from "../services/fmpErrors.js";
 import { fmpProfile } from "../services/fmpService.js";
 import { translateToArabic } from "../services/translateService.js";
 import { Card } from "../components/Card.jsx";
@@ -130,7 +131,8 @@ export default function Stock() {
       const j = await getFinancialsCached({ ticker, market });
       setFin({ loading: false, error: "", data: j });
     } catch (e) {
-      setFin({ loading: false, error: t("ERR_STATEMENTS"), data: null });
+      const error = isFmpRetryError(e) ? t("ERR_STATEMENTS_RETRY") : t("ERR_STATEMENTS");
+      setFin({ loading: false, error, data: null });
     }
   }, [ticker, market, t]);
 
@@ -140,7 +142,8 @@ export default function Stock() {
       const j = await computeValuation({ ticker, market, cache: "no-store" });
       setVal({ loading: false, error: "", data: j });
     } catch (e) {
-      setVal({ loading: false, error: t("ERR_VALUATION"), data: null });
+      const error = isFmpRetryError(e) ? t("ERR_VALUATION_RETRY") : t("ERR_VALUATION");
+      setVal({ loading: false, error, data: null });
     }
   }, [ticker, market, t]);
 

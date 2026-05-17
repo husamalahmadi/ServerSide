@@ -2,13 +2,12 @@
 import { resolveMarketAndSymbol, CURRENCY_BY_MARKET, fmpSymbolFromResolved } from "../data/stocksCatalog.js";
 import { coalesce, toNumber } from "./financials.js";
 import { fmpQuote, fmpRatios } from "../services/fmpService.js";
-import { getTasiCompanyData, tasiToValuationFormat } from "../services/tasiDataService.js";
-import { getSp500CompanyData, sp500ToValuationFormat } from "../services/sp500DataService.js";
+import { getFmpCompanyFinancials, fmpToValuationFormat } from "../services/fmpFinancialsService.js";
+import { FmpIncompleteError } from "../services/fmpErrors.js";
 
 /**
  * Client-side replacement for GET /api/valuation/:ticker.
- * - TASI (SA): uses local tasi_financial_data.json for financials; FMP quote + ratios for live inputs.
- * - US (S&P 500): uses local sp500_financial_data.json for financials; FMP quote + ratios for live inputs.
+ * Financials from FMP statements + enterprise values; live quote and ratios from FMP.
  * Caller can still cache the result in sessionStorage (as the UI already does).
  */
 export async function computeValuation({ ticker, market } = {}) {
@@ -22,41 +21,18 @@ export async function computeValuation({ ticker, market } = {}) {
   let bsJson = {};
   let isJson = {};
 
-  if (resolvedMarket === "sa") {
-    const tasiData = await getTasiCompanyData(tickerSA);
-    if (tasiData) {
-      const v = tasiToValuationFormat(tasiData);
-      const d = tasiData.data;
-      const hasUsableData =
-        v &&
-        d?.outstanding_common_stocks != null &&
-        d?.outstanding_common_stocks > 0 &&
-        (d?.enterprise_value != null ||
-          d?.market_capitalization != null ||
-          (d?.equity?.length > 0 && (d?.sales?.length > 0 || d?.net_income?.length > 0)));
-      if (v && hasUsableData) {
+  if (fmpSym) {
+    try {
+      const bundle = await getFmpCompanyFinancials(fmpSym);
+      const v = fmpToValuationFormat(bundle);
+      if (v) {
         statsJson = { statistics: v.stats };
         bsJson = { balance_sheet: v.balance_sheet };
         isJson = { income_statement: v.income_statement };
       }
-    }
-  } else if (resolvedMarket === "us") {
-    const sp500Data = await getSp500CompanyData(tickerUS);
-    if (sp500Data) {
-      const v = sp500ToValuationFormat(sp500Data);
-      const d = sp500Data.data;
-      const hasUsableData =
-        v &&
-        d?.outstanding_common_stocks != null &&
-        d?.outstanding_common_stocks > 0 &&
-        (d?.enterprise_value != null ||
-          d?.market_capitalization != null ||
-          (d?.equity?.length > 0 && (d?.sales?.length > 0 || d?.net_income?.length > 0)));
-      if (v && hasUsableData) {
-        statsJson = { statistics: v.stats };
-        bsJson = { balance_sheet: v.balance_sheet };
-        isJson = { income_statement: v.income_statement };
-      }
+    } catch (err) {
+      if (err instanceof FmpIncompleteError) throw err;
+      /* valuation continues with quote/ratios only for other errors */
     }
   }
 

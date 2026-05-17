@@ -10,6 +10,9 @@ server/static/
 # Server database
 server/trueprice.db
 
+# Per-ticker FMP financial snapshots (generated at runtime)
+server/data/fmp-financials/
+
 # Environment variables
 .env
 .env.local

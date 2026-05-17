@@ -1,5 +1,6 @@
 // FILE: src/services/fmpService.js
 import { getApiUrl } from "../config/env.js";
+import { FmpIncompleteError } from "./fmpErrors.js";
 
 /**
  * Live quote via Express `/api/fmp/quote/:symbol` (FMP stable quote).
@@ -39,6 +40,23 @@ export async function fmpRatios(fmpSymbol) {
   const url = `${getApiUrl()}/api/fmp/ratios/${encodeURIComponent(fmpSymbol)}`;
   const res = await fetch(url, { cache: "no-store", credentials: "include" });
   const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(json?.error || `HTTP ${res.status}`);
+  return json;
+}
+
+/**
+ * Income, balance, cash flow, and enterprise values via `/api/fmp/financials/:symbol`.
+ * @returns {Promise<{ income: object[], balance: object[], cash: object[], enterpriseValues: object[] }>}
+ */
+export async function fmpFinancials(fmpSymbol) {
+  const url = `${getApiUrl()}/api/fmp/financials/${encodeURIComponent(fmpSymbol)}`;
+  const res = await fetch(url, { cache: "no-store", credentials: "include" });
+  const json = await res.json().catch(() => ({}));
+  if (res.status === 422 && json?.retry) {
+    throw new FmpIncompleteError(json.error || "Incomplete financial data. Please try again.", {
+      issues: json.issues,
+    });
+  }
   if (!res.ok) throw new Error(json?.error || `HTTP ${res.status}`);
   return json;
 }
