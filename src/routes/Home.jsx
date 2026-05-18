@@ -18,10 +18,10 @@ const QUICK_PICKS = [
   { ticker: "AAPL", name: "Apple", market: "us" },
   { ticker: "MSFT", name: "Microsoft", market: "us" },
   { ticker: "2222", name: "Saudi Aramco", market: "sa" },
-  { ticker: "1120", name: "Al Rajhi Bank", market: "sa" },
+  { ticker: "7203.T", name: "Toyota", market: "jp" },
   { ticker: "NVDA", name: "NVIDIA", market: "us" },
-  { ticker: "1180", name: "SNB", market: "sa" },
-  { ticker: "2010", name: "SABIC", market: "sa" },
+  { ticker: "1120", name: "Al Rajhi Bank", market: "sa" },
+  { ticker: "6758.T", name: "Sony", market: "jp" },
   { ticker: "AMZN", name: "Amazon", market: "us" },
 ];
 
@@ -39,7 +39,7 @@ export default function Home() {
   }, [searchParams, setSearchParams]);
   usePageMeta({
     title: "TruePrice.Cash",
-    description: t("MARKET_US") + " & " + t("MARKET_SA") + ". " + t("COMPANIES") + ".",
+    description: `${t("MARKET_US")}, ${t("MARKET_SA")} & ${t("MARKET_JP")}. ${t("COMPANIES")}.`,
     pathname: "/",
   });
 
@@ -370,6 +370,7 @@ export default function Home() {
         }
         .tp-scr-market-badge.us { color: #1d4ed8; background: #eff6ff; }
         .tp-scr-market-badge.sa { color: #166534; background: #ecfdf3; }
+        .tp-scr-market-badge.jp { color: #be123c; background: #fff1f2; }
         .tp-scr-empty { border: 1px dashed var(--tp-border); padding: 20px; color: var(--tp-muted); text-align: center; }
         @media (max-width: 1180px) {
           .tp-scr-filters { grid-template-columns: repeat(12, minmax(0, 1fr)); }
@@ -503,7 +504,7 @@ export default function Home() {
                       onClick={() => pickSuggestion(it)}
                     >
                       <span className="tp-sug-ticker">{it.ticker}</span>
-                      <span className="tp-sug-name">{it.name} · {it.market === "sa" ? "TASI" : "US"}</span>
+                      <span className="tp-sug-name">{it.name} · {it.market === "sa" ? "TASI" : it.market === "jp" ? "TOKYO" : "US"}</span>
                     </div>
                   ))}
                 </div>
@@ -559,6 +560,9 @@ export default function Home() {
             </button>
             <button type="button" className="tp-scr-preset" onClick={() => applyPreset("us")}>
               {t("SCREENER_PRESET_US")}
+            </button>
+            <button type="button" className="tp-scr-preset" onClick={() => applyPreset("tokyo")}>
+              {t("SCREENER_PRESET_TOKYO")}
             </button>
             <button type="button" className="tp-scr-preset" onClick={() => applyPreset("reset")}>
               {t("RESET")}

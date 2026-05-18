@@ -4,9 +4,12 @@ import { publicUrl } from "../utils/publicUrl.js";
 const DATA_FILES = {
   us: publicUrl("data/sp500_grouped_by_industry.json"),
   sa: publicUrl("data/tasi_grouped_by_industry.json"),
+  jp: publicUrl("data/tokyo_stock_exchange.json"),
 };
 
-export const CURRENCY_BY_MARKET = { us: "USD", sa: "SAR" };
+export const MARKETS = ["us", "sa", "jp"];
+
+export const CURRENCY_BY_MARKET = { us: "USD", sa: "SAR", jp: "JPY" };
 
 async function fetchJson(url) {
   const res = await fetch(url, { cache: "no-store" });
@@ -57,21 +60,30 @@ async function ensureCatalog() {
   if (_catalogPromise) return _catalogPromise;
 
   _catalogPromise = (async () => {
-    const [usRaw, saRaw] = await Promise.all([fetchJson(DATA_FILES.us), fetchJson(DATA_FILES.sa)]);
+    const [usRaw, saRaw, jpRaw] = await Promise.all([
+      fetchJson(DATA_FILES.us),
+      fetchJson(DATA_FILES.sa),
+      fetchJson(DATA_FILES.jp).catch(() => ({})),
+    ]);
 
     const us = normalizeGrouped(usRaw, { tickerUppercase: true, market: "us" });
     const sa = normalizeGrouped(saRaw, { tickerUppercase: false, market: "sa" });
+    const jp = normalizeGrouped(jpRaw, { tickerUppercase: true, market: "jp" });
 
-    return { us, sa };
+    return { us, sa, jp };
   })();
 
   return _catalogPromise;
 }
 
+function isMarket(m) {
+  return m === "us" || m === "sa" || m === "jp";
+}
+
 export async function getStocks({ market = "us" } = {}) {
   const cat = await ensureCatalog();
-  const m = market === "sa" ? "sa" : "us";
-  const pool = m === "sa" ? cat.sa : cat.us;
+  const m = isMarket(market) ? market : "us";
+  const pool = cat[m];
 
   return {
     market: m,
@@ -81,64 +93,92 @@ export async function getStocks({ market = "us" } = {}) {
   };
 }
 
-/** Returns all stocks from both US and TASI for unified search. */
+/** Returns all stocks from US, TASI, and Tokyo for unified search. */
 export async function getAllStocks() {
   const cat = await ensureCatalog();
-  const combined = [...cat.us.list, ...cat.sa.list];
-  const industries = Array.from(new Set([...cat.us.inds, ...cat.sa.inds])).sort((a, b) => a.localeCompare(b));
+  const combined = [...cat.us.list, ...cat.sa.list, ...cat.jp.list];
+  const industries = Array.from(
+    new Set([...cat.us.inds, ...cat.sa.inds, ...cat.jp.inds])
+  ).sort((a, b) => a.localeCompare(b));
   return { items: combined, industries };
+}
+
+function findInCatalog(cat, rawTicker) {
+  const up = String(rawTicker || "").toUpperCase().trim();
+  if (!up) return null;
+  if (cat.us.byUpperTicker.has(up)) return { market: "us", hit: cat.us.byUpperTicker.get(up) };
+  if (cat.sa.byUpperTicker.has(up)) return { market: "sa", hit: cat.sa.byUpperTicker.get(up) };
+  if (cat.jp.byUpperTicker.has(up)) return { market: "jp", hit: cat.jp.byUpperTicker.get(up) };
+  // Tokyo: user might type bare "3823" without ".T"
+  const upDotT = `${up}.T`;
+  if (cat.jp.byUpperTicker.has(upDotT)) return { market: "jp", hit: cat.jp.byUpperTicker.get(upDotT) };
+  return null;
 }
 
 export async function getCompany(rawTicker) {
   const cat = await ensureCatalog();
-  const up = String(rawTicker || "").toUpperCase();
-
-  const hitUS = cat.us.byUpperTicker.get(up);
-  if (hitUS) {
-    return {
-      ticker: hitUS.ticker,
-      name: hitUS.name,
-      market: "us",
-      currency: CURRENCY_BY_MARKET.us,
-    };
-  }
-
-  const hitSA = cat.sa.byUpperTicker.get(up);
-  if (hitSA) {
-    return {
-      ticker: hitSA.ticker,
-      name: hitSA.name,
-      market: "sa",
-      currency: CURRENCY_BY_MARKET.sa,
-    };
-  }
-
-  throw new Error("Ticker not found in US/SA lists.");
+  const found = findInCatalog(cat, rawTicker);
+  if (!found) throw new Error("Ticker not found in US/SA/JP lists.");
+  return {
+    ticker: found.hit.ticker,
+    name: found.hit.name,
+    market: found.market,
+    currency: CURRENCY_BY_MARKET[found.market],
+  };
 }
 
+/**
+ * Resolve a user-entered ticker to a market + FMP symbol + display ticker.
+ * `fmpSymbol`: what to send to FMP API (e.g. AAPL, 2222.SR, 7203.T).
+ * `tickerDisplay`: what to show in UI / use as cache key.
+ */
 export async function resolveMarketAndSymbol(rawTicker, requestedMarket) {
   const cat = await ensureCatalog();
+  const upper = String(rawTicker || "").toUpperCase().trim();
+  if (!upper) return { ok: false };
 
-  const tickerUS = String(rawTicker || "").toUpperCase();
-  const tickerSA = String(rawTicker || "");
-
-  let market =
-    requestedMarket === "sa" ? "sa" : requestedMarket === "us" ? "us" : null;
+  let market = isMarket(requestedMarket) ? requestedMarket : null;
+  let resolvedUpper = upper;
 
   if (!market) {
-    if (cat.us.upperSet.has(tickerUS)) market = "us";
-    else if (cat.sa.upperSet.has(tickerSA.toUpperCase())) market = "sa";
+    const found = findInCatalog(cat, upper);
+    if (found) {
+      market = found.market;
+      resolvedUpper = String(found.hit.ticker).toUpperCase();
+    }
+  } else if (market === "jp") {
+    if (!cat.jp.upperSet.has(upper) && cat.jp.upperSet.has(`${upper}.T`)) {
+      resolvedUpper = `${upper}.T`;
+    }
   }
+
   if (!market) return { ok: false };
 
-  const symbol = market === "us" ? tickerUS : `${tickerSA}:TADAWUL`;
-  const currency = CURRENCY_BY_MARKET[market];
+  const tickerUS = upper;
+  const tickerSA = String(rawTicker || "").trim();
+  const tickerJP = resolvedUpper;
+  const tickerDisplay = market === "us" ? tickerUS : market === "jp" ? tickerJP : tickerSA;
 
-  return { ok: true, market, symbol, tickerUS, tickerSA, currency };
+  let fmpSymbol;
+  if (market === "us") fmpSymbol = tickerUS;
+  else if (market === "sa") fmpSymbol = `${tickerSA}.SR`;
+  else fmpSymbol = tickerJP;
+
+  return {
+    ok: true,
+    market,
+    symbol: fmpSymbol,
+    fmpSymbol,
+    tickerDisplay,
+    tickerUS,
+    tickerSA,
+    tickerJP,
+    currency: CURRENCY_BY_MARKET[market],
+  };
 }
 
-/** Financial Modeling Prep `symbol` query: US uses ticker as-is; Tadawul (TASI) uses `{ticker}.SR`. */
+/** Financial Modeling Prep `symbol` for a resolved ticker. */
 export function fmpSymbolFromResolved(r) {
   if (!r?.ok) return null;
-  return r.market === "us" ? r.tickerUS : `${r.tickerSA}.SR`;
+  return r.fmpSymbol || null;
 }

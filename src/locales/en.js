@@ -24,6 +24,7 @@ export default {
   MARKET: "Market",
   MARKET_US: "US Market",
   MARKET_SA: "Saudi Market",
+  MARKET_JP: "Tokyo Market",
   INDUSTRY: "Industry",
   INDUSTRY_ALL: "All industries",
   SEARCH: "Search",
@@ -162,6 +163,7 @@ export default {
   SCREENER_PRESET_LARGECAP: "Large Cap",
   SCREENER_PRESET_TASI: "TASI Focus",
   SCREENER_PRESET_US: "US Focus",
+  SCREENER_PRESET_TOKYO: "Tokyo Focus",
   SCREENER_AVG_DISCOUNT: "Avg Discount",
   SCREENER_TOP_SECTOR: "Top Sector",
 };

@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import { screenerRowFromCompany, isUsableScreenerRow } from "../src/domain/screenerMetrics.js";
 import { fetchFmpFinancialsBundle } from "./fmpFetch.js";
 import { validateFmpFinancialsBundle } from "./fmpFinancialsStore.js";
+import { SCREENER_MARKETS } from "./screenerStore.js";
 
 const serverDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(serverDir, "..");
@@ -11,10 +12,24 @@ const repoRoot = join(serverDir, "..");
 const GROUPED_PATH = {
   us: join(repoRoot, "public", "data", "sp500_grouped_by_industry.json"),
   sa: join(repoRoot, "public", "data", "tasi_grouped_by_industry.json"),
+  jp: join(repoRoot, "public", "data", "tokyo_stock_exchange.json"),
 };
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
+}
+
+function fmpSymbolFor(market, ticker) {
+  if (market === "us") return ticker.toUpperCase();
+  if (market === "sa") return `${ticker}.SR`;
+  // Tokyo tickers in the catalog already include the ".T" suffix.
+  const up = ticker.toUpperCase();
+  return up.endsWith(".T") ? up : `${up}.T`;
+}
+
+function tickerFor(market, raw) {
+  if (market === "us" || market === "jp") return raw.toUpperCase();
+  return raw;
 }
 
 export function loadGroupedCatalog(market) {
@@ -27,9 +42,9 @@ export function loadGroupedCatalog(market) {
     for (const it of list) {
       const raw = String(it?.Ticker ?? it?.ticker ?? "").trim();
       if (!raw) continue;
-      const ticker = market === "us" ? raw.toUpperCase() : raw;
+      const ticker = tickerFor(market, raw);
       const name = String(it?.Company ?? it?.company ?? ticker).trim();
-      const fmpSymbol = market === "us" ? ticker : `${ticker}.SR`;
+      const fmpSymbol = fmpSymbolFor(market, raw);
       entries.push({ ticker, name, sector, fmpSymbol });
     }
   }
@@ -51,7 +66,7 @@ function companyFromBundle(entry, bundle) {
 }
 
 /**
- * @param {"us"|"sa"} market
+ * @param {"us"|"sa"|"jp"} market
  * @param {{ apiKey: string, financialsStore?: object, delayMs?: number, maxTickers?: number }} opts
  */
 export async function buildScreenerMarket(market, opts) {
@@ -142,27 +157,21 @@ function marketBuildUsable(items, catalogSize) {
 }
 
 export async function buildAllScreeners({ apiKey, financialsStore, screenerStore, delayMs }) {
-  const us = await buildScreenerMarket("us", { apiKey, financialsStore, delayMs });
-  let usSaved = null;
-  if (marketBuildUsable(us.items, us.stats.catalog)) {
-    usSaved = screenerStore.write("us", us.items, { buildStats: us.stats });
-    console.log(`[screener/build] wrote US ${usSaved.filePath} (${us.items.length} items)`);
-  } else {
-    console.warn(
-      `[screener/build] skip US disk write — only ${us.items.length}/${us.stats.catalog} usable rows`
-    );
+  const results = {};
+  for (const market of SCREENER_MARKETS) {
+    const built = await buildScreenerMarket(market, { apiKey, financialsStore, delayMs });
+    let saved = null;
+    if (marketBuildUsable(built.items, built.stats.catalog)) {
+      saved = screenerStore.write(market, built.items, { buildStats: built.stats });
+      console.log(
+        `[screener/build] wrote ${market.toUpperCase()} ${saved.filePath} (${built.items.length} items)`
+      );
+    } else {
+      console.warn(
+        `[screener/build] skip ${market.toUpperCase()} disk write — only ${built.items.length}/${built.stats.catalog} usable rows`
+      );
+    }
+    results[market] = { ...built, saved };
   }
-
-  const sa = await buildScreenerMarket("sa", { apiKey, financialsStore, delayMs });
-  let saSaved = null;
-  if (marketBuildUsable(sa.items, sa.stats.catalog)) {
-    saSaved = screenerStore.write("sa", sa.items, { buildStats: sa.stats });
-    console.log(`[screener/build] wrote SA ${saSaved.filePath} (${sa.items.length} items)`);
-  } else {
-    console.warn(
-      `[screener/build] skip SA disk write — only ${sa.items.length}/${sa.stats.catalog} usable rows`
-    );
-  }
-
-  return { us, sa, usSaved, saSaved };
+  return results;
 }

@@ -1,7 +1,7 @@
 /**
  * Writes public/sitemap.xml from static routes plus every ticker in
- * public/data/sp500_grouped_by_industry.json and tasi_grouped_by_industry.json
- * (same sources as src/data/stocksCatalog.js).
+ * public/data/sp500_grouped_by_industry.json, tasi_grouped_by_industry.json,
+ * and tokyo_stock_exchange.json (same sources as src/data/stocksCatalog.js).
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -60,12 +60,22 @@ function urlEntry(loc, changefreq, priority) {
   </url>`;
 }
 
+function readJsonSafe(path) {
+  try {
+    return JSON.parse(readFileSync(path, "utf8"));
+  } catch {
+    return {};
+  }
+}
+
 function main() {
-  const usRaw = JSON.parse(readFileSync(join(PUBLIC, "data/sp500_grouped_by_industry.json"), "utf8"));
-  const saRaw = JSON.parse(readFileSync(join(PUBLIC, "data/tasi_grouped_by_industry.json"), "utf8"));
+  const usRaw = readJsonSafe(join(PUBLIC, "data/sp500_grouped_by_industry.json"));
+  const saRaw = readJsonSafe(join(PUBLIC, "data/tasi_grouped_by_industry.json"));
+  const jpRaw = readJsonSafe(join(PUBLIC, "data/tokyo_stock_exchange.json"));
 
   const usTickers = collectTickers(usRaw, { tickerUppercase: true });
   const saTickers = collectTickers(saRaw, { tickerUppercase: false });
+  const jpTickers = collectTickers(jpRaw, { tickerUppercase: true });
 
   const staticPages = [
     { loc: `${SITE}/`, changefreq: "weekly", priority: "1.0" },
@@ -75,10 +85,7 @@ function main() {
   ];
 
   const stockLocs = [];
-  for (const t of usTickers) {
-    stockLocs.push(`${SITE}/stock/${encodeURIComponent(t)}`);
-  }
-  for (const t of saTickers) {
+  for (const t of [...usTickers, ...saTickers, ...jpTickers]) {
     stockLocs.push(`${SITE}/stock/${encodeURIComponent(t)}`);
   }
   const uniqueStockLocs = uniqueStable(stockLocs).sort((a, b) => a.localeCompare(b, "en"));

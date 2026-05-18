@@ -13,13 +13,13 @@ export async function getLivePrice({ ticker, market } = {}) {
   const fmpSym = fmpSymbolFromResolved(r);
   if (!fmpSym) throw new Error("Ticker not allowed.");
 
-  const { currency, market: resolvedMarket, tickerUS, tickerSA } = r;
+  const { currency, market: resolvedMarket, tickerDisplay } = r;
   const j = await fmpQuote(fmpSym);
   const price = toNumber(j?.price) ?? 0;
 
   return {
     source: "live",
-    ticker: resolvedMarket === "us" ? tickerUS : tickerSA,
+    ticker: tickerDisplay,
     market: resolvedMarket,
     price: Number.isFinite(price) ? price : 0,
     currency,

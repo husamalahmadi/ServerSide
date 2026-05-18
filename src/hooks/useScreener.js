@@ -17,6 +17,7 @@ export function useScreener(items) {
     }
     if (activePreset === "tasi") return rows.filter((it) => it.market === "sa" && Number(it.discountPct) > 0);
     if (activePreset === "us") return rows.filter((it) => it.market === "us" && Number(it.discountPct) > 0);
+    if (activePreset === "tokyo") return rows.filter((it) => it.market === "jp" && Number(it.discountPct) > 0);
     return rows;
   }, [items, activePreset]);
   const sorted = useMemo(() => sortScreenerItems(filtered, sortBy, sortDir), [filtered, sortBy, sortDir]);

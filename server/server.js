@@ -16,7 +16,7 @@ import {
   INCOMPLETE_USER_MESSAGE,
 } from "./fmpFinancialsStore.js";
 import { fetchFmpFinancialsBundle, fmpApiKey, FMP_STABLE_BASE } from "./fmpFetch.js";
-import { createScreenerStore, resolveScreenerDir } from "./screenerStore.js";
+import { createScreenerStore, resolveScreenerDir, SCREENER_MARKETS } from "./screenerStore.js";
 import { buildAllScreeners } from "./buildScreenerFromFmp.js";
 import { isUsableScreenerRow, screenerMarketUsable } from "../src/domain/screenerMetrics.js";
 import { fileURLToPath } from "url";
@@ -763,8 +763,10 @@ app.get("/api/fmp/financials/:symbol", async (req, res) => {
   }
 });
 
-function mergeScreenerResponse(usItems, saItems, meta) {
-  const items = [...(usItems || []), ...(saItems || [])].filter(isUsableScreenerRow);
+function mergeScreenerResponse(rowsByMarket, meta) {
+  const items = SCREENER_MARKETS
+    .flatMap((m) => rowsByMarket?.[m] || [])
+    .filter(isUsableScreenerRow);
   const sectors = Array.from(new Set(items.map((x) => x.sector).filter(Boolean))).sort((a, b) =>
     a.localeCompare(b)
   );
@@ -780,7 +782,7 @@ function scheduleScreenerRebuildIfNeeded(needed) {
   }
   if (screenerRebuildPromise) return;
   const delayMs = Number(process.env.SCREENER_FMP_DELAY_MS || 350);
-  console.log("[screener] starting background FMP rebuild (US + SA)…");
+  console.log(`[screener] starting background FMP rebuild (${SCREENER_MARKETS.map((m) => m.toUpperCase()).join(" + ")})…`);
   screenerRebuildPromise = buildAllScreeners({
     apiKey: key,
     financialsStore: fmpFinancialsStore,
@@ -794,14 +796,27 @@ function scheduleScreenerRebuildIfNeeded(needed) {
     });
 }
 
+function readScreenerSnapshot() {
+  const snapshot = {};
+  for (const m of SCREENER_MARKETS) {
+    const hit = screenerStore.read(m);
+    const items = hit?.record?.items;
+    const expired = !hit?.record || screenerStore.isExpired(hit.record);
+    snapshot[m] = {
+      hit,
+      items: items || [],
+      meta: hit?.record?.meta || null,
+      expired,
+      usable: screenerMarketUsable(items),
+    };
+  }
+  return snapshot;
+}
+
 function ensureScreenerCacheWarm() {
-  const usHit = screenerStore.read("us");
-  const saHit = screenerStore.read("sa");
-  const usOk = screenerMarketUsable(usHit?.record?.items);
-  const saOk = screenerMarketUsable(saHit?.record?.items);
-  const usExpired = !usHit?.record || screenerStore.isExpired(usHit.record);
-  const saExpired = !saHit?.record || screenerStore.isExpired(saHit.record);
-  if (!usOk || !saOk || usExpired || saExpired) {
+  const snap = readScreenerSnapshot();
+  const needs = SCREENER_MARKETS.some((m) => !snap[m].usable || snap[m].expired);
+  if (needs) {
     console.log("[screener] FMP cache missing, expired, or incomplete — scheduling build");
     scheduleScreenerRebuildIfNeeded(true);
   }
@@ -809,39 +824,41 @@ function ensureScreenerCacheWarm() {
 
 app.get("/api/screener", (req, res) => {
   try {
-    const usHit = screenerStore.read("us");
-    const saHit = screenerStore.read("sa");
-    const usItems = usHit?.record?.items;
-    const saItems = saHit?.record?.items;
-    const usExpired = !usHit?.record || screenerStore.isExpired(usHit.record);
-    const saExpired = !saHit?.record || screenerStore.isExpired(saHit.record);
+    const snap = readScreenerSnapshot();
     const force = req.query.refresh === "1" || req.query.refresh === "true";
 
     if (force) scheduleScreenerRebuildIfNeeded(true);
 
-    const usOk = screenerMarketUsable(usItems);
-    const saOk = screenerMarketUsable(saItems);
+    const anyUsable = SCREENER_MARKETS.some((m) => snap[m].usable);
+    const anyData = SCREENER_MARKETS.some((m) => snap[m].items.length);
 
-    if (usOk || saOk) {
-      const stale = force || usExpired || saExpired || !usOk || !saOk;
+    if (anyUsable) {
+      const stale =
+        force ||
+        SCREENER_MARKETS.some((m) => snap[m].expired || !snap[m].usable);
       if (stale) scheduleScreenerRebuildIfNeeded(true);
+
+      const rowsByMarket = Object.fromEntries(
+        SCREENER_MARKETS.map((m) => [m, snap[m].usable ? snap[m].items : []])
+      );
+      const metaByMarket = Object.fromEntries(
+        SCREENER_MARKETS.map((m) => [m, snap[m].meta])
+      );
+
       return res.json(
-        mergeScreenerResponse(usOk ? usItems : [], saOk ? saItems : [], {
+        mergeScreenerResponse(rowsByMarket, {
           source: stale ? "disk-stale" : "disk",
           stale,
-          us: usHit?.record?.meta ?? null,
-          sa: saHit?.record?.meta ?? null,
+          markets: metaByMarket,
           rebuilding: Boolean(screenerRebuildPromise),
         })
       );
     }
 
-    if (usItems?.length || saItems?.length) {
+    if (anyData) {
       console.warn("[screener] disk cache has incomplete metrics; rebuilding from FMP");
-      scheduleScreenerRebuildIfNeeded(true);
-    } else {
-      scheduleScreenerRebuildIfNeeded(true);
     }
+    scheduleScreenerRebuildIfNeeded(true);
 
     return res.status(503).json({
       error: "Screener data is being built from FMP. Please try again in a few minutes.",

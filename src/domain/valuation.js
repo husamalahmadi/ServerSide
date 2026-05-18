@@ -14,7 +14,7 @@ export async function computeValuation({ ticker, market } = {}) {
   const r = await resolveMarketAndSymbol(ticker, market);
   if (!r.ok) throw new Error("Ticker not allowed.");
 
-  const { market: resolvedMarket, tickerUS, tickerSA } = r;
+  const { market: resolvedMarket, tickerDisplay } = r;
   const fmpSym = fmpSymbolFromResolved(r);
 
   let statsJson = {};
@@ -138,11 +138,11 @@ export async function computeValuation({ ticker, market } = {}) {
     fairPS = (priceToSales * sales) / sharesOutstanding;
   }
 
-  const currency = CURRENCY_BY_MARKET[resolvedMarket] || (resolvedMarket === "sa" ? "SAR" : "USD");
+  const currency = CURRENCY_BY_MARKET[resolvedMarket] || "USD";
 
   return {
     source: "live",
-    ticker: resolvedMarket === "us" ? tickerUS : tickerSA,
+    ticker: tickerDisplay,
     market: resolvedMarket,
     fetchedAt: new Date().toISOString(),
     currency,

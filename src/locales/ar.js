@@ -24,6 +24,7 @@ export default {
   MARKET: "السوق",
   MARKET_US: "السوق الأمريكي",
   MARKET_SA: "السوق السعودي",
+  MARKET_JP: "السوق الياباني",
   INDUSTRY: "القطاع",
   INDUSTRY_ALL: "كل القطاعات",
   SEARCH: "بحث",
@@ -162,6 +163,7 @@ export default {
   SCREENER_PRESET_LARGECAP: "شركات كبرى",
   SCREENER_PRESET_TASI: "تركيز السوق السعودي",
   SCREENER_PRESET_US: "تركيز السوق الأمريكي",
+  SCREENER_PRESET_TOKYO: "تركيز السوق الياباني",
   SCREENER_AVG_DISCOUNT: "متوسط الخصم",
   SCREENER_TOP_SECTOR: "أعلى قطاع",
 };

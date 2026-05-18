@@ -1,13 +1,13 @@
 /**
- * Build US/SA screener snapshots from FMP into server disk cache (SCREENER_DATA_DIR).
- * Run from repo root: npm run build:screener -- [us|sa|all] [--limit N]
+ * Build screener snapshots (US / SA / JP) from FMP into server disk cache (SCREENER_DATA_DIR).
+ * Run from repo root: npm run build:screener -- [us|sa|jp|all] [--limit N]
  */
 import dotenv from "dotenv";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { fmpApiKey } from "../server/fmpFetch.js";
 import { createFinancialsStore, resolveFmpFinancialsDir } from "../server/fmpFinancialsStore.js";
-import { createScreenerStore, resolveScreenerDir } from "../server/screenerStore.js";
+import { createScreenerStore, resolveScreenerDir, SCREENER_MARKETS } from "../server/screenerStore.js";
 import { buildScreenerMarket, buildAllScreeners } from "../server/buildScreenerFromFmp.js";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -33,7 +33,7 @@ console.log(`[screener/build] screener output: ${screenerStore.cacheDir}`);
 
 if (arg === "all") {
   await buildAllScreeners({ apiKey: key, financialsStore, screenerStore, delayMs });
-} else if (arg === "us" || arg === "sa") {
+} else if (SCREENER_MARKETS.includes(arg)) {
   const { items, stats } = await buildScreenerMarket(arg, {
     apiKey: key,
     financialsStore,
@@ -43,6 +43,6 @@ if (arg === "all") {
   const saved = screenerStore.write(arg, items, { buildStats: stats });
   console.log(`[screener/build] wrote ${saved.filePath} (${items.length} items)`, stats);
 } else {
-  console.error("Usage: node scripts/build-screener-from-fmp.mjs [us|sa|all] [--limit N]");
+  console.error("Usage: node scripts/build-screener-from-fmp.mjs [us|sa|jp|all] [--limit N]");
   process.exit(1);
 }

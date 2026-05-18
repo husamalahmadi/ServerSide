@@ -21,7 +21,7 @@ export async function getFinancialsCached({
   const r = await resolveMarketAndSymbol(ticker, market);
   if (!r.ok) throw new Error("Ticker not allowed.");
 
-  const tickerKey = r.market === "us" ? r.tickerUS : r.tickerSA;
+  const tickerKey = r.tickerDisplay;
   const cacheKey = `fmp_fin_${r.market}_${tickerKey}`;
 
   const cached = getCached(cacheKey, { ttlMs, storage });

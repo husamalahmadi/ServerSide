@@ -61,7 +61,8 @@ export function buildStockSeo({ ticker, companyName, lang, fairValue, price, cur
           "@type": "FinancialService",
           "@id": `${pageUrl}#financial`,
           name: `${name} (${symbol})`,
-          areaServed: market === "sa" ? "Saudi Arabia" : "United States",
+          areaServed:
+            market === "sa" ? "Saudi Arabia" : market === "jp" ? "Japan" : "United States",
           provider: {
             "@type": "Organization",
             name: "TruePrice.Cash",
