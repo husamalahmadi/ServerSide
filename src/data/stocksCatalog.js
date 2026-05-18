@@ -140,9 +140,19 @@ export async function resolveMarketAndSymbol(rawTicker, requestedMarket) {
   let market = isMarket(requestedMarket) ? requestedMarket : null;
   let resolvedUpper = upper;
 
+  const found = findInCatalog(cat, upper);
+
   if (!market) {
-    const found = findInCatalog(cat, upper);
     if (found) {
+      market = found.market;
+      resolvedUpper = String(found.hit.ticker).toUpperCase();
+    }
+  } else if (found && found.market !== market) {
+    const pool = cat[market];
+    const inRequested =
+      pool.upperSet.has(upper) ||
+      (market === "jp" && pool.upperSet.has(`${upper}.T`));
+    if (!inRequested) {
       market = found.market;
       resolvedUpper = String(found.hit.ticker).toUpperCase();
     }

@@ -5,11 +5,32 @@ export function fmpApiKey() {
   return k || null;
 }
 
+async function parseFmpJson(res, label) {
+  const text = await res.text();
+  if (!res.ok) {
+    if (text.trimStart().startsWith("<")) {
+      throw new Error(`FMP ${label} HTTP ${res.status} (upstream returned HTML)`);
+    }
+    try {
+      const errBody = JSON.parse(text);
+      const msg = errBody?.["Error Message"] || errBody?.error;
+      if (msg) throw new Error(String(msg));
+    } catch (e) {
+      if (e.message && !e.message.startsWith("Unexpected")) throw e;
+    }
+    throw new Error(`FMP ${label} HTTP ${res.status}`);
+  }
+  try {
+    return text ? JSON.parse(text) : null;
+  } catch {
+    throw new Error(`FMP ${label}: invalid JSON response`);
+  }
+}
+
 export async function fmpFetchStableArray(path, symbol, key) {
   const url = `${FMP_STABLE_BASE}/${path}?${new URLSearchParams({ symbol, apikey: key })}`;
   const r = await fetch(url);
-  if (!r.ok) throw new Error(`FMP ${path} HTTP ${r.status}`);
-  const data = await r.json();
+  const data = await parseFmpJson(r, path);
   if (data && typeof data === "object" && !Array.isArray(data) && (data["Error Message"] || data.error)) {
     throw new Error(String(data["Error Message"] || data.error));
   }

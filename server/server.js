@@ -603,6 +603,15 @@ function cachedFmp(key, ttlMs, fn) {
   });
 }
 
+/** Symbol from ?symbol= (preferred for tickers like 7203.T) or legacy path segment. */
+function fmpSymbolFromRequest(req) {
+  const fromQuery = String(req.query?.symbol || "").trim();
+  if (fromQuery) return fromQuery;
+  const seg = req.params?.symbol;
+  if (seg != null && String(seg).trim() !== "") return decodeURIComponent(String(seg));
+  return "";
+}
+
 function mapFmpProfileRow(raw) {
   if (!raw || typeof raw !== "object") return null;
   let logoUrl = typeof raw.image === "string" && raw.image.startsWith("http") ? raw.image : null;
@@ -629,16 +638,23 @@ function mapFmpProfileRow(raw) {
   };
 }
 
-app.get("/api/fmp/profile/:symbol", async (req, res) => {
+app.get(["/api/fmp/profile", "/api/fmp/profile/:symbol"], async (req, res) => {
   const key = fmpApiKey();
   if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
-  const symbol = decodeURIComponent(req.params.symbol);
+  const symbol = fmpSymbolFromRequest(req);
+  if (!symbol) return res.status(400).json({ error: "symbol query parameter required" });
   try {
     const data = await cachedFmp(`fmp:profile:${symbol}`, 6 * 3600_000, async () => {
       const url = `${FMP_STABLE_BASE}/profile?${new URLSearchParams({ symbol, apikey: key })}`;
       const r = await fetch(url);
+      const text = await r.text();
       if (!r.ok) throw new Error(`FMP profile HTTP ${r.status}`);
-      const arr = await r.json();
+      let arr;
+      try {
+        arr = text ? JSON.parse(text) : null;
+      } catch {
+        throw new Error("FMP profile: invalid JSON");
+      }
       if (arr && typeof arr === "object" && !Array.isArray(arr) && (arr["Error Message"] || arr.error)) {
         throw new Error(String(arr["Error Message"] || arr.error));
       }
@@ -655,16 +671,23 @@ app.get("/api/fmp/profile/:symbol", async (req, res) => {
   }
 });
 
-app.get("/api/fmp/quote/:symbol", async (req, res) => {
+app.get(["/api/fmp/quote", "/api/fmp/quote/:symbol"], async (req, res) => {
   const key = fmpApiKey();
   if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
-  const symbol = decodeURIComponent(req.params.symbol);
+  const symbol = fmpSymbolFromRequest(req);
+  if (!symbol) return res.status(400).json({ error: "symbol query parameter required" });
   try {
     const data = await cachedFmp(`fmp:quote:${symbol}`, 60_000, async () => {
       const url = `${FMP_STABLE_BASE}/quote?${new URLSearchParams({ symbol, apikey: key })}`;
       const r = await fetch(url);
+      const text = await r.text();
       if (!r.ok) throw new Error(`FMP quote HTTP ${r.status}`);
-      const arr = await r.json();
+      let arr;
+      try {
+        arr = text ? JSON.parse(text) : null;
+      } catch {
+        throw new Error("FMP quote: invalid JSON");
+      }
       if (arr && typeof arr === "object" && !Array.isArray(arr) && (arr["Error Message"] || arr.error)) {
         throw new Error(String(arr["Error Message"] || arr.error));
       }
@@ -681,16 +704,23 @@ app.get("/api/fmp/quote/:symbol", async (req, res) => {
   }
 });
 
-app.get("/api/fmp/ratios/:symbol", async (req, res) => {
+app.get(["/api/fmp/ratios", "/api/fmp/ratios/:symbol"], async (req, res) => {
   const key = fmpApiKey();
   if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
-  const symbol = decodeURIComponent(req.params.symbol);
+  const symbol = fmpSymbolFromRequest(req);
+  if (!symbol) return res.status(400).json({ error: "symbol query parameter required" });
   try {
     const data = await cachedFmp(`fmp:ratios:${symbol}`, 6 * 3600_000, async () => {
       const url = `${FMP_STABLE_BASE}/ratios?${new URLSearchParams({ symbol, apikey: key })}`;
       const r = await fetch(url);
+      const text = await r.text();
       if (!r.ok) throw new Error(`FMP ratios HTTP ${r.status}`);
-      const arr = await r.json();
+      let arr;
+      try {
+        arr = text ? JSON.parse(text) : null;
+      } catch {
+        throw new Error("FMP ratios: invalid JSON");
+      }
       if (arr && typeof arr === "object" && !Array.isArray(arr) && (arr["Error Message"] || arr.error)) {
         throw new Error(String(arr["Error Message"] || arr.error));
       }
@@ -713,10 +743,11 @@ app.get("/api/fmp/ratios/:symbol", async (req, res) => {
   }
 });
 
-app.get("/api/fmp/financials/:symbol", async (req, res) => {
+app.get(["/api/fmp/financials", "/api/fmp/financials/:symbol"], async (req, res) => {
   const key = fmpApiKey();
   if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
-  const symbol = decodeURIComponent(req.params.symbol);
+  const symbol = fmpSymbolFromRequest(req);
+  if (!symbol) return res.status(400).json({ error: "symbol query parameter required" });
   const forceRefresh = req.query.refresh === "1" || req.query.refresh === "true";
 
   try {

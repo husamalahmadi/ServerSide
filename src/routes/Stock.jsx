@@ -71,8 +71,9 @@ export default function Stock() {
   };
 
   const [company, setCompany] = useState("");
-  const [market, setMarket] = useState("us");
+  const [market, setMarket] = useState(null);
   const [currency, setCurrency] = useState("USD");
+  const [catalogReady, setCatalogReady] = useState(false);
   const [price, setPrice] = useState(null);
   const [headerError, setHeaderError] = useState("");
 
@@ -89,20 +90,26 @@ export default function Stock() {
 
   const reportDate = useMemo(() => new Date().toLocaleDateString(), []);
 
-  // Company info: FMP profile (logo + metadata)
+  // Resolve catalog market first (jp/us/sa) before any FMP calls — avoids wrong-market requests for 7203.T etc.
   useEffect(() => {
     let alive = true;
+    setCatalogReady(false);
+    setCompany("");
+    setMarket(null);
+    setPrice(null);
+    setHeaderError("");
     (async () => {
       try {
-        setHeaderError("");
         const cj = await getCompany(ticker);
         if (!alive) return;
         setCompany(cj?.name || "");
         setMarket(cj?.market || "us");
         setCurrency(cj?.currency || "USD");
+        setCatalogReady(true);
       } catch (e) {
         if (!alive) return;
         setHeaderError(String(e?.message || e));
+        setCatalogReady(false);
       }
     })();
     return () => { alive = false; };
@@ -110,20 +117,21 @@ export default function Stock() {
 
   // Price: LIVE ONLY (no cache)
   useEffect(() => {
+    if (!catalogReady || !market) return;
     let alive = true;
     (async () => {
       try {
-        setHeaderError("");
         const pj = await getLivePrice({ ticker, market, cache: "no-store" });
         if (!alive) return;
         setPrice(Number(pj?.price));
+        if (pj?.currency) setCurrency(pj.currency);
       } catch (e) {
         if (!alive) return;
         setHeaderError(String(e?.message || e));
       }
     })();
     return () => { alive = false; };
-  }, [ticker, market]);
+  }, [ticker, market, catalogReady]);
 
   const loadFinancials = useCallback(async () => {
     try {
@@ -149,6 +157,7 @@ export default function Stock() {
 
   // Prefetch delay: wait PREFETCH_DELAY_SEC then load financials and valuation
   useEffect(() => {
+    if (!catalogReady || !market) return;
     setPrefetchCountdown(PREFETCH_DELAY_SEC);
     const start = Date.now();
     const interval = setInterval(() => {
@@ -162,10 +171,11 @@ export default function Stock() {
       }
     }, 200);
     return () => clearInterval(interval);
-  }, [ticker, market, loadFinancials, loadValuation]);
+  }, [ticker, market, catalogReady, loadFinancials, loadValuation]);
 
   // Logo & profile
   useEffect(() => {
+    if (!catalogReady || !market) return;
     let alive = true;
     setLogoLoadError(false);
     (async () => {
@@ -187,7 +197,7 @@ export default function Stock() {
     })();
 
     return () => { alive = false; };
-  }, [ticker, market]);
+  }, [ticker, market, catalogReady]);
 
   // Translate profile to Arabic when lang is ar
   useEffect(() => {
@@ -239,15 +249,20 @@ export default function Stock() {
       try {
         const { items } = await getStocks({ market });
         if (!alive) return;
-        const tickerNorm = market === "us" ? (ticker || "").toUpperCase() : ticker;
-        const currentItem = items.find((i) => (market === "us" ? (i.ticker || "").toUpperCase() === tickerNorm : i.ticker === ticker));
+        const tickerNorm =
+          market === "us" || market === "jp" ? (ticker || "").toUpperCase() : ticker;
+        const sameTicker = (i) =>
+          market === "us" || market === "jp"
+            ? (i.ticker || "").toUpperCase() === tickerNorm
+            : i.ticker === ticker;
+        const currentItem = items.find(sameTicker);
         const industry = currentItem?.industry;
         if (!industry) {
           if (alive) setPeers({ loading: false, error: "", list: [] });
           return;
         }
         const peerItems = items
-          .filter((i) => i.industry === industry && (market === "us" ? (i.ticker || "").toUpperCase() !== tickerNorm : i.ticker !== ticker))
+          .filter((i) => i.industry === industry && !sameTicker(i))
           .slice(0, 8);
         const list = [];
         for (const peer of peerItems) {
