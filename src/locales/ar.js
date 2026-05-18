@@ -25,6 +25,12 @@ export default {
   MARKET_US: "السوق الأمريكي",
   MARKET_SA: "السوق السعودي",
   MARKET_JP: "السوق الياباني",
+  HOME_SEARCH_HEADLINE: "تحليل عادل",
+  HOME_SEARCH_HEADLINE_EMP: "أسهم أمريكية وسعودية ويابانية",
+  HOME_SEARCH_DECK:
+    "أدخل الرمز أو اسم الشركة. نحلل القوائم المالية ونقدّر القيمة العادلة.",
+  SCREENER_TOKYO_METRICS_PENDING:
+    "بيانات الفلتر للسوق الياباني قيد التحميل من FMP. يمكنك فتح أي رمز أدناه للتقرير الكامل.",
   INDUSTRY: "القطاع",
   INDUSTRY_ALL: "كل القطاعات",
   SEARCH: "بحث",

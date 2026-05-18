@@ -25,6 +25,12 @@ export default {
   MARKET_US: "US Market",
   MARKET_SA: "Saudi Market",
   MARKET_JP: "Tokyo Market",
+  HOME_SEARCH_HEADLINE: "Institutional-grade",
+  HOME_SEARCH_HEADLINE_EMP: "US, TASI & Tokyo stocks",
+  HOME_SEARCH_DECK:
+    "Enter a ticker or company name. We analyze financials and estimate fair value — instantly.",
+  SCREENER_TOKYO_METRICS_PENDING:
+    "FMP metrics for Tokyo are still loading. Tickers below are searchable; open one for a full report.",
   INDUSTRY: "Industry",
   INDUSTRY_ALL: "All industries",
   SEARCH: "Search",

@@ -28,31 +28,25 @@ async function loadFromApi() {
   const json = await res.json().catch(() => ({}));
 
   if (res.status === 503) {
-    const err = new Error(
-      json?.error || "Screener data is being built from FMP. Please try again in a few minutes."
-    );
-    err.code = "SCREENER_BUILDING";
-    err.rebuilding = Boolean(json?.rebuilding);
-    throw err;
+    return {
+      items: [],
+      sectors: [],
+      meta: json?.meta || null,
+      rebuilding: true,
+      buildingMessage: json?.error || null,
+    };
   }
 
   if (!res.ok) throw new Error(json?.error || `Screener API HTTP ${res.status}`);
   if (!Array.isArray(json?.items)) throw new Error("Screener API: invalid payload");
 
   const items = json.items.filter(isUsableScreenerRow);
-  if (!items.length) {
-    const err = new Error(
-      json?.error || "Screener data is being built from FMP. Please try again in a few minutes."
-    );
-    err.code = "SCREENER_BUILDING";
-    err.rebuilding = Boolean(json?.rebuilding);
-    throw err;
-  }
 
   return {
     items,
     sectors: Array.isArray(json.sectors) ? json.sectors : [],
     meta: json.meta || null,
-    rebuilding: Boolean(json.rebuilding),
+    rebuilding: Boolean(json.rebuilding) || (!items.length && json?.meta?.stale),
+    buildingMessage: !items.length ? json?.error || null : null,
   };
 }

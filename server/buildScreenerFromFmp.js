@@ -148,12 +148,13 @@ export async function buildScreenerMarket(market, opts) {
   };
 }
 
-function marketBuildUsable(items, catalogSize) {
+function marketBuildUsable(market, items) {
   if (!items?.length) return false;
   const usable = items.filter(isUsableScreenerRow).length;
-  if (usable / items.length < 0.5) return false;
-  if (catalogSize > 0 && items.length / catalogSize < 0.1) return false;
-  return true;
+  if (usable < 30) return false;
+  // Tokyo: save partial FMP cache (catalog fills the rest on the client).
+  if (market === "jp") return true;
+  return usable / items.length >= 0.5;
 }
 
 export async function buildAllScreeners({ apiKey, financialsStore, screenerStore, delayMs }) {
@@ -161,7 +162,7 @@ export async function buildAllScreeners({ apiKey, financialsStore, screenerStore
   for (const market of SCREENER_MARKETS) {
     const built = await buildScreenerMarket(market, { apiKey, financialsStore, delayMs });
     let saved = null;
-    if (marketBuildUsable(built.items, built.stats.catalog)) {
+    if (marketBuildUsable(market, built.items)) {
       saved = screenerStore.write(market, built.items, { buildStats: built.stats });
       console.log(
         `[screener/build] wrote ${market.toUpperCase()} ${saved.filePath} (${built.items.length} items)`

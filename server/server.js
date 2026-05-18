@@ -870,7 +870,7 @@ app.get("/api/screener", (req, res) => {
       if (stale) scheduleScreenerRebuildIfNeeded(true);
 
       const rowsByMarket = Object.fromEntries(
-        SCREENER_MARKETS.map((m) => [m, snap[m].usable ? snap[m].items : []])
+        SCREENER_MARKETS.map((m) => [m, snap[m].items || []])
       );
       const metaByMarket = Object.fromEntries(
         SCREENER_MARKETS.map((m) => [m, snap[m].meta])

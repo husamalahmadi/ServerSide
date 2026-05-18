@@ -9,6 +9,7 @@ import { LangToggle } from "../components/LangToggle.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { getScreenerDataset } from "../services/screenerService.js";
 import { useScreener } from "../hooks/useScreener.js";
+import { mergeScreenerWithCatalog, isUsableScreenerRow } from "../domain/screenerMetrics.js";
 import { ScreenerResultsTable } from "../components/screener/ScreenerResultsTable.jsx";
 function normalize(s) {
   return (s || "").toString().trim().toLowerCase();
@@ -58,6 +59,7 @@ export default function Home() {
     error: "",
     items: [],
     sectors: [],
+    rebuilding: false,
   });
 
   useEffect(() => {
@@ -92,7 +94,7 @@ export default function Home() {
     let alive = true;
     (async () => {
       try {
-        setScreenerState({ loading: true, error: "", items: [], sectors: [] });
+        setScreenerState({ loading: true, error: "", items: [], sectors: [], rebuilding: false });
         const data = await getScreenerDataset();
         if (!alive) return;
         setScreenerState({
@@ -100,15 +102,16 @@ export default function Home() {
           error: "",
           items: data?.items || [],
           sectors: data?.sectors || [],
+          rebuilding: Boolean(data?.rebuilding),
         });
       } catch (e) {
         if (!alive) return;
-        const building = e?.code === "SCREENER_BUILDING";
         setScreenerState({
           loading: false,
-          error: t(building ? "SCREENER_BUILDING" : "SCREENER_LOAD_FAILED"),
+          error: t("SCREENER_LOAD_FAILED"),
           items: [],
           sectors: [],
+          rebuilding: false,
         });
       }
     })();
@@ -117,7 +120,28 @@ export default function Home() {
     };
   }, [t]);
 
-  const { sortBy, sortDir, onSort, applyPreset, filteredCount, items: screenerItems } = useScreener(screenerState.items);
+  const marketCounts = useMemo(() => {
+    const counts = { us: 0, sa: 0, jp: 0 };
+    for (const it of state.items) {
+      if (it.market in counts) counts[it.market] += 1;
+    }
+    return counts;
+  }, [state.items]);
+
+  const screenerFeed = useMemo(
+    () => mergeScreenerWithCatalog(screenerState.items, state.items),
+    [screenerState.items, state.items]
+  );
+
+  const { sortBy, sortDir, onSort, applyPreset, activePreset, filteredCount, items: screenerItems } =
+    useScreener(screenerFeed);
+
+  const tokyoMetricsPending = useMemo(() => {
+    if (activePreset !== "tokyo") return false;
+    const jpRows = screenerFeed.filter((r) => r.market === "jp");
+    if (!jpRows.length) return false;
+    return !jpRows.some(isUsableScreenerRow);
+  }, [activePreset, screenerFeed]);
 
   const screenerSummary = useMemo(() => {
     const rows = screenerItems || [];
@@ -197,7 +221,44 @@ export default function Home() {
           color: var(--tp-ink);
         }
         .tp-search-headline em { font-style: italic; color: var(--tp-gold); }
-        .tp-search-deck { font-size: 12px; color: var(--tp-muted); margin-bottom: 28px; line-height: 1.7; max-width: 520px; }
+        .tp-search-deck { font-size: 12px; color: var(--tp-muted); margin-bottom: 16px; line-height: 1.7; max-width: 520px; }
+        .tp-market-strip {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          margin-bottom: 24px;
+          align-items: center;
+        }
+        .tp-market-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 14px;
+          border-radius: 999px;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+          border: 1px solid var(--tp-border);
+          background: var(--tp-surface);
+        }
+        .tp-market-pill .tp-mp-count {
+          font-family: 'IBM Plex Mono', monospace;
+          font-size: 10px;
+          opacity: 0.85;
+        }
+        .tp-market-pill.us { color: #1d4ed8; border-color: #bfdbfe; background: #eff6ff; }
+        .tp-market-pill.sa { color: #166534; border-color: #bbf7d0; background: #ecfdf3; }
+        .tp-market-pill.jp { color: #be123c; border-color: #fecdd3; background: #fff1f2; }
+        .tp-scr-tokyo-hint {
+          margin-bottom: 12px;
+          padding: 10px 14px;
+          font-size: 12px;
+          line-height: 1.5;
+          color: #9a3412;
+          background: #fff7ed;
+          border: 1px solid #fed7aa;
+          border-radius: 8px;
+        }
         .tp-search-box {
           display: flex;
           gap: 0;
@@ -469,15 +530,26 @@ export default function Home() {
         {/* Search */}
         <div className="tp-search-section">
           <h1 className="tp-search-headline">
-            {lang === "ar" ? "تحليل عادل" : "Institutional-grade"}
+            {t("HOME_SEARCH_HEADLINE")}
             <br />
-            <em>{lang === "ar" ? "أي سهم أمريكي أو سعودي" : "any US or TASI stock"}</em>
+            <em>{t("HOME_SEARCH_HEADLINE_EMP")}</em>
           </h1>
-          <p className="tp-search-deck">
-            {lang === "ar"
-              ? "أدخل الرمز أو اسم الشركة. نحلل القوائم المالية ونقدّر القيمة العادلة."
-              : "Enter a ticker or company name. We analyze financials and estimate fair value — instantly."}
-          </p>
+          <p className="tp-search-deck">{t("HOME_SEARCH_DECK")}</p>
+
+          <div className="tp-market-strip">
+            <span className="tp-market-pill us">
+              {t("MARKET_US")}
+              <span className="tp-mp-count">{marketCounts.us.toLocaleString()}</span>
+            </span>
+            <span className="tp-market-pill sa">
+              {t("MARKET_SA")}
+              <span className="tp-mp-count">{marketCounts.sa.toLocaleString()}</span>
+            </span>
+            <span className="tp-market-pill jp">
+              {t("MARKET_JP")}
+              <span className="tp-mp-count">{marketCounts.jp.toLocaleString()}</span>
+            </span>
+          </div>
 
           <div ref={wrapRef} style={{ position: "relative" }}>
             <div className="tp-search-box">
@@ -579,9 +651,15 @@ export default function Home() {
             <div className="tp-scr-empty">{screenerState.error}</div>
           ) : (
             <div className="tp-scr-layout">
+              {screenerState.rebuilding ? (
+                <div className="tp-scr-tokyo-hint">{t("SCREENER_BUILDING")}</div>
+              ) : null}
               <div className="tp-scr-hint">
                 {lang === "ar" ? "اضغط أحد الأزرار بالأعلى لتشغيل الفرز. إعادة التعيين تعرض نتائج فارغة." : "Press one of the buttons above to run screening. Reset shows no results."}
               </div>
+              {tokyoMetricsPending ? (
+                <div className="tp-scr-tokyo-hint">{t("SCREENER_TOKYO_METRICS_PENDING")}</div>
+              ) : null}
               {screenerItems.length === 0 ? (
                 <div className="tp-scr-empty">{t("NO_MATCH")}</div>
               ) : (

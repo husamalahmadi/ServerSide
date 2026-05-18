@@ -118,6 +118,35 @@ export function screenerRowFromCompany(c, market, sector) {
   };
 }
 
+/** Merge API screener rows with catalog entries missing from FMP cache (metrics null until built). */
+export function mergeScreenerWithCatalog(screenerItems, catalogItems) {
+  const key = (r) => `${r.market}:${String(r.ticker).toUpperCase()}`;
+  const byKey = new Map();
+  for (const r of screenerItems || []) {
+    byKey.set(key(r), r);
+  }
+  const out = [...(screenerItems || [])];
+  const seen = new Set(out.map(key));
+  for (const c of catalogItems || []) {
+    if (!c?.ticker || !c?.market) continue;
+    const k = key(c);
+    if (seen.has(k)) continue;
+    out.push({
+      ticker: c.ticker,
+      name: c.name,
+      market: c.market,
+      sector: c.industry || (c.market === "jp" ? "Tokyo Stock Exchange" : ""),
+      pe: null,
+      marketCap: null,
+      fairValue: null,
+      priceApprox: null,
+      discountPct: null,
+    });
+    seen.add(k);
+  }
+  return out;
+}
+
 export function collectScreenerItems(json, market) {
   const out = [];
   const industries = json?.industries;
