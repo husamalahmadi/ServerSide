@@ -2,15 +2,6 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K34F3YG5TV"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-K34F3YG5TV');
-    </script>
     <meta charset="UTF-8" />
     <!-- Must load before the Vite bundle so window.__TP_PUBLIC_API_URL__ is set -->
     <script src="/runtime-config.js"></script>
@@ -26,23 +17,63 @@
         } catch (e) {}
       })();
     </script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <title>TruePrice.Cash – Stock fair value & fundamentals</title>
-    <meta name="description" content="TruePrice.Cash helps investors with stock fair value, financial statements, and fundamentals. US and Saudi markets." />
+    <meta name="description" content="TruePrice.Cash — stock fair value, financial statements, and fundamentals for US, TASI (Saudi), and Tokyo markets." />
+    <link rel="canonical" href="https://trueprice.cash/" />
     <meta property="og:title" content="TruePrice.Cash – Stock fair value & fundamentals" />
-    <meta property="og:description" content="Stock fair value, financial statements, and fundamentals. US and Saudi markets." />
+    <meta property="og:description" content="Stock fair value, financial statements, and fundamentals. US, TASI, and Tokyo markets." />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://trueprice.cash/" />
     <link rel="icon" href="%BASE_URL%favicon.ico" />
-    <!-- Fonts: English + Arabic -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+    <!-- Fonts: non-blocking load (display=swap) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@300;400;500&family=Barlow:wght@400;500;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap"
-      rel="stylesheet"
-    >
-
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@300;400;500&family=Barlow:wght@400;500;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap"
+      />
+    </noscript>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://trueprice.cash/#website",
+            "url": "https://trueprice.cash/",
+            "name": "TruePrice.Cash",
+            "description": "Stock fair value and fundamentals for US, TASI, and Tokyo markets.",
+            "inLanguage": ["en", "ar"],
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://trueprice.cash/stock/{search_term_string}"
+              },
+              "query-input": "required name=search_term_string"
+            }
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://trueprice.cash/#organization",
+            "name": "TruePrice.Cash",
+            "url": "https://trueprice.cash/"
+          }
+        ]
+      }
+    </script>
     <style>
-      :root{
+      :root {
         --font-en: "IBM Plex Mono", "Inter", ui-monospace, monospace;
         --font-ar: "Tajawal", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans Arabic", sans-serif;
         text-rendering: optimizeLegibility;
@@ -52,6 +83,10 @@
       html { font-family: var(--font-en); }
       html[lang="ar"] { font-family: var(--font-ar); }
       body, button, input, textarea, select { font-family: inherit; }
+      .tp-static-shell { max-width: 720px; margin: 0 auto; padding: 24px 16px; line-height: 1.6; color: #1a1a14; }
+      .tp-static-shell h1 { font-size: 1.5rem; margin: 0 0 12px; }
+      .tp-static-shell nav { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; font-size: 14px; }
+      .tp-static-shell a { color: #1a3a2a; font-weight: 600; }
       @media print {
         .no-print { display: none !important; }
         body { background: #fff; color: #000; }
@@ -59,8 +94,39 @@
     </style>
   </head>
   <body>
-    <div id="root"></div>
-    <noscript style="display:block;padding:16px;color:crimson">Enable JavaScript</noscript>
+    <div id="root">
+      <main class="tp-static-shell">
+        <h1>TruePrice.Cash</h1>
+        <p>
+          Institutional-grade stock analysis with fair value estimates for US, Saudi (TASI), and Tokyo markets.
+          Search by ticker or company name on the live app.
+        </p>
+        <nav aria-label="Site">
+          <a href="/">Home</a>
+          <a href="/blogs">Blogs</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/sitemap.xml">Sitemap</a>
+          <a href="/stock/AAPL">Apple (AAPL)</a>
+          <a href="/stock/2222">Saudi Aramco (2222)</a>
+          <a href="/stock/2010">SABIC (2010)</a>
+          <a href="/stock/7203.T">Toyota (7203.T)</a>
+        </nav>
+      </main>
+    </div>
+    <noscript>
+      <p style="display:block;padding:16px;color:crimson">
+        JavaScript is required for live quotes and financial analysis. Use the links above to browse stock pages.
+      </p>
+    </noscript>
+    <!-- Google tag: deferred so it does not block first paint (see src/analytics.js) -->
+    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-K34F3YG5TV"></script>
+    <script defer>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag("js", new Date());
+      gtag("config", "G-K34F3YG5TV", { send_page_view: false });
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

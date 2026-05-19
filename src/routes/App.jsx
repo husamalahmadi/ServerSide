@@ -1,19 +1,21 @@
 // FILE: src/routes/App.jsx
-import React, { useEffect, useRef } from "react";
+import React, { Suspense, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { trackPageView } from "../analytics.js";
 import { AuthProvider } from "../context/AuthContext.jsx";
 import { I18nProvider } from "../i18n.jsx";
 import { ErrorBoundary } from "../components/ErrorBoundary.jsx";
+import { RouteFallback } from "../components/RouteFallback.jsx";
 
 import Home from "./Home.jsx";
-import Stock from "./Stock.jsx";
-import Contact from "./Contact.jsx";
-import AboutUs from "./AboutUs.jsx";
-import Blogs from "./Blogs.jsx";
-import Profile from "./Profile.jsx";
-import ProfileSetup from "./ProfileSetup.jsx";
-import AuthSignInHelp from "./AuthSignInHelp.jsx";
+
+const Stock = React.lazy(() => import("./Stock.jsx"));
+const Contact = React.lazy(() => import("./Contact.jsx"));
+const AboutUs = React.lazy(() => import("./AboutUs.jsx"));
+const Blogs = React.lazy(() => import("./Blogs.jsx"));
+const Profile = React.lazy(() => import("./Profile.jsx"));
+const ProfileSetup = React.lazy(() => import("./ProfileSetup.jsx"));
+const AuthSignInHelp = React.lazy(() => import("./AuthSignInHelp.jsx"));
 
 function AnalyticsRouteSync() {
   const location = useLocation();
@@ -28,6 +30,10 @@ function AnalyticsRouteSync() {
   return null;
 }
 
+function Lazy({ children }) {
+  return <Suspense fallback={<RouteFallback />}>{children}</Suspense>;
+}
+
 export default function App() {
   return (
     <I18nProvider>
@@ -37,14 +43,70 @@ export default function App() {
             <AnalyticsRouteSync />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/stock/:ticker" element={<Stock />} />
-              <Route path="/profile/setup" element={<ProfileSetup />} />
-              <Route path="/profile/:handle" element={<Profile />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/about" element={<AboutUs />} />
-              <Route path="/blogs" element={<Blogs />} />
-              <Route path="/auth/*" element={<AuthSignInHelp />} />
+              <Route
+                path="/stock/:ticker"
+                element={
+                  <Lazy>
+                    <Stock />
+                  </Lazy>
+                }
+              />
+              <Route
+                path="/profile/setup"
+                element={
+                  <Lazy>
+                    <ProfileSetup />
+                  </Lazy>
+                }
+              />
+              <Route
+                path="/profile/:handle"
+                element={
+                  <Lazy>
+                    <Profile />
+                  </Lazy>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <Lazy>
+                    <Profile />
+                  </Lazy>
+                }
+              />
+              <Route
+                path="/contact"
+                element={
+                  <Lazy>
+                    <Contact />
+                  </Lazy>
+                }
+              />
+              <Route
+                path="/about"
+                element={
+                  <Lazy>
+                    <AboutUs />
+                  </Lazy>
+                }
+              />
+              <Route
+                path="/blogs"
+                element={
+                  <Lazy>
+                    <Blogs />
+                  </Lazy>
+                }
+              />
+              <Route
+                path="/auth/*"
+                element={
+                  <Lazy>
+                    <AuthSignInHelp />
+                  </Lazy>
+                }
+              />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </AuthProvider>

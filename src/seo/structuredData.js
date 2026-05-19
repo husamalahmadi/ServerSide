@@ -5,6 +5,45 @@ function toAbs(pathname = "/") {
   return `${SITE_URL}${p}`;
 }
 
+/** Homepage WebSite schema (crawlable + supports stock URL pattern). */
+export function buildHomeSeo() {
+  const homeUrl = toAbs("/");
+  return {
+    title: "",
+    description:
+      "Stock fair value, financial statements, and fundamentals for US, TASI (Saudi), and Tokyo markets.",
+    pathname: "/",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": `${homeUrl}#website`,
+          url: homeUrl,
+          name: "TruePrice.Cash",
+          description:
+            "Institutional-grade stock analysis with fair value estimates for US, Saudi (TASI), and Tokyo markets.",
+          inLanguage: ["en", "ar"],
+          potentialAction: {
+            "@type": "SearchAction",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: `${homeUrl}stock/{search_term_string}`,
+            },
+            "query-input": "required name=search_term_string",
+          },
+        },
+        {
+          "@type": "Organization",
+          "@id": `${homeUrl}#organization`,
+          name: "TruePrice.Cash",
+          url: homeUrl,
+        },
+      ],
+    },
+  };
+}
+
 export function buildStockSeo({ ticker, companyName, lang, fairValue, price, currency, market }) {
   const symbol = String(ticker || "").toUpperCase();
   const name = companyName || symbol;

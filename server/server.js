@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import compression from "compression";
 import express from "express";
 import session from "express-session";
 import cors from "cors";
@@ -195,6 +196,7 @@ if (!existsSync(join(staticPath, "index.html"))) {
 }
 
 const app = express();
+app.use(compression());
 if (IS_PROD) {
   app.set("trust proxy", 1);
 }

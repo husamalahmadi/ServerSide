@@ -13,9 +13,11 @@ try {
 }
 import "./index.css";
 import { initAnalytics } from "./analytics.js";
+import { initWebVitalsReporting } from "./webVitals.js";
 import App from "./routes/App.jsx";
 
 initAnalytics();
+initWebVitalsReporting();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

@@ -7,6 +7,7 @@ import { PageHeader } from "../components/PageHeader.jsx";
 import { PillLink } from "../components/PillLink.jsx";
 import { LangToggle } from "../components/LangToggle.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
+import { buildHomeSeo } from "../seo/structuredData.js";
 import { getScreenerDataset } from "../services/screenerService.js";
 import { useScreener } from "../hooks/useScreener.js";
 import { mergeScreenerWithCatalog, isUsableScreenerRow } from "../domain/screenerMetrics.js";
@@ -37,11 +38,8 @@ export default function Home() {
     next.delete("auth");
     setSearchParams(next, { replace: true });
   }, [searchParams, setSearchParams]);
-  usePageMeta({
-    title: "TruePrice.Cash",
-    description: `${t("MARKET_US")}, ${t("MARKET_SA")} & ${t("MARKET_JP")}. ${t("COMPANIES")}.`,
-    pathname: "/",
-  });
+  const homeSeo = useMemo(() => buildHomeSeo(), []);
+  usePageMeta(homeSeo);
 
   const [q, setQ] = useState("");
   const [marketFilter, setMarketFilter] = useState("all");
