@@ -10,10 +10,8 @@ import { usePageMeta } from "../hooks/usePageMeta.js";
 import { getScreenerDataset } from "../services/screenerService.js";
 import { useScreener } from "../hooks/useScreener.js";
 import { mergeScreenerWithCatalog, isUsableScreenerRow } from "../domain/screenerMetrics.js";
+import { filterStocksByQuery } from "../domain/stockSearch.js";
 import { ScreenerResultsTable } from "../components/screener/ScreenerResultsTable.jsx";
-function normalize(s) {
-  return (s || "").toString().trim().toLowerCase();
-}
 
 const QUICK_PICKS = [
   { ticker: "AAPL", name: "Apple", market: "us" },
@@ -45,6 +43,7 @@ export default function Home() {
   });
 
   const [q, setQ] = useState("");
+  const [marketFilter, setMarketFilter] = useState("all");
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
   const wrapRef = useRef(null);
 
@@ -154,19 +153,30 @@ export default function Home() {
     return { avgDiscount, topSector };
   }, [screenerItems]);
 
-  const suggestions = useMemo(() => {
-    const query = normalize(q);
-    if (!query || query.length < 1) return [];
-    const items = Array.isArray(state.items) ? state.items : [];
-    return items
-      .filter((it) => {
-        const name = normalize(it?.name);
-        const ticker = String(it?.ticker ?? "");
-        const tickerNorm = normalize(ticker);
-        return name.includes(query) || tickerNorm.includes(query) || ticker === q;
-      })
-      .slice(0, 8);
-  }, [state.items, q]);
+  const searchQuery = q.trim();
+  const searchActive = searchQuery.length > 0;
+
+  const suggestions = useMemo(
+    () => filterStocksByQuery(state.items, searchQuery, { market: marketFilter, limit: 8 }),
+    [state.items, searchQuery, marketFilter]
+  );
+
+  const searchTableRows = useMemo(() => {
+    if (!searchActive) return [];
+    return filterStocksByQuery(screenerFeed, searchQuery, { market: marketFilter, limit: 200 });
+  }, [searchActive, searchQuery, marketFilter, screenerFeed]);
+
+  const tableItems = searchActive ? searchTableRows : screenerItems;
+  const tableCount = searchActive ? searchTableRows.length : filteredCount;
+
+  function toggleMarketFilter(market) {
+    setMarketFilter((prev) => (prev === market ? "all" : market));
+  }
+
+  function bestSearchMatch() {
+    const hits = filterStocksByQuery(state.items, searchQuery, { market: marketFilter, limit: 1 });
+    return hits[0] || null;
+  }
 
   const handleClickOutside = useCallback((e) => {
     if (wrapRef.current && !wrapRef.current.contains(e.target)) {
@@ -196,12 +206,8 @@ export default function Home() {
       e.preventDefault();
       if (suggestions.length > 0) {
         pickSuggestion(suggestions[0]);
-      } else if (q.trim()) {
-        const match = state.items.find(
-          (it) =>
-            String(it.ticker).toLowerCase() === q.trim().toLowerCase() ||
-            normalize(it.name).includes(normalize(q))
-        );
+      } else if (searchQuery) {
+        const match = bestSearchMatch();
         if (match) goToStock(match.ticker);
       }
     }
@@ -249,6 +255,16 @@ export default function Home() {
         .tp-market-pill.us { color: #1d4ed8; border-color: #bfdbfe; background: #eff6ff; }
         .tp-market-pill.sa { color: #166534; border-color: #bbf7d0; background: #ecfdf3; }
         .tp-market-pill.jp { color: #be123c; border-color: #fecdd3; background: #fff1f2; }
+        button.tp-market-pill {
+          cursor: pointer;
+          font-family: inherit;
+        }
+        button.tp-market-pill.active {
+          box-shadow: 0 0 0 2px var(--tp-ink);
+        }
+        button.tp-market-pill.us.active { box-shadow: 0 0 0 2px #1d4ed8; }
+        button.tp-market-pill.sa.active { box-shadow: 0 0 0 2px #166534; }
+        button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
         .tp-scr-tokyo-hint {
           margin-bottom: 12px;
           padding: 10px 14px;
@@ -537,18 +553,30 @@ export default function Home() {
           <p className="tp-search-deck">{t("HOME_SEARCH_DECK")}</p>
 
           <div className="tp-market-strip">
-            <span className="tp-market-pill us">
+            <button
+              type="button"
+              className={`tp-market-pill us${marketFilter === "us" ? " active" : ""}`}
+              onClick={() => toggleMarketFilter("us")}
+            >
               {t("MARKET_US")}
               <span className="tp-mp-count">{marketCounts.us.toLocaleString()}</span>
-            </span>
-            <span className="tp-market-pill sa">
+            </button>
+            <button
+              type="button"
+              className={`tp-market-pill sa${marketFilter === "sa" ? " active" : ""}`}
+              onClick={() => toggleMarketFilter("sa")}
+            >
               {t("MARKET_SA")}
               <span className="tp-mp-count">{marketCounts.sa.toLocaleString()}</span>
-            </span>
-            <span className="tp-market-pill jp">
+            </button>
+            <button
+              type="button"
+              className={`tp-market-pill jp${marketFilter === "jp" ? " active" : ""}`}
+              onClick={() => toggleMarketFilter("jp")}
+            >
               {t("MARKET_JP")}
               <span className="tp-mp-count">{marketCounts.jp.toLocaleString()}</span>
-            </span>
+            </button>
           </div>
 
           <div ref={wrapRef} style={{ position: "relative" }}>
@@ -586,12 +614,8 @@ export default function Home() {
                 className="tp-go-btn"
                 onClick={() => {
                   if (suggestions.length > 0) pickSuggestion(suggestions[0]);
-                  else if (q.trim()) {
-                    const match = state.items.find(
-                      (it) =>
-                        String(it.ticker).toLowerCase() === q.trim().toLowerCase() ||
-                        normalize(it.name).includes(normalize(q))
-                    );
+                  else if (searchQuery) {
+                    const match = bestSearchMatch();
                     if (match) goToStock(match.ticker);
                   }
                 }}
@@ -618,7 +642,7 @@ export default function Home() {
         <div className="tp-screener-section">
           <div className="tp-scr-head">
             <h2 className="tp-title" style={{ margin: 0 }}>{t("SCREENER_TITLE")}</h2>
-            <div className="tp-scr-count">{t("SCREENER_MATCHES")}: {filteredCount}</div>
+            <div className="tp-scr-count">{t("SCREENER_MATCHES")}: {tableCount}</div>
           </div>
           <div className="tp-scr-presets">
             <button type="button" className="tp-scr-preset" onClick={() => applyPreset("undervalued")}>
@@ -641,7 +665,7 @@ export default function Home() {
             </button>
           </div>
           <div className="tp-scr-summary">
-            <span>{t("SCREENER_MATCHES")}: <b>{filteredCount}</b></span>
+            <span>{t("SCREENER_MATCHES")}: <b>{tableCount}</b></span>
             <span>{t("SCREENER_AVG_DISCOUNT")}: <b>{screenerSummary.avgDiscount == null ? "—" : `${screenerSummary.avgDiscount.toFixed(1)}%`}</b></span>
             <span>{t("SCREENER_TOP_SECTOR")}: <b>{screenerSummary.topSector}</b></span>
           </div>
@@ -654,18 +678,20 @@ export default function Home() {
               {screenerState.rebuilding ? (
                 <div className="tp-scr-tokyo-hint">{t("SCREENER_BUILDING")}</div>
               ) : null}
-              <div className="tp-scr-hint">
-                {lang === "ar" ? "اضغط أحد الأزرار بالأعلى لتشغيل الفرز. إعادة التعيين تعرض نتائج فارغة." : "Press one of the buttons above to run screening. Reset shows no results."}
-              </div>
+              {!searchActive ? (
+                <div className="tp-scr-hint">
+                  {lang === "ar" ? "اضغط أحد الأزرار بالأعلى لتشغيل الفرز. إعادة التعيين تعرض نتائج فارغة." : "Press one of the buttons above to run screening. Reset shows no results."}
+                </div>
+              ) : null}
               {tokyoMetricsPending ? (
                 <div className="tp-scr-tokyo-hint">{t("SCREENER_TOKYO_METRICS_PENDING")}</div>
               ) : null}
-              {screenerItems.length === 0 ? (
+              {tableItems.length === 0 ? (
                 <div className="tp-scr-empty">{t("NO_MATCH")}</div>
               ) : (
                 <ScreenerResultsTable
                   t={t}
-                  items={screenerItems}
+                  items={tableItems}
                   sortBy={sortBy}
                   sortDir={sortDir}
                   onSort={onSort}

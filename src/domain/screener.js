@@ -1,3 +1,5 @@
+import { stockSearchScore } from "./stockSearch.js";
+
 function inRange(v, min, max) {
   if (v == null) return false;
   if (min != null && v < min) return false;
@@ -10,11 +12,7 @@ export function applyScreenerFilters(items, filters) {
   return (items || []).filter((it) => {
     if (filters.market !== "all" && it.market !== filters.market) return false;
     if (filters.sector !== "all" && it.sector !== filters.sector) return false;
-    if (q) {
-      const t = String(it.ticker || "").toLowerCase();
-      const n = String(it.name || "").toLowerCase();
-      if (!t.includes(q) && !n.includes(q)) return false;
-    }
+    if (q && stockSearchScore(it, filters.query) < 0) return false;
     if (!inRange(it.pe, filters.peMin, filters.peMax)) return false;
     if (!inRange(it.marketCap, filters.marketCapMin, filters.marketCapMax)) return false;
     if (!inRange(it.discountPct, filters.discountMin, filters.discountMax)) return false;
