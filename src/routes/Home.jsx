@@ -1,6 +1,6 @@
 // FILE: src/routes/Home.jsx
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
 import { getAllStocks } from "../data/stocksCatalog.js";
 import { PageHeader } from "../components/PageHeader.jsx";
@@ -12,6 +12,7 @@ import { useScreener } from "../hooks/useScreener.js";
 import { mergeScreenerWithCatalog, isUsableScreenerRow } from "../domain/screenerMetrics.js";
 import { filterStocksByQuery } from "../domain/stockSearch.js";
 import { ScreenerResultsTable } from "../components/screener/ScreenerResultsTable.jsx";
+import { SiteFooter } from "../components/SiteFooter.jsx";
 
 const QUICK_PICKS = [
   { ticker: "AAPL", name: "Apple", market: "us" },
@@ -343,6 +344,9 @@ export default function Home() {
           cursor: pointer;
           transition: all 0.15s;
           font-family: 'IBM Plex Mono', monospace;
+          text-decoration: none;
+          color: var(--tp-ink);
+          display: inline-block;
         }
         .tp-qp-chip:hover { background: var(--tp-accent); color: #fff; border-color: var(--tp-accent); }
         .tp-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 16px; color: var(--tp-ink); }
@@ -429,7 +433,8 @@ export default function Home() {
         }
         .tp-scr-table tbody tr:nth-child(even) { background: rgba(0,0,0,0.012); }
         .tp-scr-table tbody tr:hover { background: #f4f8f4; }
-        .tp-scr-link { border: none; background: transparent; color: var(--tp-accent); cursor: pointer; font-weight: 700; font-family: 'IBM Plex Mono', monospace; padding: 0; }
+        .tp-scr-link { border: none; background: transparent; color: var(--tp-accent); cursor: pointer; font-weight: 700; font-family: 'IBM Plex Mono', monospace; padding: 0; text-decoration: none; }
+        .tp-scr-company-cell .tp-scr-link { font-family: 'Barlow', sans-serif; font-weight: 600; }
         .tp-scr-ticker-cell { font-family: 'IBM Plex Mono', monospace; font-weight: 600; }
         .tp-scr-company-cell, .tp-scr-sector-cell { max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
         .tp-scr-num { text-align: end !important; font-variant-numeric: tabular-nums; }
@@ -628,13 +633,14 @@ export default function Home() {
           <div className="tp-quick-picks">
             <span className="tp-qp-label">{lang === "ar" ? "جرب:" : "Try:"}</span>
             {QUICK_PICKS.map((p) => (
-              <span
+              <Link
                 key={p.ticker}
+                to={`/stock/${encodeURIComponent(p.ticker)}`}
                 className="tp-qp-chip"
-                onClick={() => goToStock(p.ticker)}
+                onClick={() => setSuggestionsOpen(false)}
               >
                 {p.ticker}
-              </span>
+              </Link>
             ))}
           </div>
         </div>
@@ -702,17 +708,7 @@ export default function Home() {
           )}
         </div>
 
-        <footer
-          style={{
-            marginTop: 24,
-            padding: "14px 4px",
-            textAlign: "center",
-            color: "var(--tp-muted)",
-            fontSize: 12,
-          }}
-        >
-          © TruePrice.Cash
-        </footer>
+        <SiteFooter t={t} />
       </div>
     </div>
   );

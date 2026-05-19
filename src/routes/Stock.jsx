@@ -11,6 +11,7 @@ import { fmpProfile } from "../services/fmpService.js";
 import { translateToArabic } from "../services/translateService.js";
 import { Card } from "../components/Card.jsx";
 import { PillLink } from "../components/PillLink.jsx";
+import { SiteFooter } from "../components/SiteFooter.jsx";
 import { LangToggle } from "../components/LangToggle.jsx";
 import { RetryButton } from "../components/RetryButton.jsx";
 import { CompareBar, ChartBlock } from "../components/stock/StockCharts.jsx";
@@ -1081,9 +1082,7 @@ export default function Stock() {
         ) : null}
       </div>
 
-      <footer className="no-print" style={{ marginTop: 24, padding: "14px 4px", textAlign: "center", color: "var(--tp-muted, #64748b)", fontSize: 12 }}>
-        © TruePrice.Cash
-      </footer>
+      <SiteFooter t={t} />
     </div>
   );
 }

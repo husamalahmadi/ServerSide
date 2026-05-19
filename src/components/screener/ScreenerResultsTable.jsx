@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { fmt2, fmtBill } from "../../domain/formatting.js";
 
 function SortTh({ id, label, sortBy, sortDir, onSort }) {
@@ -33,11 +34,23 @@ export function ScreenerResultsTable({ t, items, sortBy, sortDir, onSort, onOpen
           {items.map((it) => (
             <tr key={`${it.market}-${it.ticker}`}>
               <td className="tp-scr-ticker-cell">
-                <button type="button" className="tp-scr-link" onClick={() => onOpenTicker(it.ticker)}>
+                <Link
+                  to={`/stock/${encodeURIComponent(it.ticker)}`}
+                  className="tp-scr-link"
+                  onClick={() => onOpenTicker?.(it.ticker)}
+                >
                   {it.ticker}
-                </button>
+                </Link>
               </td>
-              <td className="tp-scr-company-cell">{it.name}</td>
+              <td className="tp-scr-company-cell">
+                <Link
+                  to={`/stock/${encodeURIComponent(it.ticker)}`}
+                  className="tp-scr-link"
+                  onClick={() => onOpenTicker?.(it.ticker)}
+                >
+                  {it.name}
+                </Link>
+              </td>
               <td>
                 <span className={`tp-scr-market-badge ${it.market}`}>
                   {it.market === "sa" ? "TASI" : it.market === "jp" ? "TOKYO" : "US"}

@@ -3,6 +3,7 @@ import React, { useMemo, useState } from "react";
 import { useI18n } from "../i18n.jsx";
 import { PageHeader } from "../components/PageHeader.jsx";
 import { PillLink } from "../components/PillLink.jsx";
+import { SiteFooter } from "../components/SiteFooter.jsx";
 import { getWeb3FormsKey, getWeb3FormsTo } from "../config/env.js";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 
@@ -219,17 +220,7 @@ export default function Contact() {
         )}
         </form>
 
-        <footer
-          style={{
-            marginTop: 24,
-            padding: "14px 4px",
-            textAlign: "center",
-            color: "var(--tp-muted, #8a8578)",
-            fontSize: 12,
-          }}
-        >
-          © TruePrice.Cash
-        </footer>
+        <SiteFooter t={t} />
       </div>
     </div>
   );

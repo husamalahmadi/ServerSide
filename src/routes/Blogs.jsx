@@ -4,6 +4,7 @@ import { useI18n } from "../i18n.jsx";
 import { getBlogPosts } from "../services/bloggerService.js";
 import { PageHeader } from "../components/PageHeader.jsx";
 import { PillLink } from "../components/PillLink.jsx";
+import { SiteFooter } from "../components/SiteFooter.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { stripHtmlToText } from "../utils/sanitizeHtml.js";
 import { SafeHtml } from "../components/SafeHtml.jsx";
@@ -402,17 +403,7 @@ export default function Blogs() {
           </div>
         </div>
 
-        <footer
-          style={{
-            marginTop: 24,
-            padding: "14px 4px",
-            textAlign: "center",
-            color: "var(--tp-muted, #8a8578)",
-            fontSize: 12,
-          }}
-        >
-          © TruePrice.Cash
-        </footer>
+        <SiteFooter t={t} />
       </div>
     </div>
   );
