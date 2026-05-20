@@ -25,6 +25,8 @@ export default {
   MARKET_US: "US Market",
   MARKET_SA: "Saudi Market",
   MARKET_JP: "Tokyo Market",
+  SEO_TITLE_ABOUT: "About TruePrice.Cash – Stock Fair Value Research Platform",
+  SEO_TITLE_CONTACT: "Contact TruePrice.Cash – Investor Support & Inquiries",
   HOME_SEARCH_HEADLINE: "Institutional-grade",
   HOME_SEARCH_HEADLINE_EMP: "US, TASI & Tokyo stocks",
   HOME_SEARCH_DECK:

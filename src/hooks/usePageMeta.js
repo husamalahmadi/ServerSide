@@ -1,7 +1,11 @@
 import { useEffect } from "react";
+import {
+  DEFAULT_DOCUMENT_TITLE,
+  formatDocumentTitle,
+} from "../seo/pageTitles.js";
 
-const DEFAULT_TITLE = "TruePrice.Cash";
-const DEFAULT_DESC = "Stock fair value, financial statements, and fundamentals. US and Saudi markets.";
+const DEFAULT_DESC =
+  "Stock fair value, financial statements, and fundamentals for US, TASI (Saudi), and Tokyo markets.";
 const SITE_URL = (import.meta.env.VITE_SITE_URL || "https://trueprice.cash").replace(/\/+$/, "");
 
 function setMeta(name, content, isProperty = false) {
@@ -54,11 +58,20 @@ function absUrl(pathname = "/") {
 
 /**
  * Sets document.title, canonical/hreflang and description + og tags for the current page.
- * Call from each route with page-specific title and description.
+ * @param {object} opts
+ * @param {string} [opts.title] route label (formatted to 50–60 chars unless documentTitle set)
+ * @param {string} [opts.documentTitle] full <title> string (50–60 chars); takes precedence
  */
-export function usePageMeta({ title, description, pathname = "/", alternates = null, jsonLd = null } = {}) {
+export function usePageMeta({
+  title,
+  documentTitle,
+  description,
+  pathname = "/",
+  alternates = null,
+  jsonLd = null,
+} = {}) {
   useEffect(() => {
-    const newTitle = title ? `${title} – TruePrice.Cash` : DEFAULT_TITLE;
+    const newTitle = documentTitle || formatDocumentTitle(title);
     const newDesc = description || DEFAULT_DESC;
     const canonical = absUrl(pathname);
 
@@ -82,13 +95,13 @@ export function usePageMeta({ title, description, pathname = "/", alternates = n
     }
 
     return () => {
-      document.title = DEFAULT_TITLE;
+      document.title = DEFAULT_DOCUMENT_TITLE;
       setMeta("description", DEFAULT_DESC);
-      setMeta("og:title", DEFAULT_TITLE, true);
+      setMeta("og:title", DEFAULT_DOCUMENT_TITLE, true);
       setMeta("og:description", DEFAULT_DESC, true);
       setMeta("og:url", absUrl("/"), true);
       setLink("canonical", absUrl("/"));
       removeJsonLd("page-seo");
     };
-  }, [title, description, pathname, alternates, jsonLd]);
+  }, [title, documentTitle, description, pathname, alternates, jsonLd]);
 }

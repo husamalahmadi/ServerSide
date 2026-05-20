@@ -25,6 +25,8 @@ export default {
   MARKET_US: "السوق الأمريكي",
   MARKET_SA: "السوق السعودي",
   MARKET_JP: "السوق الياباني",
+  SEO_TITLE_ABOUT: "حول TruePrice.Cash – منصة بحث القيمة العادلة للأسهم",
+  SEO_TITLE_CONTACT: "اتصل بنا – TruePrice.Cash دعم المستثمرين والاستفسارات",
   HOME_SEARCH_HEADLINE: "تحليل عادل",
   HOME_SEARCH_HEADLINE_EMP: "أسهم أمريكية وسعودية ويابانية",
   HOME_SEARCH_DECK:
