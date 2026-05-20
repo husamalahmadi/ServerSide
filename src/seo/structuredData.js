@@ -1,3 +1,4 @@
+import { DEFAULT_META_DESCRIPTION, formatMetaDescription } from "./pageDescriptions.js";
 import { DEFAULT_DOCUMENT_TITLE, formatDocumentTitle } from "./pageTitles.js";
 
 const SITE_URL = (import.meta.env.VITE_SITE_URL || "https://trueprice.cash").replace(/\/+$/, "");
@@ -8,13 +9,19 @@ function toAbs(pathname = "/") {
 }
 
 /** Homepage WebSite schema (crawlable + supports stock URL pattern). */
-export function buildHomeSeo() {
+export function buildHomeSeo(lang = "en") {
   const homeUrl = toAbs("/");
+  const metaDescription =
+    lang === "ar"
+      ? formatMetaDescription(
+          "حلل الأسهم الأمريكية والسعودية واليابانية على TruePrice.Cash — قيمة عادلة، قوائم مالية، أساسيات، وفلتر أسهم للمستثمرين في الأسواق العالمية."
+        )
+      : DEFAULT_META_DESCRIPTION;
   return {
     documentTitle: DEFAULT_DOCUMENT_TITLE,
+    metaDescription,
     title: "",
-    description:
-      "Stock fair value, financial statements, and fundamentals for US, TASI (Saudi), and Tokyo markets.",
+    description: metaDescription,
     pathname: "/",
     jsonLd: {
       "@context": "https://schema.org",
@@ -61,13 +68,16 @@ export function buildStockSeo({ ticker, companyName, lang, fairValue, price, cur
       ? `${symbol} – ${name} القيمة العادلة والبيانات المالية`
       : `${symbol} – ${name} Fair Value & Financial Statements`
   );
-  const description = lang === "ar"
-    ? `تحليل سهم ${name} (${symbol}) يشمل السعر الحالي والقيمة العادلة والبيانات المالية الأساسية.`
-    : `Stock analysis for ${name} (${symbol}) with current price, fair value estimate, and key financial statements.`;
+  const description = formatMetaDescription(
+    lang === "ar"
+      ? `تحليل ${name} (${symbol}) على TruePrice.Cash: السعر، القيمة العادلة، القوائم المالية والمؤشرات الأساسية للمستثمرين في السوق السعودي والعالمي.`
+      : `Analyze ${name} (${symbol}) on TruePrice.Cash with live price, fair value estimate, financial statements, and key metrics for investors.`
+  );
 
   return {
     title: heading,
     documentTitle,
+    metaDescription: description,
     description,
     pathname: pagePath,
     alternates: {
@@ -142,9 +152,11 @@ export function buildStockSeo({ ticker, companyName, lang, fairValue, price, cur
 export function buildBlogsSeo({ lang, postsCount }) {
   const inLanguage = lang === "ar" ? "ar" : "en";
   const heading = lang === "ar" ? "مدونة TruePrice.Cash للاستثمار" : "TruePrice.Cash Investing Blog";
-  const description = lang === "ar"
-    ? "مقالات عن الاستثمار في سوق الأسهم السعودي والتقييم المالي وقراءة النتائج."
-    : "Articles on TASI investing, valuation basics, and earnings commentary.";
+  const description = formatMetaDescription(
+    lang === "ar"
+      ? "مدونة TruePrice.Cash: مقالات عن استثمار تداول والأسهم الأمريكية واليابانية، أساسيات التقييم، قراءة الأرباح، ونصائح للمستثمرين العرب والعالميين."
+      : "TruePrice.Cash blog: articles on TASI, US, and Tokyo investing, valuation basics, earnings commentary, and practical tips for individual investors."
+  );
   const documentTitle = formatDocumentTitle(
     lang === "ar"
       ? "مدونة TruePrice.Cash – رؤى أسهم تداول وأمريكا واليابان"
@@ -153,6 +165,7 @@ export function buildBlogsSeo({ lang, postsCount }) {
   return {
     title: heading,
     documentTitle,
+    metaDescription: description,
     description,
     pathname: "/blogs",
     alternates: {

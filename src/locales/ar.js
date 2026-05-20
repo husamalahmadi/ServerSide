@@ -27,6 +27,10 @@ export default {
   MARKET_JP: "السوق الياباني",
   SEO_TITLE_ABOUT: "حول TruePrice.Cash – منصة بحث القيمة العادلة للأسهم",
   SEO_TITLE_CONTACT: "اتصل بنا – TruePrice.Cash دعم المستثمرين والاستفسارات",
+  SEO_DESC_ABOUT:
+    "تعرّف على TruePrice.Cash — بحث القيمة العادلة لأسهم أمريكا وتداول واليابان مع قوائم مالية وأساسيات وفلاتر أسهم للمستثمرين في المنصة.",
+  SEO_DESC_CONTACT:
+    "تواصل مع TruePrice.Cash للدعم والملاحظات والأسئلة حول تحليل الأسهم الأمريكية والسعودية واليابانية وأدوات القيمة العادلة والبيانات المالية على المنصة.",
   HOME_SEARCH_HEADLINE: "تحليل عادل",
   HOME_SEARCH_HEADLINE_EMP: "أسهم أمريكية وسعودية ويابانية",
   HOME_SEARCH_DECK:

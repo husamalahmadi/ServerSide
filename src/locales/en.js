@@ -27,6 +27,10 @@ export default {
   MARKET_JP: "Tokyo Market",
   SEO_TITLE_ABOUT: "About TruePrice.Cash – Stock Fair Value Research Platform",
   SEO_TITLE_CONTACT: "Contact TruePrice.Cash – Investor Support & Inquiries",
+  SEO_DESC_ABOUT:
+    "Learn about TruePrice.Cash — fair value stock research for US, Saudi (TASI), and Tokyo markets with financial statements, fundamentals, and screening tools.",
+  SEO_DESC_CONTACT:
+    "Contact TruePrice.Cash for support and questions about US, TASI, and Tokyo stock analysis, fair value tools, and financial data on our platform.",
   HOME_SEARCH_HEADLINE: "Institutional-grade",
   HOME_SEARCH_HEADLINE_EMP: "US, TASI & Tokyo stocks",
   HOME_SEARCH_DECK:

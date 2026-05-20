@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import {
+  DEFAULT_META_DESCRIPTION,
+  formatMetaDescription,
+} from "../seo/pageDescriptions.js";
+import {
   DEFAULT_DOCUMENT_TITLE,
   formatDocumentTitle,
 } from "../seo/pageTitles.js";
-
-const DEFAULT_DESC =
-  "Stock fair value, financial statements, and fundamentals for US, TASI (Saudi), and Tokyo markets.";
 const SITE_URL = (import.meta.env.VITE_SITE_URL || "https://trueprice.cash").replace(/\/+$/, "");
 
 function setMeta(name, content, isProperty = false) {
@@ -61,18 +62,20 @@ function absUrl(pathname = "/") {
  * @param {object} opts
  * @param {string} [opts.title] route label (formatted to 50–60 chars unless documentTitle set)
  * @param {string} [opts.documentTitle] full <title> string (50–60 chars); takes precedence
+ * @param {string} [opts.metaDescription] full meta description (120–160 chars); takes precedence
  */
 export function usePageMeta({
   title,
   documentTitle,
   description,
+  metaDescription,
   pathname = "/",
   alternates = null,
   jsonLd = null,
 } = {}) {
   useEffect(() => {
     const newTitle = documentTitle || formatDocumentTitle(title);
-    const newDesc = description || DEFAULT_DESC;
+    const newDesc = metaDescription || formatMetaDescription(description);
     const canonical = absUrl(pathname);
 
     document.title = newTitle;
@@ -96,12 +99,12 @@ export function usePageMeta({
 
     return () => {
       document.title = DEFAULT_DOCUMENT_TITLE;
-      setMeta("description", DEFAULT_DESC);
+      setMeta("description", DEFAULT_META_DESCRIPTION);
       setMeta("og:title", DEFAULT_DOCUMENT_TITLE, true);
-      setMeta("og:description", DEFAULT_DESC, true);
+      setMeta("og:description", DEFAULT_META_DESCRIPTION, true);
       setMeta("og:url", absUrl("/"), true);
       setLink("canonical", absUrl("/"));
       removeJsonLd("page-seo");
     };
-  }, [title, documentTitle, description, pathname, alternates, jsonLd]);
+  }, [title, documentTitle, description, metaDescription, pathname, alternates, jsonLd]);
 }

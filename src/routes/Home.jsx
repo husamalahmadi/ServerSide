@@ -38,7 +38,7 @@ export default function Home() {
     next.delete("auth");
     setSearchParams(next, { replace: true });
   }, [searchParams, setSearchParams]);
-  const homeSeo = useMemo(() => buildHomeSeo(), []);
+  const homeSeo = useMemo(() => buildHomeSeo(lang), [lang]);
   usePageMeta(homeSeo);
 
   const [q, setQ] = useState("");

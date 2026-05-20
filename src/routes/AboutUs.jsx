@@ -9,7 +9,7 @@ export default function AboutUs() {
   const { lang, dir, t } = useI18n();
   usePageMeta({
     documentTitle: t("SEO_TITLE_ABOUT"),
-    description: "TruePrice.Cash – " + t("ABOUT_US") + ".",
+    metaDescription: t("SEO_DESC_ABOUT"),
     pathname: "/about",
   });
 

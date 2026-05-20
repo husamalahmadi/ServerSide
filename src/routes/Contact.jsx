@@ -46,7 +46,7 @@ export default function Contact() {
   )[lang] || {};
   usePageMeta({
     documentTitle: t("SEO_TITLE_CONTACT"),
-    description: L.intro,
+    metaDescription: t("SEO_DESC_CONTACT"),
     pathname: "/contact",
   });
 
