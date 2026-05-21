@@ -227,6 +227,19 @@ export default function Home() {
         }
         .tp-search-headline em { font-style: italic; color: var(--tp-gold); }
         .tp-search-deck { font-size: 12px; color: var(--tp-muted); margin-bottom: 16px; line-height: 1.7; max-width: 520px; }
+        .tp-markets-heading {
+          font-size: 13px;
+          font-weight: 600;
+          color: var(--tp-muted);
+          margin: 0 0 8px;
+          letter-spacing: 0.02em;
+        }
+        .tp-scr-count {
+          font-size: 12px;
+          color: var(--tp-muted);
+          font-weight: 600;
+          margin: 0;
+        }
         .tp-market-strip {
           display: flex;
           flex-wrap: wrap;
@@ -351,7 +364,6 @@ export default function Home() {
         .tp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
         .tp-screener-section { padding: 28px 0; border-bottom: 1px solid var(--tp-border); }
         .tp-scr-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
-        .tp-scr-count { font-size: 12px; color: var(--tp-muted); font-weight: 600; }
         .tp-scr-presets { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
         .tp-scr-preset {
           border: 1px solid var(--tp-border);
@@ -480,7 +492,7 @@ export default function Home() {
       `}</style>
 
       <div className="tp-wrap">
-        <PageHeader title="TruePrice.Cash" subtitle="Equity Intelligence · US & TASI Markets">
+        <PageHeader title="TruePrice.Cash" subtitle={t("HOME_PAGE_TAGLINE")}>
           <PillLink to="/blogs" ariaLabel={t("BLOGS")}>{t("BLOGS")}</PillLink>
           <PillLink to="/about" ariaLabel={t("ABOUT_US")}>{t("ABOUT_US")}</PillLink>
           <PillLink to="/contact" ariaLabel={t("CONTACT_US")}>{t("CONTACT_US")}</PillLink>
@@ -555,6 +567,7 @@ export default function Home() {
           </h1>
           <p className="tp-search-deck">{t("HOME_SEARCH_DECK")}</p>
 
+          <h2 className="tp-markets-heading">{t("HOME_MARKETS_HEADING")}</h2>
           <div className="tp-market-strip">
             <button
               type="button"
@@ -646,7 +659,7 @@ export default function Home() {
         <div className="tp-screener-section">
           <div className="tp-scr-head">
             <h2 className="tp-title" style={{ margin: 0 }}>{t("SCREENER_TITLE")}</h2>
-            <div className="tp-scr-count">{t("SCREENER_MATCHES")}: {tableCount}</div>
+            <h3 className="tp-scr-count">{t("SCREENER_MATCHES")}: {tableCount}</h3>
           </div>
           <div className="tp-scr-presets">
             <button type="button" className="tp-scr-preset" onClick={() => applyPreset("undervalued")}>

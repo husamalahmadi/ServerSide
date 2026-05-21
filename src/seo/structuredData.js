@@ -14,7 +14,7 @@ export function buildHomeSeo(lang = "en") {
   const metaDescription =
     lang === "ar"
       ? formatMetaDescription(
-          "حلل الأسهم الأمريكية والسعودية واليابانية على TruePrice.Cash — قيمة عادلة، قوائم مالية، أساسيات، وفلتر أسهم للمستثمرين في الأسواق العالمية."
+          "فلتر أسهم TruePrice.Cash لأسواق أمريكا والسعودية (تداول) واليابان — قيمة عادلة، فلاتر تداول واليابان، مدونات، وأساسيات للمستثمرين."
         )
       : DEFAULT_META_DESCRIPTION;
   return {
@@ -32,7 +32,7 @@ export function buildHomeSeo(lang = "en") {
           url: homeUrl,
           name: "TruePrice.Cash",
           description:
-            "Institutional-grade stock analysis with fair value estimates for US, Saudi (TASI), and Tokyo markets.",
+            "Fair value stock analysis and screener for US, Saudi (TASI), and Tokyo markets — TASI Focus, Tokyo Focus, and investing blogs.",
           inLanguage: ["en", "ar"],
           potentialAction: {
             "@type": "SearchAction",

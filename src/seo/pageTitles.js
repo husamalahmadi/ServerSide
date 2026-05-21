@@ -7,7 +7,7 @@ const BRAND_SUFFIX = ` – ${BRAND}`;
 
 /** Default homepage title (59 characters). */
 export const DEFAULT_DOCUMENT_TITLE =
-  "TruePrice.Cash – Fair Value & Fundamentals (US, TASI, Tokyo)";
+  "TruePrice.Cash – Fair Value for US, Saudi TASI & Tokyo";
 
 /**
  * Build a document title between 50 and 60 characters.

@@ -31,10 +31,12 @@ export default {
     "Learn about TruePrice.Cash — fair value stock research for US, Saudi (TASI), and Tokyo markets with financial statements, fundamentals, and screening tools.",
   SEO_DESC_CONTACT:
     "Contact TruePrice.Cash for support and questions about US, TASI, and Tokyo stock analysis, fair value tools, and financial data on our platform.",
-  HOME_SEARCH_HEADLINE: "Institutional-grade",
-  HOME_SEARCH_HEADLINE_EMP: "US, TASI & Tokyo stocks",
+  HOME_PAGE_TAGLINE: "Equity Intelligence · US, Saudi TASI & Tokyo Markets",
+  HOME_SEARCH_HEADLINE: "Fair value analysis for",
+  HOME_SEARCH_HEADLINE_EMP: "US, Saudi (TASI) & Tokyo stock markets",
   HOME_SEARCH_DECK:
-    "Enter a ticker or company name. We analyze financials and estimate fair value — instantly.",
+    "Search US, Saudi, and Tokyo market tickers on TruePrice.Cash. Fair value estimates, TASI Focus and Tokyo Focus screener presets, and investing blogs.",
+  HOME_MARKETS_HEADING: "US, Saudi (TASI), and Tokyo stock markets",
   SCREENER_TOKYO_METRICS_PENDING:
     "FMP metrics for Tokyo are still loading. Tickers below are searchable; open one for a full report.",
   INDUSTRY: "Industry",
@@ -159,7 +161,7 @@ export default {
   PROFILE_BADGE_STOCK_COMMENT: "Discussion",
   PROFILE_NO_COMMENTS_YET: "No stock comments yet.",
   PROFILE_USERNAME: "Username",
-  SCREENER_TITLE: "Stock Screener",
+  SCREENER_TITLE: "Stock Screener — US, TASI & Tokyo Fair Value",
   SCREENER_MATCHES: "Matches",
   SCREENER_LOAD_FAILED: "Failed to load screener data.",
   SCREENER_BUILDING: "Screener is loading financial data from FMP. Refresh the page in a few minutes.",
