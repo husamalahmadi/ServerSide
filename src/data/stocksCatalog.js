@@ -11,19 +11,34 @@ export const MARKETS = ["us", "sa", "jp"];
 
 export const CURRENCY_BY_MARKET = { us: "USD", sa: "SAR", jp: "JPY" };
 
-async function fetchJson(url) {
-  const res = await fetch(url, { cache: "no-store" });
-  const txt = await res.text();
-
-  let json = {};
+async function fetchJson(url, attempt = 0) {
   try {
-    json = txt ? JSON.parse(txt) : {};
-  } catch {
-    throw new Error(`Bad JSON ${res.status}: ${txt?.slice(0, 150)}`);
-  }
+    const res = await fetch(url, { cache: "no-store" });
+    const txt = await res.text();
+    const trimmed = txt.trim();
 
-  if (!res.ok) throw new Error(json?.message || json?.error || `HTTP ${res.status}`);
-  return json;
+    if (trimmed.startsWith("<") || trimmed.startsWith("<!")) {
+      throw new Error(
+        `Catalog data unavailable (HTTP ${res.status}): received HTML instead of JSON. Retry or check hosting.`
+      );
+    }
+
+    let json = {};
+    try {
+      json = trimmed ? JSON.parse(trimmed) : {};
+    } catch {
+      throw new Error(`Invalid catalog JSON (HTTP ${res.status}): ${trimmed.slice(0, 120)}`);
+    }
+
+    if (!res.ok) throw new Error(json?.message || json?.error || `HTTP ${res.status}`);
+    return json;
+  } catch (err) {
+    if (attempt < 1) {
+      await new Promise((r) => setTimeout(r, 800));
+      return fetchJson(url, attempt + 1);
+    }
+    throw err;
+  }
 }
 
 function normalizeGrouped(grouped, { tickerUppercase, market }) {

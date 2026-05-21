@@ -37,11 +37,23 @@ export function getBaseUrl() {
   return get("BASE_URL", "/");
 }
 
+const PRODUCTION_API_ORIGIN = "https://trueprice-api.onrender.com";
+
 function getResolvedApiUrlString() {
   let s = (import.meta.env.VITE_API_URL ?? "").toString().trim();
   if (typeof window !== "undefined") {
     const rt = (window.__TP_PUBLIC_API_URL__ ?? "").toString().trim();
     if (rt) s = rt;
+    if (!s) {
+      const host = (window.location.hostname || "").toLowerCase();
+      if (
+        host === "trueprice.cash" ||
+        host === "www.trueprice.cash" ||
+        host.endsWith(".trueprice.cash")
+      ) {
+        s = PRODUCTION_API_ORIGIN;
+      }
+    }
   }
   return s;
 }
