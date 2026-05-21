@@ -103,7 +103,7 @@ export default function Blogs() {
   const years = Object.keys(groupedPosts).map(Number).sort((a, b) => b - a); // Newest year first
 
   return (
-    <div dir={dir} lang={lang} style={{ minHeight: "100vh", background: "var(--tp-bg, #f5f2eb)", position: "relative", zIndex: 1 }}>
+    <div className="tp-page" dir={dir} lang={lang} style={{ maxWidth: 1400 }}>
       <style>{`
         .tp-wrap, .tp-card, .tp-header, .tp-blog-list { box-sizing: border-box; }
         .tp-wrap * { box-sizing: border-box; }
@@ -288,11 +288,7 @@ export default function Blogs() {
       `}</style>
 
       <div className="tp-container">
-        <PageHeader title="TruePrice.Cash" subtitle={t("BLOGS")}>
-          <PillLink to="/" ariaLabel={t("DASHBOARD")}>TruePrice.Cash</PillLink>
-          <PillLink to="/about" ariaLabel={t("ABOUT_US")}>{t("ABOUT_US")}</PillLink>
-          <PillLink to="/contact" ariaLabel={t("CONTACT_US")}>{t("CONTACT_US")}</PillLink>
-        </PageHeader>
+        <PageHeader title={t("BLOGS")} subtitle={lang === "ar" ? "مدونات استثمارية" : "Investing insights & market notes"} />
 
         {/* Content Area with Tree View and Blog List */}
         <div className="tp-content-wrap">

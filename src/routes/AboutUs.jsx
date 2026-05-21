@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
 import { useI18n } from "../i18n.jsx";
 import { PageHeader } from "../components/PageHeader.jsx";
-import { PillLink } from "../components/PillLink.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 
@@ -38,20 +37,12 @@ export default function AboutUs() {
   const L = content[lang] || content.en;
 
   return (
-    <div dir={dir} lang={lang} style={{ minHeight: "100vh", background: "var(--tp-bg, #f5f2eb)", position: "relative", zIndex: 1 }}>
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: 16, position: "relative", zIndex: 1 }}>
-        <PageHeader title="TruePrice.Cash" subtitle={t("ABOUT_US")}>
-          <PillLink to="/" ariaLabel={t("DASHBOARD")}>TruePrice.Cash</PillLink>
-        </PageHeader>
+    <div className="tp-page" dir={dir} lang={lang}>
+        <PageHeader title={L.title} subtitle={t("ABOUT_US")} />
 
         <div
+          className="tp-card tp-card-pad"
           style={{
-            marginTop: 16,
-            background: "var(--tp-surface, #fff)",
-            border: "1px solid var(--tp-border, #ddd8cc)",
-            borderRadius: 16,
-            padding: 16,
-            boxShadow: "0 1px 10px rgba(0,0,0,0.04)",
             lineHeight: 1.75,
           }}
         >
@@ -86,8 +77,7 @@ export default function AboutUs() {
           </div>
         ) : null}
 
-        <SiteFooter t={t} />
-      </div>
+      <SiteFooter t={t} />
     </div>
   );
 }

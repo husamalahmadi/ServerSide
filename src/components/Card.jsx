@@ -1,32 +1,14 @@
 import React from "react";
 
-export function Card({ title, children, style }) {
+export function Card({ title, children, style, className = "" }) {
   return (
-    <section
-      style={{
-        border: "1px solid var(--tp-border, #ddd8cc)",
-        borderRadius: 16,
-        background: "var(--tp-surface, #fff)",
-        marginBottom: 16,
-        boxShadow: "0 1px 10px rgba(0,0,0,0.04)",
-        overflow: "hidden",
-        ...style,
-      }}
-    >
+    <section className={`tp-card ${className}`.trim()} style={style}>
       {title ? (
-        <header
-          style={{
-            padding: "10px 14px",
-            borderBottom: "1px solid var(--tp-border, #ddd8cc)",
-            fontWeight: 900,
-            color: "var(--tp-ink, #1a1a14)",
-            fontFamily: "'Playfair Display', serif",
-          }}
-        >
-          {title}
+        <header className="tp-card-head">
+          <h2 className="tp-card-title">{title}</h2>
         </header>
       ) : null}
-      <div style={{ padding: 14, minWidth: 0 }}>{children}</div>
+      <div className="tp-card-pad">{children}</div>
     </section>
   );
 }

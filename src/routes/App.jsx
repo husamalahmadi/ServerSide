@@ -7,6 +7,7 @@ import { I18nProvider } from "../i18n.jsx";
 import { ErrorBoundary } from "../components/ErrorBoundary.jsx";
 import { RouteFallback } from "../components/RouteFallback.jsx";
 
+import { AppShell } from "../components/AppShell.jsx";
 import Home from "./Home.jsx";
 
 const Stock = React.lazy(() => import("./Stock.jsx"));
@@ -42,72 +43,74 @@ export default function App() {
           <AuthProvider>
             <AnalyticsRouteSync />
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route
-                path="/stock/:ticker"
-                element={
-                  <Lazy>
-                    <Stock />
-                  </Lazy>
-                }
-              />
-              <Route
-                path="/profile/setup"
-                element={
-                  <Lazy>
-                    <ProfileSetup />
-                  </Lazy>
-                }
-              />
-              <Route
-                path="/profile/:handle"
-                element={
-                  <Lazy>
-                    <Profile />
-                  </Lazy>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  <Lazy>
-                    <Profile />
-                  </Lazy>
-                }
-              />
-              <Route
-                path="/contact"
-                element={
-                  <Lazy>
-                    <Contact />
-                  </Lazy>
-                }
-              />
-              <Route
-                path="/about"
-                element={
-                  <Lazy>
-                    <AboutUs />
-                  </Lazy>
-                }
-              />
-              <Route
-                path="/blogs"
-                element={
-                  <Lazy>
-                    <Blogs />
-                  </Lazy>
-                }
-              />
-              <Route
-                path="/auth/*"
-                element={
-                  <Lazy>
-                    <AuthSignInHelp />
-                  </Lazy>
-                }
-              />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route element={<AppShell />}>
+                <Route path="/" element={<Home />} />
+                <Route
+                  path="/stock/:ticker"
+                  element={
+                    <Lazy>
+                      <Stock />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/profile/setup"
+                  element={
+                    <Lazy>
+                      <ProfileSetup />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/profile/:handle"
+                  element={
+                    <Lazy>
+                      <Profile />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <Lazy>
+                      <Profile />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/contact"
+                  element={
+                    <Lazy>
+                      <Contact />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/about"
+                  element={
+                    <Lazy>
+                      <AboutUs />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/blogs"
+                  element={
+                    <Lazy>
+                      <Blogs />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/auth/*"
+                  element={
+                    <Lazy>
+                      <AuthSignInHelp />
+                    </Lazy>
+                  }
+                />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Route>
             </Routes>
           </AuthProvider>
         </BrowserRouter>

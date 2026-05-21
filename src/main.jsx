@@ -12,6 +12,7 @@ try {
   /* ignore */
 }
 import "./index.css";
+import "./styles/tp-theme.css";
 import { initAnalytics } from "./analytics.js";
 import { initWebVitalsReporting } from "./webVitals.js";
 import App from "./routes/App.jsx";

@@ -1,25 +1,8 @@
-/* TruePrice.Cash – Design system (ValuAI-inspired) */
+/* TruePrice.Cash — base overrides (theme in styles/tp-theme.css) */
 :root {
-  --tp-bg: #f5f2eb;
-  --tp-surface: #ffffff;
-  --tp-surface2: #f0ece2;
-  --tp-border: #ddd8cc;
-  --tp-ink: #1a1a14;
-  --tp-muted: #8a8578;
-  --tp-accent: #1a3a2a;
-  --tp-gold: #b8860b;
-  --tp-green: #2d6a4f;
-  --tp-red: #8b1a1a;
-  --tp-amber: #7a5c00;
+  --font-ar: "Tajawal", ui-sans-serif, system-ui, sans-serif;
 }
 
-body {
-  background: var(--tp-bg);
-  color: var(--tp-ink);
-  min-height: 100vh;
-}
-
-/* Google sign-in — matches header nav pills (PillLink: Blogs, About, Contact) */
 .tp-signin-google {
   display: inline-flex;
   align-items: center;
@@ -28,41 +11,23 @@ body {
   box-sizing: border-box;
   padding: 6px 12px;
   border-radius: 999px;
-  border: 1px solid var(--tp-border, #ddd8cc);
-  background: var(--tp-surface, #fff);
-  color: var(--tp-ink, #1a1a14);
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
+  border: 1px solid var(--tp-border);
+  background: var(--tp-surface);
+  color: var(--tp-ink);
+  font-family: var(--tp-font);
+  font-size: 12px;
+  font-weight: 600;
   line-height: 1.2;
   cursor: pointer;
   white-space: nowrap;
   transition: background 0.15s, border-color 0.15s;
 }
 .tp-signin-google:hover {
-  background: var(--tp-surface2, #f0ece2);
-  border-color: var(--tp-muted, #8a8578);
-}
-.tp-signin-google:active {
-  background: var(--tp-surface2, #f0ece2);
+  background: var(--tp-primary-soft);
+  border-color: var(--tp-primary);
+  color: var(--tp-primary);
 }
 .tp-signin-google:focus-visible {
-  outline: 2px solid var(--tp-accent, #1a3a2a);
+  outline: 2px solid var(--tp-primary);
   outline-offset: 2px;
-}
-
-/* Paper texture overlay */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Arabic fallback font */
-html[lang="ar"] body {
-  font-family: var(--font-ar), "IBM Plex Mono", monospace;
 }

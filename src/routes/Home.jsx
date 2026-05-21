@@ -3,9 +3,10 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
 import { getAllStocks } from "../data/stocksCatalog.js";
-import { PageHeader } from "../components/PageHeader.jsx";
-import { PillLink } from "../components/PillLink.jsx";
-import { LangToggle } from "../components/LangToggle.jsx";
+import { StatCard } from "../components/dashboard/StatCard.jsx";
+import { MiniBarChart } from "../components/charts/MiniBarChart.jsx";
+import { Sparkline } from "../components/charts/Sparkline.jsx";
+import { DonutChart } from "../components/charts/DonutChart.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { buildHomeSeo } from "../seo/structuredData.js";
 import { getScreenerDataset } from "../services/screenerService.js";
@@ -27,7 +28,7 @@ const QUICK_PICKS = [
 ];
 
 export default function Home() {
-  const { t, lang, dir, toggleLang } = useI18n();
+  const { t, lang } = useI18n();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const authParam = searchParams.get("auth");
@@ -38,6 +39,18 @@ export default function Home() {
     next.delete("auth");
     setSearchParams(next, { replace: true });
   }, [searchParams, setSearchParams]);
+
+  useEffect(() => {
+    const qParam = searchParams.get("q");
+    if (qParam) {
+      setQ(qParam);
+      setSuggestionsOpen(true);
+      const next = new URLSearchParams(searchParams);
+      next.delete("q");
+      setSearchParams(next, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
+
   const homeSeo = useMemo(() => buildHomeSeo(lang), [lang]);
   usePageMeta(homeSeo);
 
@@ -85,7 +98,9 @@ export default function Home() {
       }
     }
     run();
-    return () => { alive = false; };
+    return () => {
+      alive = false;
+    };
   }, [t]);
 
   useEffect(() => {
@@ -168,6 +183,20 @@ export default function Home() {
   const tableItems = searchActive ? searchTableRows : screenerItems;
   const tableCount = searchActive ? searchTableRows.length : filteredCount;
 
+  const totalStocks = marketCounts.us + marketCounts.sa + marketCounts.jp;
+  const marketDonut = useMemo(
+    () => [
+      { label: t("MARKET_US"), value: marketCounts.us || 0, color: "#2c7be5" },
+      { label: t("MARKET_SA"), value: marketCounts.sa || 0, color: "#00d27a" },
+      { label: t("MARKET_JP"), value: marketCounts.jp || 0, color: "#f5803e" },
+    ],
+    [marketCounts, t]
+  );
+  const catalogBar = useMemo(
+    () => [marketCounts.us, marketCounts.sa, marketCounts.jp].map((n) => Math.max(1, Math.round(n / 100))),
+    [marketCounts]
+  );
+
   function toggleMarketFilter(market) {
     setMarketFilter((prev) => (prev === market ? "all" : market));
   }
@@ -213,361 +242,84 @@ export default function Home() {
   }
 
   return (
-    <div dir={dir} lang={lang} style={{ minHeight: "100vh", position: "relative", zIndex: 1 }}>
-      <style>{`
-        .tp-wrap { max-width: 1220px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
-        .tp-search-section { padding: 40px 0 32px; border-bottom: 1px solid var(--tp-border); }
-        .tp-search-headline {
-          font-family: 'Playfair Display', serif;
-          font-size: clamp(22px, 4vw, 36px);
-          font-weight: 700;
-          line-height: 1.2;
-          margin-bottom: 8px;
-          color: var(--tp-ink);
-        }
-        .tp-search-headline em { font-style: italic; color: var(--tp-gold); }
-        .tp-search-deck { font-size: 12px; color: var(--tp-muted); margin-bottom: 16px; line-height: 1.7; max-width: 520px; }
-        .tp-markets-heading {
-          font-size: 13px;
-          font-weight: 600;
-          color: var(--tp-muted);
-          margin: 0 0 8px;
-          letter-spacing: 0.02em;
-        }
-        .tp-scr-count {
-          font-size: 12px;
-          color: var(--tp-muted);
-          font-weight: 600;
-          margin: 0;
-        }
-        .tp-market-strip {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
-          margin-bottom: 24px;
-          align-items: center;
-        }
-        .tp-market-pill {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 8px 14px;
-          border-radius: 999px;
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 0.5px;
-          border: 1px solid var(--tp-border);
-          background: var(--tp-surface);
-        }
-        .tp-market-pill .tp-mp-count {
-          font-family: 'IBM Plex Mono', monospace;
-          font-size: 10px;
-          opacity: 0.85;
-        }
-        .tp-market-pill.us { color: #1d4ed8; border-color: #bfdbfe; background: #eff6ff; }
-        .tp-market-pill.sa { color: #166534; border-color: #bbf7d0; background: #ecfdf3; }
-        .tp-market-pill.jp { color: #be123c; border-color: #fecdd3; background: #fff1f2; }
-        button.tp-market-pill {
-          cursor: pointer;
-          font-family: inherit;
-        }
-        button.tp-market-pill.active {
-          box-shadow: 0 0 0 2px var(--tp-ink);
-        }
-        button.tp-market-pill.us.active { box-shadow: 0 0 0 2px #1d4ed8; }
-        button.tp-market-pill.sa.active { box-shadow: 0 0 0 2px #166534; }
-        button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
-        .tp-scr-tokyo-hint {
-          margin-bottom: 12px;
-          padding: 10px 14px;
-          font-size: 12px;
-          line-height: 1.5;
-          color: #9a3412;
-          background: #fff7ed;
-          border: 1px solid #fed7aa;
-          border-radius: 8px;
-        }
-        .tp-search-box {
-          display: flex;
-          gap: 0;
-          max-width: 560px;
-          border: 2px solid var(--tp-ink);
-          background: var(--tp-surface);
-        }
-        .tp-field-wrap { position: relative; flex: 1; }
-        .tp-ticker-field {
-          width: 100%;
-          border: none;
-          outline: none;
-          padding: 14px 18px;
-          font-family: 'IBM Plex Mono', monospace;
-          font-size: 16px;
-          letter-spacing: 2px;
-          background: transparent;
-          color: var(--tp-ink);
-        }
-        .tp-ticker-field::placeholder { color: var(--tp-muted); letter-spacing: 0; font-size: 13px; }
-        .tp-go-btn {
-          background: var(--tp-accent);
-          color: #fff;
-          border: none;
-          padding: 14px 28px;
-          font-family: 'Barlow', sans-serif;
-          font-weight: 700;
-          font-size: 13px;
-          letter-spacing: 2px;
-          cursor: pointer;
-          transition: background 0.15s;
-        }
-        .tp-go-btn:hover { background: #2d5a40; }
-        .tp-suggestions {
-          position: absolute;
-          top: 100%; left: 0; right: 0;
-          background: var(--tp-surface);
-          border: 2px solid var(--tp-ink);
-          border-top: none;
-          z-index: 50;
-          display: none;
-        }
-        .tp-suggestions.open { display: block; }
-        .tp-sug-item {
-          padding: 10px 18px;
-          display: flex;
-          gap: 12px;
-          align-items: center;
-          cursor: pointer;
-          font-size: 12px;
-          border-bottom: 1px solid var(--tp-border);
-          transition: background 0.1s;
-        }
-        .tp-sug-item:last-child { border-bottom: none; }
-        .tp-sug-item:hover { background: var(--tp-surface2); }
-        .tp-sug-ticker { font-weight: 500; color: var(--tp-accent); min-width: 50px; }
-        .tp-sug-name { color: var(--tp-muted); }
-        .tp-quick-picks { margin-top: 16px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .tp-qp-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--tp-muted); }
-        .tp-qp-chip {
-          border: 1px solid var(--tp-border);
-          background: var(--tp-surface);
-          padding: 4px 12px;
-          font-size: 11px;
-          letter-spacing: 1px;
-          cursor: pointer;
-          transition: all 0.15s;
-          font-family: 'IBM Plex Mono', monospace;
-          text-decoration: none;
-          color: var(--tp-ink);
-          display: inline-block;
-        }
-        .tp-qp-chip:hover { background: var(--tp-accent); color: #fff; border-color: var(--tp-accent); }
-        .tp-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 16px; color: var(--tp-ink); }
-        .tp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
-        .tp-screener-section { padding: 28px 0; border-bottom: 1px solid var(--tp-border); }
-        .tp-scr-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
-        .tp-scr-presets { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
-        .tp-scr-preset {
-          border: 1px solid var(--tp-border);
-          background: var(--tp-surface);
-          padding: 6px 11px;
-          font-size: 11px;
-          cursor: pointer;
-          border-radius: 999px;
-          font-weight: 600;
-        }
-        .tp-scr-preset:hover { background: var(--tp-accent); color: #fff; border-color: var(--tp-accent); }
-        .tp-scr-summary {
-          position: sticky;
-          top: 0;
-          z-index: 10;
-          margin: 0 0 12px;
-          border: 1px solid var(--tp-border);
-          background: #fff;
-          border-radius: 10px;
-          padding: 10px 12px;
-          font-size: 12px;
-          display: flex;
-          flex-wrap: wrap;
-          gap: 18px;
-          color: var(--tp-muted);
-        }
-        .tp-scr-layout { display: grid; grid-template-columns: 1fr; gap: 12px; align-items: start; }
-        .tp-scr-filters {
-          border: 1px solid var(--tp-border);
-          border-radius: 10px;
-          background: var(--tp-surface);
-          padding: 14px;
-          display: grid;
-          grid-template-columns: repeat(12, minmax(0, 1fr));
-          gap: 12px;
-          align-items: end;
-        }
-        .tp-scr-filters > .tp-scr-row { grid-column: span 4; }
-        .tp-scr-row { display: grid; gap: 7px; min-width: 0; }
-        .tp-scr-row label { font-size: 11px; letter-spacing: 1px; color: var(--tp-muted); text-transform: uppercase; }
-        .tp-scr-row input, .tp-scr-row select {
-          border: 1px solid var(--tp-border);
-          padding: 9px 10px;
-          background: #fff;
-          font-size: 13px;
-          border-radius: 8px;
-          width: 100%;
-          min-width: 0;
-          box-sizing: border-box;
-        }
-        .tp-scr-row small { color: var(--tp-muted); font-size: 11px; }
-        .tp-scr-inline { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 6px; align-items: center; min-width: 0; }
-        .tp-scr-hint {
-          margin: 0 2px 2px;
-          font-size: 11px;
-          color: var(--tp-muted);
-        }
-        .tp-scr-table-wrap {
-          border: 1px solid var(--tp-border);
-          border-radius: 10px;
-          overflow: auto;
-          background: var(--tp-surface);
-          max-height: 620px;
-          box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-        }
-        .tp-scr-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        .tp-scr-table th, .tp-scr-table td { padding: 9px 10px; border-bottom: 1px solid var(--tp-border); text-align: start; white-space: nowrap; vertical-align: middle; }
-        .tp-scr-table thead th {
-          background: #f8f6f1;
-          font-size: 11px;
-          letter-spacing: .5px;
-          text-transform: uppercase;
-          color: var(--tp-muted);
-          position: sticky;
-          top: 0;
-          z-index: 2;
-        }
-        .tp-scr-table tbody tr:nth-child(even) { background: rgba(0,0,0,0.012); }
-        .tp-scr-table tbody tr:hover { background: #f4f8f4; }
-        .tp-scr-link { border: none; background: transparent; color: var(--tp-accent); cursor: pointer; font-weight: 700; font-family: 'IBM Plex Mono', monospace; padding: 0; text-decoration: none; }
-        .tp-scr-company-cell .tp-scr-link { font-family: 'Barlow', sans-serif; font-weight: 600; }
-        .tp-scr-ticker-cell { font-family: 'IBM Plex Mono', monospace; font-weight: 600; }
-        .tp-scr-company-cell, .tp-scr-sector-cell { max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
-        .tp-scr-num { text-align: end !important; font-variant-numeric: tabular-nums; }
-        .tp-scr-pos { color: #166534; font-weight: 700; }
-        .tp-scr-neg { color: #991b1b; font-weight: 700; }
-        .tp-scr-market-badge {
-          display: inline-block;
-          min-width: 48px;
-          text-align: center;
-          border-radius: 999px;
-          padding: 3px 8px;
-          font-size: 10px;
-          font-weight: 700;
-          letter-spacing: .4px;
-        }
-        .tp-scr-market-badge.us { color: #1d4ed8; background: #eff6ff; }
-        .tp-scr-market-badge.sa { color: #166534; background: #ecfdf3; }
-        .tp-scr-market-badge.jp { color: #be123c; background: #fff1f2; }
-        .tp-scr-empty { border: 1px dashed var(--tp-border); padding: 20px; color: var(--tp-muted); text-align: center; }
-        @media (max-width: 1180px) {
-          .tp-scr-filters { grid-template-columns: repeat(12, minmax(0, 1fr)); }
-          .tp-scr-filters > .tp-scr-row { grid-column: span 6; }
-        }
-        @media (max-width: 980px) {
-          .tp-wrap { padding: 0 14px; }
-          .tp-scr-filters { grid-template-columns: repeat(12, minmax(0, 1fr)); }
-          .tp-scr-filters > .tp-scr-row { grid-column: span 6; }
-          .tp-scr-company-cell, .tp-scr-sector-cell { max-width: 140px; }
-        }
-        @media (max-width: 640px) {
-          .tp-scr-filters { grid-template-columns: repeat(12, minmax(0, 1fr)); }
-          .tp-scr-filters > .tp-scr-row { grid-column: span 12; }
-        }
-        .tp-company {
-          text-align: start;
-          border: 1px solid var(--tp-border);
-          padding: 12px;
-          background: var(--tp-surface);
-          cursor: pointer;
-          transition: all 0.15s;
-        }
-        .tp-company:hover { border-color: var(--tp-accent); background: var(--tp-surface2); }
-        .tp-company-name { font-weight: 700; color: var(--tp-ink); font-family: 'Barlow', sans-serif; }
-        .tp-company-meta { font-size: 12px; color: var(--tp-muted); margin-top: 6px; line-height: 1.35; }
-      `}</style>
+    <div className="tp-page">
+      <header className="tp-page-header">
+        <h1 className="tp-page-title">
+          {t("HOME_SEARCH_HEADLINE")}{" "}
+          <em>{t("HOME_SEARCH_HEADLINE_EMP")}</em>
+        </h1>
+        <p className="tp-page-sub">{t("HOME_PAGE_TAGLINE")}</p>
+      </header>
 
-      <div className="tp-wrap">
-        <PageHeader title="TruePrice.Cash" subtitle={t("HOME_PAGE_TAGLINE")}>
-          <PillLink to="/blogs" ariaLabel={t("BLOGS")}>{t("BLOGS")}</PillLink>
-          <PillLink to="/about" ariaLabel={t("ABOUT_US")}>{t("ABOUT_US")}</PillLink>
-          <PillLink to="/contact" ariaLabel={t("CONTACT_US")}>{t("CONTACT_US")}</PillLink>
-          <LangToggle lang={lang} onToggle={toggleLang} t={t} />
-        </PageHeader>
+      <div className="tp-stats-grid">
+        <StatCard
+          label={lang === "ar" ? "إجمالي الأسهم" : "Stock universe"}
+          value={totalStocks.toLocaleString()}
+          chart={<MiniBarChart values={catalogBar} color="#2c7be5" />}
+          foot={`US ${marketCounts.us.toLocaleString()} · TASI ${marketCounts.sa.toLocaleString()} · Tokyo ${marketCounts.jp.toLocaleString()}`}
+        />
+        <StatCard
+          label={t("SCREENER_MATCHES")}
+          value={tableCount.toLocaleString()}
+          chart={<Sparkline values={[12, 18, 14, 22, tableCount % 30 + 8]} color="#2c7be5" />}
+          foot={searchActive ? (lang === "ar" ? "نتائج البحث" : "Search results") : (lang === "ar" ? "من الفلتر النشط" : "Active screener filter")}
+        />
+        <StatCard
+          label={t("SCREENER_AVG_DISCOUNT")}
+          value={screenerSummary.avgDiscount == null ? "—" : `${screenerSummary.avgDiscount.toFixed(1)}%`}
+          chart={<MiniBarChart values={[4, 9, 6, 11, 8, 14]} color="#00d27a" />}
+          foot={lang === "ar" ? "متوسط خصم القيمة العادلة" : "Average fair value discount"}
+        />
+        <StatCard
+          label={t("SCREENER_TOP_SECTOR")}
+          value={screenerSummary.topSector}
+          chart={<Sparkline values={[3, 5, 4, 8, 7, 10, 9]} color="#f5803e" />}
+          foot={lang === "ar" ? "أكثر قطاع في النتائج" : "Most common sector in results"}
+        />
+      </div>
 
-        {authParam === "not_configured" && (
-          <div
-            role="status"
-            style={{
-              margin: "0 0 20px",
-              padding: "14px 16px",
-              background: "#fef2f2",
-              border: "1px solid #fecaca",
-              borderRadius: 10,
-              fontSize: 13,
-              color: "#991b1b",
-              lineHeight: 1.55,
+      {authParam === "not_configured" && (
+        <div role="status" className="tp-alert tp-alert-error">
+          <strong>Google sign-in is not configured on the server.</strong> In your API host (e.g. Render → your Web
+          Service → <strong>Environment</strong>), add <code style={{ fontSize: 12 }}>GOOGLE_CLIENT_ID</code> and{" "}
+          <code style={{ fontSize: 12 }}>GOOGLE_CLIENT_SECRET</code> from Google Cloud → Credentials → your{" "}
+          <em>OAuth 2.0 Client ID</em> (not the Blogger API key). Save and redeploy. In Google Cloud, set the OAuth{" "}
+          <strong>redirect URI</strong> to{" "}
+          <code style={{ fontSize: 11 }}>https://YOUR-API-HOST/auth/google/callback</code>.
+          <button
+            type="button"
+            onClick={() => {
+              searchParams.delete("auth");
+              setSearchParams(searchParams, { replace: true });
             }}
+            style={{ marginLeft: 12, padding: "4px 10px", fontSize: 12, cursor: "pointer" }}
           >
-            <strong>Google sign-in is not configured on the server.</strong> In your API host (e.g. Render → your Web
-            Service → <strong>Environment</strong>), add <code style={{ fontSize: 12 }}>GOOGLE_CLIENT_ID</code> and{" "}
-            <code style={{ fontSize: 12 }}>GOOGLE_CLIENT_SECRET</code> from Google Cloud → Credentials → your{" "}
-            <em>OAuth 2.0 Client ID</em> (not the Blogger API key). Save and redeploy. In Google Cloud, set the OAuth{" "}
-            <strong>redirect URI</strong> to{" "}
-            <code style={{ fontSize: 11 }}>https://YOUR-API-HOST/auth/google/callback</code>.
-            <button
-              type="button"
-              onClick={() => {
-                searchParams.delete("auth");
-                setSearchParams(searchParams, { replace: true });
-              }}
-              style={{ marginLeft: 12, padding: "4px 10px", fontSize: 12, cursor: "pointer" }}
-            >
-              Dismiss
-            </button>
-          </div>
-        )}
-        {authParam === "failed" && (
-          <div
-            role="status"
-            style={{
-              margin: "0 0 20px",
-              padding: "14px 16px",
-              background: "#fef2f2",
-              border: "1px solid #fecaca",
-              borderRadius: 10,
-              fontSize: 13,
-              color: "#991b1b",
+            Dismiss
+          </button>
+        </div>
+      )}
+      {authParam === "failed" && (
+        <div role="status" className="tp-alert tp-alert-error">
+          Google sign-in did not complete. Try again.
+          <button
+            type="button"
+            onClick={() => {
+              searchParams.delete("auth");
+              setSearchParams(searchParams, { replace: true });
             }}
+            style={{ marginLeft: 12, padding: "4px 10px", fontSize: 12, cursor: "pointer" }}
           >
-            Google sign-in did not complete. Try again.
-            <button
-              type="button"
-              onClick={() => {
-                searchParams.delete("auth");
-                setSearchParams(searchParams, { replace: true });
-              }}
-              style={{ marginLeft: 12, padding: "4px 10px", fontSize: 12, cursor: "pointer" }}
-            >
-              Dismiss
-            </button>
-          </div>
-        )}
+            Dismiss
+          </button>
+        </div>
+      )}
 
-        {/* Search */}
-        <div className="tp-search-section">
-          <h1 className="tp-search-headline">
-            {t("HOME_SEARCH_HEADLINE")}
-            <br />
-            <em>{t("HOME_SEARCH_HEADLINE_EMP")}</em>
-          </h1>
-          <p className="tp-search-deck">{t("HOME_SEARCH_DECK")}</p>
-
-          <h2 className="tp-markets-heading">{t("HOME_MARKETS_HEADING")}</h2>
+      <div className="tp-dash-grid">
+        <div className="tp-card tp-card-pad tp-span-8 tp-search-section">
+          <h2 className="tp-card-title" style={{ margin: "0 0 1rem" }}>
+            {lang === "ar" ? "بحث وتحليل الأسهم" : "Search & analyze stocks"}
+          </h2>
+          <h3 className="tp-markets-heading">{t("HOME_MARKETS_HEADING")}</h3>
           <div className="tp-market-strip">
             <button
               type="button"
@@ -636,7 +388,7 @@ export default function Home() {
                   }
                 }}
               >
-                {lang === "ar" ? "تحليل →" : "ANALYZE →"}
+                {lang === "ar" ? "تحليل ←" : "Analyze →"}
               </button>
             </div>
           </div>
@@ -656,71 +408,128 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="tp-screener-section">
-          <div className="tp-scr-head">
-            <h2 className="tp-title" style={{ margin: 0 }}>{t("SCREENER_TITLE")}</h2>
-            <h3 className="tp-scr-count">{t("SCREENER_MATCHES")}: {tableCount}</h3>
-          </div>
-          <div className="tp-scr-presets">
-            <button type="button" className="tp-scr-preset" onClick={() => applyPreset("undervalued")}>
-              {t("SCREENER_PRESET_UNDERVALUE")}
-            </button>
-            <button type="button" className="tp-scr-preset" onClick={() => applyPreset("largecap")}>
-              {t("SCREENER_PRESET_LARGECAP")}
-            </button>
-            <button type="button" className="tp-scr-preset" onClick={() => applyPreset("tasi")}>
-              {t("SCREENER_PRESET_TASI")}
-            </button>
-            <button type="button" className="tp-scr-preset" onClick={() => applyPreset("us")}>
-              {t("SCREENER_PRESET_US")}
-            </button>
-            <button type="button" className="tp-scr-preset" onClick={() => applyPreset("tokyo")}>
-              {t("SCREENER_PRESET_TOKYO")}
-            </button>
-            <button type="button" className="tp-scr-preset" onClick={() => applyPreset("reset")}>
-              {t("RESET")}
-            </button>
-          </div>
-          <div className="tp-scr-summary">
-            <span>{t("SCREENER_MATCHES")}: <b>{tableCount}</b></span>
-            <span>{t("SCREENER_AVG_DISCOUNT")}: <b>{screenerSummary.avgDiscount == null ? "—" : `${screenerSummary.avgDiscount.toFixed(1)}%`}</b></span>
-            <span>{t("SCREENER_TOP_SECTOR")}: <b>{screenerSummary.topSector}</b></span>
-          </div>
-          {screenerState.loading ? (
-            <div className="tp-scr-empty">{t("LOADING")}</div>
-          ) : screenerState.error ? (
-            <div className="tp-scr-empty">{screenerState.error}</div>
-          ) : (
-            <div className="tp-scr-layout">
-              {screenerState.rebuilding ? (
-                <div className="tp-scr-tokyo-hint">{t("SCREENER_BUILDING")}</div>
-              ) : null}
-              {!searchActive ? (
-                <div className="tp-scr-hint">
-                  {lang === "ar" ? "اضغط أحد الأزرار بالأعلى لتشغيل الفرز. إعادة التعيين تعرض نتائج فارغة." : "Press one of the buttons above to run screening. Reset shows no results."}
-                </div>
-              ) : null}
-              {tokyoMetricsPending ? (
-                <div className="tp-scr-tokyo-hint">{t("SCREENER_TOKYO_METRICS_PENDING")}</div>
-              ) : null}
-              {tableItems.length === 0 ? (
-                <div className="tp-scr-empty">{t("NO_MATCH")}</div>
-              ) : (
-                <ScreenerResultsTable
-                  t={t}
-                  items={tableItems}
-                  sortBy={sortBy}
-                  sortDir={sortDir}
-                  onSort={onSort}
-                  onOpenTicker={goToStock}
-                />
-              )}
-            </div>
-          )}
+        <div className="tp-card tp-card-pad tp-span-4">
+          <h2 className="tp-card-title" style={{ margin: "0 0 0.5rem" }}>
+            {lang === "ar" ? "حصة الأسواق" : "Market share"}
+          </h2>
+          <DonutChart
+            segments={marketDonut}
+            centerLabel={lang === "ar" ? "الإجمالي" : "Total"}
+            centerValue={totalStocks.toLocaleString()}
+          />
         </div>
-
-        <SiteFooter t={t} />
       </div>
+
+      <div className="tp-dash-grid" style={{ marginBottom: "1.25rem" }}>
+        <div className="tp-cta-card tp-span-4">
+          <h3>{t("SCREENER_PRESET_TASI")}</h3>
+          <p>
+            {lang === "ar"
+              ? "فلتر سريع لأسهم السوق السعودي (تداول) حسب القيمة العادلة."
+              : "Quick screen for Saudi (TASI) stocks by fair value discount."}
+          </p>
+          <button type="button" className="tp-btn-primary" onClick={() => applyPreset("tasi")}>
+            {lang === "ar" ? "تشغيل الفلتر" : "Run screener"}
+          </button>
+        </div>
+        <div
+          className="tp-cta-card tp-span-4"
+          style={{
+            background: "linear-gradient(135deg, #e6f0ff 0%, #d6e8ff 100%)",
+            borderColor: "#b8d4f5",
+          }}
+        >
+          <h3 style={{ color: "#1a68d1" }}>{t("SCREENER_PRESET_TOKYO")}</h3>
+          <p style={{ color: "#3d6db5" }}>
+            {lang === "ar"
+              ? "استكشف أسهم بورصة طوكيو مع فلاتر القيمة العادلة."
+              : "Explore Tokyo Exchange tickers with fair value filters."}
+          </p>
+          <button
+            type="button"
+            className="tp-btn-primary"
+            onClick={() => applyPreset("tokyo")}
+            style={{ background: "#1a68d1" }}
+          >
+            {lang === "ar" ? "تشغيل الفلتر" : "Run screener"}
+          </button>
+        </div>
+        <div className="tp-card tp-card-pad tp-span-4" style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <h2 className="tp-card-title" style={{ margin: "0 0 0.5rem" }}>{t("BLOGS")}</h2>
+          <p style={{ margin: "0 0 1rem", fontSize: 13, color: "var(--tp-muted)" }}>
+            {lang === "ar" ? "مقالات استثمارية وتحليل أسواق." : "Investing insights and market analysis."}
+          </p>
+          <Link to="/blogs" className="tp-btn-primary" style={{ textDecoration: "none", display: "inline-block" }}>
+            {lang === "ar" ? "قراءة المدونة" : "Read blogs"}
+          </Link>
+        </div>
+      </div>
+
+      <div id="screener" className="tp-card tp-card-pad tp-screener-section">
+        <div className="tp-scr-head">
+          <h2 className="tp-title" style={{ margin: 0 }}>{t("SCREENER_TITLE")}</h2>
+          <h3 className="tp-scr-count">{t("SCREENER_MATCHES")}: {tableCount}</h3>
+        </div>
+        <div className="tp-scr-presets">
+          <button type="button" className="tp-scr-preset" onClick={() => applyPreset("undervalued")}>
+            {t("SCREENER_PRESET_UNDERVALUE")}
+          </button>
+          <button type="button" className="tp-scr-preset" onClick={() => applyPreset("largecap")}>
+            {t("SCREENER_PRESET_LARGECAP")}
+          </button>
+          <button type="button" className="tp-scr-preset" onClick={() => applyPreset("tasi")}>
+            {t("SCREENER_PRESET_TASI")}
+          </button>
+          <button type="button" className="tp-scr-preset" onClick={() => applyPreset("us")}>
+            {t("SCREENER_PRESET_US")}
+          </button>
+          <button type="button" className="tp-scr-preset" onClick={() => applyPreset("tokyo")}>
+            {t("SCREENER_PRESET_TOKYO")}
+          </button>
+          <button type="button" className="tp-scr-preset" onClick={() => applyPreset("reset")}>
+            {t("RESET")}
+          </button>
+        </div>
+        <div className="tp-scr-summary">
+          <span>{t("SCREENER_MATCHES")}: <b>{tableCount}</b></span>
+          <span>{t("SCREENER_AVG_DISCOUNT")}: <b>{screenerSummary.avgDiscount == null ? "—" : `${screenerSummary.avgDiscount.toFixed(1)}%`}</b></span>
+          <span>{t("SCREENER_TOP_SECTOR")}: <b>{screenerSummary.topSector}</b></span>
+        </div>
+        {screenerState.loading ? (
+          <div className="tp-scr-empty">{t("LOADING")}</div>
+        ) : screenerState.error ? (
+          <div className="tp-scr-empty">{screenerState.error}</div>
+        ) : (
+          <div className="tp-scr-layout">
+            {screenerState.rebuilding ? (
+              <div className="tp-scr-tokyo-hint">{t("SCREENER_BUILDING")}</div>
+            ) : null}
+            {!searchActive ? (
+              <div className="tp-scr-hint">
+                {lang === "ar" ? "اضغط أحد الأزرار بالأعلى لتشغيل الفرز. إعادة التعيين تعرض نتائج فارغة." : "Press one of the buttons above to run screening. Reset shows no results."}
+              </div>
+            ) : null}
+            {tokyoMetricsPending ? (
+              <div className="tp-scr-tokyo-hint">{t("SCREENER_TOKYO_METRICS_PENDING")}</div>
+            ) : null}
+            {tableItems.length === 0 ? (
+              <div className="tp-scr-empty">{t("NO_MATCH")}</div>
+            ) : (
+              <ScreenerResultsTable
+                t={t}
+                items={tableItems}
+                sortBy={sortBy}
+                sortDir={sortDir}
+                onSort={onSort}
+                onOpenTicker={goToStock}
+              />
+            )}
+          </div>
+        )}
+      </div>
+
+      <SiteFooter t={t} />
     </div>
   );
+
 }

@@ -21,7 +21,7 @@ export function CompareBar({ current, fair, currency, dir = "ltr", t }) {
         }}
         dir={dir}
       >
-        <div style={{ height: "100%", width: `${curPct}%`, background: "#2563eb" }} />
+        <div style={{ height: "100%", width: `${curPct}%`, background: "#2c7be5", borderRadius: 999 }} />
         <div
           style={{
             position: "absolute",
@@ -29,7 +29,7 @@ export function CompareBar({ current, fair, currency, dir = "ltr", t }) {
             bottom: 0,
             width: 3,
             left: `${fairPct}%`,
-            background: "#10b981",
+            background: "#00d27a",
           }}
         />
       </div>
@@ -65,6 +65,7 @@ export function LineChart({ title, series, w = 380, dir = "ltr" }) {
   }
   const ys = (v) => pad.t + (1 - (v - min) / (max - min)) * ih;
   const dAttr = data.map((p, i) => `${i ? "L" : "M"} ${xs(i)} ${ys(p.value)}`).join(" ");
+  const areaAttr = `${dAttr} L ${pad.l + iw} ${pad.t + ih} L ${pad.l} ${pad.t + ih} Z`;
   const yTicks = [0, 1, 2, 3, 4].map((i) => {
     const ratio = i / 4;
     const value = max - (max - min) * ratio;
@@ -85,27 +86,28 @@ export function LineChart({ title, series, w = 380, dir = "ltr" }) {
       style={{ width: "100%", display: "block", maxWidth: "100%" }}
       direction={dir}
     >
-      <text x={w / 2} y={16} textAnchor="middle" style={{ fontSize: 14, fontWeight: 900 }}>
+      <text x={pad.l} y={16} textAnchor="start" style={{ fontSize: 13, fontWeight: 700, fill: "#344050" }}>
         {title}
       </text>
       {yTicks.map((tick, i) => (
         <g key={`y-${i}`}>
-          <line x1={pad.l} y1={tick.y} x2={w - pad.r} y2={tick.y} stroke="#eef2f7" />
+          <line x1={pad.l} y1={tick.y} x2={w - pad.r} y2={tick.y} stroke="#edf2f9" />
           <text
             x={pad.l - 8}
             y={tick.y + 3}
             textAnchor="end"
-            style={{ fontSize: 10, fill: "#6b7280" }}
+            style={{ fontSize: 10, fill: "#748194" }}
           >
             {formatCompact(tick.value)}
           </text>
         </g>
       ))}
-      <line x1={pad.l} y1={h - pad.b} x2={w - pad.r} y2={h - pad.b} stroke="#e5e7eb" />
-      <path d={dAttr} fill="none" stroke="#0f4a5a" strokeWidth="2" />
+      <line x1={pad.l} y1={h - pad.b} x2={w - pad.r} y2={h - pad.b} stroke="#e3e8ef" />
+      <path d={areaAttr} fill="#2c7be5" opacity="0.12" />
+      <path d={dAttr} fill="none" stroke="#2c7be5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
       {data.map((p, i) => (
         <g key={`${p.label}-${i}`}>
-          <circle cx={xs(i)} cy={ys(p.value)} r="3.5" fill="#0f4a5a" />
+          <circle cx={xs(i)} cy={ys(p.value)} r="4" fill="#fff" stroke="#2c7be5" strokeWidth="2" />
           <text
             x={xs(i)}
             y={h - pad.b + 16}

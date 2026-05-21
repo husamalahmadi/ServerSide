@@ -391,7 +391,7 @@ export default function Stock() {
   }, [companyDisplayName, ticker, fairAvg, price, currency, lang, t]);
 
   return (
-    <div style={{ background: "var(--tp-bg, #f5f2eb)", minHeight: "100vh" }} dir={dir} lang={lang}>
+    <div className="tp-page" style={{ maxWidth: 1280 }} dir={dir} lang={lang}>
       <div
         style={{
           maxWidth: isMobile ? 1100 : 1400,

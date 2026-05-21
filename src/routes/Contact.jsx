@@ -102,21 +102,17 @@ export default function Contact() {
   }
 
   return (
-    <div dir={dir} lang={lang} style={{ minHeight: "100vh", background: "var(--tp-bg, #f5f2eb)", position: "relative", zIndex: 1 }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: 16, position: "relative", zIndex: 1 }}>
-        <PageHeader title="TruePrice.Cash" subtitle={L.title}>
-          <PillLink to="/" ariaLabel="Dashboard">TruePrice.Cash</PillLink>
-        </PageHeader>
+    <div className="tp-page" dir={dir} lang={lang}>
+        <PageHeader title={L.title} subtitle={t("CONTACT_US")} />
 
         <form
         onSubmit={handleSend}
+        className="tp-card tp-card-pad"
         style={{
           maxWidth: 720,
           margin: "0 auto",
           display: "grid",
           gap: 12,
-          background: "var(--tp-surface, #fff)",
-          border: "1px solid var(--tp-border, #ddd8cc)",
           borderRadius: 12,
           padding: 16,
         }}
@@ -183,8 +179,8 @@ export default function Contact() {
             style={{
               padding: "8px 14px",
               borderRadius: 8,
-            border: "1px solid var(--tp-accent, #1a3a2a)",
-            background: "var(--tp-accent, #1a3a2a)",
+            border: "1px solid var(--tp-primary)",
+            background: "var(--tp-primary)",
               color: "#fff",
               fontWeight: 700,
               cursor: loading ? "not-allowed" : "pointer",
@@ -224,8 +220,7 @@ export default function Contact() {
         )}
         </form>
 
-        <SiteFooter t={t} />
-      </div>
+      <SiteFooter t={t} />
     </div>
   );
 }
