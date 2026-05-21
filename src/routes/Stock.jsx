@@ -10,9 +10,7 @@ import { isFmpRetryError } from "../services/fmpErrors.js";
 import { fmpProfile } from "../services/fmpService.js";
 import { translateToArabic } from "../services/translateService.js";
 import { Card } from "../components/Card.jsx";
-import { PillLink } from "../components/PillLink.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
-import { LangToggle } from "../components/LangToggle.jsx";
 import { RetryButton } from "../components/RetryButton.jsx";
 import { CompareBar, ChartBlock } from "../components/stock/StockCharts.jsx";
 import { StockNewsSidebar } from "../components/StockNewsSidebar.jsx";
@@ -22,7 +20,6 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { useTrackView } from "../hooks/useActivity.js";
 import { StockComments } from "../components/StockComments.jsx";
 import { WatchlistManager } from "../components/WatchlistManager.jsx";
-import { UserBar } from "../components/UserBar.jsx";
 import { GoogleGIcon } from "../components/GoogleGIcon.jsx";
 import { getPrefetchDelayMs } from "../config/env.js";
 import { exportElementAsPdf } from "../utils/exportPdf.js";
@@ -33,7 +30,7 @@ const PREFETCH_DELAY_SEC = Math.ceil(getPrefetchDelayMs() / 1000);
 /* Page */
 export default function Stock() {
   const { ticker } = useParams();
-  const { t, lang, dir, toggleLang } = useI18n();
+  const { t, lang, dir } = useI18n();
   const { user, login } = useAuth();
   const signInNavigating = useRef(false);
   useTrackView(ticker);
@@ -483,9 +480,6 @@ export default function Stock() {
             >
               {pdfExporting ? "…" : t("EXPORT_PDF")}
             </button>
-            <UserBar />
-            <PillLink to="/" ariaLabel={t("DASHBOARD")}>TruePrice.Cash</PillLink>
-            <LangToggle lang={lang} onToggle={toggleLang} t={t} />
           </div>
         </div>
 
