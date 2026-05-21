@@ -37,7 +37,8 @@ export function getBaseUrl() {
   return get("BASE_URL", "/");
 }
 
-const PRODUCTION_API_ORIGIN = "https://trueprice-api.onrender.com";
+/** Canonical web origin (API proxied at /api/*). Avoids bare-domain 301 breaking fetch. */
+const PRODUCTION_API_ORIGIN = "https://www.trueprice.cash";
 
 function getResolvedApiUrlString() {
   let s = (import.meta.env.VITE_API_URL ?? "").toString().trim();

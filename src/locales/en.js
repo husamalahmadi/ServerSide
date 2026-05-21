@@ -103,6 +103,8 @@ export default {
   ERR_STATEMENTS: "Failed to load financial statements.",
   ERR_STATEMENTS_RETRY:
     "Some financial data could not be loaded completely. This is usually temporary — please try again.",
+  ERR_PRICE_NETWORK:
+    "Live price could not be loaded. Check your connection and refresh — or open www.trueprice.cash.",
   ERR_VALUATION: "Failed to load valuation.",
   ERR_VALUATION_RETRY:
     "Valuation could not be calculated because some data is missing. Please try again in a moment.",

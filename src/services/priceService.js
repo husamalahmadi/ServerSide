@@ -14,7 +14,20 @@ export async function getLivePrice({ ticker, market } = {}) {
   if (!fmpSym) throw new Error("Ticker not allowed.");
 
   const { currency, market: resolvedMarket, tickerDisplay } = r;
-  const j = await fmpQuote(fmpSym);
+  let j;
+  let lastErr;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      j = await fmpQuote(fmpSym);
+      lastErr = null;
+      break;
+    } catch (err) {
+      lastErr = err;
+      if (attempt < 2) await new Promise((r) => setTimeout(r, 600 * (attempt + 1)));
+    }
+  }
+  if (lastErr) throw lastErr;
+
   const price = toNumber(j?.price) ?? 0;
 
   return {

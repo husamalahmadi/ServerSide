@@ -27,3 +27,36 @@ export async function readJsonResponse(res, label = "API") {
 
   return json;
 }
+
+const FETCH_RETRY_DELAYS_MS = [0, 600, 1500];
+
+function isRetryableFetchError(err) {
+  const msg = String(err?.message || err || "").toLowerCase();
+  return (
+    err?.name === "TypeError" ||
+    msg.includes("failed to fetch") ||
+    msg.includes("networkerror") ||
+    msg.includes("load failed")
+  );
+}
+
+/**
+ * fetch with short retries — helps Render cold starts and flaky mobile networks.
+ */
+export async function fetchWithRetry(url, init = {}, { attempts = 3 } = {}) {
+  let lastErr;
+  const tries = Math.max(1, attempts);
+  for (let i = 0; i < tries; i++) {
+    if (i > 0) {
+      const delay = FETCH_RETRY_DELAYS_MS[i] ?? 1500;
+      await new Promise((r) => setTimeout(r, delay));
+    }
+    try {
+      return await fetch(url, init);
+    } catch (err) {
+      lastErr = err;
+      if (!isRetryableFetchError(err) || i === tries - 1) throw err;
+    }
+  }
+  throw lastErr;
+}

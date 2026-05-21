@@ -1,6 +1,6 @@
 // FILE: src/services/fmpService.js
 import { getApiUrl } from "../config/env.js";
-import { readJsonResponse } from "../utils/apiFetch.js";
+import { fetchWithRetry, readJsonResponse } from "../utils/apiFetch.js";
 import { FmpIncompleteError } from "./fmpErrors.js";
 
 /**
@@ -15,7 +15,10 @@ function fmpApiUrl(endpoint, fmpSymbol) {
 
 async function fmpFetch(endpoint, fmpSymbol) {
   const url = fmpApiUrl(endpoint, fmpSymbol);
-  const res = await fetch(url, { cache: "no-store", credentials: "include" });
+  const res = await fetchWithRetry(url, {
+    cache: "no-store",
+    credentials: "omit",
+  });
   return readJsonResponse(res, `FMP ${endpoint}`);
 }
 
@@ -49,7 +52,10 @@ export async function fmpRatios(fmpSymbol) {
  */
 export async function fmpFinancials(fmpSymbol) {
   const url = fmpApiUrl("financials", fmpSymbol);
-  const res = await fetch(url, { cache: "no-store", credentials: "include" });
+  const res = await fetchWithRetry(url, {
+    cache: "no-store",
+    credentials: "omit",
+  });
   const txt = await res.text();
   const trimmed = txt.trim();
 

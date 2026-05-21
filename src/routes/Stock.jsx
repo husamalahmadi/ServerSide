@@ -125,7 +125,12 @@ export default function Stock() {
         if (pj?.currency) setCurrency(pj.currency);
       } catch (e) {
         if (!alive) return;
-        setHeaderError(String(e?.message || e));
+        const msg = String(e?.message || e);
+        setHeaderError(
+          msg.toLowerCase().includes("failed to fetch")
+            ? t("ERR_PRICE_NETWORK")
+            : msg
+        );
       }
     })();
     return () => { alive = false; };
