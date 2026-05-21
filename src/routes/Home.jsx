@@ -421,6 +421,23 @@ export default function Home() {
       </div>
 
       <div className="tp-dash-grid" style={{ marginBottom: "1.25rem" }}>
+        <div
+          className="tp-cta-card tp-span-4"
+          style={{
+            background: "linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)",
+            borderColor: "#bfdbfe",
+          }}
+        >
+          <h3 style={{ color: "#1d4ed8" }}>{t("SCREENER_PRESET_US")}</h3>
+          <p style={{ color: "#3b6fc9" }}>
+            {lang === "ar"
+              ? "فلتر سريع لأسهم السوق الأمريكي حسب القيمة العادلة."
+              : "Quick screen for US-listed stocks by fair value discount."}
+          </p>
+          <button type="button" className="tp-btn-primary" onClick={() => applyPreset("us")}>
+            {lang === "ar" ? "تشغيل الفلتر" : "Run screener"}
+          </button>
+        </div>
         <div className="tp-cta-card tp-span-4">
           <h3>{t("SCREENER_PRESET_TASI")}</h3>
           <p>
@@ -453,15 +470,6 @@ export default function Home() {
           >
             {lang === "ar" ? "تشغيل الفلتر" : "Run screener"}
           </button>
-        </div>
-        <div className="tp-card tp-card-pad tp-span-4" style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          <h2 className="tp-card-title" style={{ margin: "0 0 0.5rem" }}>{t("BLOGS")}</h2>
-          <p style={{ margin: "0 0 1rem", fontSize: 13, color: "var(--tp-muted)" }}>
-            {lang === "ar" ? "مقالات استثمارية وتحليل أسواق." : "Investing insights and market analysis."}
-          </p>
-          <Link to="/blogs" className="tp-btn-primary" style={{ textDecoration: "none", display: "inline-block" }}>
-            {lang === "ar" ? "قراءة المدونة" : "Read blogs"}
-          </Link>
         </div>
       </div>
 
