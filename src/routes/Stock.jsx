@@ -407,19 +407,9 @@ export default function Stock() {
         <div ref={reportContentRef} style={{ flex: 1, minWidth: 0, maxWidth: isMobile ? "100%" : 1100 }}>
         {/* Banner */}
         <div
-          className="no-print"
+          className="no-print tp-stock-banner"
           style={{
-            background: "var(--tp-accent, #1a3a2a)",
-            color: "#fff",
-            borderRadius: 16,
-            padding: 14,
-            marginBottom: 16,
-            boxShadow: "0 1px 10px rgba(0,0,0,0.10)",
-            display: "flex",
             alignItems: isMobile ? "stretch" : "center",
-            gap: 12,
-            flexWrap: "wrap",
-            minWidth: 0,
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0, flex: "1 1 200px", maxWidth: isMobile ? "100%" : 420 }}>
@@ -450,7 +440,7 @@ export default function Stock() {
                   <span style={{ fontWeight: 600, opacity: 0.9 }}> – {(lang === "ar" && translatedProfile?.industry) || profile?.industry}</span>
                 ) : null}
               </div>
-              <div style={{ fontSize: 13, color: "#cbd5e1", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              <div className="tp-stock-banner-meta" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 <b>{t("TICKER")}:</b> {ticker} · <b>{t("REPORT_DATE")}:</b> {reportDate}
               </div>
             </div>
@@ -479,50 +469,17 @@ export default function Stock() {
                 `${fmt2(price)} ${currency}`
               )}
             </div>
-            <button
-              type="button"
-              onClick={handleShare}
-              style={{
-                border: "1px solid #d1d5db",
-                borderRadius: 999,
-                padding: "6px 10px",
-                fontWeight: 700,
-                background: "#fff",
-                color: "#111827",
-                cursor: "pointer",
-              }}
-            >
+            <button type="button" className="tp-btn-outline-light" onClick={handleShare}>
               {shareCopied ? t("SHARE_COPIED") : t("SHARE_REPORT")}
             </button>
-            <button
-              type="button"
-              onClick={handlePrint}
-              style={{
-                border: "1px solid #d1d5db",
-                borderRadius: 999,
-                padding: "6px 10px",
-                fontWeight: 700,
-                background: "#fff",
-                color: "#111827",
-                cursor: "pointer",
-              }}
-            >
+            <button type="button" className="tp-btn-outline-light" onClick={handlePrint}>
               {t("PRINT_REPORT")}
             </button>
             <button
               type="button"
+              className="tp-btn-outline-light"
               onClick={handleExportPdf}
               disabled={pdfExporting}
-              style={{
-                border: "1px solid #d1d5db",
-                borderRadius: 999,
-                padding: "6px 10px",
-                fontWeight: 700,
-                background: "#fff",
-                color: "#111827",
-                cursor: pdfExporting ? "not-allowed" : "pointer",
-                opacity: pdfExporting ? 0.6 : 1,
-              }}
             >
               {pdfExporting ? "…" : t("EXPORT_PDF")}
             </button>
