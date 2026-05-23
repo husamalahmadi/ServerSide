@@ -476,11 +476,14 @@ export default function Home() {
 
       <HomeMarketNews t={t} lang={lang} dir={dir} />
 
-      <div id="screener" className="tp-card tp-card-pad tp-screener-section">
-        <div className="tp-scr-head">
-          <h2 className="tp-title" style={{ margin: 0 }}>{t("SCREENER_TITLE")}</h2>
-          <h3 className="tp-scr-count">{t("SCREENER_MATCHES")}: {tableCount}</h3>
+      <section id="screener" className="tp-panel tp-screener-section" aria-label={t("SCREENER_TITLE")}>
+        <div className="tp-panel-head">
+          <h2 className="tp-panel-title">{t("SCREENER_TITLE")}</h2>
+          <p className="tp-panel-head-meta">
+            {t("SCREENER_MATCHES")}: <b>{tableCount}</b>
+          </p>
         </div>
+        <div className="tp-panel-body">
         <div className="tp-scr-presets">
           <button type="button" className="tp-scr-preset" onClick={() => applyPreset("undervalued")}>
             {t("SCREENER_PRESET_UNDERVALUE")}
@@ -537,7 +540,8 @@ export default function Home() {
             )}
           </div>
         )}
-      </div>
+        </div>
+      </section>
 
       <SiteFooter t={t} />
     </div>

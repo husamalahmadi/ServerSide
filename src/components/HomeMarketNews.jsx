@@ -50,9 +50,9 @@ export function HomeMarketNews({ t, lang, dir }) {
   }, [loadNews, refreshKey]);
 
   return (
-    <section className="tp-home-news tp-card" dir={dir} aria-label={t("HOME_MARKET_NEWS_TITLE")}>
-      <div className="tp-news-sidebar-head">
-        <h2 className="tp-news-sidebar-title">{t("HOME_MARKET_NEWS_TITLE")}</h2>
+    <section className="tp-home-news tp-panel" dir={dir} aria-label={t("HOME_MARKET_NEWS_TITLE")}>
+      <div className="tp-panel-head">
+        <h2 className="tp-panel-title">{t("HOME_MARKET_NEWS_TITLE")}</h2>
         <button
           type="button"
           className="tp-news-refresh"

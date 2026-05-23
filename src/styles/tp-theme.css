@@ -825,25 +825,73 @@ button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
   color: #b02a37;
 }
 
-/* —— Home: market news (before screener) —— */
-.tp-home-news {
+/* —— Dashboard panels (blue header: news, screener) —— */
+.tp-panel {
   margin-bottom: 1.25rem;
   overflow: hidden;
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-border-soft);
+  border-radius: var(--tp-radius-lg);
+  box-shadow: var(--tp-shadow);
+}
+
+.tp-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--tp-primary);
+  color: #fff;
+  border-bottom: 1px solid var(--tp-primary-dark);
+  flex-wrap: wrap;
+}
+
+.tp-panel-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.tp-panel-head-meta {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.tp-panel-head-meta b {
+  font-weight: 800;
+}
+
+.tp-panel-body {
+  padding: 1rem 1.1rem;
+  background: var(--tp-surface2);
+}
+
+/* —— Home: market news (compact, narrow items) —— */
+.tp-home-news {
+  margin-bottom: 1rem;
+}
+
+.tp-home-news .tp-panel-head {
+  padding: 0.6rem 0.85rem;
 }
 
 .tp-home-news-body {
-  padding: 0.75rem 1rem 1rem;
+  padding: 0.5rem 0.65rem 0.65rem;
   background: var(--tp-surface2);
 }
 
 .tp-home-news-scroll {
-  max-height: 22.5rem; /* ~5 article rows visible */
+  max-height: 15.5rem; /* ~5 compact rows visible */
   overflow-y: auto;
-  padding-right: 0.25rem;
+  padding-right: 0.2rem;
 }
 
 .tp-home-news-scroll::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 
 .tp-home-news-scroll::-webkit-scrollbar-thumb {
@@ -851,8 +899,41 @@ button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
   border-radius: 999px;
 }
 
-.tp-home-news-item {
-  min-height: 4.25rem;
+.tp-home-news-scroll.tp-news-list {
+  gap: 0.35rem;
+}
+
+.tp-home-news-scroll > li {
+  max-width: min(100%, 28rem);
+}
+
+.tp-home-news .tp-news-item-link {
+  padding: 0.45rem 0.55rem;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.tp-home-news .tp-news-item-title {
+  font-size: 12px;
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tp-home-news .tp-news-item-meta {
+  margin-top: 0.2rem;
+  font-size: 10px;
+}
+
+.tp-home-news .tp-news-status {
+  font-size: 12px;
+  padding: 0.35rem 0.25rem;
+}
+
+.tp-screener-section .tp-scr-presets {
+  margin-top: 0;
 }
 
 /* —— Stock page: news sidebar —— */
