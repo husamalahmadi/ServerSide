@@ -825,6 +825,36 @@ button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
   color: #b02a37;
 }
 
+/* —— Home: market news (before screener) —— */
+.tp-home-news {
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+}
+
+.tp-home-news-body {
+  padding: 0.75rem 1rem 1rem;
+  background: var(--tp-surface2);
+}
+
+.tp-home-news-scroll {
+  max-height: 22.5rem; /* ~5 article rows visible */
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.tp-home-news-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tp-home-news-scroll::-webkit-scrollbar-thumb {
+  background: #c5d3e8;
+  border-radius: 999px;
+}
+
+.tp-home-news-item {
+  min-height: 4.25rem;
+}
+
 /* —— Stock page: news sidebar —— */
 .tp-news-sidebar {
   flex-shrink: 0;

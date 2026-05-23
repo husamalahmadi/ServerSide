@@ -37,6 +37,7 @@ export default {
   HOME_SEARCH_DECK:
     "Search US, Saudi, and Tokyo market tickers on TruePrice.Cash. Fair value estimates, TASI Focus and Tokyo Focus screener presets, and investing blogs.",
   HOME_MARKETS_HEADING: "US, Saudi (TASI), and Tokyo stock markets",
+  HOME_MARKET_NEWS_TITLE: "Market news",
   SCREENER_TOKYO_METRICS_PENDING:
     "FMP metrics for Tokyo are still loading. Tickers below are searchable; open one for a full report.",
   INDUSTRY: "Industry",

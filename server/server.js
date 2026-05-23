@@ -706,6 +706,48 @@ app.get(["/api/fmp/quote", "/api/fmp/quote/:symbol"], async (req, res) => {
   }
 });
 
+app.get("/api/fmp/news/general-latest", async (req, res) => {
+  const key = fmpApiKey();
+  if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  const page = Math.max(0, Number.parseInt(String(req.query?.page ?? "0"), 10) || 0);
+  const limit = Math.min(50, Math.max(1, Number.parseInt(String(req.query?.limit ?? "20"), 10) || 20));
+  const cacheKey = `fmp:news:general:${page}:${limit}`;
+  try {
+    const data = await cachedFmp(cacheKey, 5 * 60_000, async () => {
+      const url = `${FMP_STABLE_BASE}/news/general-latest?${new URLSearchParams({
+        page: String(page),
+        limit: String(limit),
+        apikey: key,
+      })}`;
+      const r = await fetch(url);
+      const text = await r.text();
+      if (!r.ok) throw new Error(`FMP news HTTP ${r.status}`);
+      let arr;
+      try {
+        arr = text ? JSON.parse(text) : null;
+      } catch {
+        throw new Error("FMP news: invalid JSON");
+      }
+      if (arr && typeof arr === "object" && !Array.isArray(arr) && (arr["Error Message"] || arr.error)) {
+        throw new Error(String(arr["Error Message"] || arr.error));
+      }
+      if (!Array.isArray(arr)) throw new Error("FMP news: expected array");
+      return arr.map((row) => ({
+        title: row?.title ?? "",
+        url: row?.url ?? "",
+        publisher: row?.publisher ?? row?.site ?? "",
+        publishedDate: row?.publishedDate ?? null,
+        image: typeof row?.image === "string" ? row.image : null,
+        symbol: row?.symbol ?? null,
+      }));
+    });
+    res.json(data);
+  } catch (err) {
+    console.error("[fmp/news/general-latest]", err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
+
 app.get(["/api/fmp/ratios", "/api/fmp/ratios/:symbol"], async (req, res) => {
   const key = fmpApiKey();
   if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });

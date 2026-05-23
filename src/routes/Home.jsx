@@ -15,6 +15,7 @@ import { mergeScreenerWithCatalog, isUsableScreenerRow } from "../domain/screene
 import { filterStocksByQuery } from "../domain/stockSearch.js";
 import { ScreenerResultsTable } from "../components/screener/ScreenerResultsTable.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
+import { HomeMarketNews } from "../components/HomeMarketNews.jsx";
 
 const QUICK_PICKS = [
   { ticker: "AAPL", name: "Apple", market: "us" },
@@ -28,7 +29,7 @@ const QUICK_PICKS = [
 ];
 
 export default function Home() {
-  const { t, lang } = useI18n();
+  const { t, lang, dir } = useI18n();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const authParam = searchParams.get("auth");
@@ -472,6 +473,8 @@ export default function Home() {
           </button>
         </div>
       </div>
+
+      <HomeMarketNews t={t} lang={lang} dir={dir} />
 
       <div id="screener" className="tp-card tp-card-pad tp-screener-section">
         <div className="tp-scr-head">

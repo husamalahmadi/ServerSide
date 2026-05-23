@@ -37,6 +37,7 @@ export default {
   HOME_SEARCH_DECK:
     "ابحث في أسهم أسواق أمريكا والسعودية واليابان على TruePrice.Cash — قيمة عادلة، فلاتر تداول واليابان، ومدونات استثمارية.",
   HOME_MARKETS_HEADING: "أسواق أمريكا والسعودية (تداول) واليابان",
+  HOME_MARKET_NEWS_TITLE: "أخبار الأسواق",
   SCREENER_TOKYO_METRICS_PENDING:
     "بيانات الفلتر للسوق الياباني قيد التحميل من FMP. يمكنك فتح أي رمز أدناه للتقرير الكامل.",
   INDUSTRY: "القطاع",
