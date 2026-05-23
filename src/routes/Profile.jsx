@@ -5,13 +5,10 @@ import { useI18n } from "../i18n.jsx";
 import { getApiUrl } from "../config/env.js";
 import { Card } from "../components/Card.jsx";
 import { AvatarImg } from "../components/AvatarImg.jsx";
-import { PillLink } from "../components/PillLink.jsx";
-import { LangToggle } from "../components/LangToggle.jsx";
-
 export default function Profile() {
   const { handle: urlHandle } = useParams();
   const location = useLocation();
-  const { lang, dir, t, toggleLang } = useI18n();
+  const { lang, dir, t } = useI18n();
   const { user: currentUser, loading: authLoading, refreshUser } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
@@ -154,10 +151,6 @@ export default function Profile() {
   if (!profile?.user) {
     return (
       <div style={{ padding: 24 }} dir={dir} lang={lang}>
-        <div style={{ marginBottom: 24, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-          <PillLink to="/">TruePrice.Cash</PillLink>
-          <LangToggle lang={lang} onToggle={toggleLang} t={t} />
-        </div>
         <div style={{ marginTop: 24, color: "#64748b" }}>{t("PROFILE_USER_NOT_FOUND")}</div>
       </div>
     );
@@ -167,11 +160,6 @@ export default function Profile() {
 
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: 24 }} dir={dir} lang={lang}>
-      <div style={{ marginBottom: 24, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-        <PillLink to="/">TruePrice.Cash</PillLink>
-        <LangToggle lang={lang} onToggle={toggleLang} t={t} />
-      </div>
-
       <Card>
         <div style={{ display: "flex", gap: 20, flexWrap: "wrap", alignItems: "flex-start" }}>
           <div>

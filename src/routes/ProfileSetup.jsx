@@ -134,9 +134,6 @@ export default function ProfileSetup() {
 
   return (
     <div style={{ maxWidth: 520, margin: "0 auto", padding: 24 }}>
-      <div style={{ marginBottom: 24 }}>
-        <PillLink to="/">TruePrice.Cash</PillLink>
-      </div>
       <Card title="Complete your profile">
         <p style={{ color: "#64748b", marginBottom: 16, fontSize: 14 }}>
           You&apos;re signed in with Google. Choose a public <strong>username</strong> (it can&apos;t be changed
