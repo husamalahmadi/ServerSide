@@ -14,6 +14,16 @@ function NavIcon({ name }) {
       </>
     ),
     chart: <path d="M4 18V8M10 18V4M16 18v-6M22 18V10" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" fill="none" />,
+    trending: (
+      <path
+        d="M4 16l5-6 4 4 7-9"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    ),
     blog: <path d="M6 5h12v14H8l-2 2V5z" stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinejoin="round" />,
     info: (
       <>
@@ -75,6 +85,10 @@ export function AppShell() {
             <NavIcon name="chart" />
             {lang === "ar" ? "فلتر الأسهم" : "Stock Screener"}
           </a>
+          <NavLink to="/us-markets" className="tp-nav-link" onClick={closeSidebar}>
+            <NavIcon name="trending" />
+            {t("US_MARKET_NAV")}
+          </NavLink>
           <NavLink to="/blogs" className="tp-nav-link" onClick={closeSidebar}>
             <NavIcon name="blog" />
             {t("BLOGS")}

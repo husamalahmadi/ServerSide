@@ -17,6 +17,7 @@ const Blogs = React.lazy(() => import("./Blogs.jsx"));
 const Profile = React.lazy(() => import("./Profile.jsx"));
 const ProfileSetup = React.lazy(() => import("./ProfileSetup.jsx"));
 const AuthSignInHelp = React.lazy(() => import("./AuthSignInHelp.jsx"));
+const UsMarketPerformance = React.lazy(() => import("./UsMarketPerformance.jsx"));
 
 function AnalyticsRouteSync() {
   const location = useLocation();
@@ -98,6 +99,14 @@ export default function App() {
                   element={
                     <Lazy>
                       <Blogs />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/us-markets"
+                  element={
+                    <Lazy>
+                      <UsMarketPerformance />
                     </Lazy>
                   }
                 />

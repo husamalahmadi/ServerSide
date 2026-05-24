@@ -706,6 +706,93 @@ app.get(["/api/fmp/quote", "/api/fmp/quote/:symbol"], async (req, res) => {
   }
 });
 
+async function fetchFmpStableArray(path, params, label) {
+  const key = fmpApiKey();
+  if (!key) throw new Error("FMP_API_KEY not configured");
+  const url = `${FMP_STABLE_BASE}/${path}?${new URLSearchParams({ ...params, apikey: key })}`;
+  const r = await fetch(url);
+  const text = await r.text();
+  if (!r.ok) throw new Error(`FMP ${label} HTTP ${r.status}`);
+  let arr;
+  try {
+    arr = text ? JSON.parse(text) : null;
+  } catch {
+    throw new Error(`FMP ${label}: invalid JSON`);
+  }
+  if (arr && typeof arr === "object" && !Array.isArray(arr) && (arr["Error Message"] || arr.error)) {
+    throw new Error(String(arr["Error Message"] || arr.error));
+  }
+  if (!Array.isArray(arr)) throw new Error(`FMP ${label}: expected array`);
+  return arr;
+}
+
+function normalizeSnapshotDate(raw) {
+  const s = String(raw || "").trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+  const d = new Date();
+  d.setUTCDate(d.getUTCDate() - 1);
+  while (d.getUTCDay() === 0 || d.getUTCDay() === 6) {
+    d.setUTCDate(d.getUTCDate() - 1);
+  }
+  return d.toISOString().slice(0, 10);
+}
+
+app.get("/api/fmp/us-market-dashboard", async (req, res) => {
+  const key = fmpApiKey();
+  if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  const date = normalizeSnapshotDate(req.query?.date);
+  const cacheKey = `fmp:us-market:${date}`;
+  try {
+    const data = await cachedFmp(cacheKey, 10 * 60_000, async () => {
+      const [sectors, industries, gainers, losers, mostActives] = await Promise.all([
+        fetchFmpStableArray(
+          "sector-performance-snapshot",
+          { date },
+          "sector-performance"
+        ),
+        fetchFmpStableArray(
+          "industry-performance-snapshot",
+          { date },
+          "industry-performance"
+        ),
+        fetchFmpStableArray("biggest-gainers", {}, "biggest-gainers"),
+        fetchFmpStableArray("biggest-losers", {}, "biggest-losers"),
+        fetchFmpStableArray("most-actives", {}, "most-actives"),
+      ]);
+
+      const mapMover = (row) => ({
+        symbol: row?.symbol ?? "",
+        name: row?.name ?? "",
+        price: Number(row?.price),
+        change: Number(row?.change),
+        changesPercentage: Number(row?.changesPercentage),
+        exchange: row?.exchange ?? "",
+      });
+
+      return {
+        date,
+        sectors: sectors.map((row) => ({
+          sector: row?.sector ?? "",
+          exchange: row?.exchange ?? "",
+          averageChange: Number(row?.averageChange),
+        })),
+        industries: industries.map((row) => ({
+          industry: row?.industry ?? "",
+          exchange: row?.exchange ?? "",
+          averageChange: Number(row?.averageChange),
+        })),
+        gainers: gainers.map(mapMover).filter((r) => r.symbol),
+        losers: losers.map(mapMover).filter((r) => r.symbol),
+        mostActives: mostActives.map(mapMover).filter((r) => r.symbol),
+      };
+    });
+    res.json(data);
+  } catch (err) {
+    console.error("[fmp/us-market-dashboard]", date, err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
+
 app.get("/api/fmp/news/general-latest", async (req, res) => {
   const key = fmpApiKey();
   if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
