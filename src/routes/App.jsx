@@ -18,12 +18,7 @@ const Profile = React.lazy(() => import("./Profile.jsx"));
 const ProfileSetup = React.lazy(() => import("./ProfileSetup.jsx"));
 const AuthSignInHelp = React.lazy(() => import("./AuthSignInHelp.jsx"));
 const UsMarketPerformance = React.lazy(() => import("./UsMarketPerformance.jsx"));
-const SaMarketPerformance = React.lazy(() =>
-  import("./RegionalMarketPerformance.jsx").then((m) => ({ default: m.SaMarketPerformance }))
-);
-const JpMarketPerformance = React.lazy(() =>
-  import("./RegionalMarketPerformance.jsx").then((m) => ({ default: m.JpMarketPerformance }))
-);
+const SaMarketPerformance = React.lazy(() => import("./SaMarketPerformance.jsx"));
 
 function AnalyticsRouteSync() {
   const location = useLocation();
@@ -121,14 +116,6 @@ export default function App() {
                   element={
                     <Lazy>
                       <SaMarketPerformance />
-                    </Lazy>
-                  }
-                />
-                <Route
-                  path="/jp-markets"
-                  element={
-                    <Lazy>
-                      <JpMarketPerformance />
                     </Lazy>
                   }
                 />

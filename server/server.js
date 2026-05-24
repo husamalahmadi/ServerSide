@@ -19,7 +19,7 @@ import {
 import { fetchFmpFinancialsBundle, fmpApiKey, FMP_STABLE_BASE } from "./fmpFetch.js";
 import { createScreenerStore, resolveScreenerDir, SCREENER_MARKETS } from "./screenerStore.js";
 import { buildAllScreeners } from "./buildScreenerFromFmp.js";
-import { buildRegionalMarketDashboard } from "./regionalMarketDashboard.js";
+import { buildSaMarketDashboard } from "./saMarketDashboard.js";
 import { isUsableScreenerRow, screenerMarketUsable } from "../src/domain/screenerMetrics.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -738,25 +738,18 @@ function normalizeSnapshotDate(raw) {
   return d.toISOString().slice(0, 10);
 }
 
-function regionalMarketHandler(market) {
-  return async (req, res) => {
-    const key = fmpApiKey();
-    if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
-    const cacheKey = `fmp:${market}-market:live`;
-    try {
-      const data = await cachedFmp(cacheKey, 10 * 60_000, async () =>
-        buildRegionalMarketDashboard(market, { apiKey: key, screenerStore })
-      );
-      res.json(data);
-    } catch (err) {
-      console.error(`[fmp/${market}-market-dashboard]`, err.message);
-      res.status(502).json({ error: err.message });
-    }
-  };
-}
-
-app.get("/api/fmp/sa-market-dashboard", regionalMarketHandler("sa"));
-app.get("/api/fmp/jp-market-dashboard", regionalMarketHandler("jp"));
+app.get("/api/fmp/sa-market-dashboard", async (req, res) => {
+  const key = fmpApiKey();
+  if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  const cacheKey = "fmp:sa-market:live";
+  try {
+    const data = await cachedFmp(cacheKey, 10 * 60_000, async () => buildSaMarketDashboard(key));
+    res.json(data);
+  } catch (err) {
+    console.error("[fmp/sa-market-dashboard]", err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
 
 app.get("/api/fmp/us-market-dashboard", async (req, res) => {
   const key = fmpApiKey();

@@ -93,10 +93,6 @@ export function AppShell() {
             <NavIcon name="trending" />
             {t("SA_MARKET_NAV")}
           </NavLink>
-          <NavLink to="/jp-markets" className="tp-nav-link" onClick={closeSidebar}>
-            <NavIcon name="trending" />
-            {t("JP_MARKET_NAV")}
-          </NavLink>
           <NavLink to="/blogs" className="tp-nav-link" onClick={closeSidebar}>
             <NavIcon name="blog" />
             {t("BLOGS")}

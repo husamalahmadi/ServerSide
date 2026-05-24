@@ -63,16 +63,8 @@ export default {
   US_MARKET_SCREENER_LINK: "فلتر الأسهم",
   SA_MARKET_NAV: "أداء سوق تداول",
   SA_MARKET_TITLE: "أداء سوق الأسهم السعودية (تاسي)",
-  SA_MARKET_SUB:
-    "متوسط أداء قطاعات تداول، أكبر الرابحين والخاسرين، والأكثر تداولاً من قائمة TruePrice.",
+  SA_MARKET_SUB: "أكبر الرابحين والخاسرين والأكثر تداولاً من قائمة تداول على TruePrice.",
   SA_MARKET_FOOTNOTE: "بيانات من أسهم تداول في قائمتنا. حلّل القيمة العادلة عبر",
-  JP_MARKET_NAV: "أداء بورصة طوكيو",
-  JP_MARKET_TITLE: "أداء بورصة طوكيو",
-  JP_MARKET_SUB:
-    "أكبر الرابحين والخاسرين في طوكيو، الأكثر تداولاً، وملخص الأداء لأسهمنا المتتبعة.",
-  JP_MARKET_FOOTNOTE: "بيانات من أسهم طوكيو في قائمتنا (عينة للأسواق الكبيرة). راجع",
-  REGIONAL_MARKET_AS_OF: "آخر تحديث",
-  REGIONAL_MARKET_COVERAGE: "أسعار لحظية لـ {quoted} من {catalog} سهم في القائمة.",
   SCREENER_TOKYO_METRICS_PENDING:
     "بيانات الفلتر للسوق الياباني قيد التحميل من FMP. يمكنك فتح أي رمز أدناه للتقرير الكامل.",
   INDUSTRY: "القطاع",
