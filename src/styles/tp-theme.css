@@ -1130,6 +1130,12 @@ button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
   min-width: 9.5rem;
 }
 
+.tp-us-coverage-note {
+  font-size: 0.85rem;
+  color: var(--tp-muted, #6e84a3);
+  padding-top: 0;
+}
+
 .tp-us-loading {
   text-align: center;
   padding: 2rem;

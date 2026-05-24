@@ -61,6 +61,18 @@ export default {
   US_MARKET_NO_DATA: "No data for this date.",
   US_MARKET_FOOTNOTE: "Data from US exchanges. Run fair value analysis in the",
   US_MARKET_SCREENER_LINK: "stock screener",
+  SA_MARKET_NAV: "TASI market performance",
+  SA_MARKET_TITLE: "Saudi (TASI) market performance",
+  SA_MARKET_SUB:
+    "Live Tadawul sector averages, top gainers, losers, and most active Saudi stocks from the TruePrice catalog.",
+  SA_MARKET_FOOTNOTE: "Data from Tadawul-listed stocks in our catalog. Analyze fair value in the",
+  JP_MARKET_NAV: "Tokyo market performance",
+  JP_MARKET_TITLE: "Tokyo Stock Exchange performance",
+  JP_MARKET_SUB:
+    "Live Tokyo movers, volume leaders, and grouped performance for stocks we track on TruePrice.",
+  JP_MARKET_FOOTNOTE: "Data from Tokyo-listed stocks in our catalog (sampled for large universes). See the",
+  REGIONAL_MARKET_AS_OF: "Updated",
+  REGIONAL_MARKET_COVERAGE: "Live quotes for {quoted} of {catalog} catalog stocks.",
   SCREENER_TOKYO_METRICS_PENDING:
     "FMP metrics for Tokyo are still loading. Tickers below are searchable; open one for a full report.",
   INDUSTRY: "Industry",
