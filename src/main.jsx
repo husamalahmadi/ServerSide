@@ -30,7 +30,6 @@ if (!rootEl) {
         <App />
       </React.StrictMode>
     );
-    document.documentElement.classList.add("tp-app-ready");
   } catch (err) {
     console.error("[TruePrice] App failed to start:", err);
     const fallback = document.getElementById("tp-static-fallback");

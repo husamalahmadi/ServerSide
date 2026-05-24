@@ -86,6 +86,8 @@
       .tp-static-shell { max-width: 720px; margin: 0 auto; padding: 24px 16px; line-height: 1.6; color: #1a1a14; }
       .tp-static-shell h1 { font-size: 1.5rem; margin: 0 0 12px; }
       .tp-static-shell h2 { font-size: 1.1rem; margin: 16px 0 8px; font-weight: 600; }
+      .tp-static-hero { font-size: 1.5rem; margin: 0 0 12px; font-weight: 700; line-height: 1.35; }
+      .tp-static-subhead { font-size: 1.1rem; margin: 16px 0 8px; font-weight: 600; }
       .tp-static-shell nav { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; font-size: 14px; }
       .tp-static-shell a { color: #1a3a2a; font-weight: 600; }
       html.js #tp-static-fallback { display: none; }
@@ -106,13 +108,13 @@
   </head>
   <body>
   <script>document.documentElement.classList.add("js");</script>
-    <main id="tp-static-fallback" class="tp-static-shell">
-      <h1>Fair value for US, Saudi (TASI) &amp; Tokyo stock markets — TruePrice.Cash</h1>
+    <main id="tp-static-fallback" class="tp-static-shell" aria-hidden="true">
+      <p class="tp-static-hero">Fair value for US, Saudi (TASI) &amp; Tokyo stock markets — TruePrice.Cash</p>
       <p>
         TruePrice.Cash stock screener for US, Saudi (TASI), and Tokyo markets — fair value analysis,
         TASI Focus, Tokyo Focus, blogs, and fundamentals. Search by ticker or company name on the live app.
       </p>
-      <h2>Stock screener — US, TASI &amp; Tokyo fair value (TASI Focus, Tokyo Focus)</h2>
+      <p class="tp-static-subhead">Stock screener — US, TASI &amp; Tokyo fair value (TASI Focus, Tokyo Focus)</p>
       <nav aria-label="Site">
         <a href="/">Home</a>
         <a href="/blogs">Blogs</a>

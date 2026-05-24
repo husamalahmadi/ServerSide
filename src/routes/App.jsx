@@ -20,6 +20,14 @@ const AuthSignInHelp = React.lazy(() => import("./AuthSignInHelp.jsx"));
 const UsMarketPerformance = React.lazy(() => import("./UsMarketPerformance.jsx"));
 const SaMarketPerformance = React.lazy(() => import("./SaMarketPerformance.jsx"));
 
+function StaticSeoFallbackCleanup() {
+  useEffect(() => {
+    document.getElementById("tp-static-fallback")?.remove();
+    document.documentElement.classList.add("tp-app-ready");
+  }, []);
+  return null;
+}
+
 function AnalyticsRouteSync() {
   const location = useLocation();
   const skipFirst = useRef(true);
@@ -43,6 +51,7 @@ export default function App() {
       <ErrorBoundary>
         <BrowserRouter basename={import.meta.env.BASE_URL}>
           <AuthProvider>
+            <StaticSeoFallbackCleanup />
             <AnalyticsRouteSync />
             <Routes>
               <Route element={<AppShell />}>
