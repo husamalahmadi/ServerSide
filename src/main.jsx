@@ -20,8 +20,25 @@ import App from "./routes/App.jsx";
 initAnalytics();
 initWebVitalsReporting();
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const rootEl = document.getElementById("root");
+if (!rootEl) {
+  console.error("[TruePrice] Missing #root — cannot start the app.");
+} else {
+  try {
+    ReactDOM.createRoot(rootEl).render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+    document.documentElement.classList.add("tp-app-ready");
+  } catch (err) {
+    console.error("[TruePrice] App failed to start:", err);
+    const fallback = document.getElementById("tp-static-fallback");
+    if (fallback && !fallback.querySelector(".tp-boot-warn")) {
+      const p = document.createElement("p");
+      p.className = "tp-boot-warn";
+      p.textContent = String(err?.message || err || "App failed to load.");
+      fallback.appendChild(p);
+    }
+  }
+}

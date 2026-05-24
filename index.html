@@ -88,6 +88,16 @@
       .tp-static-shell h2 { font-size: 1.1rem; margin: 16px 0 8px; font-weight: 600; }
       .tp-static-shell nav { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; font-size: 14px; }
       .tp-static-shell a { color: #1a3a2a; font-weight: 600; }
+      html.js #tp-static-fallback { display: none; }
+      .tp-boot-warn {
+        margin-top: 16px;
+        padding: 12px 14px;
+        background: #fff7ed;
+        border: 1px solid #fdba74;
+        border-radius: 8px;
+        color: #9a3412;
+        font-size: 14px;
+      }
       @media print {
         .no-print { display: none !important; }
         body { background: #fff; color: #000; }
@@ -95,27 +105,39 @@
     </style>
   </head>
   <body>
-    <div id="root">
-      <main class="tp-static-shell">
-        <h1>Fair value for US, Saudi (TASI) &amp; Tokyo stock markets — TruePrice.Cash</h1>
-        <p>
-          TruePrice.Cash stock screener for US, Saudi (TASI), and Tokyo markets — fair value analysis,
-          TASI Focus, Tokyo Focus, blogs, and fundamentals. Search by ticker or company name on the live app.
-        </p>
-        <h2>Stock screener — US, TASI &amp; Tokyo fair value (TASI Focus, Tokyo Focus)</h2>
-        <nav aria-label="Site">
-          <a href="/">Home</a>
-          <a href="/blogs">Blogs</a>
-          <a href="/about">About</a>
-          <a href="/contact">Contact</a>
-          <a href="/sitemap.xml">Sitemap</a>
-          <a href="/stock/AAPL">Apple (AAPL)</a>
-          <a href="/stock/2222">Saudi Aramco (2222)</a>
-          <a href="/stock/2010">SABIC (2010)</a>
-          <a href="/stock/7203.T">Toyota (7203.T)</a>
-        </nav>
-      </main>
-    </div>
+  <script>document.documentElement.classList.add("js");</script>
+    <main id="tp-static-fallback" class="tp-static-shell">
+      <h1>Fair value for US, Saudi (TASI) &amp; Tokyo stock markets — TruePrice.Cash</h1>
+      <p>
+        TruePrice.Cash stock screener for US, Saudi (TASI), and Tokyo markets — fair value analysis,
+        TASI Focus, Tokyo Focus, blogs, and fundamentals. Search by ticker or company name on the live app.
+      </p>
+      <h2>Stock screener — US, TASI &amp; Tokyo fair value (TASI Focus, Tokyo Focus)</h2>
+      <nav aria-label="Site">
+        <a href="/">Home</a>
+        <a href="/blogs">Blogs</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/sitemap.xml">Sitemap</a>
+        <a href="/stock/AAPL">Apple (AAPL)</a>
+        <a href="/stock/2222">Saudi Aramco (2222)</a>
+        <a href="/stock/2010">SABIC (2010)</a>
+        <a href="/stock/7203.T">Toyota (7203.T)</a>
+      </nav>
+    </main>
+    <div id="root"></div>
+    <script>
+      setTimeout(function () {
+        if (document.documentElement.classList.contains("tp-app-ready")) return;
+        var el = document.getElementById("tp-static-fallback");
+        if (!el || el.querySelector(".tp-boot-warn")) return;
+        var p = document.createElement("p");
+        p.className = "tp-boot-warn";
+        p.textContent =
+          "The interactive app did not load. Hard-refresh (Ctrl+Shift+R), disable ad blockers for this site, or open DevTools (F12) → Console for errors.";
+        el.appendChild(p);
+      }, 8000);
+    </script>
     <noscript>
       <p style="display:block;padding:16px;color:crimson">
         JavaScript is required for live quotes and financial analysis. Use the links above to browse stock pages.

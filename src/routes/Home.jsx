@@ -33,6 +33,11 @@ export default function Home() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const authParam = searchParams.get("auth");
+  const [q, setQ] = useState("");
+  const [marketFilter, setMarketFilter] = useState("all");
+  const [suggestionsOpen, setSuggestionsOpen] = useState(false);
+  const wrapRef = useRef(null);
+
   // Legacy ?auth=api_required (old client builds). Strip silently — do not show a banner.
   useEffect(() => {
     if (searchParams.get("auth") !== "api_required") return;
@@ -54,11 +59,6 @@ export default function Home() {
 
   const homeSeo = useMemo(() => buildHomeSeo(lang), [lang]);
   usePageMeta(homeSeo);
-
-  const [q, setQ] = useState("");
-  const [marketFilter, setMarketFilter] = useState("all");
-  const [suggestionsOpen, setSuggestionsOpen] = useState(false);
-  const wrapRef = useRef(null);
 
   const [state, setState] = useState({
     loading: true,
