@@ -4,20 +4,6 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { GoogleGIcon } from "./GoogleGIcon.jsx";
 import { AvatarImg } from "./AvatarImg.jsx";
 
-const menuStyle = {
-  position: "absolute",
-  top: "100%",
-  right: 0,
-  marginTop: 4,
-  background: "#fff",
-  border: "1px solid #e5e7eb",
-  borderRadius: 8,
-  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-  minWidth: 160,
-  zIndex: 100,
-  padding: "8px 0",
-};
-
 export function UserBar() {
   const { user, loading, login, logout } = useAuth();
   const [open, setOpen] = useState(false);
@@ -57,18 +43,8 @@ export function UserBar() {
     <div ref={ref} style={{ position: "relative" }}>
       <button
         type="button"
+        className="tp-user-menu-btn"
         onClick={() => setOpen((o) => !o)}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          padding: "6px 10px",
-          border: "1px solid #e5e7eb",
-          borderRadius: 8,
-          background: "#fff",
-          cursor: "pointer",
-          fontSize: 14,
-        }}
       >
         <AvatarImg src={user.picture} size={28} />
         <span style={{ fontWeight: 600, color: "#374151" }}>
@@ -76,40 +52,15 @@ export function UserBar() {
         </span>
       </button>
       {open ? (
-        <div style={menuStyle}>
+        <div className="tp-user-menu">
           <Link
             to={user.handle && user.profile_completed ? `/profile/${user.handle}` : "/profile/setup"}
-            style={{
-              display: "block",
-              padding: "10px 12px",
-              textAlign: "left",
-              color: "#374151",
-              textDecoration: "none",
-              borderBottom: "1px solid #f1f5f9",
-              fontSize: 14,
-              fontWeight: 500,
-            }}
+            className="tp-user-menu-item tp-user-menu-item--border"
           >
             My profile
           </Link>
-          <div style={{ padding: "8px 12px", borderBottom: "1px solid #f1f5f9", fontSize: 13, color: "#64748b" }}>
-            {user.email}
-          </div>
-          <button
-            type="button"
-            onClick={logout}
-            style={{
-              display: "block",
-              width: "100%",
-              padding: "10px 12px",
-              textAlign: "left",
-              border: "none",
-              background: "none",
-              cursor: "pointer",
-              fontSize: 14,
-              color: "#374151",
-            }}
-          >
+          <div className="tp-user-menu-meta">{user.email}</div>
+          <button type="button" className="tp-user-menu-item" onClick={logout}>
             Sign out
           </button>
         </div>

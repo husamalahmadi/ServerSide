@@ -26,6 +26,15 @@ const EXTERNAL_MARKET_LINKS = [
   { href: "https://www.jpx.co.jp", labelKey: "FOOTER_EXCHANGE_TSE" },
 ];
 
+const footerHeadingStyle = {
+  fontSize: 10,
+  letterSpacing: "0.08em",
+  textTransform: "uppercase",
+  fontWeight: 700,
+  color: "var(--tp-ink-strong)",
+  marginBottom: 10,
+};
+
 /**
  * Sitewide footer: internal navigation, deep stock links, XML sitemap, and external market references.
  */
@@ -33,6 +42,7 @@ export function SiteFooter({ t }) {
   return (
     <footer className="tp-site-footer no-print">
       <div
+        className="tp-footer-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
@@ -42,28 +52,17 @@ export function SiteFooter({ t }) {
         }}
       >
         <nav aria-label={t("FOOTER_NAV_SITE")}>
-          <div
-            style={{
-              fontSize: 10,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              fontWeight: 700,
-              color: "var(--tp-ink-strong)",
-              marginBottom: 10,
-            }}
-          >
-            {t("FOOTER_NAV_SITE")}
-          </div>
-          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 6 }}>
+          <div style={footerHeadingStyle}>{t("FOOTER_NAV_SITE")}</div>
+          <ul className="tp-footer-nav-list" style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 6 }}>
             {SITE_LINKS.map(({ to, labelKey }) => (
               <li key={to}>
-                <Link to={to} style={{ color: "var(--tp-primary)", textDecoration: "none", fontWeight: 600 }}>
+                <Link to={to} className="tp-footer-link" style={{ fontWeight: 600 }}>
                   {t(labelKey)}
                 </Link>
               </li>
             ))}
             <li>
-              <a href="/sitemap.xml" style={{ color: "var(--tp-primary)", textDecoration: "none", fontWeight: 600 }}>
+              <a href="/sitemap.xml" className="tp-footer-link" style={{ fontWeight: 600 }}>
                 {t("FOOTER_SITEMAP")}
               </a>
             </li>
@@ -71,25 +70,11 @@ export function SiteFooter({ t }) {
         </nav>
 
         <nav aria-label={t("FOOTER_NAV_STOCKS")}>
-          <div
-            style={{
-              fontSize: 10,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              fontWeight: 700,
-              color: "var(--tp-ink-strong)",
-              marginBottom: 10,
-            }}
-          >
-            {t("FOOTER_NAV_STOCKS")}
-          </div>
-          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 6 }}>
+          <div style={footerHeadingStyle}>{t("FOOTER_NAV_STOCKS")}</div>
+          <ul className="tp-footer-nav-list" style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 6 }}>
             {FOOTER_STOCK_LINKS.map(({ ticker, labelKey }) => (
               <li key={ticker}>
-                <Link
-                  to={`/stock/${encodeURIComponent(ticker)}`}
-                  style={{ color: "var(--tp-primary)", textDecoration: "none", fontWeight: 600 }}
-                >
+                <Link to={`/stock/${encodeURIComponent(ticker)}`} className="tp-footer-link" style={{ fontWeight: 600 }}>
                   {t(labelKey)}
                 </Link>
               </li>
@@ -98,27 +83,11 @@ export function SiteFooter({ t }) {
         </nav>
 
         <nav aria-label={t("FOOTER_NAV_EXTERNAL")}>
-          <div
-            style={{
-              fontSize: 10,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              fontWeight: 700,
-              color: "var(--tp-ink-strong)",
-              marginBottom: 10,
-            }}
-          >
-            {t("FOOTER_NAV_EXTERNAL")}
-          </div>
-          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 6 }}>
+          <div style={footerHeadingStyle}>{t("FOOTER_NAV_EXTERNAL")}</div>
+          <ul className="tp-footer-nav-list" style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 6 }}>
             {EXTERNAL_MARKET_LINKS.map(({ href, labelKey }) => (
               <li key={href}>
-                <a
-                  href={href}
-                  style={{ color: "var(--tp-primary)", textDecoration: "none", fontWeight: 500 }}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href={href} className="tp-footer-link" style={{ fontWeight: 500 }} target="_blank" rel="noopener noreferrer">
                   {t(labelKey)}
                 </a>
               </li>
