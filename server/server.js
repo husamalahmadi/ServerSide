@@ -849,6 +849,48 @@ app.get("/api/fmp/news/general-latest", async (req, res) => {
   }
 });
 
+app.get(["/api/fmp/news/stock", "/api/fmp/news/stock/:symbol"], async (req, res) => {
+  const key = fmpApiKey();
+  if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  const symbol = fmpSymbolFromRequest(req);
+  if (!symbol) return res.status(400).json({ error: "symbol query parameter required" });
+  const cacheKey = `fmp:news:stock:${symbol.toUpperCase()}`;
+  try {
+    const data = await cachedFmp(cacheKey, 5 * 60_000, async () => {
+      const url = `${FMP_STABLE_BASE}/news/stock?${new URLSearchParams({
+        symbols: symbol,
+        apikey: key,
+      })}`;
+      const r = await fetch(url);
+      const text = await r.text();
+      if (!r.ok) throw new Error(`FMP stock news HTTP ${r.status}`);
+      let arr;
+      try {
+        arr = text ? JSON.parse(text) : null;
+      } catch {
+        throw new Error("FMP stock news: invalid JSON");
+      }
+      if (arr && typeof arr === "object" && !Array.isArray(arr) && (arr["Error Message"] || arr.error)) {
+        throw new Error(String(arr["Error Message"] || arr.error));
+      }
+      if (!Array.isArray(arr)) throw new Error("FMP stock news: expected array");
+      return arr.map((row) => ({
+        title: row?.title ?? "",
+        url: row?.url ?? "",
+        publisher: row?.publisher ?? row?.site ?? "",
+        publishedDate: row?.publishedDate ?? null,
+        image: typeof row?.image === "string" ? row.image : null,
+        symbol: row?.symbol ?? symbol,
+        text: typeof row?.text === "string" ? row.text : null,
+      }));
+    });
+    res.json(data);
+  } catch (err) {
+    console.error("[fmp/news/stock]", symbol, err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
+
 app.get(["/api/fmp/ratios", "/api/fmp/ratios/:symbol"], async (req, res) => {
   const key = fmpApiKey();
   if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });

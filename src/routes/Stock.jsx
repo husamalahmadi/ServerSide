@@ -1033,8 +1033,8 @@ export default function Stock() {
         </Card>
         </div>
 
-        {market === "us" || market === "jp" ? (
-          <StockNewsSidebar ticker={ticker} companyName={companyDisplayName} market={market} t={t} dir={dir} isMobile={isMobile} />
+        {market ? (
+          <StockNewsSidebar ticker={ticker} market={market} t={t} dir={dir} isMobile={isMobile} />
         ) : null}
       </div>
 
