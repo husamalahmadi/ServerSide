@@ -444,7 +444,12 @@ html[lang="ar"] body {
 }
 
 /* —— Home: search —— */
-.tp-search-section { margin-bottom: 0; }
+.tp-search-section { margin-bottom: 0; overflow: visible; }
+
+.tp-search-section .tp-search-autocomplete {
+  position: relative;
+  z-index: 20;
+}
 
 .tp-markets-heading {
   font-size: 12px;
@@ -504,7 +509,7 @@ button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
   border: 1px solid var(--tp-border);
   border-radius: var(--tp-radius);
   background: var(--tp-surface2);
-  overflow: hidden;
+  overflow: visible;
   box-shadow: inset 0 1px 2px rgba(18, 38, 63, 0.04);
 }
 
@@ -544,18 +549,26 @@ button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
 
 .tp-suggestions {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 2px);
   left: 0;
   right: 0;
   background: var(--tp-surface);
   border: 1px solid var(--tp-border);
-  border-radius: 0 0 var(--tp-radius) var(--tp-radius);
-  z-index: 50;
+  border-radius: var(--tp-radius);
+  z-index: 100;
   display: none;
   box-shadow: var(--tp-shadow-lg);
+  max-height: 280px;
+  overflow-y: auto;
 }
 
 .tp-suggestions.open { display: block; }
+
+.tp-sug-empty {
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--tp-muted);
+}
 
 .tp-sug-item {
   padding: 10px 14px;

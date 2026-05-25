@@ -348,12 +348,12 @@ export default function Home() {
             </button>
           </div>
 
-          <div ref={wrapRef} style={{ position: "relative" }}>
+          <div ref={wrapRef} className="tp-search-autocomplete">
             <div className="tp-search-box">
               <div className="tp-field-wrap">
                 <input
                   className="tp-ticker-field"
-                  type="text"
+                  type="search"
                   value={q}
                   onChange={(e) => {
                     setQ(e.target.value);
@@ -362,20 +362,38 @@ export default function Home() {
                   onFocus={() => setSuggestionsOpen(true)}
                   onKeyDown={handleKeyDown}
                   placeholder={t("SEARCH_PLACEHOLDER")}
-                  maxLength={20}
+                  maxLength={32}
                   autoComplete="off"
+                  aria-autocomplete="list"
+                  aria-expanded={suggestionsOpen && searchQuery.length > 0}
+                  role="combobox"
                 />
-                <div className={`tp-suggestions ${suggestionsOpen && suggestions.length > 0 ? "open" : ""}`}>
-                  {suggestions.map((it) => (
-                    <div
-                      key={`${it.ticker}-${it.market || ""}`}
-                      className="tp-sug-item"
-                      onClick={() => pickSuggestion(it)}
-                    >
-                      <span className="tp-sug-ticker">{it.ticker}</span>
-                      <span className="tp-sug-name">{it.name} · {it.market === "sa" ? "TASI" : it.market === "jp" ? "TOKYO" : "US"}</span>
-                    </div>
-                  ))}
+                <div
+                  className={`tp-suggestions ${suggestionsOpen && searchQuery.length > 0 ? "open" : ""}`}
+                  role="listbox"
+                >
+                  {state.loading ? (
+                    <div className="tp-sug-empty">{t("LOADING")}</div>
+                  ) : state.error ? (
+                    <div className="tp-sug-empty">{state.error}</div>
+                  ) : suggestions.length === 0 ? (
+                    <div className="tp-sug-empty">{t("NO_MATCH")}</div>
+                  ) : (
+                    suggestions.map((it) => (
+                      <div
+                        key={`${it.ticker}-${it.market || ""}`}
+                        className="tp-sug-item"
+                        role="option"
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => pickSuggestion(it)}
+                      >
+                        <span className="tp-sug-ticker">{it.ticker}</span>
+                        <span className="tp-sug-name">
+                          {it.name} · {it.market === "sa" ? "TASI" : it.market === "jp" ? "TOKYO" : "US"}
+                        </span>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
               <button

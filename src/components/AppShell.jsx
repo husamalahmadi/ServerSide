@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
 import { UserBar } from "./UserBar.jsx";
 import { LangToggle } from "./LangToggle.jsx";
@@ -42,20 +42,7 @@ function NavIcon({ name }) {
 
 export function AppShell() {
   const { t, lang, dir, toggleLang } = useI18n();
-  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [topSearch, setTopSearch] = useState("");
-
-  const onTopSearch = (e) => {
-    e.preventDefault();
-    const q = topSearch.trim();
-    if (!q) {
-      navigate("/");
-      return;
-    }
-    navigate(`/?q=${encodeURIComponent(q)}`);
-    setTopSearch("");
-  };
 
   const closeSidebar = () => setSidebarOpen(false);
 
@@ -120,21 +107,6 @@ export function AppShell() {
           >
             ☰
           </button>
-          <form className="tp-topbar-search" onSubmit={onTopSearch}>
-            <span className="tp-topbar-search-icon" aria-hidden>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
-                <path d="M16 16l5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            </span>
-            <input
-              type="search"
-              value={topSearch}
-              onChange={(e) => setTopSearch(e.target.value)}
-              placeholder={t("SEARCH_PLACEHOLDER")}
-              aria-label={t("SEARCH")}
-            />
-          </form>
           <div className="tp-topbar-actions">
             <UserBar />
             <LangToggle lang={lang} onToggle={toggleLang} t={t} />
