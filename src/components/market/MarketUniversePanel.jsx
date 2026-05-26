@@ -106,7 +106,7 @@ export function MarketUniversePanel({
 
   const toggleSort = (key) => {
     setSort((prev) =>
-      prev.key === key ? { key, dir: (prev.dir * -1) : { key, dir: 1 } }
+      prev.key === key ? { key, dir: prev.dir * -1 } : { key, dir: 1 }
     );
   };
 
