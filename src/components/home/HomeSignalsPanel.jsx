@@ -167,7 +167,7 @@ export function HomeSignalsPanel({ t, lang, dir }) {
               emptyLabel={t("HOME_SIGNALS_EMPTY")}
               renderMeta={(row) => (
                 <span className="tp-signal-metric-stack">
-                  <span className="tp-signal-metric-primary">{fmtPrice(row.price, market)}</span>
+                  <span className="tp-signal-metric-primary">{fmtPrice(row.price, marketTab)}</span>
                   <span className={`tp-signal-metric-secondary ${pctClass(row.changesPercentage)}`}>
                     {fmtPct(row.changesPercentage)}
                   </span>
@@ -184,7 +184,7 @@ export function HomeSignalsPanel({ t, lang, dir }) {
               emptyLabel={t("HOME_SIGNALS_EMPTY")}
               renderMeta={(row) => (
                 <span className="tp-signal-metric-stack">
-                  <span className="tp-signal-metric-primary">{fmtPrice(row.price, market)}</span>
+                  <span className="tp-signal-metric-primary">{fmtPrice(row.price, marketTab)}</span>
                   <span className="tp-signal-metric-secondary tp-signal-vol-ratio">
                     {row.volumeRatio != null ? `${row.volumeRatio}× vol` : "—"}
                   </span>
@@ -201,10 +201,10 @@ export function HomeSignalsPanel({ t, lang, dir }) {
               emptyLabel={t("HOME_SIGNALS_NEAR_FAIR_EMPTY")}
               renderMeta={(row) => (
                 <span className="tp-signal-metric-stack">
-                  <span className="tp-signal-metric-primary">{fmtPrice(row.price, market)}</span>
+                  <span className="tp-signal-metric-primary">{fmtPrice(row.price, marketTab)}</span>
                   <span className="tp-signal-metric-secondary">
                     <span className="tp-signal-fv-label">{t("HOME_SIGNALS_FV")}</span>{" "}
-                    {fmtPrice(row.fairValue, market)}
+                    {fmtPrice(row.fairValue, marketTab)}
                     {row.discountPct != null ? (
                       <span className={`tp-signal-fv-disc ${pctClass(row.discountPct)}`}>
                         {" "}
