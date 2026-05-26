@@ -149,7 +149,7 @@ export function HomeSignalsPanel({ t, lang, dir }) {
       <div className="tp-panel-body tp-signals-body">
         {loading && !data ? (
           <div className="tp-signals-grid tp-signals-skeleton">
-            {[1, 2, 3].map((i) => (
+            {[1, 2].map((i) => (
               <div key={i} className="tp-signal-card tp-signal-skel" />
             ))}
           </div>
@@ -170,23 +170,6 @@ export function HomeSignalsPanel({ t, lang, dir }) {
                   <span className="tp-signal-metric-primary">{fmtPrice(row.price, marketTab)}</span>
                   <span className={`tp-signal-metric-secondary ${pctClass(row.changesPercentage)}`}>
                     {fmtPct(row.changesPercentage)}
-                  </span>
-                </span>
-              )}
-            />
-            <SignalCard
-              title={t("HOME_SIGNALS_UNUSUAL")}
-              tag={t("HOME_SIGNALS_TAG_VOLUME")}
-              tagClass="tp-signal-tag-volume"
-              rows={block?.unusualVolume}
-              market={marketTab}
-              t={t}
-              emptyLabel={t("HOME_SIGNALS_EMPTY")}
-              renderMeta={(row) => (
-                <span className="tp-signal-metric-stack">
-                  <span className="tp-signal-metric-primary">{fmtPrice(row.price, marketTab)}</span>
-                  <span className="tp-signal-metric-secondary tp-signal-vol-ratio">
-                    {row.volumeRatio != null ? `${row.volumeRatio}× vol` : "—"}
                   </span>
                 </span>
               )}
