@@ -27,8 +27,7 @@ import {
 } from "./marketUniverse.js";
 import { MARKET_UNIVERSE_TTL_MS } from "./marketUniverseCache.js";
 import { buildHomeSignals } from "./homeSignals.js";
-
-const HOME_SIGNALS_TTL_MS = 12 * 60_000;
+import { getHomeSignals, HOME_SIGNALS_TTL_MS } from "./homeSignalsCache.js";
 import { isUsableScreenerRow, screenerMarketUsable } from "../src/domain/screenerMetrics.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -793,10 +792,12 @@ app.get("/api/fmp/home-signals", async (req, res) => {
   if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
   try {
     const data = await cachedFmp("fmp:home-signals", HOME_SIGNALS_TTL_MS, async () => {
-      const snap = readScreenerSnapshot();
-      return buildHomeSignals(key, {
-        usItems: snap.us?.items || [],
-        saItems: snap.sa?.items || [],
+      return getHomeSignals(async () => {
+        const snap = readScreenerSnapshot();
+        return buildHomeSignals(key, {
+          usItems: snap.us?.items || [],
+          saItems: snap.sa?.items || [],
+        });
       });
     });
     res.json(data);

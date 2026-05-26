@@ -1560,6 +1560,34 @@ button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
   white-space: nowrap;
 }
 
+.tp-signal-metric-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  line-height: 1.25;
+  text-align: end;
+}
+
+.tp-signal-metric-primary {
+  font-weight: 800;
+  color: var(--tp-ink-strong);
+}
+
+.tp-signal-metric-secondary {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--tp-muted);
+}
+
+.tp-signal-fv-label {
+  font-weight: 700;
+}
+
+.tp-signal-fv-disc {
+  font-weight: 700;
+}
+
 .tp-signal-vol-ratio {
   color: #c2410c;
 }

@@ -1,19 +1,48 @@
 import { FMP_STABLE_BASE } from "./fmpFetch.js";
+import { loadGroupedCatalog } from "./buildScreenerFromFmp.js";
 import { computeSaMovers } from "./saMarketDashboard.js";
+import { fetchAllBatchQuotes, num } from "./fmpBatchQuotes.js";
 import { isUsableScreenerRow } from "../src/domain/screenerMetrics.js";
 
 const NEAR_FAIR_MAX_ABS_DISCOUNT = 14;
 const UNUSUAL_MIN_RATIO = 1.35;
 const HIST_FETCH_DELAY_MS = 140;
 const MAX_HIST_FETCHES_PER_MARKET = 14;
+const NEAR_FAIR_QUOTE_CANDIDATES = 48;
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-function num(v) {
-  const n = Number(v);
-  return Number.isFinite(n) ? n : null;
+function catalogFmpByTicker(market) {
+  const entries = loadGroupedCatalog(market);
+  const map = new Map();
+  for (const e of entries) {
+    const key = market === "sa" ? String(e.ticker) : String(e.ticker).toUpperCase();
+    map.set(key, String(e.fmpSymbol || e.ticker).trim().toUpperCase());
+  }
+  return map;
+}
+
+function fmpSymbolForRow(market, symbol, fmpByTicker) {
+  const key = market === "sa" ? String(symbol) : String(symbol).toUpperCase();
+  return fmpByTicker.get(key) || (market === "sa" ? `${key}.SR` : key);
+}
+
+/** Parse % change from FMP mover / batch-quote rows (stable API field names vary). */
+function changePctFromRow(row, price) {
+  let pct = num(
+    row?.changesPercentage ??
+      row?.changePercentage ??
+      row?.changePercent ??
+      row?.percentChange
+  );
+  const change = num(row?.change);
+  const p = price ?? num(row?.price);
+  if (pct == null && p != null && p > 0 && change != null) {
+    pct = (change / p) * 100;
+  }
+  return pct;
 }
 
 async function fetchFmpStableArray(path, params, apiKey, label) {
@@ -35,11 +64,13 @@ async function fetchFmpStableArray(path, params, apiKey, label) {
 }
 
 function mapUsMover(row) {
+  const price = num(row?.price);
+  const changesPercentage = changePctFromRow(row, price);
   return {
     symbol: String(row?.symbol ?? "").trim().toUpperCase(),
     name: String(row?.name ?? "").trim(),
-    price: num(row?.price),
-    changesPercentage: num(row?.changesPercentage ?? row?.changePercent),
+    price,
+    changesPercentage,
     volume: num(row?.volume),
   };
 }
@@ -60,7 +91,6 @@ function parseHistoricalRows(payload) {
     .sort((a, b) => b.date.localeCompare(a.date));
 }
 
-/** Latest session volume vs trailing average (excludes latest bar from average). */
 function volumeVsAverage(sortedDesc) {
   if (sortedDesc.length < 12) return null;
   const latest = sortedDesc[0];
@@ -95,7 +125,7 @@ async function fetchHistoricalVolumeInsight(fmpSymbol, apiKey) {
   return volumeVsAverage(rows);
 }
 
-async function buildUnusualVolumeList({ symbolsWithFmp, apiKey, label }) {
+async function buildUnusualVolumeList({ symbolsWithFmp, apiKey }) {
   const list = [];
   let i = 0;
   for (const { symbol, name, price, fmpSymbol } of symbolsWithFmp) {
@@ -118,42 +148,111 @@ async function buildUnusualVolumeList({ symbolsWithFmp, apiKey, label }) {
   return list.slice(0, 8);
 }
 
-function pickNearFair(items, limit = 8) {
-  const rows = (items || [])
+/** Fill missing price / % change from batch quotes. */
+async function enrichRowsWithQuotes(rows, market, apiKey) {
+  if (!rows?.length) return rows;
+  const fmpByTicker = catalogFmpByTicker(market);
+  const need = rows.filter(
+    (r) =>
+      r.symbol &&
+      (r.price == null || !Number.isFinite(r.price) || r.changesPercentage == null)
+  );
+  if (!need.length) return rows;
+
+  const fmpSymbols = need.map((r) => fmpSymbolForRow(market, r.symbol, fmpByTicker));
+  const quotes = await fetchAllBatchQuotes(fmpSymbols, apiKey);
+  const byFmp = new Map();
+  for (const q of quotes) {
+    const sym = String(q?.symbol ?? "").toUpperCase();
+    if (sym) byFmp.set(sym, q);
+  }
+
+  return rows.map((row) => {
+    const fmp = fmpSymbolForRow(market, row.symbol, fmpByTicker);
+    const q = byFmp.get(fmp);
+    if (!q) return row;
+    const price = num(q?.price) ?? row.price;
+    const changesPercentage = changePctFromRow(q, price) ?? row.changesPercentage;
+    return {
+      ...row,
+      name: row.name || String(q?.name || "").trim() || row.symbol,
+      price: price ?? row.price,
+      changesPercentage:
+        changesPercentage != null ? changesPercentage : row.changesPercentage,
+    };
+  });
+}
+
+/** Near fair value: screener fair value + live quote price (recomputed discount). */
+async function buildNearFairList(items, market, apiKey, limit = 8) {
+  const fmpByTicker = catalogFmpByTicker(market);
+  const candidates = (items || [])
     .filter(isUsableScreenerRow)
     .map((r) => ({
-      ticker: r.ticker,
-      name: r.name || r.ticker,
-      market: r.market,
-      sector: r.sector || "",
-      discountPct: num(r.discountPct),
+      symbol: market === "sa" ? String(r.ticker) : String(r.ticker).toUpperCase(),
+      name: String(r.name || r.ticker),
       fairValue: num(r.fairValue),
-      priceApprox: num(r.priceApprox),
+      price: num(r.priceApprox),
+      discountPct: num(r.discountPct),
     }))
-    .filter(
-      (r) =>
-        r.discountPct != null &&
-        Math.abs(r.discountPct) <= NEAR_FAIR_MAX_ABS_DISCOUNT &&
-        r.fairValue != null &&
-        r.priceApprox != null
-    )
-    .sort((a, b) => Math.abs(a.discountPct) - Math.abs(b.discountPct));
-  return rows.slice(0, limit);
+    .filter((r) => r.fairValue != null && r.fairValue > 0);
+
+  if (!candidates.length) return [];
+
+  const ranked = [...candidates]
+    .sort((a, b) => {
+      const da = a.discountPct != null ? Math.abs(a.discountPct) : 999;
+      const db = b.discountPct != null ? Math.abs(b.discountPct) : 999;
+      return da - db;
+    })
+    .slice(0, NEAR_FAIR_QUOTE_CANDIDATES);
+
+  const fmpSymbols = ranked.map((r) => fmpSymbolForRow(market, r.symbol, fmpByTicker));
+  const quotes = await fetchAllBatchQuotes(fmpSymbols, apiKey);
+  const byFmp = new Map();
+  for (const q of quotes) {
+    const sym = String(q?.symbol ?? "").toUpperCase();
+    if (sym) byFmp.set(sym, q);
+  }
+
+  const out = [];
+  for (const row of ranked) {
+    const fmp = fmpSymbolForRow(market, row.symbol, fmpByTicker);
+    const q = byFmp.get(fmp);
+    const price = num(q?.price) ?? row.price;
+    if (price == null || price <= 0) continue;
+    const discountPct = ((row.fairValue - price) / price) * 100;
+    if (Math.abs(discountPct) > NEAR_FAIR_MAX_ABS_DISCOUNT) continue;
+    out.push({
+      symbol: row.symbol,
+      name: row.name || String(q?.name || "").trim() || row.symbol,
+      price: Math.round(price * 100) / 100,
+      fairValue: Math.round(row.fairValue * 100) / 100,
+      discountPct: Math.round(discountPct * 100) / 100,
+    });
+  }
+
+  out.sort((a, b) => Math.abs(a.discountPct) - Math.abs(b.discountPct));
+  return out.slice(0, limit);
 }
 
 /**
  * @param {string} apiKey
- * @param {{ usItems: object[], saItems: object[] }} screenerRows — raw per-market screener rows from disk
+ * @param {{ usItems: object[], saItems: object[] }} screenerRows
  */
 export async function buildHomeSignals(apiKey, { usItems = [], saItems = [] } = {}) {
-  const [gainersArr, mostActivesArr, saMovers] = await Promise.all([
+  const [gainersArr, mostActivesArr, saMovers, usNearFair, saNearFair] = await Promise.all([
     fetchFmpStableArray("biggest-gainers", {}, apiKey, "biggest-gainers"),
     fetchFmpStableArray("most-actives", {}, apiKey, "most-actives"),
     computeSaMovers(apiKey),
+    buildNearFairList(usItems, "us", apiKey, 8),
+    buildNearFairList(saItems, "sa", apiKey, 8),
   ]);
 
   const usGainers = gainersArr.map(mapUsMover).filter((r) => r.symbol);
-  const topUsGainers = [...usGainers].sort((a, b) => (b.changesPercentage || 0) - (a.changesPercentage || 0)).slice(0, 8);
+  const topUsGainers = [...usGainers]
+    .sort((a, b) => (b.changesPercentage ?? -Infinity) - (a.changesPercentage ?? -Infinity))
+    .slice(0, 8);
 
   const mostActive = mostActivesArr.map(mapUsMover).filter((r) => r.symbol && r.volume > 0);
   const seen = new Set();
@@ -170,14 +269,14 @@ export async function buildHomeSignals(apiKey, { usItems = [], saItems = [] } = 
     if (usHistCandidates.length >= MAX_HIST_FETCHES_PER_MARKET) break;
   }
 
-  const saWithChange = saMovers.filter((m) => Number.isFinite(m.changesPercentage));
+  const saWithChange = saMovers.filter((m) => m.changesPercentage != null);
   const topSaGainers = [...saWithChange]
     .sort((a, b) => b.changesPercentage - a.changesPercentage)
     .slice(0, 8)
     .map(({ symbol, name, price, changesPercentage }) => ({
       symbol,
       name,
-      price,
+      price: price > 0 ? price : null,
       changesPercentage,
     }));
 
@@ -188,32 +287,34 @@ export async function buildHomeSignals(apiKey, { usItems = [], saItems = [] } = 
     .map((m) => ({
       symbol: m.symbol,
       name: m.name,
-      price: m.price,
+      price: m.price > 0 ? m.price : null,
       fmpSymbol: `${String(m.symbol).trim()}.SR`,
     }));
 
-  const [usUnusual, saUnusual] = await Promise.all([
-    buildUnusualVolumeList({ symbolsWithFmp: usHistCandidates, apiKey, label: "us" }),
-    buildUnusualVolumeList({ symbolsWithFmp: saVolSorted, apiKey, label: "sa" }),
+  const [usUnusual, saUnusual, usGainersEnriched, saGainersEnriched] = await Promise.all([
+    buildUnusualVolumeList({ symbolsWithFmp: usHistCandidates, apiKey }),
+    buildUnusualVolumeList({ symbolsWithFmp: saVolSorted, apiKey }),
+    enrichRowsWithQuotes(topUsGainers, "us", apiKey),
+    enrichRowsWithQuotes(topSaGainers, "sa", apiKey),
+  ]);
+
+  const [usUnusualFinal, saUnusualFinal] = await Promise.all([
+    enrichRowsWithQuotes(usUnusual, "us", apiKey),
+    enrichRowsWithQuotes(saUnusual, "sa", apiKey),
   ]);
 
   return {
     updatedAt: new Date().toISOString(),
-    cacheMinutes: 12,
+    cacheMinutes: 60,
     us: {
-      gainers: topUsGainers.map(({ symbol, name, price, changesPercentage }) => ({
-        symbol,
-        name,
-        price,
-        changesPercentage,
-      })),
-      unusualVolume: usUnusual,
-      nearFair: pickNearFair(usItems, 8),
+      gainers: usGainersEnriched,
+      unusualVolume: usUnusualFinal,
+      nearFair: usNearFair,
     },
     sa: {
-      gainers: topSaGainers,
-      unusualVolume: saUnusual,
-      nearFair: pickNearFair(saItems, 8),
+      gainers: saGainersEnriched,
+      unusualVolume: saUnusualFinal,
+      nearFair: saNearFair,
     },
   };
 }

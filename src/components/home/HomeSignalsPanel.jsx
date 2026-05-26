@@ -142,7 +142,7 @@ export function HomeSignalsPanel({ t, lang, dir }) {
         <div className="tp-signals-meta">
           {t("HOME_SIGNALS_UPDATED")} {formatUpdated(data.updatedAt, lang)}
           <span className="tp-signals-meta-sep">·</span>
-          {t("HOME_SIGNALS_CACHE")} {data.cacheMinutes ?? 12} {t("MARKET_UNIVERSE_MIN")}
+          {t("HOME_SIGNALS_CACHE")} {data.cacheMinutes ?? 60} {t("MARKET_UNIVERSE_MIN")}
         </div>
       ) : null}
 
@@ -166,7 +166,12 @@ export function HomeSignalsPanel({ t, lang, dir }) {
               t={t}
               emptyLabel={t("HOME_SIGNALS_EMPTY")}
               renderMeta={(row) => (
-                <span className={pctClass(row.changesPercentage)}>{fmtPct(row.changesPercentage)}</span>
+                <span className="tp-signal-metric-stack">
+                  <span className="tp-signal-metric-primary">{fmtPrice(row.price, market)}</span>
+                  <span className={`tp-signal-metric-secondary ${pctClass(row.changesPercentage)}`}>
+                    {fmtPct(row.changesPercentage)}
+                  </span>
+                </span>
               )}
             />
             <SignalCard
@@ -178,8 +183,11 @@ export function HomeSignalsPanel({ t, lang, dir }) {
               t={t}
               emptyLabel={t("HOME_SIGNALS_EMPTY")}
               renderMeta={(row) => (
-                <span className="tp-signal-vol-ratio">
-                  {row.volumeRatio != null ? `${row.volumeRatio}×` : "—"}
+                <span className="tp-signal-metric-stack">
+                  <span className="tp-signal-metric-primary">{fmtPrice(row.price, market)}</span>
+                  <span className="tp-signal-metric-secondary tp-signal-vol-ratio">
+                    {row.volumeRatio != null ? `${row.volumeRatio}× vol` : "—"}
+                  </span>
                 </span>
               )}
             />
@@ -187,18 +195,23 @@ export function HomeSignalsPanel({ t, lang, dir }) {
               title={t("HOME_SIGNALS_NEAR_FAIR")}
               tag={t("HOME_SIGNALS_TAG_VALUE")}
               tagClass="tp-signal-tag-value"
-              rows={(block?.nearFair || []).map((r) => ({
-                symbol: r.ticker,
-                name: r.name,
-                discountPct: r.discountPct,
-                price: r.priceApprox,
-              }))}
+              rows={block?.nearFair}
               market={marketTab}
               t={t}
               emptyLabel={t("HOME_SIGNALS_NEAR_FAIR_EMPTY")}
               renderMeta={(row) => (
-                <span className={pctClass(row.discountPct)}>
-                  {row.discountPct == null ? "—" : `${fmtPct(row.discountPct)} FV`}
+                <span className="tp-signal-metric-stack">
+                  <span className="tp-signal-metric-primary">{fmtPrice(row.price, market)}</span>
+                  <span className="tp-signal-metric-secondary">
+                    <span className="tp-signal-fv-label">{t("HOME_SIGNALS_FV")}</span>{" "}
+                    {fmtPrice(row.fairValue, market)}
+                    {row.discountPct != null ? (
+                      <span className={`tp-signal-fv-disc ${pctClass(row.discountPct)}`}>
+                        {" "}
+                        ({fmtPct(row.discountPct)})
+                      </span>
+                    ) : null}
+                  </span>
                 </span>
               )}
             />

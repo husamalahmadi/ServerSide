@@ -24,14 +24,20 @@ export async function computeSaMovers(apiKey) {
     const entry = byFmp.get(sym);
     if (!entry) continue;
     const price = num(q?.price);
-    const changesPercentage = num(q?.changesPercentage ?? q?.changePercent);
+    let changesPercentage = num(
+      q?.changesPercentage ?? q?.changePercentage ?? q?.changePercent ?? q?.percentChange
+    );
+    const change = num(q?.change);
+    if (changesPercentage == null && price != null && price > 0 && change != null) {
+      changesPercentage = (change / price) * 100;
+    }
     const volume = num(q?.volume);
     if (price == null && changesPercentage == null) continue;
     movers.push({
       symbol: entry.ticker,
       name: String(q?.name || entry.name || entry.ticker),
-      price: price ?? 0,
-      changesPercentage: changesPercentage ?? 0,
+      price: price ?? null,
+      changesPercentage,
       volume: volume ?? 0,
     });
   }
