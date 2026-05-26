@@ -9,8 +9,8 @@ function stripMovers(rows) {
   }));
 }
 
-/** TASI gainers, losers, and most active from catalog + FMP batch quotes. */
-export async function buildSaMarketDashboard(apiKey) {
+/** Raw TASI movers with volume (shared by dashboard + home signals). */
+export async function computeSaMovers(apiKey) {
   const entries = loadGroupedCatalog("sa");
   const byFmp = new Map(entries.map((e) => [e.fmpSymbol.toUpperCase(), e]));
   const quoteRows = await fetchAllBatchQuotes(
@@ -35,6 +35,12 @@ export async function buildSaMarketDashboard(apiKey) {
       volume: volume ?? 0,
     });
   }
+  return movers;
+}
+
+/** TASI gainers, losers, and most active from catalog + FMP batch quotes. */
+export async function buildSaMarketDashboard(apiKey) {
+  const movers = await computeSaMovers(apiKey);
 
   const withChange = movers.filter((m) => Number.isFinite(m.changesPercentage));
   const gainers = [...withChange].sort((a, b) => b.changesPercentage - a.changesPercentage);

@@ -1378,6 +1378,219 @@ button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
   font-weight: 600;
 }
 
+/* —— Homepage live signals —— */
+.tp-signals-panel {
+  margin-bottom: 1.25rem;
+}
+
+.tp-signals-head {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.tp-signals-sub {
+  margin: 0.3rem 0 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.45;
+  max-width: 520px;
+}
+
+.tp-signals-head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-inline-start: auto;
+}
+
+.tp-signals-market-tabs {
+  display: inline-flex;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.tp-signals-market-tabs button {
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  font-weight: 700;
+  font-family: inherit;
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.tp-signals-market-tabs button.active {
+  background: #fff;
+  color: var(--tp-primary);
+}
+
+.tp-signals-market-tabs button.active.sa {
+  color: #166534;
+}
+
+.tp-signals-meta {
+  padding: 0.45rem 1rem;
+  font-size: 11px;
+  color: var(--tp-muted);
+  background: var(--tp-surface2);
+  border-bottom: 1px solid var(--tp-border-soft);
+}
+
+.tp-signals-meta-sep {
+  margin: 0 0.35rem;
+}
+
+.tp-signals-body {
+  padding: 1rem !important;
+  background: linear-gradient(180deg, var(--tp-surface2) 0%, var(--tp-surface) 100%);
+}
+
+.tp-signals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.tp-signal-card {
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-border-soft);
+  border-radius: var(--tp-radius-lg);
+  box-shadow: var(--tp-shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 280px;
+}
+
+.tp-signal-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 0.85rem;
+  border-bottom: 1px solid var(--tp-border-soft);
+  background: var(--tp-ink-strong);
+  color: #fff;
+}
+
+.tp-signal-card-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.tp-signal-tag {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+.tp-signal-tag-live {
+  background: rgba(0, 210, 122, 0.2);
+  color: #86efac;
+  border-color: rgba(0, 210, 122, 0.35);
+}
+
+.tp-signal-tag-volume {
+  background: rgba(245, 128, 62, 0.2);
+  color: #fdba74;
+  border-color: rgba(245, 128, 62, 0.35);
+}
+
+.tp-signal-tag-value {
+  background: rgba(44, 123, 229, 0.25);
+  color: #93c5fd;
+  border-color: rgba(44, 123, 229, 0.4);
+}
+
+.tp-signal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.35rem 0;
+  flex: 1;
+}
+
+.tp-signal-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.55rem 0.85rem;
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 1px solid var(--tp-border-soft);
+  transition: background 0.12s;
+}
+
+.tp-signal-row:hover {
+  background: var(--tp-primary-soft);
+}
+
+.tp-signal-ticker {
+  font-family: var(--tp-mono);
+  font-weight: 800;
+  font-size: 12px;
+  color: var(--tp-primary);
+}
+
+.tp-signal-name {
+  font-size: 11px;
+  color: var(--tp-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.tp-signal-metric {
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.tp-signal-vol-ratio {
+  color: #c2410c;
+}
+
+.tp-signal-empty {
+  margin: auto;
+  padding: 1.5rem 0.85rem;
+  font-size: 12px;
+  color: var(--tp-muted);
+  text-align: center;
+}
+
+.tp-signal-skel {
+  min-height: 280px;
+  background: linear-gradient(
+    90deg,
+    var(--tp-surface2) 0%,
+    #e8eef7 50%,
+    var(--tp-surface2) 100%
+  );
+  background-size: 200% 100%;
+  animation: tp-universe-shimmer 1.2s ease-in-out infinite;
+  border-radius: var(--tp-radius-lg);
+}
+
+@media (max-width: 1100px) {
+  .tp-signals-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* —— Market universe (S&P 500 / TASI full directory) —— */
 .tp-universe {
   margin-top: 1.5rem;

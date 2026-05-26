@@ -26,6 +26,9 @@ import {
   getMarketUniverse,
 } from "./marketUniverse.js";
 import { MARKET_UNIVERSE_TTL_MS } from "./marketUniverseCache.js";
+import { buildHomeSignals } from "./homeSignals.js";
+
+const HOME_SIGNALS_TTL_MS = 12 * 60_000;
 import { isUsableScreenerRow, screenerMarketUsable } from "../src/domain/screenerMetrics.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -781,6 +784,24 @@ app.get("/api/fmp/sa-market-universe", async (req, res) => {
     res.json(data);
   } catch (err) {
     console.error("[fmp/sa-market-universe]", err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
+
+app.get("/api/fmp/home-signals", async (req, res) => {
+  const key = fmpApiKey();
+  if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  try {
+    const data = await cachedFmp("fmp:home-signals", HOME_SIGNALS_TTL_MS, async () => {
+      const snap = readScreenerSnapshot();
+      return buildHomeSignals(key, {
+        usItems: snap.us?.items || [],
+        saItems: snap.sa?.items || [],
+      });
+    });
+    res.json(data);
+  } catch (err) {
+    console.error("[fmp/home-signals]", err.message);
     res.status(502).json({ error: err.message });
   }
 });

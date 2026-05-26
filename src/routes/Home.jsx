@@ -16,17 +16,7 @@ import { filterStocksByQuery } from "../domain/stockSearch.js";
 import { ScreenerResultsTable } from "../components/screener/ScreenerResultsTable.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { HomeMarketNews } from "../components/HomeMarketNews.jsx";
-
-const QUICK_PICKS = [
-  { ticker: "AAPL", name: "Apple", market: "us" },
-  { ticker: "MSFT", name: "Microsoft", market: "us" },
-  { ticker: "2222", name: "Saudi Aramco", market: "sa" },
-  { ticker: "7203.T", name: "Toyota", market: "jp" },
-  { ticker: "NVDA", name: "NVIDIA", market: "us" },
-  { ticker: "1120", name: "Al Rajhi Bank", market: "sa" },
-  { ticker: "6758.T", name: "Sony", market: "jp" },
-  { ticker: "AMZN", name: "Amazon", market: "us" },
-];
+import { HomeSignalsPanel } from "../components/home/HomeSignalsPanel.jsx";
 
 export default function Home() {
   const { t, lang, dir } = useI18n();
@@ -412,19 +402,6 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="tp-quick-picks">
-            <span className="tp-qp-label">{lang === "ar" ? "جرب:" : "Try:"}</span>
-            {QUICK_PICKS.map((p) => (
-              <Link
-                key={p.ticker}
-                to={`/stock/${encodeURIComponent(p.ticker)}`}
-                className="tp-qp-chip"
-                onClick={() => setSuggestionsOpen(false)}
-              >
-                {p.ticker}
-              </Link>
-            ))}
-          </div>
         </div>
 
         <div className="tp-card tp-card-pad tp-span-4">
@@ -438,6 +415,8 @@ export default function Home() {
           />
         </div>
       </div>
+
+      <HomeSignalsPanel t={t} lang={lang} dir={dir} />
 
       <div className="tp-dash-grid" style={{ marginBottom: "1.25rem" }}>
         <div
