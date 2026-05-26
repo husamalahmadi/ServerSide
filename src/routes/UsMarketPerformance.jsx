@@ -6,6 +6,8 @@ import { StatCard } from "../components/dashboard/StatCard.jsx";
 import { Sparkline } from "../components/charts/Sparkline.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { defaultSnapshotDate, fetchUsMarketDashboard } from "../services/usMarketService.js";
+import { fetchUsMarketUniverse } from "../services/marketUniverseService.js";
+import { MarketUniversePanel } from "../components/market/MarketUniversePanel.jsx";
 
 function fmtPct(n) {
   if (!Number.isFinite(n)) return "—";
@@ -160,6 +162,10 @@ export default function UsMarketPerformance() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [universe, setUniverse] = useState(null);
+  const [universeLoading, setUniverseLoading] = useState(true);
+  const [universeError, setUniverseError] = useState("");
+  const [universeNonce, setUniverseNonce] = useState(0);
 
   const pageTitle =
     lang === "ar"
@@ -203,6 +209,33 @@ export default function UsMarketPerformance() {
     const cleanup = load();
     return cleanup;
   }, [load]);
+
+  const loadUniverse = useCallback(() => {
+    let alive = true;
+    setUniverseLoading(true);
+    setUniverseError("");
+    fetchUsMarketUniverse()
+      .then((json) => {
+        if (!alive) return;
+        setUniverse(json);
+      })
+      .catch((e) => {
+        if (!alive) return;
+        setUniverseError(String(e?.message || e));
+        setUniverse(null);
+      })
+      .finally(() => {
+        if (alive) setUniverseLoading(false);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [universeNonce]);
+
+  useEffect(() => {
+    const cleanup = loadUniverse();
+    return cleanup;
+  }, [loadUniverse]);
 
   const sectors = data?.sectors ?? [];
   const industries = data?.industries ?? [];
@@ -368,6 +401,17 @@ export default function UsMarketPerformance() {
           </p>
         </>
       ) : null}
+
+      <MarketUniversePanel
+        data={universe}
+        loading={universeLoading}
+        error={universeError}
+        market="us"
+        t={t}
+        lang={lang}
+        onOpen={openTicker}
+        onRefresh={() => setUniverseNonce((n) => n + 1)}
+      />
 
       <SiteFooter t={t} />
     </div>

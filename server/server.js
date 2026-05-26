@@ -20,6 +20,12 @@ import { fetchFmpFinancialsBundle, fmpApiKey, FMP_STABLE_BASE } from "./fmpFetch
 import { createScreenerStore, resolveScreenerDir, SCREENER_MARKETS } from "./screenerStore.js";
 import { buildAllScreeners } from "./buildScreenerFromFmp.js";
 import { buildSaMarketDashboard } from "./saMarketDashboard.js";
+import {
+  buildUsMarketUniverse,
+  buildSaMarketUniverse,
+  getMarketUniverse,
+} from "./marketUniverse.js";
+import { MARKET_UNIVERSE_TTL_MS } from "./marketUniverseCache.js";
 import { isUsableScreenerRow, screenerMarketUsable } from "../src/domain/screenerMetrics.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -747,6 +753,34 @@ app.get("/api/fmp/sa-market-dashboard", async (req, res) => {
     res.json(data);
   } catch (err) {
     console.error("[fmp/sa-market-dashboard]", err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
+
+app.get("/api/fmp/us-market-universe", async (req, res) => {
+  const key = fmpApiKey();
+  if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  try {
+    const data = await cachedFmp("fmp:us-universe", MARKET_UNIVERSE_TTL_MS, () =>
+      getMarketUniverse("us", key, buildUsMarketUniverse)
+    );
+    res.json(data);
+  } catch (err) {
+    console.error("[fmp/us-market-universe]", err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
+
+app.get("/api/fmp/sa-market-universe", async (req, res) => {
+  const key = fmpApiKey();
+  if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  try {
+    const data = await cachedFmp("fmp:sa-universe", MARKET_UNIVERSE_TTL_MS, () =>
+      getMarketUniverse("sa", key, buildSaMarketUniverse)
+    );
+    res.json(data);
+  } catch (err) {
+    console.error("[fmp/sa-market-universe]", err.message);
     res.status(502).json({ error: err.message });
   }
 });

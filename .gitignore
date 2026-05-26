@@ -16,6 +16,9 @@ server/data/fmp-financials/*
 # FMP screener snapshots (3-month TTL on server disk)
 server/data/screener/*
 !server/data/screener/.gitkeep
+# Market universe snapshots (20 min TTL)
+server/data/cache/*
+!server/data/cache/.gitkeep
 
 # Legacy bulk financial + public screener JSON (replaced by FMP API + server cache)
 public/data/sp500_financial_data.json
