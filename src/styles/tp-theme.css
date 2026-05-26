@@ -1563,6 +1563,16 @@ button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
   vertical-align: middle;
 }
 
+.tp-universe-table .tp-universe-price,
+.tp-universe-table thead th.tp-universe-price-h {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.tp-universe-th-btn.tp-universe-th-center {
+  text-align: center;
+}
+
 .tp-universe-table tbody tr:nth-child(even) {
   background: rgba(44, 123, 229, 0.03);
 }

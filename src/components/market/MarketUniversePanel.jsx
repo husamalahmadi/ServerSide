@@ -11,17 +11,6 @@ function fmtPrice(n, currency = "USD") {
   return n.toFixed(4);
 }
 
-function fmtPct(n) {
-  if (!Number.isFinite(n)) return "—";
-  const sign = n > 0 ? "+" : "";
-  return `${sign}${n.toFixed(2)}%`;
-}
-
-function pctClass(n) {
-  if (!Number.isFinite(n) || n === 0) return "";
-  return n > 0 ? "tp-us-pos" : "tp-us-neg";
-}
-
 function industryHue(name) {
   let h = 0;
   for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) % 360;
@@ -78,7 +67,7 @@ export function MarketUniversePanel({
     list.sort((a, b) => {
       let av = a[key];
       let bv = b[key];
-      if (key === "price" || key === "changesPercentage") {
+      if (key === "price") {
         av = Number.isFinite(av) ? av : dir > 0 ? Infinity : -Infinity;
         bv = Number.isFinite(bv) ? bv : dir > 0 ? Infinity : -Infinity;
       } else {
@@ -238,13 +227,10 @@ export function MarketUniversePanel({
                             </button>
                           </td>
                           <td className="tp-universe-name">{row.name}</td>
-                          <td className="tp-us-num">
+                          <td className="tp-universe-price">
                             {pricePrefix}
                             {fmtPrice(row.price, currency)}
                             {market === "sa" ? " SAR" : ""}
-                          </td>
-                          <td className={`tp-us-num ${pctClass(row.changesPercentage)}`}>
-                            {fmtPct(row.changesPercentage)}
                           </td>
                         </tr>
                       ))}
@@ -277,20 +263,14 @@ export function MarketUniversePanel({
                       {sortMark("industry")}
                     </button>
                   </th>
-                  <th className="tp-us-num">
-                    <button type="button" className="tp-universe-th-btn" onClick={() => toggleSort("price")}>
-                      {t("PRICE")}
-                      {sortMark("price")}
-                    </button>
-                  </th>
-                  <th className="tp-us-num">
+                  <th className="tp-universe-price-h">
                     <button
                       type="button"
-                      className="tp-universe-th-btn"
-                      onClick={() => toggleSort("changesPercentage")}
+                      className="tp-universe-th-btn tp-universe-th-center"
+                      onClick={() => toggleSort("price")}
                     >
-                      {t("US_MARKET_CHANGE_PCT")}
-                      {sortMark("changesPercentage")}
+                      {t("PRICE")}
+                      {sortMark("price")}
                     </button>
                   </th>
                 </tr>
@@ -322,13 +302,10 @@ export function MarketUniversePanel({
                         <span className="tp-universe-muted">—</span>
                       )}
                     </td>
-                    <td className="tp-us-num">
+                    <td className="tp-universe-price">
                       {pricePrefix}
                       {fmtPrice(row.price, currency)}
                       {market === "sa" ? " SAR" : ""}
-                    </td>
-                    <td className={`tp-us-num ${pctClass(row.changesPercentage)}`}>
-                      {fmtPct(row.changesPercentage)}
                     </td>
                   </tr>
                 ))}
