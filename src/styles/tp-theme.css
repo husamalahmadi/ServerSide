@@ -1609,15 +1609,18 @@ button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
   justify-content: space-between;
   gap: 0.5rem;
   padding: 0.75rem 0.85rem;
-  border-bottom: 1px solid var(--tp-border-soft);
-  background: var(--tp-ink-strong);
+  border-bottom: 1px solid var(--tp-primary-dark);
+  background: var(--tp-primary);
   color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
 
 .tp-signal-card-title {
   margin: 0;
   font-size: 13px;
   font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.01em;
 }
 
 .tp-signal-tag {
@@ -1625,27 +1628,29 @@ button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  padding: 0.2rem 0.5rem;
+  padding: 0.22rem 0.55rem;
   border-radius: 999px;
   border: 1px solid transparent;
+  box-shadow: 0 1px 2px rgba(18, 38, 63, 0.08);
 }
 
+/* Chips on primary-blue card heads: high contrast, aligned with dashboard pills */
 .tp-signal-tag-live {
-  background: rgba(0, 210, 122, 0.2);
-  color: #86efac;
-  border-color: rgba(0, 210, 122, 0.35);
+  background: #fff;
+  color: #047857;
+  border-color: rgba(4, 120, 87, 0.18);
 }
 
 .tp-signal-tag-volume {
-  background: rgba(245, 128, 62, 0.2);
-  color: #fdba74;
-  border-color: rgba(245, 128, 62, 0.35);
+  background: rgba(255, 255, 255, 0.95);
+  color: #c2410c;
+  border-color: rgba(194, 65, 12, 0.2);
 }
 
 .tp-signal-tag-value {
-  background: rgba(44, 123, 229, 0.25);
-  color: #93c5fd;
-  border-color: rgba(44, 123, 229, 0.4);
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--tp-primary-dark);
+  border-color: rgba(255, 255, 255, 0.55);
 }
 
 .tp-signal-list {
