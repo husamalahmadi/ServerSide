@@ -329,6 +329,9 @@ if (existsSync(staticPath)) {
           const normalized = String(filePath).replace(/\\/g, "/");
           if (normalized.endsWith("/index.html")) {
             res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+          } else if (normalized.endsWith("/llms.txt") || normalized.endsWith("/robots.txt")) {
+            res.setHeader("Content-Type", "text/plain; charset=utf-8");
+            res.setHeader("Cache-Control", "public, max-age=86400");
           } else {
             res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
           }

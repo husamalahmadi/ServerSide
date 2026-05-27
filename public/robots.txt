@@ -2,3 +2,6 @@ User-agent: *
 Allow: /
 
 Sitemap: https://trueprice.cash/sitemap.xml
+
+# LLM site index (https://llmstxt.org/)
+# https://trueprice.cash/llms.txt
