@@ -418,62 +418,9 @@ export default function Home() {
 
       <HomeSignalsPanel t={t} lang={lang} dir={dir} />
 
-      <div className="tp-dash-grid" style={{ marginBottom: "1.25rem" }}>
-        <div
-          className="tp-cta-card tp-span-4"
-          style={{
-            background: "linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)",
-            borderColor: "#bfdbfe",
-          }}
-        >
-          <h3 style={{ color: "#1d4ed8" }}>{t("SCREENER_PRESET_US")}</h3>
-          <p style={{ color: "#3b6fc9" }}>
-            {lang === "ar"
-              ? "فلتر سريع لأسهم السوق الأمريكي حسب القيمة العادلة."
-              : "Quick screen for US-listed stocks by fair value discount."}
-          </p>
-          <button type="button" className="tp-btn-primary" onClick={() => applyPreset("us")}>
-            {lang === "ar" ? "تشغيل الفلتر" : "Run screener"}
-          </button>
-        </div>
-        <div className="tp-cta-card tp-span-4">
-          <h3>{t("SCREENER_PRESET_TASI")}</h3>
-          <p>
-            {lang === "ar"
-              ? "فلتر سريع لأسهم السوق السعودي (تداول) حسب القيمة العادلة."
-              : "Quick screen for Saudi (TASI) stocks by fair value discount."}
-          </p>
-          <button type="button" className="tp-btn-primary" onClick={() => applyPreset("tasi")}>
-            {lang === "ar" ? "تشغيل الفلتر" : "Run screener"}
-          </button>
-        </div>
-        <div
-          className="tp-cta-card tp-span-4"
-          style={{
-            background: "linear-gradient(135deg, #e6f0ff 0%, #d6e8ff 100%)",
-            borderColor: "#b8d4f5",
-          }}
-        >
-          <h3 style={{ color: "#1a68d1" }}>{t("SCREENER_PRESET_TOKYO")}</h3>
-          <p style={{ color: "#3d6db5" }}>
-            {lang === "ar"
-              ? "استكشف أسهم بورصة طوكيو مع فلاتر القيمة العادلة."
-              : "Explore Tokyo Exchange tickers with fair value filters."}
-          </p>
-          <button
-            type="button"
-            className="tp-btn-primary"
-            onClick={() => applyPreset("tokyo")}
-            style={{ background: "#1a68d1" }}
-          >
-            {lang === "ar" ? "تشغيل الفلتر" : "Run screener"}
-          </button>
-        </div>
-      </div>
-
       <HomeMarketNews t={t} lang={lang} dir={dir} />
 
-      <section id="screener" className="tp-panel tp-screener-section" aria-label={t("SCREENER_TITLE")}>
+      <section id="screener" className="tp-panel tp-screener-section" dir={dir} aria-label={t("SCREENER_TITLE")}>
         <div className="tp-panel-head">
           <h2 className="tp-panel-title">{t("SCREENER_TITLE")}</h2>
           <p className="tp-panel-head-meta">
@@ -481,62 +428,111 @@ export default function Home() {
           </p>
         </div>
         <div className="tp-panel-body">
-        <div className="tp-scr-presets">
-          <button type="button" className="tp-scr-preset" onClick={() => applyPreset("undervalued")}>
-            {t("SCREENER_PRESET_UNDERVALUE")}
-          </button>
-          <button type="button" className="tp-scr-preset" onClick={() => applyPreset("largecap")}>
-            {t("SCREENER_PRESET_LARGECAP")}
-          </button>
-          <button type="button" className="tp-scr-preset" onClick={() => applyPreset("tasi")}>
-            {t("SCREENER_PRESET_TASI")}
-          </button>
-          <button type="button" className="tp-scr-preset" onClick={() => applyPreset("us")}>
-            {t("SCREENER_PRESET_US")}
-          </button>
-          <button type="button" className="tp-scr-preset" onClick={() => applyPreset("tokyo")}>
-            {t("SCREENER_PRESET_TOKYO")}
-          </button>
-          <button type="button" className="tp-scr-preset" onClick={() => applyPreset("reset")}>
-            {t("RESET")}
-          </button>
-        </div>
-        <div className="tp-scr-summary">
-          <span>{t("SCREENER_MATCHES")}: <b>{tableCount}</b></span>
-          <span>{t("SCREENER_AVG_DISCOUNT")}: <b>{screenerSummary.avgDiscount == null ? "—" : `${screenerSummary.avgDiscount.toFixed(1)}%`}</b></span>
-          <span>{t("SCREENER_TOP_SECTOR")}: <b>{screenerSummary.topSector}</b></span>
-        </div>
-        {screenerState.loading ? (
-          <div className="tp-scr-empty">{t("LOADING")}</div>
-        ) : screenerState.error ? (
-          <div className="tp-scr-empty">{screenerState.error}</div>
-        ) : (
-          <div className="tp-scr-layout">
-            {screenerState.rebuilding ? (
-              <div className="tp-scr-tokyo-hint">{t("SCREENER_BUILDING")}</div>
-            ) : null}
-            {!searchActive ? (
-              <div className="tp-scr-hint">
-                {lang === "ar" ? "اضغط أحد الأزرار بالأعلى لتشغيل الفرز. إعادة التعيين تعرض نتائج فارغة." : "Press one of the buttons above to run screening. Reset shows no results."}
+          <div className="tp-scr-toolbar">
+            <aside className="tp-scr-market-rail" aria-label={t("SCREENER_MARKET_FOCUS_RAIL")}>
+              <div className="tp-scr-rail-label">{t("SCREENER_RAIL_LABEL")}</div>
+              <button
+                type="button"
+                className={`tp-scr-focus-card tp-scr-focus-us${activePreset === "us" ? " is-active" : ""}`}
+                onClick={() => applyPreset("us")}
+                aria-pressed={activePreset === "us"}
+              >
+                <span className="tp-scr-focus-badge" aria-hidden>
+                  US
+                </span>
+                <span className="tp-scr-focus-title">{t("SCREENER_PRESET_US")}</span>
+                <span className="tp-scr-focus-sub">{t("SCREENER_RAIL_US_HINT")}</span>
+                <span className="tp-scr-focus-go">{t("SCREENER_RAIL_RUN")}</span>
+              </button>
+              <button
+                type="button"
+                className={`tp-scr-focus-card tp-scr-focus-sa${activePreset === "tasi" ? " is-active" : ""}`}
+                onClick={() => applyPreset("tasi")}
+                aria-pressed={activePreset === "tasi"}
+              >
+                <span className="tp-scr-focus-badge tp-scr-focus-badge-sa" aria-hidden>
+                  SA
+                </span>
+                <span className="tp-scr-focus-title">{t("SCREENER_PRESET_TASI")}</span>
+                <span className="tp-scr-focus-sub">{t("SCREENER_RAIL_SA_HINT")}</span>
+                <span className="tp-scr-focus-go">{t("SCREENER_RAIL_RUN")}</span>
+              </button>
+              <button
+                type="button"
+                className={`tp-scr-focus-card tp-scr-focus-jp${activePreset === "tokyo" ? " is-active" : ""}`}
+                onClick={() => applyPreset("tokyo")}
+                aria-pressed={activePreset === "tokyo"}
+              >
+                <span className="tp-scr-focus-badge tp-scr-focus-badge-jp" aria-hidden>
+                  JP
+                </span>
+                <span className="tp-scr-focus-title">{t("SCREENER_PRESET_TOKYO")}</span>
+                <span className="tp-scr-focus-sub">{t("SCREENER_RAIL_JP_HINT")}</span>
+                <span className="tp-scr-focus-go">{t("SCREENER_RAIL_RUN")}</span>
+              </button>
+            </aside>
+            <div className="tp-scr-main-col">
+              <div className="tp-scr-presets">
+                <button type="button" className="tp-scr-preset" onClick={() => applyPreset("undervalued")}>
+                  {t("SCREENER_PRESET_UNDERVALUE")}
+                </button>
+                <button type="button" className="tp-scr-preset" onClick={() => applyPreset("largecap")}>
+                  {t("SCREENER_PRESET_LARGECAP")}
+                </button>
+                <button type="button" className="tp-scr-preset" onClick={() => applyPreset("tasi")}>
+                  {t("SCREENER_PRESET_TASI")}
+                </button>
+                <button type="button" className="tp-scr-preset" onClick={() => applyPreset("us")}>
+                  {t("SCREENER_PRESET_US")}
+                </button>
+                <button type="button" className="tp-scr-preset" onClick={() => applyPreset("tokyo")}>
+                  {t("SCREENER_PRESET_TOKYO")}
+                </button>
+                <button type="button" className="tp-scr-preset" onClick={() => applyPreset("reset")}>
+                  {t("RESET")}
+                </button>
               </div>
-            ) : null}
-            {tokyoMetricsPending ? (
-              <div className="tp-scr-tokyo-hint">{t("SCREENER_TOKYO_METRICS_PENDING")}</div>
-            ) : null}
-            {tableItems.length === 0 ? (
-              <div className="tp-scr-empty">{t("NO_MATCH")}</div>
-            ) : (
-              <ScreenerResultsTable
-                t={t}
-                items={tableItems}
-                sortBy={sortBy}
-                sortDir={sortDir}
-                onSort={onSort}
-                onOpenTicker={goToStock}
-              />
-            )}
+              <div className="tp-scr-summary">
+                <span>
+                  {t("SCREENER_MATCHES")}: <b>{tableCount}</b>
+                </span>
+                <span>
+                  {t("SCREENER_AVG_DISCOUNT")}:{" "}
+                  <b>{screenerSummary.avgDiscount == null ? "—" : `${screenerSummary.avgDiscount.toFixed(1)}%`}</b>
+                </span>
+                <span>
+                  {t("SCREENER_TOP_SECTOR")}: <b>{screenerSummary.topSector}</b>
+                </span>
+              </div>
+              {screenerState.loading ? (
+                <div className="tp-scr-empty">{t("LOADING")}</div>
+              ) : screenerState.error ? (
+                <div className="tp-scr-empty">{screenerState.error}</div>
+              ) : (
+                <div className="tp-scr-layout">
+                  {screenerState.rebuilding ? (
+                    <div className="tp-scr-tokyo-hint">{t("SCREENER_BUILDING")}</div>
+                  ) : null}
+                  {!searchActive ? <div className="tp-scr-hint">{t("SCREENER_HINT_IDLE")}</div> : null}
+                  {tokyoMetricsPending ? (
+                    <div className="tp-scr-tokyo-hint">{t("SCREENER_TOKYO_METRICS_PENDING")}</div>
+                  ) : null}
+                  {tableItems.length === 0 ? (
+                    <div className="tp-scr-empty">{t("NO_MATCH")}</div>
+                  ) : (
+                    <ScreenerResultsTable
+                      t={t}
+                      items={tableItems}
+                      sortBy={sortBy}
+                      sortDir={sortDir}
+                      onSort={onSort}
+                      onOpenTicker={goToStock}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-        )}
         </div>
       </section>
 
