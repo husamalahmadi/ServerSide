@@ -479,15 +479,6 @@ export default function Home() {
                 <button type="button" className="tp-scr-preset" onClick={() => applyPreset("largecap")}>
                   {t("SCREENER_PRESET_LARGECAP")}
                 </button>
-                <button type="button" className="tp-scr-preset" onClick={() => applyPreset("tasi")}>
-                  {t("SCREENER_PRESET_TASI")}
-                </button>
-                <button type="button" className="tp-scr-preset" onClick={() => applyPreset("us")}>
-                  {t("SCREENER_PRESET_US")}
-                </button>
-                <button type="button" className="tp-scr-preset" onClick={() => applyPreset("tokyo")}>
-                  {t("SCREENER_PRESET_TOKYO")}
-                </button>
                 <button type="button" className="tp-scr-preset" onClick={() => applyPreset("reset")}>
                   {t("RESET")}
                 </button>
