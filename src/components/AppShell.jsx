@@ -109,7 +109,11 @@ export function AppShell() {
           >
             ☰
           </button>
-          {onStockPage ? <StockSearchBox variant="topbar" /> : null}
+          {onStockPage ? (
+            <div className="tp-topbar-stock-center">
+              <StockSearchBox variant="topbar" />
+            </div>
+          ) : null}
           <div className="tp-topbar-actions">
             <UserBar />
             <LangToggle lang={lang} onToggle={toggleLang} t={t} />

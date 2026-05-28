@@ -415,20 +415,14 @@ export default function Stock() {
   }, [companyDisplayName, ticker, fairAvg, price, currency, lang, t]);
 
   return (
-    <div className="tp-page" style={{ maxWidth: 1280 }} dir={dir} lang={lang}>
+    <div className="tp-page tp-stock-page" dir={dir} lang={lang}>
       <div
+        className="tp-stock-body"
         style={{
-          maxWidth: isMobile ? 1100 : 1400,
-          margin: "0 auto",
-          padding: 16,
-          overflowX: "hidden",
-        display: "flex",
-        flexDirection: isMobile ? "column" : "row",
-        gap: 16,
-        alignItems: "flex-start",
-      }}
-    >
-        <div ref={reportContentRef} style={{ flex: 1, minWidth: 0, maxWidth: isMobile ? "100%" : 1100 }}>
+          flexDirection: isMobile ? "column" : "row",
+        }}
+      >
+        <div ref={reportContentRef} className="tp-stock-report-col">
         {/* Banner */}
         <div
           className="no-print tp-stock-banner"
