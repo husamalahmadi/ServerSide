@@ -1,7 +1,7 @@
 import React from "react";
 import { fmt2, sortSeries, trendText } from "../../domain/formatting.js";
 
-export function CompareBar({ current, fair, currency, dir = "ltr", t }) {
+export function CompareBar({ current, fair, currency, dir = "ltr", t, fairLabel }) {
   const cur = Number(current);
   const fv = Number(fair);
   const max = Math.max(cur, fv, 1);
@@ -38,7 +38,7 @@ export function CompareBar({ current, fair, currency, dir = "ltr", t }) {
           {t("CUR_PRICE")}: <b>{fmt2(cur)} {currency}</b>
         </span>
         <span style={{ overflowWrap: "anywhere" }}>
-          {t("FAIR_AVG")}: <b>{fmt2(fv)} {currency}</b>
+          {fairLabel || t("FAIR_AVG")}: <b>{fmt2(fv)} {currency}</b>
         </span>
       </div>
     </div>

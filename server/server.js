@@ -718,6 +718,73 @@ app.get(["/api/fmp/quote", "/api/fmp/quote/:symbol"], async (req, res) => {
   }
 });
 
+/** DCF fair value — full figure only for signed-in users (FMP stable discounted-cash-flow). */
+app.get(["/api/fmp/dcf", "/api/fmp/dcf/:symbol"], async (req, res) => {
+  const key = fmpApiKey();
+  if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  const symbol = fmpSymbolFromRequest(req);
+  if (!symbol) return res.status(400).json({ error: "symbol query parameter required" });
+  try {
+    const row = await cachedFmp(`fmp:dcf:${symbol}`, 60 * 60_000, async () => {
+      const url = `${FMP_STABLE_BASE}/discounted-cash-flow?${new URLSearchParams({
+        symbol,
+        apikey: key,
+      })}`;
+      const r = await fetch(url);
+      const text = await r.text();
+      if (!r.ok) throw new Error(`FMP DCF HTTP ${r.status}`);
+      let arr;
+      try {
+        arr = text ? JSON.parse(text) : null;
+      } catch {
+        throw new Error("FMP DCF: invalid JSON");
+      }
+      if (arr && typeof arr === "object" && !Array.isArray(arr) && (arr["Error Message"] || arr.error)) {
+        throw new Error(String(arr["Error Message"] || arr.error));
+      }
+      if (!Array.isArray(arr) || !arr.length) throw new Error("FMP DCF: empty");
+      const item = arr[0];
+      const dcf = Number(item?.dcf);
+      const stockPrice = Number(item?.["Stock Price"] ?? item?.stockPrice);
+      if (!Number.isFinite(dcf) || dcf <= 0) throw new Error("FMP DCF: invalid dcf");
+      return {
+        symbol: String(item?.symbol ?? symbol).trim(),
+        date: String(item?.date ?? "").slice(0, 10) || null,
+        dcf,
+        stockPrice: Number.isFinite(stockPrice) ? stockPrice : null,
+      };
+    });
+
+    if (!req.user) {
+      return res.json({
+        locked: true,
+        symbol: row.symbol,
+        date: row.date,
+        stockPrice: row.stockPrice,
+        hasDcf: true,
+      });
+    }
+
+    const stockPrice = row.stockPrice;
+    let discountPct = null;
+    if (Number.isFinite(stockPrice) && stockPrice > 0) {
+      discountPct = Math.round(((row.dcf - stockPrice) / stockPrice) * 1000) / 10;
+    }
+
+    res.json({
+      locked: false,
+      symbol: row.symbol,
+      date: row.date,
+      dcf: row.dcf,
+      stockPrice,
+      discountPct,
+    });
+  } catch (err) {
+    console.error("[fmp/dcf]", symbol, err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
+
 async function fetchFmpStableArray(path, params, label) {
   const key = fmpApiKey();
   if (!key) throw new Error("FMP_API_KEY not configured");

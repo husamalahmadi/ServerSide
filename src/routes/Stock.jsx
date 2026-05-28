@@ -14,6 +14,8 @@ import { SiteFooter } from "../components/SiteFooter.jsx";
 import { RetryButton } from "../components/RetryButton.jsx";
 import { CompareBar, ChartBlock } from "../components/stock/StockCharts.jsx";
 import { StockNewsSidebar } from "../components/StockNewsSidebar.jsx";
+import { StockDcfHero } from "../components/stock/StockDcfHero.jsx";
+import { fetchStockDcf } from "../services/dcfService.js";
 import { fmt2, fmtBill, trendText, calcTrend } from "../domain/formatting.js";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -85,6 +87,8 @@ export default function Stock() {
   const [peers, setPeers] = useState({ loading: false, error: "", list: [] });
   const [peersCountdown, setPeersCountdown] = useState(0);
   const [peersRequested, setPeersRequested] = useState(false);
+  const [dcf, setDcf] = useState({ loading: false, error: "", data: null });
+  const [fmpSymbol, setFmpSymbol] = useState("");
 
   const reportDate = useMemo(() => new Date().toLocaleDateString(), []);
 
@@ -186,6 +190,7 @@ export default function Stock() {
         const r = await resolveMarketAndSymbol(ticker, market);
         if (!r.ok || !alive) return;
         const fmpSym = fmpSymbolFromResolved(r);
+        setFmpSymbol(fmpSym || "");
         const profileRes = fmpSym ? await fmpProfile(fmpSym) : null;
         if (!alive) return;
         const logo =
@@ -196,11 +201,28 @@ export default function Stock() {
         if (!alive) return;
         setLogoUrl(null);
         setProfile(null);
+        setFmpSymbol("");
       }
     })();
 
     return () => { alive = false; };
   }, [ticker, market, catalogReady]);
+
+  const loadDcf = useCallback(async () => {
+    if (!fmpSymbol) return;
+    try {
+      setDcf({ loading: true, error: "", data: null });
+      const data = await fetchStockDcf(fmpSymbol);
+      setDcf({ loading: false, error: "", data });
+    } catch (e) {
+      setDcf({ loading: false, error: String(e?.message || e), data: null });
+    }
+  }, [fmpSymbol]);
+
+  useEffect(() => {
+    if (!catalogReady || !fmpSymbol) return;
+    loadDcf();
+  }, [catalogReady, fmpSymbol, loadDcf, user?.id]);
 
   // Translate profile to Arabic when lang is ar
   useEffect(() => {
@@ -503,6 +525,20 @@ export default function Stock() {
             {t("ZERO_DATA_TRY_AGAIN")}
           </div>
         ) : null}
+
+        <StockDcfHero
+          t={t}
+          dir={dir}
+          currency={currency}
+          loading={dcf.loading}
+          error={dcf.error}
+          data={dcf.data}
+          livePrice={price}
+          user={user}
+          onSignIn={login}
+          onRetry={loadDcf}
+          signInBusy={signInNavigating.current}
+        />
 
         {/* 1. Executive Summary */}
         <Card title={t("EXEC_SUM")}>
