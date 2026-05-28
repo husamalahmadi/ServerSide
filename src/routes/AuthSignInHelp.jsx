@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { getApiUrl } from "../config/env.js";
+import { sanitizeOAuthReturnPath, stashOAuthReturn } from "../utils/oauthReturn.js";
 
 /**
  * Fallback when the SPA renders /auth/* (e.g. client-side nav). Full-page visit to /auth/google
@@ -9,7 +10,8 @@ import { getApiUrl } from "../config/env.js";
 export default function AuthSignInHelp() {
   const location = useLocation();
   const apiBase = getApiUrl();
-  const oauthStart = `${apiBase.replace(/\/+$/, "")}/auth/google`;
+  const returnPath = sanitizeOAuthReturnPath(`${location.pathname}${location.search || ""}`);
+  const oauthStart = `${apiBase.replace(/\/+$/, "")}/auth/google?${new URLSearchParams({ returnTo: returnPath })}`;
 
   return (
     <div
@@ -32,6 +34,7 @@ export default function AuthSignInHelp() {
         <button
           type="button"
           onClick={() => {
+            stashOAuthReturn(returnPath);
             window.location.href = oauthStart;
           }}
           style={{

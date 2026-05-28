@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { getApiUrl } from "../config/env.js";
+import { stashOAuthReturn, takeOAuthReturn, sanitizeOAuthReturnPath } from "../utils/oauthReturn.js";
 import { Card } from "../components/Card.jsx";
 import { PillLink } from "../components/PillLink.jsx";
 
@@ -18,7 +19,8 @@ export default function ProfileSetup() {
   // If the user already completed setup (e.g. they navigated here directly),
   // send them straight to their profile — don't show the form again.
   if (!loading && user?.profile_completed) {
-    navigate(`/profile/${user.handle}`, { replace: true });
+    const dest = takeOAuthReturn(`/profile/${user.handle}`);
+    navigate(dest, { replace: true });
     return null;
   }
 
@@ -63,7 +65,12 @@ export default function ProfileSetup() {
         <button
           type="button"
           onClick={() => {
-            window.location.href = `${getApiUrl()}/auth/google`;
+            const path = sanitizeOAuthReturnPath(
+              `${window.location.pathname}${window.location.search || ""}`
+            );
+            stashOAuthReturn(path);
+            const q = new URLSearchParams({ returnTo: path });
+            window.location.href = `${getApiUrl()}/auth/google?${q}`;
           }}
           style={{
             padding: "10px 16px",
@@ -116,7 +123,8 @@ export default function ProfileSetup() {
         return;
       }
       await refreshUser();
-      navigate(`/profile/${h}`, { replace: true });
+      const dest = takeOAuthReturn(`/profile/${h}`);
+      navigate(dest, { replace: true });
     } catch (err) {
       setError("Failed to save profile");
     } finally {

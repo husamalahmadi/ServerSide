@@ -1,6 +1,11 @@
 import React, { createContext, useContext, useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getApiUrl } from "../config/env.js";
+import {
+  sanitizeOAuthReturnPath,
+  stashOAuthReturn,
+  takeOAuthReturn,
+} from "../utils/oauthReturn.js";
 
 const AuthContext = createContext(null);
 
@@ -19,10 +24,24 @@ export function AuthProvider({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const navigateRef = useRef(navigate);
-  const pathnameRef = useRef(location.pathname);
+  const locationRef = useRef(location);
   const lastExtraFetchRef = useRef(0);
   navigateRef.current = navigate;
-  pathnameRef.current = location.pathname;
+  locationRef.current = location;
+
+  const currentReturnPath = useCallback(() => {
+    const { pathname, search } = locationRef.current;
+    return sanitizeOAuthReturnPath(`${pathname}${search || ""}`);
+  }, []);
+
+  const applyOAuthReturnIfNeeded = useCallback(() => {
+    const stored = takeOAuthReturn();
+    const { pathname, search } = locationRef.current;
+    const here = sanitizeOAuthReturnPath(`${pathname}${search || ""}`);
+    if (stored !== "/" && stored !== here) {
+      navigateRef.current(stored, { replace: true });
+    }
+  }, []);
 
   const stripTpSessionParam = useCallback(() => {
     try {
@@ -30,7 +49,7 @@ export function AuthProvider({ children }) {
       if (!sp.get("tp_session")) return;
       sp.delete("tp_session");
       const q = sp.toString();
-      const path = pathnameRef.current;
+      const path = locationRef.current.pathname;
       navigateRef.current(`${path}${q ? `?${q}` : ""}`, { replace: true });
     } catch {
       /* ignore */
@@ -60,6 +79,7 @@ export function AuthProvider({ children }) {
             setUser(data.user);
             setLoading(false);
             stripTpSessionParam();
+            if (isFreshOAuth) applyOAuthReturnIfNeeded();
             return;
           }
         } catch {
@@ -102,11 +122,17 @@ export function AuthProvider({ children }) {
       window.removeEventListener("focus", onFocus);
       document.removeEventListener("visibilitychange", onVis);
     };
-  }, [stripTpSessionParam]);
+  }, [stripTpSessionParam, applyOAuthReturnIfNeeded]);
 
-  const login = () => {
-    window.location.href = `${getApiUrl()}/auth/google`;
-  };
+  const login = useCallback(
+    (returnTo) => {
+      const path = sanitizeOAuthReturnPath(returnTo ?? currentReturnPath());
+      stashOAuthReturn(path);
+      const q = new URLSearchParams({ returnTo: path });
+      window.location.href = `${getApiUrl()}/auth/google?${q}`;
+    },
+    [currentReturnPath]
+  );
 
   const logout = async () => {
     try {

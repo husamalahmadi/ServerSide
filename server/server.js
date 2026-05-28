@@ -81,6 +81,26 @@ function normalizePublicUrl(s) {
   return t.replace(/\/+$/, "");
 }
 
+/** Relative SPA path only — blocks open redirects after Google OAuth. */
+function sanitizeOAuthReturnPath(path) {
+  if (typeof path !== "string") return "/";
+  const raw = path.trim();
+  if (!raw.startsWith("/") || raw.startsWith("//")) return "/";
+  if (/[\s\\]/.test(raw)) return "/";
+  const qIdx = raw.indexOf("?");
+  const pathname = (qIdx >= 0 ? raw.slice(0, qIdx) : raw) || "/";
+  let search = qIdx >= 0 ? raw.slice(qIdx + 1) : "";
+  if (search) {
+    const sp = new URLSearchParams(search);
+    sp.delete("tp_session");
+    sp.delete("auth");
+    const rest = sp.toString();
+    search = rest ? `?${rest}` : "";
+  }
+  if (pathname.startsWith("/auth")) return "/";
+  return pathname + search;
+}
+
 const CLIENT_URL_RAW = process.env.CLIENT_URL || "http://localhost:5173";
 /** First origin is used for OAuth redirects; allow comma-separated list for CORS. */
 const CLIENT_URL = normalizePublicUrl(CLIENT_URL_RAW.split(",")[0].trim());
@@ -281,7 +301,15 @@ app.get("/auth/google", (req, res, next) => {
   if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
     return res.redirect(`${CLIENT_URL}/?auth=not_configured`);
   }
-  passport.authenticate("google", { scope: ["profile", "email"] })(req, res, next);
+  const returnTo = sanitizeOAuthReturnPath(req.query?.returnTo);
+  req.session.oauthReturnTo = returnTo;
+  req.session.save((err) => {
+    if (err) {
+      console.error("[auth/google] session save:", err.message);
+      return next(err);
+    }
+    passport.authenticate("google", { scope: ["profile", "email"] })(req, res, next);
+  });
 });
 app.get(
   "/auth/google/callback",
@@ -290,12 +318,20 @@ app.get(
     if (req.user?.id && req.sessionID) {
       db.prepare("UPDATE users SET current_session_id=?, updated_at=datetime('now') WHERE id=?").run(req.sessionID, req.user.id);
     }
+    const returnTo = sanitizeOAuthReturnPath(req.session?.oauthReturnTo);
+    delete req.session.oauthReturnTo;
     const needsSetup = req.user && !req.user.profile_completed;
-    const rel = needsSetup ? "/profile/setup" : "/";
+    if (needsSetup) {
+      req.session.oauthReturnTo = returnTo;
+    }
+    const rel = needsSetup ? "/profile/setup" : returnTo;
     const target = new URL(rel, `${CLIENT_URL.replace(/\/+$/, "")}/`);
     // Hint SPA to poll /auth/me longer (cold start + cross-origin cookie timing).
     target.searchParams.set("tp_session", "1");
-    res.redirect(target.toString());
+    req.session.save((err) => {
+      if (err) console.error("[auth/google/callback] session save:", err.message);
+      res.redirect(target.toString());
+    });
   }
 );
 app.get("/auth/me", (req, res) => {
