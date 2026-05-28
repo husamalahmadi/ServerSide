@@ -422,7 +422,7 @@ export default function Stock() {
           flexDirection: isMobile ? "column" : "row",
         }}
       >
-        <div ref={reportContentRef} className="tp-stock-report-col">
+        <div ref={reportContentRef} className="tp-stock-report-col tp-stock-content-rail">
         {/* Banner */}
         <div
           className="no-print tp-stock-banner"

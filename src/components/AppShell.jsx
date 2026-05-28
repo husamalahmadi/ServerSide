@@ -101,23 +101,25 @@ export function AppShell() {
 
       <div className="tp-main">
         <header className={`tp-topbar${onStockPage ? " tp-topbar--stock" : ""}`}>
-          <button
-            type="button"
-            className="tp-menu-btn"
-            aria-label="Menu"
-            onClick={() => setSidebarOpen((o) => !o)}
-          >
-            ☰
-          </button>
+          <div className="tp-topbar-stock-toolbar">
+            <button
+              type="button"
+              className="tp-menu-btn"
+              aria-label="Menu"
+              onClick={() => setSidebarOpen((o) => !o)}
+            >
+              ☰
+            </button>
+            <div className="tp-topbar-actions">
+              <UserBar />
+              <LangToggle lang={lang} onToggle={toggleLang} t={t} />
+            </div>
+          </div>
           {onStockPage ? (
-            <div className="tp-topbar-stock-center">
+            <div className="tp-stock-content-rail">
               <StockSearchBox variant="topbar" />
             </div>
           ) : null}
-          <div className="tp-topbar-actions">
-            <UserBar />
-            <LangToggle lang={lang} onToggle={toggleLang} t={t} />
-          </div>
         </header>
         <main className="tp-content">
           <Outlet />

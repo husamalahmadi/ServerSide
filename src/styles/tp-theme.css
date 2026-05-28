@@ -232,10 +232,19 @@ html[lang="ar"] body {
   max-width: var(--tp-stock-page-max, 1280px);
 }
 
+/* Same horizontal box as stock report (page max + body padding). */
+.tp-stock-content-rail {
+  width: 100%;
+  max-width: var(--tp-stock-page-max, 1280px);
+  margin-inline: auto;
+  padding-inline: 16px;
+  box-sizing: border-box;
+}
+
 .tp-stock-body {
+  width: 100%;
   max-width: var(--tp-stock-body-max, 1400px);
-  margin: 0 auto;
-  padding: 16px;
+  margin-inline: auto;
   overflow-x: hidden;
   display: flex;
   gap: 16px;
@@ -246,43 +255,40 @@ html[lang="ar"] body {
   flex: 1;
   min-width: 0;
   width: 100%;
-  max-width: var(--tp-stock-report-max, 1100px);
 }
 
-.tp-stock-body > .tp-stock-report-col:only-child {
+.tp-stock-body > .tp-stock-report-col.tp-stock-content-rail:only-child {
+  max-width: var(--tp-stock-page-max, 1280px);
   margin-inline: auto;
 }
 
 .tp-topbar--stock {
   height: auto;
   min-height: 64px;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-rows: auto;
-  align-items: start;
-  gap: 0.65rem 1rem;
-  padding: 0.65rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+  padding: 0.65rem 1.75rem 0.75rem;
   box-sizing: border-box;
 }
 
-.tp-topbar-stock-center {
-  grid-column: 2;
-  justify-self: center;
+.tp-topbar-stock-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
   width: 100%;
-  max-width: var(--tp-stock-report-max, 1100px);
-  min-width: 0;
+  max-width: var(--tp-stock-page-max, 1280px);
+  margin-inline: auto;
+  min-height: 40px;
 }
 
 .tp-topbar--stock .tp-menu-btn {
-  grid-column: 1;
-  grid-row: 1;
-  align-self: center;
+  margin-inline-end: auto;
 }
 
 .tp-topbar--stock .tp-topbar-actions {
-  grid-column: 3;
-  grid-row: 1;
-  align-self: center;
   margin-inline-start: 0;
 }
 
@@ -293,7 +299,7 @@ html[lang="ar"] body {
   gap: 0.5rem;
   position: relative;
   z-index: 50;
-  align-items: center;
+  align-items: stretch;
 }
 
 .tp-topbar-search-wrap .tp-search-autocomplete {
@@ -2447,26 +2453,11 @@ button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
   .tp-topbar-search { max-width: none; }
 
   .tp-topbar--stock {
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto;
-    padding: 0.65rem 1rem;
+    padding: 0.65rem 1rem 0.75rem;
   }
 
-  .tp-topbar-stock-center {
-    grid-column: 1 / -1;
-    grid-row: 2;
+  .tp-topbar-stock-toolbar {
     max-width: none;
-  }
-
-  .tp-topbar--stock .tp-topbar-actions {
-    grid-column: 2;
-    grid-row: 1;
-    justify-content: flex-end;
-  }
-
-  .tp-topbar--stock .tp-menu-btn {
-    grid-column: 1;
-    grid-row: 1;
   }
 
   /* Touch-friendly targets (Google / WCAG: ≥48px, adequate spacing) */
