@@ -28,6 +28,7 @@ import {
 import { MARKET_UNIVERSE_TTL_MS } from "./marketUniverseCache.js";
 import { buildHomeSignals } from "./homeSignals.js";
 import { getHomeSignals, HOME_SIGNALS_TTL_MS } from "./homeSignalsCache.js";
+import { dcfSymbolCandidates, fetchDcfWithFallback } from "./fmpDcf.js";
 import { isUsableScreenerRow, screenerMarketUsable } from "../src/domain/screenerMetrics.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -760,35 +761,11 @@ app.get(["/api/fmp/dcf", "/api/fmp/dcf/:symbol"], async (req, res) => {
   if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
   const symbol = fmpSymbolFromRequest(req);
   if (!symbol) return res.status(400).json({ error: "symbol query parameter required" });
+  const market = String(req.query?.market ?? "").trim().toLowerCase();
+  const candidates = dcfSymbolCandidates(symbol, market);
   try {
-    const row = await cachedFmp(`fmp:dcf:${symbol}`, 60 * 60_000, async () => {
-      const url = `${FMP_STABLE_BASE}/discounted-cash-flow?${new URLSearchParams({
-        symbol,
-        apikey: key,
-      })}`;
-      const r = await fetch(url);
-      const text = await r.text();
-      if (!r.ok) throw new Error(`FMP DCF HTTP ${r.status}`);
-      let arr;
-      try {
-        arr = text ? JSON.parse(text) : null;
-      } catch {
-        throw new Error("FMP DCF: invalid JSON");
-      }
-      if (arr && typeof arr === "object" && !Array.isArray(arr) && (arr["Error Message"] || arr.error)) {
-        throw new Error(String(arr["Error Message"] || arr.error));
-      }
-      if (!Array.isArray(arr) || !arr.length) throw new Error("FMP DCF: empty");
-      const item = arr[0];
-      const dcf = Number(item?.dcf);
-      const stockPrice = Number(item?.["Stock Price"] ?? item?.stockPrice);
-      if (!Number.isFinite(dcf) || dcf <= 0) throw new Error("FMP DCF: invalid dcf");
-      return {
-        symbol: String(item?.symbol ?? symbol).trim(),
-        date: String(item?.date ?? "").slice(0, 10) || null,
-        dcf,
-        stockPrice: Number.isFinite(stockPrice) ? stockPrice : null,
-      };
+    const row = await cachedFmp(`fmp:dcf:${candidates.join("|")}`, 60 * 60_000, async () => {
+      return fetchDcfWithFallback(candidates.length ? candidates : [symbol], key);
     });
 
     if (!req.user) {
@@ -816,8 +793,21 @@ app.get(["/api/fmp/dcf", "/api/fmp/dcf/:symbol"], async (req, res) => {
       discountPct,
     });
   } catch (err) {
-    console.error("[fmp/dcf]", symbol, err.message);
-    res.status(502).json({ error: err.message });
+    const msg = String(err?.message || err);
+    console.error("[fmp/dcf]", candidates.join(","), msg);
+    const noData =
+      /empty|missing dcf|non-positive|invalid json/i.test(msg) ||
+      msg.startsWith("FMP DCF:");
+    if (noData) {
+      return res.json({
+        locked: !req.user,
+        symbol,
+        date: null,
+        stockPrice: null,
+        hasDcf: false,
+      });
+    }
+    res.status(502).json({ error: msg });
   }
 });
 

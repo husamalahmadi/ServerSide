@@ -212,12 +212,12 @@ export default function Stock() {
     if (!fmpSymbol) return;
     try {
       setDcf({ loading: true, error: "", data: null });
-      const data = await fetchStockDcf(fmpSymbol);
+      const data = await fetchStockDcf(fmpSymbol, market);
       setDcf({ loading: false, error: "", data });
     } catch (e) {
       setDcf({ loading: false, error: String(e?.message || e), data: null });
     }
-  }, [fmpSymbol]);
+  }, [fmpSymbol, market]);
 
   useEffect(() => {
     if (!catalogReady || !fmpSymbol) return;
