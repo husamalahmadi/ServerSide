@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useMatch } from "react-router-dom";
+import { StockSearchBox } from "./StockSearchBox.jsx";
 import { useI18n } from "../i18n.jsx";
 import { UserBar } from "./UserBar.jsx";
 import { LangToggle } from "./LangToggle.jsx";
@@ -43,6 +44,7 @@ function NavIcon({ name }) {
 export function AppShell() {
   const { t, lang, dir, toggleLang } = useI18n();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const onStockPage = Boolean(useMatch({ path: "/stock/:ticker", end: true }));
 
   const closeSidebar = () => setSidebarOpen(false);
 
@@ -98,7 +100,7 @@ export function AppShell() {
       </aside>
 
       <div className="tp-main">
-        <header className="tp-topbar">
+        <header className={`tp-topbar${onStockPage ? " tp-topbar--stock" : ""}`}>
           <button
             type="button"
             className="tp-menu-btn"
@@ -107,6 +109,7 @@ export function AppShell() {
           >
             ☰
           </button>
+          {onStockPage ? <StockSearchBox variant="topbar" /> : null}
           <div className="tp-topbar-actions">
             <UserBar />
             <LangToggle lang={lang} onToggle={toggleLang} t={t} />

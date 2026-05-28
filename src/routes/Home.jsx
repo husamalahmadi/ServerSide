@@ -1,5 +1,5 @@
 // FILE: src/routes/Home.jsx
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
 import { getAllStocks } from "../data/stocksCatalog.js";
@@ -13,6 +13,7 @@ import { getScreenerDataset } from "../services/screenerService.js";
 import { useScreener } from "../hooks/useScreener.js";
 import { mergeScreenerWithCatalog, isUsableScreenerRow } from "../domain/screenerMetrics.js";
 import { filterStocksByQuery } from "../domain/stockSearch.js";
+import { StockSearchBox } from "../components/StockSearchBox.jsx";
 import { ScreenerResultsTable } from "../components/screener/ScreenerResultsTable.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { HomeMarketNews } from "../components/HomeMarketNews.jsx";
@@ -25,8 +26,6 @@ export default function Home() {
   const authParam = searchParams.get("auth");
   const [q, setQ] = useState("");
   const [marketFilter, setMarketFilter] = useState("all");
-  const [suggestionsOpen, setSuggestionsOpen] = useState(false);
-  const wrapRef = useRef(null);
 
   // Legacy ?auth=api_required (old client builds). Strip silently — do not show a banner.
   useEffect(() => {
@@ -40,7 +39,6 @@ export default function Home() {
     const qParam = searchParams.get("q");
     if (qParam) {
       setQ(qParam);
-      setSuggestionsOpen(true);
       const next = new URLSearchParams(searchParams);
       next.delete("q");
       setSearchParams(next, { replace: true });
@@ -161,11 +159,6 @@ export default function Home() {
   const searchQuery = q.trim();
   const searchActive = searchQuery.length > 0;
 
-  const suggestions = useMemo(
-    () => filterStocksByQuery(state.items, searchQuery, { market: marketFilter, limit: 8 }),
-    [state.items, searchQuery, marketFilter]
-  );
-
   const searchTableRows = useMemo(() => {
     if (!searchActive) return [];
     return filterStocksByQuery(screenerFeed, searchQuery, { market: marketFilter, limit: 200 });
@@ -188,48 +181,9 @@ export default function Home() {
     [marketCounts]
   );
 
-  function toggleMarketFilter(market) {
-    setMarketFilter((prev) => (prev === market ? "all" : market));
-  }
-
-  function bestSearchMatch() {
-    const hits = filterStocksByQuery(state.items, searchQuery, { market: marketFilter, limit: 1 });
-    return hits[0] || null;
-  }
-
-  const handleClickOutside = useCallback((e) => {
-    if (wrapRef.current && !wrapRef.current.contains(e.target)) {
-      setSuggestionsOpen(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, [handleClickOutside]);
-
   function goToStock(ticker) {
-    setSuggestionsOpen(false);
     setQ("");
     navigate(`/stock/${encodeURIComponent(ticker)}`);
-  }
-
-  function pickSuggestion(it) {
-    setQ(String(it.ticker));
-    setSuggestionsOpen(false);
-    goToStock(it.ticker);
-  }
-
-  function handleKeyDown(e) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      if (suggestions.length > 0) {
-        pickSuggestion(suggestions[0]);
-      } else if (searchQuery) {
-        const match = bestSearchMatch();
-        if (match) goToStock(match.ticker);
-      }
-    }
   }
 
   return (
@@ -310,98 +264,16 @@ export default function Home() {
           <h2 className="tp-card-title" style={{ margin: "0 0 1rem" }}>
             {lang === "ar" ? "بحث وتحليل الأسهم" : "Search & analyze stocks"}
           </h2>
-          <h3 className="tp-markets-heading">{t("HOME_MARKETS_HEADING")}</h3>
-          <div className="tp-market-strip">
-            <button
-              type="button"
-              className={`tp-market-pill us${marketFilter === "us" ? " active" : ""}`}
-              onClick={() => toggleMarketFilter("us")}
-            >
-              {t("MARKET_US")}
-              <span className="tp-mp-count">{marketCounts.us.toLocaleString()}</span>
-            </button>
-            <button
-              type="button"
-              className={`tp-market-pill sa${marketFilter === "sa" ? " active" : ""}`}
-              onClick={() => toggleMarketFilter("sa")}
-            >
-              {t("MARKET_SA")}
-              <span className="tp-mp-count">{marketCounts.sa.toLocaleString()}</span>
-            </button>
-            <button
-              type="button"
-              className={`tp-market-pill jp${marketFilter === "jp" ? " active" : ""}`}
-              onClick={() => toggleMarketFilter("jp")}
-            >
-              {t("MARKET_JP")}
-              <span className="tp-mp-count">{marketCounts.jp.toLocaleString()}</span>
-            </button>
-          </div>
-
-          <div ref={wrapRef} className="tp-search-autocomplete">
-            <div className="tp-search-box">
-              <div className="tp-field-wrap">
-                <input
-                  className="tp-ticker-field"
-                  type="search"
-                  value={q}
-                  onChange={(e) => {
-                    setQ(e.target.value);
-                    setSuggestionsOpen(true);
-                  }}
-                  onFocus={() => setSuggestionsOpen(true)}
-                  onKeyDown={handleKeyDown}
-                  placeholder={t("SEARCH_PLACEHOLDER")}
-                  maxLength={32}
-                  autoComplete="off"
-                  aria-autocomplete="list"
-                  aria-expanded={suggestionsOpen && searchQuery.length > 0}
-                  role="combobox"
-                />
-                <div
-                  className={`tp-suggestions ${suggestionsOpen && searchQuery.length > 0 ? "open" : ""}`}
-                  role="listbox"
-                >
-                  {state.loading ? (
-                    <div className="tp-sug-empty">{t("LOADING")}</div>
-                  ) : state.error ? (
-                    <div className="tp-sug-empty">{state.error}</div>
-                  ) : suggestions.length === 0 ? (
-                    <div className="tp-sug-empty">{t("NO_MATCH")}</div>
-                  ) : (
-                    suggestions.map((it) => (
-                      <div
-                        key={`${it.ticker}-${it.market || ""}`}
-                        className="tp-sug-item"
-                        role="option"
-                        onMouseDown={(e) => e.preventDefault()}
-                        onClick={() => pickSuggestion(it)}
-                      >
-                        <span className="tp-sug-ticker">{it.ticker}</span>
-                        <span className="tp-sug-name">
-                          {it.name} · {it.market === "sa" ? "TASI" : it.market === "jp" ? "TOKYO" : "US"}
-                        </span>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-              <button
-                type="button"
-                className="tp-go-btn"
-                onClick={() => {
-                  if (suggestions.length > 0) pickSuggestion(suggestions[0]);
-                  else if (searchQuery) {
-                    const match = bestSearchMatch();
-                    if (match) goToStock(match.ticker);
-                  }
-                }}
-              >
-                {lang === "ar" ? "تحليل ←" : "Analyze →"}
-              </button>
-            </div>
-          </div>
-
+          <StockSearchBox
+            variant="section"
+            catalogItems={state.items}
+            catalogLoading={state.loading}
+            catalogError={state.error}
+            query={q}
+            onQueryChange={setQ}
+            marketFilter={marketFilter}
+            onMarketFilterChange={setMarketFilter}
+          />
         </div>
 
         <div className="tp-card tp-card-pad tp-span-4">

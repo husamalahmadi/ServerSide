@@ -228,6 +228,56 @@ html[lang="ar"] body {
   pointer-events: none;
 }
 
+.tp-topbar--stock {
+  height: auto;
+  min-height: 64px;
+  flex-wrap: wrap;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+  align-items: flex-start;
+}
+
+.tp-topbar-search-wrap {
+  flex: 1;
+  min-width: 0;
+  max-width: min(720px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  position: relative;
+  z-index: 50;
+}
+
+.tp-topbar-search-wrap .tp-search-autocomplete {
+  position: relative;
+  z-index: 60;
+}
+
+.tp-market-strip--topbar {
+  margin-bottom: 0;
+  gap: 0.35rem;
+}
+
+.tp-market-strip--topbar .tp-market-pill {
+  padding: 4px 10px;
+  font-size: 11px;
+}
+
+.tp-search-box--topbar {
+  max-width: 100%;
+}
+
+.tp-search-box--topbar .tp-ticker-field {
+  padding: 0.55rem 0.85rem;
+  font-size: 14px;
+}
+
+.tp-search-box--topbar .tp-go-btn {
+  padding: 0.55rem 1rem;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
 .tp-topbar-actions {
   display: flex;
   align-items: center;
@@ -2343,6 +2393,29 @@ button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
   .tp-content { padding: 1rem; }
   .tp-stats-grid { grid-template-columns: 1fr; }
   .tp-topbar-search { max-width: none; }
+
+  .tp-topbar--stock {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .tp-topbar--stock .tp-topbar-actions {
+    margin-inline-start: 0;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .tp-topbar-search-wrap {
+    max-width: none;
+    order: 2;
+    width: 100%;
+  }
+
+  .tp-topbar--stock .tp-menu-btn {
+    order: 0;
+    align-self: flex-start;
+  }
 
   /* Touch-friendly targets (Google / WCAG: ≥48px, adequate spacing) */
   .tp-topbar-actions {
