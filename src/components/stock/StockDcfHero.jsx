@@ -38,7 +38,7 @@ export function StockDcfHero({
   if (!locked && Number.isFinite(dcf) && Number.isFinite(price) && price > 0) {
     discountPct = ((dcf - price) / price) * 100;
   }
-  const hasDcf = locked ? Boolean(data?.hasDcf) : Number.isFinite(dcf) && dcf > 0;
+  const hasDcf = locked ? Boolean(data?.hasDcf) : Number.isFinite(dcf);
 
   return (
     <section className="tp-dcf-hero" dir={dir} aria-label={t("DCF_HERO_ARIA")}>

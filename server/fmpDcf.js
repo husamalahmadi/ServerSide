@@ -79,15 +79,15 @@ async function fetchDcfRaw(symbol, apiKey) {
 }
 
 /**
- * Fetch DCF for the first symbol variant that returns a usable positive fair value.
+ * Fetch DCF for the first symbol variant that returns a finite value from FMP.
  */
 export async function fetchDcfWithFallback(symbols, apiKey) {
   let lastError = new Error("FMP DCF: no symbol");
   for (const sym of symbols) {
     try {
       const row = await fetchDcfRaw(sym, apiKey);
-      if (row.dcf > 0) return { ...row, fmpSymbolUsed: sym };
-      lastError = new Error("FMP DCF: non-positive dcf");
+      if (Number.isFinite(row.dcf)) return { ...row, fmpSymbolUsed: sym };
+      lastError = new Error("FMP DCF: missing dcf field");
     } catch (e) {
       lastError = e;
     }

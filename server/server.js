@@ -796,7 +796,7 @@ app.get(["/api/fmp/dcf", "/api/fmp/dcf/:symbol"], async (req, res) => {
     const msg = String(err?.message || err);
     console.error("[fmp/dcf]", candidates.join(","), msg);
     const noData =
-      /empty|missing dcf|non-positive|invalid json/i.test(msg) ||
+      /empty|missing dcf|invalid json/i.test(msg) ||
       msg.startsWith("FMP DCF:");
     if (noData) {
       return res.json({

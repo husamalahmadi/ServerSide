@@ -4,9 +4,9 @@ import { fmt2, sortSeries, trendText } from "../../domain/formatting.js";
 export function CompareBar({ current, fair, currency, dir = "ltr", t, fairLabel }) {
   const cur = Number(current);
   const fv = Number(fair);
-  const max = Math.max(cur, fv, 1);
-  const curPct = (cur / max) * 100;
-  const fairPct = (fv / max) * 100;
+  const max = Math.max(cur, fv > 0 ? fv : cur, 1);
+  const curPct = Math.min(100, (cur / max) * 100);
+  const fairPct = fv > 0 ? Math.min(100, (fv / max) * 100) : 0;
 
   return (
     <div style={{ width: "100%", maxWidth: 360, minWidth: 0, display: "grid", gap: 6 }}>
