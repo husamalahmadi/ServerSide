@@ -2,7 +2,6 @@
 import React, { useMemo, useState } from "react";
 import { useI18n } from "../i18n.jsx";
 import { PageHeader } from "../components/PageHeader.jsx";
-import { PillLink } from "../components/PillLink.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { getWeb3FormsKey, getWeb3FormsTo } from "../config/env.js";
 import { usePageMeta } from "../hooks/usePageMeta.js";
@@ -15,6 +14,10 @@ export default function Contact() {
     () => ({
       en: {
         title: "Contact Us",
+        heroKicker: "We’d love to hear from you",
+        heroTitle: "Questions, feedback, or ideas?",
+        heroLead:
+          "Whether you spotted a data issue, want a new market covered, or simply have a question about fair value—send us a message and we’ll get back to you by email.",
         intro: "Send us a message. We’ll receive it by email.",
         email: "Your Email",
         topic: "Topic",
@@ -29,6 +32,10 @@ export default function Contact() {
       },
       ar: {
         title: "اتصل بنا",
+        heroKicker: "يسعدنا تواصلك معنا",
+        heroTitle: "أسئلة، ملاحظات، أو أفكار؟",
+        heroLead:
+          "سواء لاحظت خطأً في البيانات، أو رغبت بتغطية سوق جديد، أو لديك سؤال عن القيمة العادلة — أرسل لنا رسالتك وسنعاود التواصل معك عبر البريد الإلكتروني.",
         intro: "أرسل رسالتك، وسيصلنا بريد إلكتروني بها.",
         email: "بريدك الإلكتروني",
         topic: "الموضوع",
@@ -102,123 +109,76 @@ export default function Contact() {
   }
 
   return (
-    <div className="tp-page" dir={dir} lang={lang}>
-        <PageHeader title={L.title} subtitle={t("CONTACT_US")} />
+    <div className="tp-page tp-about-page tp-contact-page" dir={dir} lang={lang}>
+      <PageHeader title={L.title} subtitle={t("CONTACT_US")} />
 
-        <form
-        onSubmit={handleSend}
-        className="tp-card tp-card-pad"
-        style={{
-          maxWidth: 720,
-          margin: "0 auto",
-          display: "grid",
-          gap: 12,
-          borderRadius: 12,
-          padding: 16,
-        }}
-      >
-        <div style={{ color: "#6b7280", marginBottom: 8 }}>{L.intro}</div>
+      <section className="tp-about-hero" aria-label={L.heroTitle}>
+        <span className="tp-about-hero-glow" aria-hidden />
+        <span className="tp-about-hero-kicker">{L.heroKicker}</span>
+        <h2 className="tp-about-hero-title">{L.heroTitle}</h2>
+        <p className="tp-about-hero-lead">{L.heroLead}</p>
+      </section>
 
-        <label style={{ display: "grid", gap: 6 }}>
-          <span style={{ fontWeight: 700 }}>{L.email}</span>
+      <form onSubmit={handleSend} className="tp-contact-card">
+        <p className="tp-contact-intro">{L.intro}</p>
+
+        <label className="tp-contact-field">
+          <span className="tp-contact-label">{L.email}</span>
           <input
+            className="tp-contact-input"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
             required
-            style={{
-              padding: "8px 10px",
-              borderRadius: 8,
-              border: "1px solid #e5e7eb",
-              background: "#f9fafb",
-            }}
           />
         </label>
 
-        <label style={{ display: "grid", gap: 6 }}>
-          <span style={{ fontWeight: 700 }}>{L.topic}</span>
+        <label className="tp-contact-field">
+          <span className="tp-contact-label">{L.topic}</span>
           <input
+            className="tp-contact-input"
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
             placeholder={L.topic}
             required
             minLength={3}
-            style={{
-              padding: "8px 10px",
-              borderRadius: 8,
-              border: "1px solid #e5e7eb",
-              background: "#fff",
-            }}
           />
         </label>
 
-        <label style={{ display: "grid", gap: 6 }}>
-          <span style={{ fontWeight: 700 }}>{L.message}</span>
+        <label className="tp-contact-field">
+          <span className="tp-contact-label">{L.message}</span>
           <textarea
+            className="tp-contact-input tp-contact-textarea"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder={L.message}
             rows={8}
             required
             minLength={5}
-            style={{
-              padding: "8px 10px",
-              borderRadius: 8,
-              border: "1px solid #e5e7eb",
-              background: "#fff",
-              resize: "vertical",
-            }}
           />
         </label>
 
-        <div style={{ display: "flex", gap: 10 }}>
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              padding: "8px 14px",
-              borderRadius: 8,
-            border: "1px solid var(--tp-primary)",
-            background: "var(--tp-primary)",
-              color: "#fff",
-              fontWeight: 700,
-              cursor: loading ? "not-allowed" : "pointer",
-              opacity: loading ? 0.8 : 1,
-            }}
-          >
+        <div className="tp-contact-actions">
+          <button type="submit" className="tp-contact-send" disabled={loading}>
             {loading ? L.sending : L.send}
           </button>
           <button
             type="button"
+            className="tp-contact-clear"
             onClick={handleClear}
             disabled={loading}
-            style={{
-              padding: "8px 14px",
-              borderRadius: 8,
-              border: "1px solid #e5e7eb",
-              background: "transparent",
-              cursor: "pointer",
-            }}
           >
             {L.clear}
           </button>
         </div>
 
         {state.msg && (
-          <div
-            style={{
-              color: state.ok ? "#065f46" : "#991b1b",
-              background: state.ok ? "#ecfdf5" : "#fee2e2",
-              border: `1px solid ${state.ok ? "#a7f3d0" : "#fecaca"}`,
-              borderRadius: 8,
-              padding: "8px 10px",
-            }}
-          >
+          <div className={`tp-contact-status ${state.ok ? "ok" : "err"}`}>
             {state.msg}
           </div>
         )}
-        </form>
+      </form>
 
       <SiteFooter t={t} />
     </div>
