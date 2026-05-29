@@ -2458,6 +2458,54 @@ button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
   .tp-us-industry-cols { grid-template-columns: 1fr; }
 }
 
+/* —— Tablet: collapse sidebar into a slide-in drawer so content gets
+   full width (covers iPad portrait/landscape and small laptops) —— */
+@media (max-width: 1024px) {
+  .tp-menu-btn {
+    display: grid;
+    place-items: center;
+    width: var(--tp-touch-min);
+    height: var(--tp-touch-min);
+  }
+  .tp-sidebar {
+    position: fixed;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    box-shadow: var(--tp-shadow-lg);
+  }
+  html[dir="rtl"] .tp-sidebar {
+    transform: translateX(100%);
+  }
+  .tp-sidebar.open {
+    transform: translateX(0);
+  }
+  .tp-sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 38, 63, 0.35);
+    z-index: 99;
+  }
+  .tp-sidebar-backdrop.open {
+    display: block;
+  }
+  .tp-content {
+    padding: 1.2rem 1.25rem 1.6rem;
+  }
+  .tp-about-pillars {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* Touch-friendly drawer nav for tablets */
+  .tp-nav-link {
+    min-height: var(--tp-touch-min);
+    padding: 0.7rem 0.85rem;
+  }
+  .tp-topbar-actions {
+    gap: var(--tp-touch-gap);
+  }
+}
+
 @media (max-width: 768px) {
   .tp-menu-btn {
     display: grid;
@@ -2489,6 +2537,17 @@ button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
   .tp-content { padding: 1rem; }
   .tp-stats-grid { grid-template-columns: 1fr; }
   .tp-topbar-search { max-width: none; }
+
+  .tp-page-header {
+    padding: 1.15rem 1.1rem;
+  }
+  .tp-page-title {
+    font-size: clamp(1.25rem, 5.2vw, 1.55rem);
+  }
+  .tp-page-header::after {
+    width: 200px;
+    height: 200px;
+  }
 
   .tp-topbar--stock {
     padding: 0.65rem 1rem 0.75rem;
