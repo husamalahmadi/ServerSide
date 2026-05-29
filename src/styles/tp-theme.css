@@ -37,7 +37,7 @@
 }
 
 body {
-  background: var(--tp-bg);
+  background: linear-gradient(160deg, #ffffff 0%, #eef4ff 45%, #dfeaff 100%) fixed;
   color: var(--tp-ink);
   font-family: var(--tp-font);
   font-size: 14px;
@@ -355,14 +355,37 @@ html[lang="ar"] body {
 }
 
 .tp-page-header {
+  position: relative;
+  overflow: hidden;
   margin-bottom: 1.5rem;
+  padding: 1.6rem 1.65rem;
+  border-radius: var(--tp-radius-lg);
+  border: 1px solid #c2d9f6;
+  background: linear-gradient(140deg, #ffffff 0%, #eef5ff 48%, #e1ecff 100%);
+  box-shadow: var(--tp-shadow), 0 0 0 1px rgba(44, 123, 229, 0.04);
+}
+
+.tp-page-header::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  inset-inline-end: -10%;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(
+    circle,
+    rgba(44, 123, 229, 0.16) 0%,
+    rgba(44, 123, 229, 0) 70%
+  );
+  pointer-events: none;
 }
 
 .tp-page-title {
-  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  position: relative;
+  font-size: clamp(1.4rem, 2.5vw, 1.85rem);
   font-weight: 800;
   color: var(--tp-ink-strong);
-  margin: 0 0 0.35rem;
+  margin: 0 0 0.4rem;
   line-height: 1.25;
 }
 
@@ -372,6 +395,7 @@ html[lang="ar"] body {
 }
 
 .tp-page-sub {
+  position: relative;
   margin: 0;
   color: var(--tp-muted);
   font-size: 13px;
@@ -379,9 +403,23 @@ html[lang="ar"] body {
   line-height: 1.6;
 }
 
+/* About/Contact already render their own gradient hero, so keep their
+   in-page title block plain to avoid a doubled banner. */
+.tp-about-page > .tp-page-header {
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  margin-bottom: 1rem;
+}
+
+.tp-about-page > .tp-page-header::after {
+  display: none;
+}
+
 /* —— Cards —— */
 .tp-card {
-  background: var(--tp-surface);
+  background: linear-gradient(160deg, #ffffff 0%, #f6faff 100%);
   border: 1px solid var(--tp-border-soft);
   border-radius: var(--tp-radius-lg);
   box-shadow: var(--tp-shadow);
