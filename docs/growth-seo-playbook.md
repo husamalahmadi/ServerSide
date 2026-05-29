@@ -2,6 +2,26 @@
 
 This keeps the same product idea (fundamentals-driven stock analysis) and turns it into an SEO distribution engine.
 
+## Implementation status (code-side)
+
+Done in the app:
+
+- [x] Stock profile narrative on every `/stock/:ticker` page (Section 1.4)
+- [x] Stock page structured data: `WebPage` + `BreadcrumbList` + `FinancialService` JSON-LD (Section 1.5)
+- [x] Arabic/English keyword headings for stock pages (Section 1)
+- [x] Blog listing structured data: `Blog` + `CollectionPage` JSON-LD
+- [x] Per-post `BlogPosting` JSON-LD with headline, URL, author, publish/modify dates (Section 5 — Google News readiness)
+- [x] Author names + publish dates shown on each post (Section 5)
+- [x] Sitemap auto-generated on build, now including `/us-markets` and `/sa-markets` landing pages (Section 5)
+- [x] Investor traffic dashboard link via `VITE_PUBLIC_TRAFFIC_DASHBOARD_URL` on the About page (Section 6)
+
+Operational (manual, not code — owners must execute):
+
+- [ ] Produce the 50 Arabic posts and apply the post template (Sections 2 & 3)
+- [ ] Backlink outreach workflow (Section 4)
+- [ ] Maintain publishing cadence + submit sitemap in Search Console (Section 5)
+- [ ] Build/maintain the public Notion traffic dashboard (Section 6)
+
 ## 1) Templated stock profile pages
 
 Use each stock page (`/stock/:ticker`) as a dedicated landing page for:

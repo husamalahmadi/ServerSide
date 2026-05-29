@@ -72,7 +72,22 @@ export default function Blogs() {
     posts: [],
   });
   const [selectedPostId, setSelectedPostId] = useState(null);
-  const seo = useMemo(() => buildBlogsSeo({ lang, postsCount: state.posts.length }), [lang, state.posts.length]);
+  const postsForSeo = useMemo(() => {
+    const iso = (v) => {
+      if (!v) return null;
+      const d = v instanceof Date ? v : new Date(v);
+      return Number.isNaN(d.getTime()) ? null : d.toISOString();
+    };
+    return state.posts.map((p) => ({
+      id: p.id,
+      title: stripHtmlToText(p.title || ""),
+      url: p.url || "",
+      published: iso(p.published),
+      updated: iso(p.updated),
+      author: p.author || "",
+    }));
+  }, [state.posts]);
+  const seo = useMemo(() => buildBlogsSeo({ lang, posts: postsForSeo }), [lang, postsForSeo]);
   usePageMeta(seo);
 
   const loadBlogs = useCallback(async () => {

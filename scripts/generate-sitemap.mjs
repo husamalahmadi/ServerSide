@@ -79,6 +79,8 @@ function main() {
 
   const staticPages = [
     { loc: `${SITE}/`, changefreq: "weekly", priority: "1.0" },
+    { loc: `${SITE}/us-markets`, changefreq: "daily", priority: "0.8" },
+    { loc: `${SITE}/sa-markets`, changefreq: "daily", priority: "0.8" },
     { loc: `${SITE}/blogs`, changefreq: "weekly", priority: "0.9" },
     { loc: `${SITE}/about`, changefreq: "monthly", priority: "0.7" },
     { loc: `${SITE}/contact`, changefreq: "monthly", priority: "0.7" },

@@ -149,7 +149,14 @@ export function buildStockSeo({ ticker, companyName, lang, fairValue, price, cur
   };
 }
 
-export function buildBlogsSeo({ lang, postsCount }) {
+/** Safely convert a Date or date string to an ISO string (or null). */
+function toIsoDate(value) {
+  if (!value) return null;
+  const d = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(d.getTime()) ? null : d.toISOString();
+}
+
+export function buildBlogsSeo({ lang, posts = [], postsCount }) {
   const inLanguage = lang === "ar" ? "ar" : "en";
   const heading = lang === "ar" ? "مدونة TruePrice.Cash للاستثمار" : "TruePrice.Cash Investing Blog";
   const description = formatMetaDescription(
@@ -162,6 +169,44 @@ export function buildBlogsSeo({ lang, postsCount }) {
       ? "مدونة TruePrice.Cash – رؤى أسهم تداول وأمريكا واليابان"
       : "TruePrice.Cash Blog – US, TASI & Tokyo Stock Insights"
   );
+
+  const blogId = `${toAbs("/blogs")}#blog`;
+  const safePosts = Array.isArray(posts) ? posts.filter((p) => p && (p.title || p.url)) : [];
+
+  // Per-post BlogPosting nodes (improves Google News / article discovery).
+  const postingNodes = safePosts.map((post, i) => {
+    const headline = String(post.title || "").trim().slice(0, 110) || `${heading} #${i + 1}`;
+    const url = post.url || toAbs("/blogs");
+    const datePublished = toIsoDate(post.published);
+    const dateModified = toIsoDate(post.updated) || datePublished;
+    const node = {
+      "@type": "BlogPosting",
+      "@id": `${toAbs("/blogs")}#post-${post.id || i + 1}`,
+      headline,
+      url,
+      mainEntityOfPage: url,
+      inLanguage,
+      isPartOf: { "@id": blogId },
+      publisher: {
+        "@type": "Organization",
+        name: "TruePrice.Cash",
+        url: toAbs("/"),
+      },
+      author: post.author
+        ? { "@type": "Person", name: post.author }
+        : { "@type": "Organization", name: "TruePrice.Cash", url: toAbs("/") },
+    };
+    if (datePublished) node.datePublished = datePublished;
+    if (dateModified) node.dateModified = dateModified;
+    return node;
+  });
+
+  const itemListElement = postingNodes.map((node, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    url: node.url,
+  }));
+
   return {
     title: heading,
     documentTitle,
@@ -178,7 +223,7 @@ export function buildBlogsSeo({ lang, postsCount }) {
       "@graph": [
         {
           "@type": "Blog",
-          "@id": `${toAbs("/blogs")}#blog`,
+          "@id": blogId,
           url: toAbs("/blogs"),
           name: heading,
           description,
@@ -203,9 +248,11 @@ export function buildBlogsSeo({ lang, postsCount }) {
           inLanguage,
           mainEntity: {
             "@type": "ItemList",
-            numberOfItems: Number(postsCount) || 0,
+            numberOfItems: Number(postsCount) || safePosts.length,
+            ...(itemListElement.length ? { itemListElement } : {}),
           },
         },
+        ...postingNodes,
       ],
     },
   };
