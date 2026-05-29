@@ -2624,3 +2624,323 @@ button.tp-market-pill.jp.active { box-shadow: 0 0 0 2px #be123c; }
     width: 100%;
   }
 }
+
+/* —— About page —— */
+.tp-about-page {
+  max-width: 1080px;
+}
+
+.tp-about-hero {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  padding: 2rem 1.75rem;
+  border-radius: var(--tp-radius-lg);
+  border: 1px solid #b8d4f5;
+  background: linear-gradient(140deg, #ffffff 0%, #f0f6ff 45%, #e6f0ff 100%);
+  box-shadow: var(--tp-shadow-lg), 0 0 0 1px rgba(44, 123, 229, 0.05);
+}
+
+.tp-about-hero-glow {
+  position: absolute;
+  inset: -45% 25% auto -15%;
+  height: 220px;
+  background: radial-gradient(ellipse at center, rgba(44, 123, 229, 0.18), transparent 70%);
+  pointer-events: none;
+}
+
+.tp-about-hero-kicker {
+  position: relative;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(135deg, var(--tp-primary) 0%, var(--tp-primary-dark) 100%);
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+}
+
+.tp-about-hero-title {
+  position: relative;
+  margin: 0.85rem 0 0.5rem;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 900;
+  line-height: 1.15;
+  color: var(--tp-ink-strong);
+}
+
+.tp-about-hero-lead {
+  position: relative;
+  margin: 0;
+  max-width: 60rem;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--tp-ink);
+}
+
+.tp-about-nav {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.tp-about-nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  color: var(--tp-primary-dark);
+  background: var(--tp-surface);
+  border: 1px solid #cfe0fb;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+}
+
+.tp-about-nav-link:hover {
+  background: var(--tp-primary);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.tp-about-section {
+  scroll-margin-top: 84px;
+  margin-bottom: 1.5rem;
+  padding: 1.6rem 1.5rem;
+  border-radius: var(--tp-radius-lg);
+  border: 1px solid var(--tp-border);
+  background: var(--tp-surface);
+  box-shadow: var(--tp-shadow);
+}
+
+.tp-about-eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tp-primary-dark);
+  background: var(--tp-primary-soft);
+  border: 1px solid #cfe0fb;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.tp-about-section-title {
+  margin: 0.6rem 0 0.5rem;
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  font-weight: 900;
+  color: var(--tp-ink-strong);
+  line-height: 1.2;
+}
+
+.tp-about-lead {
+  margin: 0 0 0.6rem;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.7;
+  color: var(--tp-ink-strong);
+  max-width: 62rem;
+}
+
+.tp-about-body {
+  margin: 0 0 0.6rem;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--tp-ink);
+  max-width: 62rem;
+}
+
+.tp-about-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.tp-about-pillar {
+  position: relative;
+  padding: 1.25rem 1.15rem;
+  border-radius: var(--tp-radius-lg);
+  border: 1px solid var(--tp-border);
+  background: linear-gradient(160deg, var(--tp-surface2) 0%, #ffffff 100%);
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+
+.tp-about-pillar:hover {
+  border-color: #cfe0fb;
+  box-shadow: var(--tp-shadow);
+  transform: translateY(-2px);
+}
+
+.tp-about-pillar-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--tp-primary) 0%, var(--tp-primary-dark) 100%);
+  box-shadow: 0 6px 16px rgba(44, 123, 229, 0.28);
+  margin-bottom: 0.85rem;
+}
+
+.tp-about-pillar-title {
+  margin: 0 0 0.4rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--tp-ink-strong);
+}
+
+.tp-about-pillar-text {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--tp-ink);
+}
+
+.tp-about-fair {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-top: 1rem;
+  padding: 1.25rem;
+  border-radius: var(--tp-radius-lg);
+  border: 1px solid #b8d4f5;
+  background: linear-gradient(140deg, #f0f6ff 0%, #e6f0ff 100%);
+}
+
+.tp-about-fair-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--tp-primary) 0%, var(--tp-primary-dark) 100%);
+  box-shadow: 0 6px 16px rgba(44, 123, 229, 0.3);
+}
+
+.tp-about-fair-text {
+  min-width: 0;
+}
+
+.tp-about-fair-title {
+  margin: 0 0 0.4rem;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--tp-ink-strong);
+}
+
+.tp-about-fair-lead {
+  margin: 0 0 0.6rem;
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.7;
+  color: var(--tp-ink-strong);
+}
+
+.tp-about-steps-title {
+  margin: 1.5rem 0 0.85rem;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--tp-ink-strong);
+}
+
+.tp-about-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.tp-about-step {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  padding: 1rem 1.1rem;
+  border-radius: var(--tp-radius);
+  border: 1px solid var(--tp-border);
+  background: var(--tp-surface2);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.tp-about-step:hover {
+  border-color: #cfe0fb;
+  box-shadow: var(--tp-shadow);
+}
+
+.tp-about-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-family: var(--tp-mono);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--tp-primary-dark);
+  background: var(--tp-primary-soft);
+  border: 1px solid #cfe0fb;
+}
+
+.tp-about-step-title {
+  margin: 0.1rem 0 0.3rem;
+  font-size: 14.5px;
+  font-weight: 800;
+  color: var(--tp-ink-strong);
+}
+
+.tp-about-step-text {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--tp-ink);
+}
+
+.tp-about-traffic {
+  margin: 0 0 1rem;
+  text-align: center;
+  font-size: 13px;
+  color: var(--tp-muted);
+}
+
+.tp-about-traffic a {
+  color: var(--tp-primary-dark);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.tp-about-traffic a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .tp-about-pillars {
+    grid-template-columns: 1fr;
+  }
+
+  .tp-about-fair {
+    flex-direction: column;
+  }
+
+  .tp-about-hero {
+    padding: 1.5rem 1.2rem;
+  }
+
+  .tp-about-section {
+    padding: 1.25rem 1.1rem;
+  }
+}
