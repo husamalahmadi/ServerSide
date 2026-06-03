@@ -755,6 +755,49 @@ app.get(["/api/fmp/quote", "/api/fmp/quote/:symbol"], async (req, res) => {
   }
 });
 
+/** Market index quotes for the global topbar ticker (FMP stable quote-short). */
+const TOPBAR_INDEX_SYMBOLS = ["^SPX", "^NDX", "^DJI", "^TASI.SR"];
+
+app.get("/api/fmp/index-quotes", async (req, res) => {
+  const key = fmpApiKey();
+  if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  try {
+    const data = await cachedFmp("fmp:index-quotes", 30_000, async () => {
+      const rows = await Promise.all(
+        TOPBAR_INDEX_SYMBOLS.map(async (symbol) => {
+          try {
+            const url = `${FMP_STABLE_BASE}/quote-short?${new URLSearchParams({ symbol, apikey: key })}`;
+            const r = await fetch(url);
+            const text = await r.text();
+            if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            const arr = text ? JSON.parse(text) : null;
+            const row = Array.isArray(arr) ? arr[0] : arr;
+            const price = Number(row?.price);
+            if (!Number.isFinite(price)) throw new Error("empty");
+            const change = Number(row?.change);
+            const prevClose = price - (Number.isFinite(change) ? change : 0);
+            const changePct =
+              Number.isFinite(change) && prevClose !== 0 ? (change / prevClose) * 100 : null;
+            return {
+              symbol,
+              price,
+              change: Number.isFinite(change) ? change : null,
+              changePct,
+            };
+          } catch {
+            return { symbol, price: null, change: null, changePct: null };
+          }
+        })
+      );
+      return rows;
+    });
+    res.json(data);
+  } catch (err) {
+    console.error("[fmp/index-quotes]", err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
+
 /** DCF fair value — full figure only for signed-in users (FMP stable discounted-cash-flow). */
 app.get(["/api/fmp/dcf", "/api/fmp/dcf/:symbol"], async (req, res) => {
   const key = fmpApiKey();

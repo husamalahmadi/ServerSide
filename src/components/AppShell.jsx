@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, NavLink, Outlet, useMatch } from "react-router-dom";
 import { StockSearchBox } from "./StockSearchBox.jsx";
+import { MarketIndexStrip } from "./MarketIndexStrip.jsx";
 import { useI18n } from "../i18n.jsx";
 import { UserBar } from "./UserBar.jsx";
 import { LangToggle } from "./LangToggle.jsx";
@@ -110,6 +111,7 @@ export function AppShell() {
             >
               ☰
             </button>
+            <MarketIndexStrip lang={lang} />
             <div className="tp-topbar-actions">
               <UserBar />
               <LangToggle lang={lang} onToggle={toggleLang} t={t} />
