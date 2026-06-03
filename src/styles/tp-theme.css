@@ -297,8 +297,9 @@ html[lang="ar"] body {
   flex: 1 1 auto;
   min-width: 0;
   display: flex;
-  align-items: center;
-  gap: 0.45rem;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.5rem;
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -312,15 +313,16 @@ html[lang="ar"] body {
 .tp-index-chip {
   flex: 0 0 auto;
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.4rem;
-  padding: 0.32rem 0.7rem;
-  border-radius: 999px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.05rem;
+  padding: 0.28rem 0.75rem;
+  border-radius: var(--tp-radius);
   border: 1px solid var(--tp-border-soft);
   background: linear-gradient(160deg, #ffffff 0%, #f1f7ff 100%);
   box-shadow: 0 1px 2px rgba(18, 38, 63, 0.06);
-  font-size: 12px;
-  line-height: 1.15;
+  line-height: 1.1;
   white-space: nowrap;
   transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
 }
@@ -330,15 +332,25 @@ html[lang="ar"] body {
   transform: translateY(-1px);
 }
 
+/* Match the site's label convention (stat-card / nav labels). */
 .tp-index-label {
-  font-weight: 700;
-  color: var(--tp-ink-strong);
-  letter-spacing: 0.01em;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--tp-muted);
+}
+
+.tp-index-quote {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
 }
 
 .tp-index-price {
-  font-weight: 600;
-  color: var(--tp-ink);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--tp-ink-strong);
   font-variant-numeric: tabular-nums;
 }
 
@@ -346,14 +358,15 @@ html[lang="ar"] body {
   display: inline-flex;
   align-items: center;
   gap: 0.12rem;
+  font-size: 11px;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-  padding: 0.08rem 0.4rem;
+  padding: 0.05rem 0.4rem;
   border-radius: 999px;
 }
 
 .tp-index-caret {
-  font-size: 9px;
+  font-size: 8px;
   line-height: 1;
 }
 

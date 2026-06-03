@@ -70,15 +70,17 @@ export function MarketIndexStrip({ lang = "en" }) {
             title={meta.en}
           >
             <span className="tp-index-label">{label}</span>
-            <span className="tp-index-price">{fmtPrice(q.price)}</span>
-            {hasData && Number.isFinite(pct) ? (
-              <span className="tp-index-pct">
-                <span className="tp-index-caret" aria-hidden>
-                  {up ? "▲" : "▼"}
+            <span className="tp-index-quote">
+              <span className="tp-index-price">{fmtPrice(q.price)}</span>
+              {hasData && Number.isFinite(pct) ? (
+                <span className="tp-index-pct">
+                  <span className="tp-index-caret" aria-hidden>
+                    {up ? "▲" : "▼"}
+                  </span>
+                  {fmtPct(pct)}
                 </span>
-                {fmtPct(pct)}
-              </span>
-            ) : null}
+              ) : null}
+            </span>
           </div>
         );
       })}
