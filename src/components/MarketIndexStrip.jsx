@@ -9,7 +9,7 @@ const INDEX_META = {
 };
 
 const ORDER = ["^SPX", "^NDX", "^DJI", "^TASI.SR"];
-const REFRESH_MS = 60_000;
+const REFRESH_MS = 15 * 60_000;
 
 function fmtPrice(value) {
   if (!Number.isFinite(value)) return "—";

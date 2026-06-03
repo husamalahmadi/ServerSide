@@ -762,7 +762,7 @@ app.get("/api/fmp/index-quotes", async (req, res) => {
   const key = fmpApiKey();
   if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
   try {
-    const data = await cachedFmp("fmp:index-quotes", 30_000, async () => {
+    const data = await cachedFmp("fmp:index-quotes", 15 * 60_000, async () => {
       const rows = await Promise.all(
         TOPBAR_INDEX_SYMBOLS.map(async (symbol) => {
           try {
