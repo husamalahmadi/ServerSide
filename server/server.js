@@ -1293,6 +1293,33 @@ app.get("/api/analytics/trending", (req, res) => {
   res.json({ trending: rows });
 });
 
+/** Per-route canonical injection so non-JS crawlers don't see the homepage canonical on every page. */
+const CANONICAL_SITE = `https://${CANONICAL_HOST}`;
+let _spaIndexTemplate = null;
+let _spaIndexTemplatePath = "";
+
+function loadSpaIndexTemplate(indexHtmlPath) {
+  if (_spaIndexTemplate === null || _spaIndexTemplatePath !== indexHtmlPath) {
+    _spaIndexTemplate = readFileSync(indexHtmlPath, "utf8");
+    _spaIndexTemplatePath = indexHtmlPath;
+  }
+  return _spaIndexTemplate;
+}
+
+function canonicalUrlForPath(reqPath) {
+  let path = String(reqPath || "/").split("?")[0];
+  if (path.length > 1) path = path.replace(/\/+$/, "");
+  if (!path) path = "/";
+  return path === "/" ? `${CANONICAL_SITE}/` : `${CANONICAL_SITE}${path}`;
+}
+
+function renderSpaIndexHtml(indexHtmlPath, canonical) {
+  const html = loadSpaIndexTemplate(indexHtmlPath);
+  return html
+    .replace(/(<link\s+rel="canonical"\s+href=")[^"]*("\s*\/?>)/i, `$1${canonical}$2`)
+    .replace(/(<meta\s+property="og:url"\s+content=")[^"]*("\s*\/?>)/i, `$1${canonical}$2`);
+}
+
 app.get("*", (req, res, next) => {
   if (req.path.startsWith("/api") || req.path.startsWith("/auth")) return next();
   // Missing hashed files must not fall through to SPA HTML (wrong MIME / confusing errors).
@@ -1318,12 +1345,19 @@ app.get("*", (req, res, next) => {
   if (!isKnownSpaRoute) {
     res.status(404);
   }
-  res.sendFile(indexHtml, (err) => {
-    if (err) {
-      console.error("[static] sendFile index.html failed:", err.message);
-      next(err);
-    }
-  });
+  try {
+    const canonical = isKnownSpaRoute ? canonicalUrlForPath(req.path) : `${CANONICAL_SITE}/`;
+    const html = renderSpaIndexHtml(indexHtml, canonical);
+    res.type("html").send(html);
+  } catch (err) {
+    console.error("[static] render index.html failed:", err.message);
+    res.sendFile(indexHtml, (e) => {
+      if (e) {
+        console.error("[static] sendFile index.html failed:", e.message);
+        next(e);
+      }
+    });
+  }
 });
 
 // Avoid Express default HTML error pages (wrong MIME for /assets debugging).
