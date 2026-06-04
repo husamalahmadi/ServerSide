@@ -371,21 +371,39 @@ html[lang="ar"] body {
 }
 
 .tp-index-chip--up {
-  border-color: rgba(0, 178, 104, 0.4);
+  border-color: rgba(0, 178, 104, 0.45);
+  background: linear-gradient(160deg, #f1fdf7 0%, #dcfce9 100%);
+}
+
+.tp-index-chip--up .tp-index-label {
+  color: #0a8a52;
+}
+
+.tp-index-chip--up .tp-index-price {
+  color: #06623b;
 }
 
 .tp-index-chip--up .tp-index-pct {
   color: #0a8a52;
-  background: rgba(0, 200, 117, 0.14);
+  background: rgba(0, 200, 117, 0.18);
 }
 
 .tp-index-chip--down {
-  border-color: rgba(214, 48, 79, 0.34);
+  border-color: rgba(214, 48, 79, 0.4);
+  background: linear-gradient(160deg, #fff5f6 0%, #ffe1e6 100%);
+}
+
+.tp-index-chip--down .tp-index-label {
+  color: #c01f3f;
+}
+
+.tp-index-chip--down .tp-index-price {
+  color: #9b132f;
 }
 
 .tp-index-chip--down .tp-index-pct {
   color: #c01f3f;
-  background: rgba(226, 55, 87, 0.12);
+  background: rgba(226, 55, 87, 0.16);
 }
 
 .tp-index-chip--flat .tp-index-pct {
