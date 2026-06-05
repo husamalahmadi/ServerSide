@@ -16,6 +16,7 @@ import { CompareBar, ChartBlock } from "../components/stock/StockCharts.jsx";
 import { StockNewsSidebar } from "../components/StockNewsSidebar.jsx";
 import { StockDcfHero } from "../components/stock/StockDcfHero.jsx";
 import { fetchStockDcf } from "../services/dcfService.js";
+import { fetchKeyMetrics } from "../services/keyMetricsService.js";
 import { fmt2, fmtBill, trendText, calcTrend } from "../domain/formatting.js";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -88,6 +89,8 @@ export default function Stock() {
   const [peersCountdown, setPeersCountdown] = useState(0);
   const [peersRequested, setPeersRequested] = useState(false);
   const [dcf, setDcf] = useState({ loading: false, error: "", data: null });
+  const [keyMetrics, setKeyMetrics] = useState({ loading: false, error: "", data: null });
+  const [kmYearIdx, setKmYearIdx] = useState(0);
   const [fmpSymbol, setFmpSymbol] = useState("");
 
   const reportDate = useMemo(() => new Date().toLocaleDateString(), []);
@@ -223,6 +226,24 @@ export default function Stock() {
     if (!catalogReady || !fmpSymbol) return;
     loadDcf();
   }, [catalogReady, fmpSymbol, loadDcf, user?.id]);
+
+  const loadKeyMetrics = useCallback(async () => {
+    if (!fmpSymbol) return;
+    try {
+      setKeyMetrics({ loading: true, error: "", data: null });
+      const data = await fetchKeyMetrics(fmpSymbol, 5);
+      setKmYearIdx(0);
+      setKeyMetrics({ loading: false, error: "", data: Array.isArray(data) ? data : [] });
+    } catch (e) {
+      const error = isFmpRetryError(e) ? t("ERR_STATEMENTS_RETRY") : String(e?.message || e);
+      setKeyMetrics({ loading: false, error, data: null });
+    }
+  }, [fmpSymbol, t]);
+
+  useEffect(() => {
+    if (!catalogReady || !fmpSymbol) return;
+    loadKeyMetrics();
+  }, [catalogReady, fmpSymbol, loadKeyMetrics]);
 
   // Translate profile to Arabic when lang is ar
   useEffect(() => {
@@ -413,6 +434,64 @@ export default function Stock() {
       "This report is educational only and not financial advice; combine it with your own research and risk management.",
     ];
   }, [companyDisplayName, ticker, fairAvg, price, currency, lang, t]);
+
+  const kmRows = useMemo(
+    () => (Array.isArray(keyMetrics.data) ? keyMetrics.data : []),
+    [keyMetrics.data]
+  );
+  const km = kmRows[kmYearIdx] || kmRows[0] || null;
+  const kmCurrency = km?.reportedCurrency || currency;
+  const kmGroups = useMemo(() => {
+    if (!km) return [];
+    const ar = lang === "ar";
+    const pct = (v) => (Number.isFinite(v) ? `${(v * 100).toFixed(2)}%` : "—");
+    const mult = (v) => (Number.isFinite(v) ? `${fmt2(v)}×` : "—");
+    const money = (v) => (Number.isFinite(v) ? `${fmtBill(v)} ${kmCurrency}` : "—");
+    const ratio = (v) => (Number.isFinite(v) ? fmt2(v) : "—");
+    const days = (v) => (Number.isFinite(v) ? `${Math.round(v)} ${ar ? "يوم" : "d"}` : "—");
+    return [
+      {
+        title: ar ? "التقييم" : "Valuation",
+        items: [
+          { label: ar ? "القيمة السوقية" : "Market Cap", value: money(km.marketCap) },
+          { label: ar ? "قيمة المنشأة" : "Enterprise Value", value: money(km.enterpriseValue) },
+          { label: "EV / EBITDA", value: mult(km.evToEBITDA) },
+          { label: ar ? "القيمة/المبيعات" : "EV / Sales", value: mult(km.evToSales) },
+          { label: ar ? "القيمة/التدفق الحر" : "EV / FCF", value: mult(km.evToFreeCashFlow) },
+          { label: ar ? "عائد الأرباح" : "Earnings Yield", value: pct(km.earningsYield) },
+          { label: ar ? "عائد التدفق الحر" : "FCF Yield", value: pct(km.freeCashFlowYield) },
+        ],
+      },
+      {
+        title: ar ? "العوائد" : "Returns",
+        items: [
+          { label: ar ? "العائد على حقوق الملكية" : "Return on Equity", value: pct(km.returnOnEquity) },
+          { label: ar ? "العائد على الأصول" : "Return on Assets", value: pct(km.returnOnAssets) },
+          { label: ar ? "العائد على رأس المال المستثمر" : "Return on Invested Capital", value: pct(km.returnOnInvestedCapital) },
+          { label: ar ? "العائد على رأس المال المستخدم" : "Return on Capital Employed", value: pct(km.returnOnCapitalEmployed) },
+        ],
+      },
+      {
+        title: ar ? "السلامة المالية" : "Financial Health",
+        items: [
+          { label: ar ? "النسبة الجارية" : "Current Ratio", value: mult(km.currentRatio) },
+          { label: ar ? "صافي الدين/EBITDA" : "Net Debt / EBITDA", value: mult(km.netDebtToEBITDA) },
+          { label: ar ? "رقم جراهام" : "Graham Number", value: Number.isFinite(km.grahamNumber) ? `${fmt2(km.grahamNumber)} ${kmCurrency}` : "—" },
+          { label: ar ? "رأس المال العامل" : "Working Capital", value: money(km.workingCapital) },
+          { label: ar ? "جودة الأرباح" : "Income Quality", value: ratio(km.incomeQuality) },
+        ],
+      },
+      {
+        title: ar ? "الكفاءة التشغيلية" : "Operating Efficiency",
+        items: [
+          { label: ar ? "أيام تحصيل المبيعات" : "Days Sales Outstanding", value: days(km.daysOfSalesOutstanding) },
+          { label: ar ? "أيام بقاء المخزون" : "Days Inventory Outstanding", value: days(km.daysOfInventoryOutstanding) },
+          { label: ar ? "أيام سداد الدائنين" : "Days Payables Outstanding", value: days(km.daysOfPayablesOutstanding) },
+          { label: ar ? "دورة التحويل النقدي" : "Cash Conversion Cycle", value: days(km.cashConversionCycle) },
+        ],
+      },
+    ];
+  }, [km, lang, kmCurrency]);
 
   return (
     <div className="tp-page tp-stock-page" dir={dir} lang={lang}>
@@ -678,6 +757,56 @@ export default function Stock() {
             >
               <ChartBlock title={t("TOTAL_EQUITY")} series={serEquity} w={bigChartW} dir={dir} t={t} />
               <ChartBlock title={t("FCF")} series={serFCF} w={bigChartW} dir={dir} t={t} />
+            </div>
+          )}
+        </Card>
+
+        {/* 4b. Key Metrics (FMP key-metrics) */}
+        <Card
+          title={`${lang === "ar" ? "المؤشرات المالية الرئيسية" : "Key Metrics"}${
+            km?.fiscalYear ? ` — ${lang === "ar" ? "السنة المالية" : "FY"} ${km.fiscalYear}` : ""
+          }`}
+        >
+          {!fmpSymbol ? (
+            <div style={{ color: "#64748b" }}>{t("LOADING")}</div>
+          ) : keyMetrics.loading && !keyMetrics.data ? (
+            <div style={{ color: "#64748b" }}>Loading…</div>
+          ) : keyMetrics.error ? (
+            <div style={{ color: "#b91c1c" }}>
+              {keyMetrics.error}
+              <RetryButton onRetry={loadKeyMetrics} t={t} />
+            </div>
+          ) : !km ? (
+            <div style={{ color: "#475569" }}>{t("NO_DATA")}</div>
+          ) : (
+            <div style={{ display: "grid", gap: 14, minWidth: 0 }}>
+              {kmRows.length > 1 ? (
+                <div className="tp-km-years">
+                  {kmRows.map((row, i) => (
+                    <button
+                      key={row.fiscalYear || row.date || i}
+                      type="button"
+                      className={`tp-km-year-btn${i === kmYearIdx ? " active" : ""}`}
+                      onClick={() => setKmYearIdx(i)}
+                    >
+                      {row.fiscalYear || row.date}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+              {kmGroups.map((g) => (
+                <div className="tp-km-group" key={g.title}>
+                  <div className="tp-km-group-title">{g.title}</div>
+                  <div className="tp-km-grid">
+                    {g.items.map((it) => (
+                      <div className="tp-km-tile" key={it.label}>
+                        <span className="tp-km-label">{it.label}</span>
+                        <span className="tp-km-value">{it.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </Card>

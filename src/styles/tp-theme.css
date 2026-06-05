@@ -411,6 +411,92 @@ html[lang="ar"] body {
   background: var(--tp-surface2);
 }
 
+/* —— Stock page: Key Metrics —— */
+.tp-km-group {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.tp-km-group-title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--tp-primary);
+}
+
+.tp-km-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  min-width: 0;
+}
+
+.tp-km-tile {
+  display: grid;
+  gap: 3px;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--tp-radius);
+  border: 1px solid var(--tp-border-soft);
+  background: linear-gradient(160deg, #ffffff 0%, #f4f9ff 100%);
+  box-shadow: 0 1px 2px rgba(18, 38, 63, 0.05);
+  min-width: 0;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+
+.tp-km-tile:hover {
+  border-color: #bcd7f7;
+  box-shadow: 0 3px 10px rgba(18, 38, 63, 0.08);
+  transform: translateY(-1px);
+}
+
+.tp-km-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--tp-muted);
+  overflow-wrap: anywhere;
+}
+
+.tp-km-value {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--tp-ink-strong);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.tp-km-years {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tp-km-year-btn {
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--tp-border);
+  background: var(--tp-surface2);
+  color: var(--tp-ink);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.tp-km-year-btn:hover {
+  border-color: var(--tp-primary);
+  color: var(--tp-primary);
+}
+
+.tp-km-year-btn.active {
+  background: var(--tp-primary);
+  border-color: var(--tp-primary);
+  color: #fff;
+}
+
 .tp-index-chip--load {
   opacity: 0.55;
 }

@@ -798,6 +798,73 @@ app.get("/api/fmp/index-quotes", async (req, res) => {
   }
 });
 
+/** Key metrics (valuation, returns, health) — FMP stable key-metrics. */
+app.get(["/api/fmp/key-metrics", "/api/fmp/key-metrics/:symbol"], async (req, res) => {
+  const key = fmpApiKey();
+  if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  const symbol = fmpSymbolFromRequest(req);
+  if (!symbol) return res.status(400).json({ error: "symbol query parameter required" });
+  const limit = Math.min(Math.max(parseInt(req.query?.limit, 10) || 5, 1), 10);
+  const toNum = (v) => {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  };
+  try {
+    const data = await cachedFmp(`fmp:key-metrics:${symbol}:${limit}`, 6 * 3600_000, async () => {
+      const url = `${FMP_STABLE_BASE}/key-metrics?${new URLSearchParams({
+        symbol,
+        limit: String(limit),
+        apikey: key,
+      })}`;
+      const r = await fetch(url);
+      const text = await r.text();
+      if (!r.ok) throw new Error(`FMP key-metrics HTTP ${r.status}`);
+      let arr;
+      try {
+        arr = text ? JSON.parse(text) : null;
+      } catch {
+        throw new Error("FMP key-metrics: invalid JSON");
+      }
+      if (arr && typeof arr === "object" && !Array.isArray(arr) && (arr["Error Message"] || arr.error)) {
+        throw new Error(String(arr["Error Message"] || arr.error));
+      }
+      if (!Array.isArray(arr)) throw new Error("FMP key-metrics: empty");
+      return arr.map((row) => ({
+        fiscalYear: row.fiscalYear ?? null,
+        date: row.date ?? null,
+        period: row.period ?? null,
+        reportedCurrency: row.reportedCurrency ?? null,
+        marketCap: toNum(row.marketCap),
+        enterpriseValue: toNum(row.enterpriseValue),
+        evToSales: toNum(row.evToSales),
+        evToEBITDA: toNum(row.evToEBITDA),
+        evToFreeCashFlow: toNum(row.evToFreeCashFlow),
+        netDebtToEBITDA: toNum(row.netDebtToEBITDA),
+        currentRatio: toNum(row.currentRatio),
+        earningsYield: toNum(row.earningsYield),
+        freeCashFlowYield: toNum(row.freeCashFlowYield),
+        returnOnEquity: toNum(row.returnOnEquity),
+        returnOnAssets: toNum(row.returnOnAssets),
+        returnOnInvestedCapital: toNum(row.returnOnInvestedCapital),
+        returnOnCapitalEmployed: toNum(row.returnOnCapitalEmployed),
+        grahamNumber: toNum(row.grahamNumber),
+        workingCapital: toNum(row.workingCapital),
+        investedCapital: toNum(row.investedCapital),
+        freeCashFlowToEquity: toNum(row.freeCashFlowToEquity),
+        incomeQuality: toNum(row.incomeQuality),
+        daysOfSalesOutstanding: toNum(row.daysOfSalesOutstanding),
+        daysOfInventoryOutstanding: toNum(row.daysOfInventoryOutstanding),
+        daysOfPayablesOutstanding: toNum(row.daysOfPayablesOutstanding),
+        cashConversionCycle: toNum(row.cashConversionCycle),
+      }));
+    });
+    res.json(data);
+  } catch (err) {
+    console.error("[fmp/key-metrics]", symbol, err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
+
 /** DCF fair value — full figure only for signed-in users (FMP stable discounted-cash-flow). */
 app.get(["/api/fmp/dcf", "/api/fmp/dcf/:symbol"], async (req, res) => {
   const key = fmpApiKey();
