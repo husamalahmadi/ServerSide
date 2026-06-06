@@ -444,7 +444,9 @@ html[lang="ar"] body {
 }
 
 .tp-km-th-metric {
-  text-align: start;
+  text-align: center;
+  width: 1%;
+  white-space: nowrap;
 }
 
 .tp-km-group-row td {
@@ -468,7 +470,8 @@ html[lang="ar"] body {
 }
 
 .tp-km-metric {
-  text-align: start;
+  text-align: center;
+  width: 1%;
   font-size: 13px;
   font-weight: 600;
   color: var(--tp-ink);
