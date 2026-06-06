@@ -90,7 +90,6 @@ export default function Stock() {
   const [peersRequested, setPeersRequested] = useState(false);
   const [dcf, setDcf] = useState({ loading: false, error: "", data: null });
   const [keyMetrics, setKeyMetrics] = useState({ loading: false, error: "", data: null });
-  const [kmYearIdx, setKmYearIdx] = useState(0);
   const [fmpSymbol, setFmpSymbol] = useState("");
 
   const reportDate = useMemo(() => new Date().toLocaleDateString(), []);
@@ -232,7 +231,6 @@ export default function Stock() {
     try {
       setKeyMetrics({ loading: true, error: "", data: null });
       const data = await fetchKeyMetrics(fmpSymbol, 5);
-      setKmYearIdx(0);
       setKeyMetrics({ loading: false, error: "", data: Array.isArray(data) ? data : [] });
     } catch (e) {
       const error = isFmpRetryError(e) ? t("ERR_STATEMENTS_RETRY") : String(e?.message || e);
@@ -435,63 +433,99 @@ export default function Stock() {
     ];
   }, [companyDisplayName, ticker, fairAvg, price, currency, lang, t]);
 
-  const kmRows = useMemo(
-    () => (Array.isArray(keyMetrics.data) ? keyMetrics.data : []),
-    [keyMetrics.data]
-  );
-  const km = kmRows[kmYearIdx] || kmRows[0] || null;
-  const kmCurrency = km?.reportedCurrency || currency;
-  const kmGroups = useMemo(() => {
-    if (!km) return [];
+  // Key Metrics as a table: metrics are rows, fiscal years are columns (oldest → newest).
+  const kmCols = useMemo(() => {
+    const rows = Array.isArray(keyMetrics.data) ? keyMetrics.data : [];
+    return [...rows].reverse();
+  }, [keyMetrics.data]);
+  const hasKm = kmCols.length > 0;
+  const kmCurrency = kmCols[kmCols.length - 1]?.reportedCurrency || currency;
+  const kmTableGroups = useMemo(() => {
     const ar = lang === "ar";
     const pct = (v) => (Number.isFinite(v) ? `${(v * 100).toFixed(2)}%` : "—");
     const mult = (v) => (Number.isFinite(v) ? `${fmt2(v)}×` : "—");
     const money = (v) => (Number.isFinite(v) ? `${fmtBill(v)} ${kmCurrency}` : "—");
-    const ratio = (v) => (Number.isFinite(v) ? fmt2(v) : "—");
-    const days = (v) => (Number.isFinite(v) ? `${Math.round(v)} ${ar ? "يوم" : "d"}` : "—");
     return [
       {
         title: ar ? "التقييم" : "Valuation",
-        items: [
-          { label: ar ? "القيمة السوقية" : "Market Cap", value: money(km.marketCap) },
-          { label: ar ? "قيمة المنشأة" : "Enterprise Value", value: money(km.enterpriseValue) },
-          { label: "EV / EBITDA", value: mult(km.evToEBITDA) },
-          { label: ar ? "القيمة/المبيعات" : "EV / Sales", value: mult(km.evToSales) },
-          { label: ar ? "القيمة/التدفق الحر" : "EV / FCF", value: mult(km.evToFreeCashFlow) },
-          { label: ar ? "عائد الأرباح" : "Earnings Yield", value: pct(km.earningsYield) },
-          { label: ar ? "عائد التدفق الحر" : "FCF Yield", value: pct(km.freeCashFlowYield) },
+        rows: [
+          { label: ar ? "قيمة المنشأة" : "Enterprise Value", key: "enterpriseValue", fmt: money },
+          { label: ar ? "عائد الأرباح" : "Earnings Yield", key: "earningsYield", fmt: pct },
         ],
       },
       {
         title: ar ? "العوائد" : "Returns",
-        items: [
-          { label: ar ? "العائد على حقوق الملكية" : "Return on Equity", value: pct(km.returnOnEquity) },
-          { label: ar ? "العائد على الأصول" : "Return on Assets", value: pct(km.returnOnAssets) },
-          { label: ar ? "العائد على رأس المال المستثمر" : "Return on Invested Capital", value: pct(km.returnOnInvestedCapital) },
-          { label: ar ? "العائد على رأس المال المستخدم" : "Return on Capital Employed", value: pct(km.returnOnCapitalEmployed) },
+        rows: [
+          { label: ar ? "العائد على حقوق الملكية" : "Return on Equity", key: "returnOnEquity", fmt: pct },
+          { label: ar ? "العائد على رأس المال المستثمر" : "Return on Invested Capital", key: "returnOnInvestedCapital", fmt: pct },
         ],
       },
       {
         title: ar ? "السلامة المالية" : "Financial Health",
-        items: [
-          { label: ar ? "النسبة الجارية" : "Current Ratio", value: mult(km.currentRatio) },
-          { label: ar ? "صافي الدين/EBITDA" : "Net Debt / EBITDA", value: mult(km.netDebtToEBITDA) },
-          { label: ar ? "رقم جراهام" : "Graham Number", value: Number.isFinite(km.grahamNumber) ? `${fmt2(km.grahamNumber)} ${kmCurrency}` : "—" },
-          { label: ar ? "رأس المال العامل" : "Working Capital", value: money(km.workingCapital) },
-          { label: ar ? "جودة الأرباح" : "Income Quality", value: ratio(km.incomeQuality) },
-        ],
-      },
-      {
-        title: ar ? "الكفاءة التشغيلية" : "Operating Efficiency",
-        items: [
-          { label: ar ? "أيام تحصيل المبيعات" : "Days Sales Outstanding", value: days(km.daysOfSalesOutstanding) },
-          { label: ar ? "أيام بقاء المخزون" : "Days Inventory Outstanding", value: days(km.daysOfInventoryOutstanding) },
-          { label: ar ? "أيام سداد الدائنين" : "Days Payables Outstanding", value: days(km.daysOfPayablesOutstanding) },
-          { label: ar ? "دورة التحويل النقدي" : "Cash Conversion Cycle", value: days(km.cashConversionCycle) },
+        rows: [
+          { label: ar ? "النسبة الجارية" : "Current Ratio", key: "currentRatio", fmt: mult },
+          { label: ar ? "صافي الدين/EBITDA" : "Net Debt / EBITDA", key: "netDebtToEBITDA", fmt: mult },
         ],
       },
     ];
-  }, [km, lang, kmCurrency]);
+  }, [lang, kmCurrency]);
+
+  const keyMetricsCard = (
+    <Card title={lang === "ar" ? "٣. المؤشرات المالية الرئيسية" : "3. Key Metrics"}>
+      {!fmpSymbol ? (
+        <div style={{ color: "#64748b" }}>{t("LOADING")}</div>
+      ) : keyMetrics.loading && !keyMetrics.data ? (
+        <div style={{ color: "#64748b" }}>Loading…</div>
+      ) : keyMetrics.error ? (
+        <div style={{ color: "#b91c1c" }}>
+          {keyMetrics.error}
+          <RetryButton onRetry={loadKeyMetrics} t={t} />
+        </div>
+      ) : !hasKm ? (
+        <div style={{ color: "#475569" }}>{t("NO_DATA")}</div>
+      ) : (
+        <div className="tp-km-table-wrap">
+          <table className="tp-km-table">
+            <thead>
+              <tr>
+                <th className="tp-km-th-metric">{lang === "ar" ? "المؤشر" : "Metric"}</th>
+                {kmCols.map((c, i) => (
+                  <th
+                    key={c.fiscalYear || c.date || i}
+                    className={`tp-km-th-year${i === kmCols.length - 1 ? " latest" : ""}`}
+                  >
+                    {c.fiscalYear || c.date}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {kmTableGroups.map((g) => (
+                <React.Fragment key={g.title}>
+                  <tr className="tp-km-group-row">
+                    <td colSpan={kmCols.length + 1}>{g.title}</td>
+                  </tr>
+                  {g.rows.map((m) => (
+                    <tr className="tp-km-data-row" key={m.label}>
+                      <td className="tp-km-metric">{m.label}</td>
+                      {kmCols.map((c, i) => (
+                        <td
+                          key={(c.fiscalYear || c.date || i) + m.key}
+                          className={`tp-km-cell${i === kmCols.length - 1 ? " latest" : ""}`}
+                        >
+                          {m.fmt(c[m.key])}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </Card>
+  );
 
   return (
     <div className="tp-page tp-stock-page" dir={dir} lang={lang}>
@@ -716,7 +750,10 @@ export default function Stock() {
           </div>
         </Card>
 
-        {/* 3. Revenue & Income */}
+        {/* 3. Key Metrics (FMP key-metrics) */}
+        {keyMetricsCard}
+
+        {/* 4. Revenue & Income */}
         <Card title={`${t("REV_INC_TITLE")} (${currency})`}>
           {prefetchCountdown > 0 ? (
             <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
@@ -739,7 +776,7 @@ export default function Stock() {
           )}
         </Card>
 
-        {/* 4. Equity & FCF */}
+        {/* 5. Equity & FCF */}
         <Card title={`${t("EQUITY_FCF_TITLE")} (${currency})`}>
           {prefetchCountdown > 0 ? (
             <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
@@ -761,57 +798,7 @@ export default function Stock() {
           )}
         </Card>
 
-        {/* 4b. Key Metrics (FMP key-metrics) */}
-        <Card
-          title={`${lang === "ar" ? "المؤشرات المالية الرئيسية" : "Key Metrics"}${
-            km?.fiscalYear ? ` — ${lang === "ar" ? "السنة المالية" : "FY"} ${km.fiscalYear}` : ""
-          }`}
-        >
-          {!fmpSymbol ? (
-            <div style={{ color: "#64748b" }}>{t("LOADING")}</div>
-          ) : keyMetrics.loading && !keyMetrics.data ? (
-            <div style={{ color: "#64748b" }}>Loading…</div>
-          ) : keyMetrics.error ? (
-            <div style={{ color: "#b91c1c" }}>
-              {keyMetrics.error}
-              <RetryButton onRetry={loadKeyMetrics} t={t} />
-            </div>
-          ) : !km ? (
-            <div style={{ color: "#475569" }}>{t("NO_DATA")}</div>
-          ) : (
-            <div style={{ display: "grid", gap: 14, minWidth: 0 }}>
-              {kmRows.length > 1 ? (
-                <div className="tp-km-years">
-                  {kmRows.map((row, i) => (
-                    <button
-                      key={row.fiscalYear || row.date || i}
-                      type="button"
-                      className={`tp-km-year-btn${i === kmYearIdx ? " active" : ""}`}
-                      onClick={() => setKmYearIdx(i)}
-                    >
-                      {row.fiscalYear || row.date}
-                    </button>
-                  ))}
-                </div>
-              ) : null}
-              {kmGroups.map((g) => (
-                <div className="tp-km-group" key={g.title}>
-                  <div className="tp-km-group-title">{g.title}</div>
-                  <div className="tp-km-grid">
-                    {g.items.map((it) => (
-                      <div className="tp-km-tile" key={it.label}>
-                        <span className="tp-km-label">{it.label}</span>
-                        <span className="tp-km-value">{it.value}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </Card>
-
-        {/* 5. Industry peers (EV-based fair value) – button + 8s wait */}
+        {/* 6. Industry peers (EV-based fair value) – button + 8s wait */}
         <Card title={t("INDUSTRY_PEERS_EV")}>
           {!user ? (
             <div style={{ display: "grid", gap: 12 }}>
