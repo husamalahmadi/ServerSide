@@ -433,13 +433,13 @@ export default function Stock() {
     ];
   }, [companyDisplayName, ticker, fairAvg, price, currency, lang, t]);
 
-  // Key Metrics as a table: metrics are rows, fiscal years are columns (oldest → newest).
-  const kmCols = useMemo(() => {
-    const rows = Array.isArray(keyMetrics.data) ? keyMetrics.data : [];
-    return [...rows].reverse();
-  }, [keyMetrics.data]);
+  // Key Metrics as a table: metrics are rows, fiscal years are columns (newest → oldest).
+  const kmCols = useMemo(
+    () => (Array.isArray(keyMetrics.data) ? keyMetrics.data : []),
+    [keyMetrics.data]
+  );
   const hasKm = kmCols.length > 0;
-  const kmCurrency = kmCols[kmCols.length - 1]?.reportedCurrency || currency;
+  const kmCurrency = kmCols[0]?.reportedCurrency || currency;
   const kmTableGroups = useMemo(() => {
     const ar = lang === "ar";
     const pct = (v) => (Number.isFinite(v) ? `${(v * 100).toFixed(2)}%` : "—");
@@ -490,10 +490,7 @@ export default function Stock() {
               <tr>
                 <th className="tp-km-th-metric">{lang === "ar" ? "المؤشر" : "Metric"}</th>
                 {kmCols.map((c, i) => (
-                  <th
-                    key={c.fiscalYear || c.date || i}
-                    className={`tp-km-th-year${i === kmCols.length - 1 ? " latest" : ""}`}
-                  >
+                  <th key={c.fiscalYear || c.date || i} className="tp-km-th-year">
                     {c.fiscalYear || c.date}
                   </th>
                 ))}
@@ -511,7 +508,7 @@ export default function Stock() {
                       {kmCols.map((c, i) => (
                         <td
                           key={(c.fiscalYear || c.date || i) + m.key}
-                          className={`tp-km-cell${i === kmCols.length - 1 ? " latest" : ""}`}
+                          className="tp-km-cell"
                         >
                           {m.fmt(c[m.key])}
                         </td>

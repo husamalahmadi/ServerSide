@@ -447,10 +447,6 @@ html[lang="ar"] body {
   text-align: start;
 }
 
-.tp-km-th-year.latest {
-  color: #0b62d6;
-}
-
 .tp-km-group-row td {
   background: #f4f9ff;
   color: var(--tp-primary);
@@ -496,11 +492,6 @@ html[lang="ar"] body {
   padding: 0.55rem 0.85rem;
   white-space: nowrap;
   border-bottom: 1px solid var(--tp-border-soft);
-}
-
-.tp-km-cell.latest {
-  background: rgba(11, 98, 214, 0.06);
-  color: #0b62d6;
 }
 
 .tp-km-data-row:last-child .tp-km-cell {
