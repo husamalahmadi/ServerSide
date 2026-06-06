@@ -3,9 +3,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
 import { getAllStocks } from "../data/stocksCatalog.js";
-import { StatCard } from "../components/dashboard/StatCard.jsx";
-import { MiniBarChart } from "../components/charts/MiniBarChart.jsx";
-import { Sparkline } from "../components/charts/Sparkline.jsx";
 import { DonutChart } from "../components/charts/DonutChart.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { buildHomeSeo } from "../seo/structuredData.js";
@@ -176,11 +173,6 @@ export default function Home() {
     ],
     [marketCounts, t]
   );
-  const catalogBar = useMemo(
-    () => [marketCounts.us, marketCounts.sa, marketCounts.jp].map((n) => Math.max(1, Math.round(n / 100))),
-    [marketCounts]
-  );
-
   function goToStock(ticker) {
     setQ("");
     navigate(`/stock/${encodeURIComponent(ticker)}`);
@@ -195,33 +187,6 @@ export default function Home() {
         </h1>
         <p className="tp-page-sub">{t("HOME_PAGE_TAGLINE")}</p>
       </header>
-
-      <div className="tp-stats-grid">
-        <StatCard
-          label={lang === "ar" ? "إجمالي الأسهم" : "Stock universe"}
-          value={totalStocks.toLocaleString()}
-          chart={<MiniBarChart values={catalogBar} color="#2c7be5" />}
-          foot={`US ${marketCounts.us.toLocaleString()} · TASI ${marketCounts.sa.toLocaleString()} · Tokyo ${marketCounts.jp.toLocaleString()}`}
-        />
-        <StatCard
-          label={t("SCREENER_MATCHES")}
-          value={tableCount.toLocaleString()}
-          chart={<Sparkline values={[12, 18, 14, 22, tableCount % 30 + 8]} color="#2c7be5" />}
-          foot={searchActive ? (lang === "ar" ? "نتائج البحث" : "Search results") : (lang === "ar" ? "من الفلتر النشط" : "Active screener filter")}
-        />
-        <StatCard
-          label={t("SCREENER_AVG_DISCOUNT")}
-          value={screenerSummary.avgDiscount == null ? "—" : `${screenerSummary.avgDiscount.toFixed(1)}%`}
-          chart={<MiniBarChart values={[4, 9, 6, 11, 8, 14]} color="#00d27a" />}
-          foot={lang === "ar" ? "متوسط خصم القيمة العادلة" : "Average fair value discount"}
-        />
-        <StatCard
-          label={t("SCREENER_TOP_SECTOR")}
-          value={screenerSummary.topSector}
-          chart={<Sparkline values={[3, 5, 4, 8, 7, 10, 9]} color="#f5803e" />}
-          foot={lang === "ar" ? "أكثر قطاع في النتائج" : "Most common sector in results"}
-        />
-      </div>
 
       {authParam === "not_configured" && (
         <div role="status" className="tp-alert tp-alert-error">
