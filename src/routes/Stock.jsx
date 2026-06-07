@@ -24,11 +24,8 @@ import { useTrackView } from "../hooks/useActivity.js";
 import { StockComments } from "../components/StockComments.jsx";
 import { WatchlistManager } from "../components/WatchlistManager.jsx";
 import { GoogleGIcon } from "../components/GoogleGIcon.jsx";
-import { getPrefetchDelayMs } from "../config/env.js";
 import { exportElementAsPdf } from "../utils/exportPdf.js";
 import { buildStockSeo } from "../seo/structuredData.js";
-
-const PREFETCH_DELAY_SEC = Math.ceil(getPrefetchDelayMs() / 1000);
 
 /* Page */
 export default function Stock() {
@@ -84,7 +81,7 @@ export default function Stock() {
   const [logoLoadError, setLogoLoadError] = useState(false);
   const [profile, setProfile] = useState(null);
   const [translatedProfile, setTranslatedProfile] = useState(null);
-  const [prefetchCountdown, setPrefetchCountdown] = useState(PREFETCH_DELAY_SEC);
+  const [prefetchCountdown, setPrefetchCountdown] = useState(0);
   const [peers, setPeers] = useState({ loading: false, error: "", list: [] });
   const [peersCountdown, setPeersCountdown] = useState(0);
   const [peersRequested, setPeersRequested] = useState(false);
@@ -164,22 +161,12 @@ export default function Stock() {
     }
   }, [ticker, market, t]);
 
-  // Prefetch delay: wait PREFETCH_DELAY_SEC then load financials and valuation
+  // Load financials and valuation immediately once the catalog is ready
   useEffect(() => {
     if (!catalogReady || !market) return;
-    setPrefetchCountdown(PREFETCH_DELAY_SEC);
-    const start = Date.now();
-    const interval = setInterval(() => {
-      const elapsed = Math.floor((Date.now() - start) / 1000);
-      const left = Math.max(0, PREFETCH_DELAY_SEC - elapsed);
-      setPrefetchCountdown(left);
-      if (left <= 0) {
-        clearInterval(interval);
-        loadFinancials();
-        loadValuation();
-      }
-    }, 200);
-    return () => clearInterval(interval);
+    setPrefetchCountdown(0);
+    loadFinancials();
+    loadValuation();
   }, [ticker, market, catalogReady, loadFinancials, loadValuation]);
 
   // Logo & profile
