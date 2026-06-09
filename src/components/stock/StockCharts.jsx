@@ -48,7 +48,7 @@ export function CompareBar({ current, fair, currency, dir = "ltr", t, fairLabel 
 export function LineChart({ title, series, w = 380, dir = "ltr" }) {
   const data = sortSeries(series);
   const h = 220;
-  const pad = { t: 22, r: 18, b: 28, l: 56 };
+  const pad = { t: 12, r: 18, b: 28, l: 56 };
   const iw = w - pad.l - pad.r;
   const ih = h - pad.t - pad.b;
 
@@ -86,9 +86,6 @@ export function LineChart({ title, series, w = 380, dir = "ltr" }) {
       style={{ width: "100%", display: "block", maxWidth: "100%" }}
       direction={dir}
     >
-      <text x={pad.l} y={16} textAnchor="start" style={{ fontSize: 13, fontWeight: 700, fill: "#344050" }}>
-        {title}
-      </text>
       {yTicks.map((tick, i) => (
         <g key={`y-${i}`}>
           <line x1={pad.l} y1={tick.y} x2={w - pad.r} y2={tick.y} stroke="#edf2f9" />
@@ -125,6 +122,17 @@ export function LineChart({ title, series, w = 380, dir = "ltr" }) {
 export function ChartBlock({ title, series, w, dir, t }) {
   return (
     <div style={{ display: "grid", gap: 8, minWidth: 0 }}>
+      <div
+        style={{
+          fontSize: 13,
+          fontWeight: 700,
+          color: "#344050",
+          textAlign: "start",
+          overflowWrap: "anywhere",
+        }}
+      >
+        {title}
+      </div>
       <LineChart title={title} series={series} w={w} dir={dir} />
       <div style={{ fontSize: 12, color: "#374151", overflowWrap: "anywhere" }}>
         <span style={{ fontWeight: 900 }}>{t("TREND")}:</span>{" "}
