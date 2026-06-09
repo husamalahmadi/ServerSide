@@ -124,11 +124,14 @@ export function ChartBlock({ title, series, w, dir, t }) {
     <div style={{ display: "grid", gap: 8, minWidth: 0 }}>
       <div
         style={{
-          fontSize: 13,
+          fontSize: 12,
           fontWeight: 700,
           color: "#344050",
-          textAlign: "start",
+          textAlign: "center",
+          lineHeight: 1.3,
+          whiteSpace: "normal",
           overflowWrap: "anywhere",
+          width: "100%",
         }}
       >
         {title}
