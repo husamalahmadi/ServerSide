@@ -22,6 +22,11 @@ export function dcfSymbolCandidates(symbol, market) {
     add(`${base}.SR`);
     add(base);
   }
+  if (m === "uk" || upper.endsWith(".L")) {
+    const base = raw.replace(/\.l$/i, "");
+    add(`${base}.L`);
+    add(base);
+  }
   return out;
 }
 

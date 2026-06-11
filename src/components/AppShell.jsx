@@ -61,7 +61,7 @@ export function AppShell() {
           <span className="tp-sidebar-logo">TP</span>
           <span>
             <div className="tp-sidebar-title">TruePrice.Cash</div>
-            <div className="tp-sidebar-tag">US · TASI · Tokyo</div>
+            <div className="tp-sidebar-tag">US · TASI · Tokyo · LSE</div>
           </span>
         </Link>
 

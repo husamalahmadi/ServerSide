@@ -281,9 +281,9 @@ export default function Stock() {
         const { items } = await getStocks({ market });
         if (!alive) return;
         const tickerNorm =
-          market === "us" || market === "jp" ? (ticker || "").toUpperCase() : ticker;
+          market === "us" || market === "jp" || market === "uk" ? (ticker || "").toUpperCase() : ticker;
         const sameTicker = (i) =>
-          market === "us" || market === "jp"
+          market === "us" || market === "jp" || market === "uk"
             ? (i.ticker || "").toUpperCase() === tickerNorm
             : i.ticker === ticker;
         const currentItem = items.find(sameTicker);

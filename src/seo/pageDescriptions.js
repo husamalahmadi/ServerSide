@@ -4,7 +4,7 @@ export const META_DESC_MAX_LEN = 160;
 
 /** Homepage / default (150 characters). */
 export const DEFAULT_META_DESCRIPTION =
-  "TruePrice.Cash stock screener for US, Saudi (TASI), and Tokyo markets — fair value analysis, TASI Focus, Tokyo Focus, blogs, and fundamentals.";
+  "TruePrice.Cash stock screener for US, TASI, Tokyo & London markets — fair value analysis, London Focus preset, blogs, and fundamentals.";
 
 const PAD_SUFFIX =
   " Explore tickers, compare valuations, and read fundamentals on TruePrice.Cash.";

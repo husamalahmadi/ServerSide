@@ -1,7 +1,7 @@
 /**
  * Writes public/sitemap.xml from static routes plus every ticker in
  * public/data/sp500_grouped_by_industry.json, tasi_grouped_by_industry.json,
- * and tokyo_stock_exchange.json (same sources as src/data/stocksCatalog.js).
+ * tokyo_stock_exchange.json, and london_stock_exchange.json (same sources as src/data/stocksCatalog.js).
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -72,10 +72,12 @@ function main() {
   const usRaw = readJsonSafe(join(PUBLIC, "data/sp500_grouped_by_industry.json"));
   const saRaw = readJsonSafe(join(PUBLIC, "data/tasi_grouped_by_industry.json"));
   const jpRaw = readJsonSafe(join(PUBLIC, "data/tokyo_stock_exchange.json"));
+  const ukRaw = readJsonSafe(join(PUBLIC, "data/london_stock_exchange.json"));
 
   const usTickers = collectTickers(usRaw, { tickerUppercase: true });
   const saTickers = collectTickers(saRaw, { tickerUppercase: false });
   const jpTickers = collectTickers(jpRaw, { tickerUppercase: true });
+  const ukTickers = collectTickers(ukRaw, { tickerUppercase: true });
 
   const staticPages = [
     { loc: `${SITE}/`, changefreq: "weekly", priority: "1.0" },
@@ -87,7 +89,7 @@ function main() {
   ];
 
   const stockLocs = [];
-  for (const t of [...usTickers, ...saTickers, ...jpTickers]) {
+  for (const t of [...usTickers, ...saTickers, ...jpTickers, ...ukTickers]) {
     stockLocs.push(`${SITE}/stock/${encodeURIComponent(t)}`);
   }
   const uniqueStockLocs = uniqueStable(stockLocs).sort((a, b) => a.localeCompare(b, "en"));

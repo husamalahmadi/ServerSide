@@ -12,6 +12,7 @@ export function ScreenerFilters({ t, filters, setFilters, sectors }) {
           <option value="us">{t("MARKET_US")}</option>
           <option value="sa">{t("MARKET_SA")}</option>
           <option value="jp">{t("MARKET_JP")}</option>
+          <option value="uk">{t("MARKET_UK")}</option>
         </select>
       </div>
       <div className="tp-scr-row">

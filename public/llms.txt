@@ -1,13 +1,13 @@
 # TruePrice.Cash
 
-> TruePrice.Cash is a stock research dashboard for US (S&P 500), Saudi TASI, and Tokyo markets. It offers fair value estimates, a multi-market screener, live market signals, fundamentals, and stock news sourced from Financial Modeling Prep.
+> TruePrice.Cash is a stock research dashboard for US (S&P 500), Saudi TASI, Tokyo, and London (LSE) markets. It offers fair value estimates, a multi-market screener, live market signals, fundamentals, and stock news sourced from Financial Modeling Prep.
 
-The site compares market price to estimated fair value using enterprise value, balance sheet, and income data where available. Markets use codes `us` (United States), `sa` (Saudi TASI), and `jp` (Tokyo). English and Arabic UI are supported.
+The site compares market price to estimated fair value using enterprise value, balance sheet, and income data where available. Markets use codes `us` (United States), `sa` (Saudi TASI), `jp` (Tokyo), and `uk` (London). English and Arabic UI are supported.
 
 ## Core pages
 
 - [Home](https://trueprice.cash/): Stock search, live US/TASI signals (top gainers, near fair value), market news, and the stock screener with market-focus presets.
-- [Stock analysis](https://trueprice.cash/stock/AAPL): Per-ticker fair value, charts, fundamentals, and news. Use `/stock/{ticker}` — US symbols like `AAPL`, TASI numeric tickers like `2222`, Tokyo tickers like `7203.T`.
+- [Stock analysis](https://trueprice.cash/stock/AAPL): Per-ticker fair value, charts, fundamentals, and news. Use `/stock/{ticker}` — US symbols like `AAPL`, TASI numeric tickers like `2222`, Tokyo tickers like `7203.T`, London tickers like `GLEN.L`.
 - [US market performance](https://trueprice.cash/us-markets): US sector/industry snapshots, movers, and S&P 500 universe with live prices.
 - [TASI market performance](https://trueprice.cash/sa-markets): Saudi market movers and full TASI listing with prices.
 - [Blogs](https://trueprice.cash/blogs): Articles and market commentary.

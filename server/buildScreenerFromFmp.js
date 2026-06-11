@@ -13,6 +13,7 @@ const GROUPED_PATH = {
   us: join(repoRoot, "public", "data", "sp500_grouped_by_industry.json"),
   sa: join(repoRoot, "public", "data", "tasi_grouped_by_industry.json"),
   jp: join(repoRoot, "public", "data", "tokyo_stock_exchange.json"),
+  uk: join(repoRoot, "public", "data", "london_stock_exchange.json"),
 };
 
 function sleep(ms) {
@@ -22,13 +23,17 @@ function sleep(ms) {
 function fmpSymbolFor(market, ticker) {
   if (market === "us") return ticker.toUpperCase();
   if (market === "sa") return `${ticker}.SR`;
+  if (market === "uk") {
+    const up = ticker.toUpperCase();
+    return up.endsWith(".L") ? up : `${up}.L`;
+  }
   // Tokyo tickers in the catalog already include the ".T" suffix.
   const up = ticker.toUpperCase();
   return up.endsWith(".T") ? up : `${up}.T`;
 }
 
 function tickerFor(market, raw) {
-  if (market === "us" || market === "jp") return raw.toUpperCase();
+  if (market === "us" || market === "jp" || market === "uk") return raw.toUpperCase();
   return raw;
 }
 
@@ -66,7 +71,7 @@ function companyFromBundle(entry, bundle) {
 }
 
 /**
- * @param {"us"|"sa"|"jp"} market
+ * @param {"us"|"sa"|"jp"|"uk"} market
  * @param {{ apiKey: string, financialsStore?: object, delayMs?: number, maxTickers?: number }} opts
  */
 export async function buildScreenerMarket(market, opts) {
@@ -152,8 +157,8 @@ function marketBuildUsable(market, items) {
   if (!items?.length) return false;
   const usable = items.filter(isUsableScreenerRow).length;
   if (usable < 30) return false;
-  // Tokyo: save partial FMP cache (catalog fills the rest on the client).
-  if (market === "jp") return true;
+  // Tokyo / London: save partial FMP cache (catalog fills the rest on the client).
+  if (market === "jp" || market === "uk") return true;
   return usable / items.length >= 0.5;
 }
 

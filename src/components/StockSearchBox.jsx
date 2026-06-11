@@ -4,6 +4,13 @@ import { useI18n } from "../i18n.jsx";
 import { getAllStocks } from "../data/stocksCatalog.js";
 import { filterStocksByQuery } from "../domain/stockSearch.js";
 
+function marketBadge(market) {
+  if (market === "sa") return "TASI";
+  if (market === "jp") return "TOKYO";
+  if (market === "uk") return "LSE";
+  return "US";
+}
+
 /**
  * Stock ticker search with market filter and autocomplete (homepage + topbar).
  */
@@ -57,7 +64,7 @@ export function StockSearchBox({
   const error = useExternal ? externalError || "" : internal.error;
 
   const marketCounts = useMemo(() => {
-    const counts = { us: 0, sa: 0, jp: 0 };
+    const counts = { us: 0, sa: 0, jp: 0, uk: 0 };
     for (const it of items) {
       if (it.market in counts) counts[it.market] += 1;
     }
@@ -156,6 +163,16 @@ export function StockSearchBox({
           <span className="tp-mp-count">{marketCounts.jp.toLocaleString()}</span>
         ) : null}
       </button>
+      <button
+        type="button"
+        className={`tp-market-pill uk${marketFilter === "uk" ? " active" : ""}`}
+        onClick={() => toggleMarketFilter("uk")}
+      >
+        {t("MARKET_UK")}
+        {variant !== "topbar" ? (
+          <span className="tp-mp-count">{marketCounts.uk.toLocaleString()}</span>
+        ) : null}
+      </button>
     </div>
   );
 
@@ -201,7 +218,7 @@ export function StockSearchBox({
                 >
                   <span className="tp-sug-ticker">{it.ticker}</span>
                   <span className="tp-sug-name">
-                    {it.name} · {it.market === "sa" ? "TASI" : it.market === "jp" ? "TOKYO" : "US"}
+                    {it.name} · {marketBadge(it.market)}
                   </span>
                 </div>
               ))

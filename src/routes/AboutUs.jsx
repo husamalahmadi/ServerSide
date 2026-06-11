@@ -53,7 +53,7 @@ export default function AboutUs() {
         heroKicker: "Fair value, made clear",
         heroTitle: "Invest with conviction, not guesswork",
         heroLead:
-          "TruePrice.Cash turns dense financial statements into a single, honest question: is this stock trading above or below what it is really worth? We bring fundamentals-driven fair value to investors across the US, Saudi (TASI), and Tokyo markets.",
+          "TruePrice.Cash turns dense financial statements into a single, honest question: is this stock trading above or below what it is really worth? We bring fundamentals-driven fair value to investors across the US, Saudi (TASI), Tokyo, and London markets.",
         navAbout: "About us",
         navHowTo: "How to use",
         about: {
@@ -63,7 +63,7 @@ export default function AboutUs() {
             "We are a research platform that estimates the intrinsic, fair value of public companies and measures the gap between price and value—so investors can act on evidence instead of noise.",
           body: [
             "We read the core of every business—revenue, operating income, net income, shareholders’ equity, and free cash flow—and translate it into a clear valuation picture, including a discounted cash flow (DCF) estimate as our flagship metric.",
-            "Our coverage spans the US, Saudi (TASI), and Tokyo markets, with a screener, market dashboards, and full company reports designed to be fast, consistent, and genuinely useful.",
+            "Our coverage spans the US, Saudi (TASI), Tokyo, and London markets, with a screener, market dashboards, and full company reports designed to be fast, consistent, and genuinely useful.",
           ],
           pillars: [
             {
@@ -101,7 +101,7 @@ export default function AboutUs() {
             {
               title: "Search any stock",
               text:
-                "Use the search bar on the home page or in the top bar of any stock page. Filter by US, TASI, or Tokyo and start typing a ticker or company name to jump straight to a full report.",
+                "Use the search bar on the home page or in the top bar of any stock page. Filter by US, TASI, Tokyo, or London and start typing a ticker or company name to jump straight to a full report.",
             },
             {
               title: "Read the DCF fair value",
@@ -130,7 +130,7 @@ export default function AboutUs() {
         heroKicker: "القيمة العادلة بوضوح",
         heroTitle: "استثمر بقناعة لا بالتخمين",
         heroLead:
-          "تحوّل TruePrice.Cash القوائم المالية المعقّدة إلى سؤال واحد صادق: هل يتداول هذا السهم أعلى أم أدنى من قيمته الحقيقية؟ نقدّم القيمة العادلة المبنية على الأساسيات للمستثمرين في أسواق الولايات المتحدة والسعودية (تاسي) وطوكيو.",
+          "تحوّل TruePrice.Cash القوائم المالية المعقّدة إلى سؤال واحد صادق: هل يتداول هذا السهم أعلى أم أدنى من قيمته الحقيقية؟ نقدّم القيمة العادلة المبنية على الأساسيات للمستثمرين في أسواق الولايات المتحدة والسعودية (تاسي) وطوكيو ولندن.",
         navAbout: "من نحن",
         navHowTo: "كيفية الاستخدام",
         about: {
@@ -140,7 +140,7 @@ export default function AboutUs() {
             "نحن منصّة بحثية تُقدّر القيمة العادلة الجوهرية للشركات المدرجة وتقيس الفجوة بين السعر والقيمة، لتمكين المستثمرين من اتخاذ قراراتهم بناءً على الأدلة لا الضجيج.",
           body: [
             "نقرأ جوهر كل شركة — الإيرادات والدخل التشغيلي وصافي الدخل وحقوق المساهمين والتدفق النقدي الحر — ونترجمها إلى صورة واضحة للتقييم، تتضمّن تقدير التدفقات النقدية المخصومة (DCF) كمقياسنا الرئيسي.",
-            "تشمل تغطيتنا أسواق الولايات المتحدة والسعودية (تاسي) وطوكيو، مع أداة فرز وأسواق تفاعلية وتقارير شركات كاملة صُمّمت لتكون سريعة ومتّسقة ومفيدة فعلاً.",
+            "تشمل تغطيتنا أسواق الولايات المتحدة والسعودية (تاسي) وطوكيو ولندن، مع أداة فرز وأسواق تفاعلية وتقارير شركات كاملة صُمّمت لتكون سريعة ومتّسقة ومفيدة فعلاً.",
           ],
           pillars: [
             {
@@ -178,7 +178,7 @@ export default function AboutUs() {
             {
               title: "ابحث عن أي سهم",
               text:
-                "استخدم شريط البحث في الصفحة الرئيسية أو في الشريط العلوي لأي صفحة سهم. صفِّ حسب السوق (الولايات المتحدة، تاسي، طوكيو) وابدأ بكتابة الرمز أو اسم الشركة للانتقال مباشرةً إلى تقرير كامل.",
+                "استخدم شريط البحث في الصفحة الرئيسية أو في الشريط العلوي لأي صفحة سهم. صفِّ حسب السوق (الولايات المتحدة، تاسي، طوكيو، لندن) وابدأ بكتابة الرمز أو اسم الشركة للانتقال مباشرةً إلى تقرير كامل.",
             },
             {
               title: "اقرأ القيمة العادلة (DCF)",

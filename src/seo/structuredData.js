@@ -32,7 +32,7 @@ export function buildHomeSeo(lang = "en") {
           url: homeUrl,
           name: "TruePrice.Cash",
           description:
-            "Fair value stock analysis and screener for US, Saudi (TASI), and Tokyo markets — TASI Focus, Tokyo Focus, and investing blogs.",
+            "Fair value stock analysis and screener for US, Saudi (TASI), Tokyo, and London markets — market-focus presets and investing blogs.",
           inLanguage: ["en", "ar"],
           potentialAction: {
             "@type": "SearchAction",
@@ -120,7 +120,13 @@ export function buildStockSeo({ ticker, companyName, lang, fairValue, price, cur
           "@id": `${pageUrl}#financial`,
           name: `${name} (${symbol})`,
           areaServed:
-            market === "sa" ? "Saudi Arabia" : market === "jp" ? "Japan" : "United States",
+            market === "sa"
+              ? "Saudi Arabia"
+              : market === "jp"
+                ? "Japan"
+                : market === "uk"
+                  ? "United Kingdom"
+                  : "United States",
           provider: {
             "@type": "Organization",
             name: "TruePrice.Cash",

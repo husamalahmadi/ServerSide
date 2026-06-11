@@ -104,7 +104,7 @@ function isFmpCompanyData(data) {
  */
 export function screenerRowFromCompany(c, market, sector) {
   const tickerRaw = String(c?.ticker ?? "").trim();
-  const ticker = market === "us" ? tickerRaw.toUpperCase() : tickerRaw;
+  const ticker = market === "us" || market === "jp" || market === "uk" ? tickerRaw.toUpperCase() : tickerRaw;
   if (!ticker) return null;
 
   const metrics = isFmpCompanyData(c?.data) ? metricsFromFmp(c) : metricsFromLegacyStatistics(c);
@@ -135,7 +135,13 @@ export function mergeScreenerWithCatalog(screenerItems, catalogItems) {
       ticker: c.ticker,
       name: c.name,
       market: c.market,
-      sector: c.industry || (c.market === "jp" ? "Tokyo Stock Exchange" : ""),
+      sector:
+        c.industry ||
+        (c.market === "jp"
+          ? "Tokyo Stock Exchange"
+          : c.market === "uk"
+            ? "London Stock Exchange"
+            : ""),
       pe: null,
       marketCap: null,
       fairValue: null,

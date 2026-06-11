@@ -26,6 +26,13 @@ export function stockSearchScore(item, query) {
     if (tickerLow === withT) return 0;
   }
 
+  // London: allow "GLEN" to match "GLEN.L"
+  if (item?.market === "uk" && !q.includes(".")) {
+    const bare = tickerLow.replace(/\.l$/i, "");
+    if (bare === q) return 0;
+    if (tickerLow === `${q}.l`) return 0;
+  }
+
   // Numeric tickers (TASI and similar): exact match only at top rank
   if (/^\d+$/.test(q)) {
     const qBare = q.replace(/^0+/, "") || q;
@@ -42,7 +49,7 @@ export function stockSearchScore(item, query) {
 /**
  * @param {Array<{ ticker?: string, name?: string, market?: string }>} items
  * @param {string} query
- * @param {{ market?: "all"|"us"|"sa"|"jp", limit?: number }} [opts]
+ * @param {{ market?: "all"|"us"|"sa"|"jp"|"uk", limit?: number }} [opts]
  */
 export function filterStocksByQuery(items, query, opts = {}) {
   const { market = "all", limit = 8 } = opts;

@@ -120,7 +120,7 @@ export default function Home() {
   }, [t]);
 
   const marketCounts = useMemo(() => {
-    const counts = { us: 0, sa: 0, jp: 0 };
+    const counts = { us: 0, sa: 0, jp: 0, uk: 0 };
     for (const it of state.items) {
       if (it.market in counts) counts[it.market] += 1;
     }
@@ -140,6 +140,13 @@ export default function Home() {
     const jpRows = screenerFeed.filter((r) => r.market === "jp");
     if (!jpRows.length) return false;
     return !jpRows.some(isUsableScreenerRow);
+  }, [activePreset, screenerFeed]);
+
+  const londonMetricsPending = useMemo(() => {
+    if (activePreset !== "london") return false;
+    const ukRows = screenerFeed.filter((r) => r.market === "uk");
+    if (!ukRows.length) return false;
+    return !ukRows.some(isUsableScreenerRow);
   }, [activePreset, screenerFeed]);
 
   const screenerSummary = useMemo(() => {
@@ -164,12 +171,13 @@ export default function Home() {
   const tableItems = searchActive ? searchTableRows : screenerItems;
   const tableCount = searchActive ? searchTableRows.length : filteredCount;
 
-  const totalStocks = marketCounts.us + marketCounts.sa + marketCounts.jp;
+  const totalStocks = marketCounts.us + marketCounts.sa + marketCounts.jp + marketCounts.uk;
   const marketDonut = useMemo(
     () => [
       { label: t("MARKET_US"), value: marketCounts.us || 0, color: "#2c7be5" },
       { label: t("MARKET_SA"), value: marketCounts.sa || 0, color: "#00d27a" },
       { label: t("MARKET_JP"), value: marketCounts.jp || 0, color: "#f5803e" },
+      { label: t("MARKET_UK"), value: marketCounts.uk || 0, color: "#7c3aed" },
     ],
     [marketCounts, t]
   );
@@ -307,6 +315,19 @@ export default function Home() {
                 <span className="tp-scr-focus-sub">{t("SCREENER_RAIL_JP_HINT")}</span>
                 <span className="tp-scr-focus-go">{t("SCREENER_RAIL_RUN")}</span>
               </button>
+              <button
+                type="button"
+                className={`tp-scr-focus-card tp-scr-focus-uk${activePreset === "london" ? " is-active" : ""}`}
+                onClick={() => applyPreset("london")}
+                aria-pressed={activePreset === "london"}
+              >
+                <span className="tp-scr-focus-badge tp-scr-focus-badge-uk" aria-hidden>
+                  UK
+                </span>
+                <span className="tp-scr-focus-title">{t("SCREENER_PRESET_LONDON")}</span>
+                <span className="tp-scr-focus-sub">{t("SCREENER_RAIL_UK_HINT")}</span>
+                <span className="tp-scr-focus-go">{t("SCREENER_RAIL_RUN")}</span>
+              </button>
             </aside>
             <div className="tp-scr-main-col">
               <div className="tp-scr-presets">
@@ -344,6 +365,9 @@ export default function Home() {
                   {!searchActive ? <div className="tp-scr-hint">{t("SCREENER_HINT_IDLE")}</div> : null}
                   {tokyoMetricsPending ? (
                     <div className="tp-scr-tokyo-hint">{t("SCREENER_TOKYO_METRICS_PENDING")}</div>
+                  ) : null}
+                  {londonMetricsPending ? (
+                    <div className="tp-scr-tokyo-hint">{t("SCREENER_UK_METRICS_PENDING")}</div>
                   ) : null}
                   {tableItems.length === 0 ? (
                     <div className="tp-scr-empty">{t("NO_MATCH")}</div>

@@ -11,9 +11,10 @@ const FILE_BY_MARKET = {
   us: "screener_us.json",
   sa: "screener_sa.json",
   jp: "screener_jp.json",
+  uk: "screener_uk.json",
 };
 
-export const SCREENER_MARKETS = ["us", "sa", "jp"];
+export const SCREENER_MARKETS = ["us", "sa", "jp", "uk"];
 
 export function resolveScreenerDir() {
   const explicit = (process.env.SCREENER_DATA_DIR || "").trim();
