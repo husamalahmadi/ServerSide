@@ -1,5 +1,7 @@
 // FILE: src/data/stocksCatalog.js
 import { publicUrl } from "../utils/publicUrl.js";
+import { getApiUrl } from "../config/env.js";
+import { fetchWithRetry, readJsonResponse } from "../utils/apiFetch.js";
 
 const DATA_FILES = {
   us: publicUrl("data/sp500_grouped_by_industry.json"),
@@ -71,11 +73,46 @@ function normalizeGrouped(grouped, { tickerUppercase, market }) {
   return { list: flat, inds, byUpperTicker, upperSet };
 }
 
+function poolFromList(list, inds) {
+  const byUpperTicker = new Map();
+  const upperSet = new Set();
+  for (const it of list || []) {
+    const up = String(it.ticker).toUpperCase();
+    byUpperTicker.set(up, it);
+    upperSet.add(up);
+  }
+  return { list: list || [], inds: inds || [], byUpperTicker, upperSet };
+}
+
+function catalogFromApiPayload(payload) {
+  const m = payload?.markets || {};
+  return {
+    us: poolFromList(m.us?.list, m.us?.inds),
+    sa: poolFromList(m.sa?.list, m.sa?.inds),
+    jp: poolFromList(m.jp?.list, m.jp?.inds),
+    uk: poolFromList(m.uk?.list, m.uk?.inds),
+  };
+}
+
+async function fetchCatalogFromApi() {
+  const base = getApiUrl().replace(/\/+$/, "");
+  const res = await fetchWithRetry(`${base}/api/catalog`, { cache: "no-store" });
+  return readJsonResponse(res, "catalog");
+}
+
 let _catalogPromise = null;
 async function ensureCatalog() {
   if (_catalogPromise) return _catalogPromise;
 
   _catalogPromise = (async () => {
+    try {
+      const payload = await fetchCatalogFromApi();
+      const cat = catalogFromApiPayload(payload);
+      if (cat.us?.list?.length) return cat;
+    } catch (err) {
+      console.warn("[catalog] API unavailable, falling back to static JSON files", err?.message || err);
+    }
+
     const [usRaw, saRaw, jpRaw, ukRaw] = await Promise.all([
       fetchJson(DATA_FILES.us),
       fetchJson(DATA_FILES.sa),
@@ -89,7 +126,7 @@ async function ensureCatalog() {
     const uk = normalizeGrouped(ukRaw, { tickerUppercase: true, market: "uk" });
 
     return { us, sa, jp, uk };
-  })();
+ })();
 
   return _catalogPromise;
 }

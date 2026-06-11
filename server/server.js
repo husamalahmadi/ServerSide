@@ -29,6 +29,7 @@ import { MARKET_UNIVERSE_TTL_MS } from "./marketUniverseCache.js";
 import { buildHomeSignals } from "./homeSignals.js";
 import { getHomeSignals, HOME_SIGNALS_TTL_MS } from "./homeSignalsCache.js";
 import { dcfSymbolCandidates, fetchDcfWithFallback } from "./fmpDcf.js";
+import { buildStocksCatalogPayload } from "./stocksCatalogApi.js";
 import { isUsableScreenerRow, screenerMarketUsable } from "../src/domain/screenerMetrics.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -1301,6 +1302,23 @@ function ensureScreenerCacheWarm() {
     scheduleScreenerRebuildIfNeeded(true);
   }
 }
+
+let stocksCatalogCache = null;
+app.get("/api/catalog", (req, res) => {
+  try {
+    if (!stocksCatalogCache) {
+      stocksCatalogCache = buildStocksCatalogPayload();
+      console.log(
+        `[catalog] loaded ${stocksCatalogCache.total} tickers (US ${stocksCatalogCache.markets.us?.count || 0}, SA ${stocksCatalogCache.markets.sa?.count || 0}, JP ${stocksCatalogCache.markets.jp?.count || 0}, UK ${stocksCatalogCache.markets.uk?.count || 0})`
+      );
+    }
+    res.setHeader("Cache-Control", "public, max-age=3600");
+    res.json(stocksCatalogCache);
+  } catch (err) {
+    console.error("[catalog]", err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 app.get("/api/screener", (req, res) => {
   try {
