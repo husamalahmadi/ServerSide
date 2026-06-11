@@ -10,6 +10,24 @@ const defaultConfig = {
   ALLOWED_ATTR: ["href", "target", "rel"],
 };
 
+/** Trusted synced blog HTML — allows layout/styling tags; scripts are always stripped. */
+export const BLOG_HTML_CONFIG = {
+  ADD_TAGS: ["style"],
+  ALLOWED_TAGS: [
+    "style", "div", "span", "section", "article", "header", "footer", "aside", "main", "nav",
+    "p", "br", "strong", "em", "u", "b", "i", "a", "ul", "ol", "li",
+    "h1", "h2", "h3", "h4", "h5", "h6", "blockquote", "code", "pre",
+    "img", "figure", "figcaption", "table", "thead", "tbody", "tr", "th", "td",
+    "canvas", "time", "sup", "sub", "hr", "small", "label",
+  ],
+  ALLOWED_ATTR: [
+    "href", "target", "rel", "class", "id", "style", "src", "alt", "title",
+    "role", "aria-label", "aria-hidden", "datetime", "colspan", "rowspan",
+    "loading", "width", "height", "dir", "lang",
+  ],
+  FORBID_TAGS: ["script", "iframe", "object", "embed", "form", "input", "button"],
+};
+
 /**
  * Returns sanitized HTML safe to render with dangerouslySetInnerHTML.
  * @param {string} dirty - Raw HTML string

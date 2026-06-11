@@ -14,6 +14,7 @@ const Stock = React.lazy(() => import("./Stock.jsx"));
 const Contact = React.lazy(() => import("./Contact.jsx"));
 const AboutUs = React.lazy(() => import("./AboutUs.jsx"));
 const Blogs = React.lazy(() => import("./Blogs.jsx"));
+const BlogPost = React.lazy(() => import("./BlogPost.jsx"));
 const Profile = React.lazy(() => import("./Profile.jsx"));
 const ProfileSetup = React.lazy(() => import("./ProfileSetup.jsx"));
 const AuthSignInHelp = React.lazy(() => import("./AuthSignInHelp.jsx"));
@@ -109,6 +110,14 @@ export default function App() {
                   element={
                     <Lazy>
                       <Blogs />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/blogs/:slug"
+                  element={
+                    <Lazy>
+                      <BlogPost />
                     </Lazy>
                   }
                 />

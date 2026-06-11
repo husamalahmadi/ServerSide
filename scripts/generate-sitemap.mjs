@@ -88,6 +88,13 @@ function main() {
     { loc: `${SITE}/contact`, changefreq: "monthly", priority: "0.7" },
   ];
 
+  const blogRaw = readJsonSafe(join(PUBLIC, "data/blog-posts.json"));
+  const blogPosts = Array.isArray(blogRaw?.posts) ? blogRaw.posts : [];
+  const blogLocs = blogPosts
+    .filter((p) => p?.slug)
+    .map((p) => `${SITE}/blogs/${encodeURIComponent(p.slug)}`);
+  const uniqueBlogLocs = uniqueStable(blogLocs).sort((a, b) => a.localeCompare(b, "en"));
+
   const stockLocs = [];
   for (const t of [...usTickers, ...saTickers, ...jpTickers, ...ukTickers]) {
     stockLocs.push(`${SITE}/stock/${encodeURIComponent(t)}`);
@@ -102,6 +109,9 @@ function main() {
   for (const { loc, changefreq, priority } of staticPages) {
     lines.push(urlEntry(loc, changefreq, priority));
   }
+  for (const loc of uniqueBlogLocs) {
+    lines.push(urlEntry(loc, "monthly", "0.75"));
+  }
   for (const loc of uniqueStockLocs) {
     lines.push(urlEntry(loc, "weekly", "0.6"));
   }
@@ -109,7 +119,9 @@ function main() {
   lines.push("</urlset>", "");
 
   writeFileSync(OUT, lines.join("\n"), "utf8");
-  console.log(`[sitemap] Wrote ${OUT} (${staticPages.length + uniqueStockLocs.length} URLs)`);
+  console.log(
+    `[sitemap] Wrote ${OUT} (${staticPages.length + uniqueBlogLocs.length + uniqueStockLocs.length} URLs, ${uniqueBlogLocs.length} blog posts)`
+  );
 }
 
 main();

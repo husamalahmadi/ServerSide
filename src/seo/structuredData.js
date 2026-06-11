@@ -1,5 +1,6 @@
 import { DEFAULT_META_DESCRIPTION, formatMetaDescription } from "./pageDescriptions.js";
 import { DEFAULT_DOCUMENT_TITLE, formatDocumentTitle } from "./pageTitles.js";
+import { stripHtmlToText } from "../utils/sanitizeHtml.js";
 
 const SITE_URL = (import.meta.env.VITE_SITE_URL || "https://trueprice.cash").replace(/\/+$/, "");
 
@@ -182,12 +183,12 @@ export function buildBlogsSeo({ lang, posts = [], postsCount }) {
   // Per-post BlogPosting nodes (improves Google News / article discovery).
   const postingNodes = safePosts.map((post, i) => {
     const headline = String(post.title || "").trim().slice(0, 110) || `${heading} #${i + 1}`;
-    const url = post.url || toAbs("/blogs");
+    const url = post.url ? toAbs(post.url) : toAbs("/blogs");
     const datePublished = toIsoDate(post.published);
     const dateModified = toIsoDate(post.updated) || datePublished;
     const node = {
       "@type": "BlogPosting",
-      "@id": `${toAbs("/blogs")}#post-${post.id || i + 1}`,
+      "@id": `${url}#post`,
       headline,
       url,
       mainEntityOfPage: url,
@@ -259,6 +260,84 @@ export function buildBlogsSeo({ lang, posts = [], postsCount }) {
           },
         },
         ...postingNodes,
+      ],
+    },
+  };
+}
+
+/** Individual blog post page SEO + BlogPosting JSON-LD. */
+export function buildBlogPostSeo({ post, lang = "en" }) {
+  const inLanguage = lang === "ar" ? "ar" : "en";
+  const pathname = `/blogs/${post.slug}`;
+  const headline = String(post.title || stripHtmlToText(post.titleHtml || "")).trim().slice(0, 110);
+  const description = formatMetaDescription(
+    post.excerpt ||
+      stripHtmlToText(post.content || "").slice(0, 160) ||
+      (lang === "ar"
+        ? "مقال استثماري من مدونة TruePrice.Cash."
+        : "Investing article from the TruePrice.Cash blog.")
+  );
+  const documentTitle = formatDocumentTitle(headline);
+  const url = toAbs(pathname);
+  const datePublished = toIsoDate(post.published);
+  const dateModified = toIsoDate(post.updated) || datePublished;
+
+  const blogPosting = {
+    "@type": "BlogPosting",
+    "@id": `${url}#post`,
+    headline,
+    description,
+    url,
+    mainEntityOfPage: url,
+    inLanguage,
+    isPartOf: {
+      "@type": "Blog",
+      "@id": `${toAbs("/blogs")}#blog`,
+      url: toAbs("/blogs"),
+      name: lang === "ar" ? "مدونة TruePrice.Cash" : "TruePrice.Cash Blog",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "TruePrice.Cash",
+      url: toAbs("/"),
+    },
+    author: post.author
+      ? { "@type": "Person", name: post.author }
+      : { "@type": "Organization", name: "TruePrice.Cash", url: toAbs("/") },
+  };
+  if (datePublished) blogPosting.datePublished = datePublished;
+  if (dateModified) blogPosting.dateModified = dateModified;
+  if (post.heroImage) blogPosting.image = post.heroImage;
+
+  return {
+    title: headline,
+    documentTitle,
+    metaDescription: description,
+    description,
+    pathname,
+    alternates: {
+      en: `/blogs?lang=en`,
+      ar: `/blogs?lang=ar`,
+      "x-default": "/blogs",
+    },
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": `${url}#webpage`,
+          url,
+          name: headline,
+          description,
+          inLanguage,
+          isPartOf: {
+            "@type": "WebSite",
+            "@id": `${toAbs("/")}#website`,
+            url: toAbs("/"),
+            name: "TruePrice.Cash",
+          },
+        },
+        blogPosting,
       ],
     },
   };

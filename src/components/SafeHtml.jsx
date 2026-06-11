@@ -5,9 +5,9 @@ import { sanitizeHtml } from "../utils/sanitizeHtml.js";
  * Renders HTML content after sanitization to prevent XSS.
  * Use for blog content or any API/user HTML.
  */
-export function SafeHtml({ html, tagName = "div", className, style }) {
+export function SafeHtml({ html, tagName = "div", className, style, sanitizeConfig }) {
   if (html == null || html === "") return null;
-  const clean = sanitizeHtml(String(html));
+  const clean = sanitizeHtml(String(html), sanitizeConfig);
   if (!clean) return null;
   const Tag = tagName;
   return (
