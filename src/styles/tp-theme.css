@@ -3692,6 +3692,10 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
 }
 
 /* Article page */
+.tp-blog-post-nav {
+  margin-bottom: 1rem;
+}
+
 .tp-blog-article-wrap {
   margin-bottom: 1.5rem;
 }
