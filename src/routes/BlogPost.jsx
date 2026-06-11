@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
+import { PageHeader } from "../components/PageHeader.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { SafeHtml } from "../components/SafeHtml.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { buildBlogPostSeo } from "../seo/structuredData.js";
 import { getBlogPostBySlug, getBlogPostsByLang, blogPostPath } from "../data/blogPosts.js";
-import { BLOG_HTML_CONFIG } from "../utils/sanitizeHtml.js";
+import { stripHtmlToText, BLOG_HTML_CONFIG } from "../utils/sanitizeHtml.js";
 
 function formatDate(date, lang) {
   if (!date) return "";
@@ -19,6 +20,11 @@ function formatDate(date, lang) {
   } catch {
     return "";
   }
+}
+
+function readingMinutes(html) {
+  const words = stripHtmlToText(html).split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / 220));
 }
 
 export default function BlogPost() {
@@ -54,12 +60,20 @@ export default function BlogPost() {
     () =>
       ({
         en: {
+          kicker: "TruePrice.Cash Investing Blog",
           back: "← Back to all posts",
+          published: "Published",
+          updated: "Updated",
+          readTime: "min read",
           related: "More from the blog",
           source: "Original on Blogger",
         },
         ar: {
+          kicker: "مدونة TruePrice.Cash للاستثمار",
           back: "← العودة إلى جميع المقالات",
+          published: "نُشر",
+          updated: "آخر تحديث",
+          readTime: "دقيقة قراءة",
           related: "مقالات أخرى",
           source: "النص الأصلي على Blogger",
         },
@@ -79,21 +93,39 @@ export default function BlogPost() {
   }
 
   const post = state.post;
+  const readMins = post ? readingMinutes(post.content) : 0;
 
   return (
     <div className="tp-page tp-blog-post-page" dir={dir} lang={postLang}>
       <div className="tp-blog-container">
+        <PageHeader
+          title={post?.title || t("BLOGS")}
+          subtitle={postLang === "ar" ? "مدونة استثمارية" : "Investing insights & market notes"}
+        />
+
         {state.loading ? (
           <div className="tp-blog-loading">{uiLang === "ar" ? "جاري التحميل…" : "Loading…"}</div>
         ) : post ? (
           <>
-            <nav className="tp-blog-post-nav" aria-label={L.back}>
-              <Link to={`/blogs?lang=${postLang}`} className="tp-blog-back-link">
-                {L.back}
-              </Link>
-            </nav>
-
             <article className="tp-blog-article-wrap">
+              <header className="tp-blog-article-hero">
+                <span className="tp-blog-hero-glow" aria-hidden />
+                <span className="tp-blog-hero-kicker">{L.kicker}</span>
+                <SafeHtml html={post.titleHtml || post.title} tagName="h1" className="tp-blog-article-title" />
+                <div className="tp-blog-article-meta">
+                  <time dateTime={post.published}>{formatDate(post.published, postLang)}</time>
+                  {post.author ? <span>{post.author}</span> : null}
+                  <span>
+                    {readMins} {L.readTime}
+                  </span>
+                </div>
+                {post.heroImage ? (
+                  <div className="tp-blog-hero-image-wrap">
+                    <img src={post.heroImage} alt="" className="tp-blog-hero-image" loading="eager" />
+                  </div>
+                ) : null}
+              </header>
+
               <div className="tp-blog-article-body">
                 <SafeHtml
                   html={post.content}
