@@ -5,10 +5,11 @@ const INDEX_META = {
   "^SPX": { en: "S&P 500", ar: "إس آند بي 500", short: "S&P 500" },
   "^NDX": { en: "Nasdaq 100", ar: "ناسداك 100", short: "Nasdaq" },
   "^DJI": { en: "Dow Jones", ar: "داو جونز", short: "Dow" },
+  "^FTSE": { en: "FTSE 100", ar: "فوتسي 100", short: "FTSE" },
   "^TASI.SR": { en: "TASI", ar: "تاسي", short: "TASI" },
 };
 
-const ORDER = ["^SPX", "^NDX", "^DJI", "^TASI.SR"];
+const ORDER = ["^SPX", "^NDX", "^DJI", "^FTSE", "^TASI.SR"];
 const REFRESH_MS = 15 * 60_000;
 
 function fmtPrice(value) {

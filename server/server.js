@@ -757,7 +757,7 @@ app.get(["/api/fmp/quote", "/api/fmp/quote/:symbol"], async (req, res) => {
 });
 
 /** Market index quotes for the global topbar ticker (FMP stable quote-short). */
-const TOPBAR_INDEX_SYMBOLS = ["^SPX", "^NDX", "^DJI", "^TASI.SR"];
+const TOPBAR_INDEX_SYMBOLS = ["^SPX", "^NDX", "^DJI", "^FTSE", "^TASI.SR"];
 
 app.get("/api/fmp/index-quotes", async (req, res) => {
   const key = fmpApiKey();
