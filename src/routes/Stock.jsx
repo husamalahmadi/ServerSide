@@ -26,6 +26,7 @@ import { WatchlistManager } from "../components/WatchlistManager.jsx";
 import { GoogleGIcon } from "../components/GoogleGIcon.jsx";
 import { exportElementAsPdf } from "../utils/exportPdf.js";
 import { buildStockSeo } from "../seo/structuredData.js";
+import { fmpImageStockUrl } from "../../shared/fmpLogoUrl.js";
 
 /* Page */
 export default function Stock() {
@@ -78,6 +79,7 @@ export default function Stock() {
   const [fin, setFin] = useState({ loading: false, error: "", data: null });
   const [val, setVal] = useState({ loading: false, error: "", data: null });
   const [logoUrl, setLogoUrl] = useState(null);
+  const [logoFallbackUrl, setLogoFallbackUrl] = useState(null);
   const [logoLoadError, setLogoLoadError] = useState(false);
   const [profile, setProfile] = useState(null);
   const [translatedProfile, setTranslatedProfile] = useState(null);
@@ -174,21 +176,25 @@ export default function Stock() {
     if (!catalogReady || !market) return;
     let alive = true;
     setLogoLoadError(false);
+    setLogoFallbackUrl(null);
     (async () => {
       try {
         const r = await resolveMarketAndSymbol(ticker, market);
         if (!r.ok || !alive) return;
         const fmpSym = fmpSymbolFromResolved(r);
         setFmpSymbol(fmpSym || "");
+        const stockLogo = fmpSym ? fmpImageStockUrl(fmpSym) : null;
         const profileRes = fmpSym ? await fmpProfile(fmpSym) : null;
         if (!alive) return;
-        const logo =
+        const primary =
           profileRes?.logoUrl && typeof profileRes.logoUrl === "string" ? profileRes.logoUrl : null;
-        setLogoUrl(logo);
+        setLogoUrl(primary || stockLogo);
+        setLogoFallbackUrl(primary && stockLogo && primary !== stockLogo ? stockLogo : null);
         setProfile(profileRes && typeof profileRes === "object" ? profileRes : null);
       } catch {
         if (!alive) return;
         setLogoUrl(null);
+        setLogoFallbackUrl(null);
         setProfile(null);
         setFmpSymbol("");
       }
@@ -534,7 +540,14 @@ export default function Stock() {
                 alt=""
                 referrerPolicy="no-referrer"
                 style={{ width: 48, height: 48, objectFit: "contain", borderRadius: 8, background: "#fff", flexShrink: 0 }}
-                onError={() => setLogoLoadError(true)}
+                onError={() => {
+                  if (logoFallbackUrl) {
+                    setLogoUrl(logoFallbackUrl);
+                    setLogoFallbackUrl(null);
+                  } else {
+                    setLogoLoadError(true);
+                  }
+                }}
               />
             ) : null}
             <div style={{ display: "grid", gap: 2, minWidth: 0, overflow: "hidden" }}>

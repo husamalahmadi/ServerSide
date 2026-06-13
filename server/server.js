@@ -17,6 +17,7 @@ import {
   INCOMPLETE_USER_MESSAGE,
 } from "./fmpFinancialsStore.js";
 import { fetchFmpFinancialsBundle, fmpApiKey, FMP_STABLE_BASE } from "./fmpFetch.js";
+import { resolveFmpLogoUrl } from "../shared/fmpLogoUrl.js";
 import { createScreenerStore, resolveScreenerDir, SCREENER_MARKETS } from "./screenerStore.js";
 import { buildAllScreeners } from "./buildScreenerFromFmp.js";
 import { buildSaMarketDashboard } from "./saMarketDashboard.js";
@@ -668,17 +669,9 @@ function fmpSymbolFromRequest(req) {
   return "";
 }
 
-function mapFmpProfileRow(raw) {
+function mapFmpProfileRow(raw, requestSymbol) {
   if (!raw || typeof raw !== "object") return null;
-  let logoUrl = typeof raw.image === "string" && raw.image.startsWith("http") ? raw.image : null;
-  if (!logoUrl && raw.website) {
-    try {
-      const domain = new URL(raw.website).hostname.replace(/^www\./, "");
-      logoUrl = `https://logo.clearbit.com/${domain}`;
-    } catch {
-      /* ignore */
-    }
-  }
+  const logoUrl = resolveFmpLogoUrl(raw, requestSymbol);
   return {
     symbol: raw.symbol ?? null,
     name: raw.companyName ?? raw.name ?? null,
@@ -700,7 +693,7 @@ app.get(["/api/fmp/profile", "/api/fmp/profile/:symbol"], async (req, res) => {
   const symbol = fmpSymbolFromRequest(req);
   if (!symbol) return res.status(400).json({ error: "symbol query parameter required" });
   try {
-    const data = await cachedFmp(`fmp:profile:${symbol}`, 6 * 3600_000, async () => {
+    const data = await cachedFmp(`fmp:profile:v2:${symbol}`, 6 * 3600_000, async () => {
       const url = `${FMP_STABLE_BASE}/profile?${new URLSearchParams({ symbol, apikey: key })}`;
       const r = await fetch(url);
       const text = await r.text();
@@ -716,7 +709,7 @@ app.get(["/api/fmp/profile", "/api/fmp/profile/:symbol"], async (req, res) => {
       }
       const row = Array.isArray(arr) ? arr[0] : arr;
       if (!row || typeof row !== "object") throw new Error("FMP profile: empty");
-      const mapped = mapFmpProfileRow(row);
+      const mapped = mapFmpProfileRow(row, symbol);
       if (!mapped) throw new Error("FMP profile: map failed");
       return mapped;
     });
