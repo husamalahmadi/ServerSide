@@ -30,6 +30,10 @@ import { buildHomeSignals } from "./homeSignals.js";
 import { getHomeSignals, HOME_SIGNALS_TTL_MS } from "./homeSignalsCache.js";
 import { dcfSymbolCandidates, fetchDcfWithFallback } from "./fmpDcf.js";
 import { buildStocksCatalogPayload } from "./stocksCatalogApi.js";
+import { findStockByTicker, CURRENCY_BY_MARKET } from "./stockCatalogLookup.js";
+import { injectSeoIntoSpaHtml, buildStockStaticFallback } from "./spaHtmlSeo.js";
+import { configureSeoSiteUrl } from "../shared/seo/siteUrl.js";
+import { buildStockSeo } from "../shared/seo/structuredData.js";
 import { isUsableScreenerRow, screenerMarketUsable } from "../src/domain/screenerMetrics.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -1380,6 +1384,7 @@ app.get("/api/analytics/trending", (req, res) => {
 
 /** Per-route canonical injection so non-JS crawlers don't see the homepage canonical on every page. */
 const CANONICAL_SITE = `https://${CANONICAL_HOST}`;
+configureSeoSiteUrl(CANONICAL_SITE);
 let _spaIndexTemplate = null;
 let _spaIndexTemplatePath = "";
 
@@ -1398,11 +1403,46 @@ function canonicalUrlForPath(reqPath) {
   return path === "/" ? `${CANONICAL_SITE}/` : `${CANONICAL_SITE}${path}`;
 }
 
-function renderSpaIndexHtml(indexHtmlPath, canonical) {
+function renderSpaIndexHtml(indexHtmlPath, canonical, seoInject = null) {
   const html = loadSpaIndexTemplate(indexHtmlPath);
+  if (seoInject?.seo) {
+    return injectSeoIntoSpaHtml(html, seoInject.seo, CANONICAL_SITE, canonical, {
+      staticFallbackHtml: seoInject.staticFallbackHtml,
+    });
+  }
   return html
     .replace(/(<link\s+rel="canonical"\s+href=")[^"]*("\s*\/?>)/i, `$1${canonical}$2`)
     .replace(/(<meta\s+property="og:url"\s+content=")[^"]*("\s*\/?>)/i, `$1${canonical}$2`);
+}
+
+function stockSeoInjectForRequest(req) {
+  const stockMatch = String(req.path || "").match(/^\/stock\/([^/]+)\/?$/);
+  if (!stockMatch) return null;
+  try {
+    const rawTicker = decodeURIComponent(stockMatch[1]);
+    const lang = req.query.lang === "ar" ? "ar" : "en";
+    const found = findStockByTicker(rawTicker);
+    if (!found) return null;
+    const seo = buildStockSeo({
+      ticker: found.hit.ticker,
+      companyName: found.hit.name,
+      lang,
+      market: found.market,
+      currency: CURRENCY_BY_MARKET[found.market],
+    });
+    return {
+      seo,
+      staticFallbackHtml: buildStockStaticFallback({
+        hit: found.hit,
+        market: found.market,
+        lang,
+        seo,
+      }),
+    };
+  } catch (err) {
+    console.warn("[static] stock SEO lookup failed:", err?.message || err);
+    return null;
+  }
 }
 
 app.get("*", (req, res, next) => {
@@ -1432,7 +1472,8 @@ app.get("*", (req, res, next) => {
   }
   try {
     const canonical = isKnownSpaRoute ? canonicalUrlForPath(req.path) : `${CANONICAL_SITE}/`;
-    const html = renderSpaIndexHtml(indexHtml, canonical);
+    const seoInject = isKnownSpaRoute ? stockSeoInjectForRequest(req) : null;
+    const html = renderSpaIndexHtml(indexHtml, canonical, seoInject);
     res.type("html").send(html);
   } catch (err) {
     console.error("[static] render index.html failed:", err.message);
