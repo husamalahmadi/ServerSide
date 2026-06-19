@@ -5,12 +5,9 @@ export function num(v) {
 }
 
 /**
- * Shares denominator per spec (`commonStock` from balance sheet) with sane fallbacks
- * when FMP reports book equity instead of share count.
+ * Shares outstanding for EV per share — same source as valuation/screener (`numberOfShares` on enterprise-values).
  */
-export function sharesDenominator(balanceRow, evRow, incomeRow) {
-  const cs = num(balanceRow?.commonStock);
-  if (cs != null && cs >= 1e4 && cs <= 1e12) return cs;
+export function sharesOutstanding(evRow, incomeRow) {
   return (
     num(evRow?.numberOfShares) ??
     num(incomeRow?.weightedAverageShsOut) ??
@@ -73,8 +70,6 @@ export function buildYearlyEvFairValue({
       date: bs.date ?? null,
       cash: num(bs.cashAndCashEquivalents),
       debt: num(bs.totalDebt),
-      commonStock: num(bs.commonStock),
-      balanceRow: bs,
     });
   }
 
@@ -100,7 +95,7 @@ export function buildYearlyEvFairValue({
   return [...byYear.values()]
     .sort((a, b) => a.year - b.year)
     .map((row) => {
-      const shares = sharesDenominator(row.balanceRow, row.evRow, row.incomeRow);
+      const shares = sharesOutstanding(row.evRow, row.incomeRow);
       const fairValue = computeEvFairValuePerShare({
         enterpriseValue: row.enterpriseValue,
         cash: row.cash,

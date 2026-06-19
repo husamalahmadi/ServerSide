@@ -14,10 +14,13 @@ const yearly = buildYearlyEvFairValue({
     { fiscalYear: 2023, date: "2023-12-31", enterpriseValue: 2_500_000_000_000 },
   ],
   balanceSheet: [
-    { fiscalYear: 2022, cashAndCashEquivalents: 50_000_000_000, totalDebt: 120_000_000_000, commonStock: 15_000_000_000 },
-    { fiscalYear: 2023, cashAndCashEquivalents: 60_000_000_000, totalDebt: 110_000_000_000, commonStock: 15_500_000_000 },
+    { fiscalYear: 2022, cashAndCashEquivalents: 50_000_000_000, totalDebt: 120_000_000_000 },
+    { fiscalYear: 2023, cashAndCashEquivalents: 60_000_000_000, totalDebt: 110_000_000_000 },
   ],
-  enterpriseValues: [],
+  enterpriseValues: [
+    { fiscalYear: 2022, numberOfShares: 15_000_000_000 },
+    { fiscalYear: 2023, numberOfShares: 15_500_000_000 },
+  ],
   incomeStatement: [],
 });
 

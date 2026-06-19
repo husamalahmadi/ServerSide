@@ -927,7 +927,7 @@ app.get(["/api/fmp/fair-value-chart", "/api/fmp/fair-value-chart/:symbol"], asyn
   const symbol = fmpSymbolFromRequest(req);
   if (!symbol) return res.status(400).json({ error: "symbol query parameter required" });
   try {
-    const data = await cachedFmp(`fmp:fv-chart:v1:${symbol}`, 6 * 3600_000, async () => {
+    const data = await cachedFmp(`fmp:fv-chart:v2:${symbol}`, 6 * 3600_000, async () => {
       return fetchFairValueChartData(symbol, key);
     });
     res.json(data);
