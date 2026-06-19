@@ -33,11 +33,11 @@ export function FairValueChart({
   w = 640,
 }) {
   const h = 280;
-  const pad = { t: 18, r: 52, b: 36, l: 52 };
+  const pad = { t: 22, r: 18, b: 36, l: 52 };
   const iw = w - pad.l - pad.r;
   const ih = h - pad.t - pad.b;
 
-  const { pricePath, fairPath, fairDots, xTicks, priceTicks, fairTicks, hasFair } = useMemo(() => {
+  const { pricePath, fairPath, fairDots, xTicks, priceTicks, hasFair } = useMemo(() => {
     const prices = (monthlyPrices || [])
       .map((p) => ({ ts: parseTs(p.date), price: Number(p.price), date: p.date }))
       .filter((p) => p.ts != null && Number.isFinite(p.price) && p.price > 0)
@@ -60,7 +60,6 @@ export function FairValueChart({
         fairDots: [],
         xTicks: [],
         priceTicks: [],
-        fairTicks: [],
         hasFair: false,
       };
     }
@@ -71,38 +70,30 @@ export function FairValueChart({
     const xs = (ts) => pad.l + ((ts - minTs) / span) * iw;
 
     const priceVals = prices.map((p) => p.price);
-    let pMin = Math.min(...priceVals);
-    let pMax = Math.max(...priceVals);
-    if (pMin === pMax) {
-      const d = Math.abs(pMin || 1) * 0.08;
-      pMin -= d;
-      pMax += d;
+    const fairVals = fairs.map((f) => f.value);
+    const allVals = fairs.length ? [...priceVals, ...fairVals] : priceVals;
+    let yMin = Math.min(...allVals);
+    let yMax = Math.max(...allVals);
+    if (yMin === yMax) {
+      const d = Math.abs(yMin || 1) * 0.08;
+      yMin -= d;
+      yMax += d;
     }
-    const ysPrice = (v) => pad.t + (1 - (v - pMin) / (pMax - pMin)) * ih;
+    const ys = (v) => pad.t + (1 - (v - yMin) / (yMax - yMin)) * ih;
 
     const pricePath = prices
-      .map((p, i) => `${i ? "L" : "M"} ${xs(p.ts)} ${ysPrice(p.price)}`)
+      .map((p, i) => `${i ? "L" : "M"} ${xs(p.ts)} ${ys(p.price)}`)
       .join(" ");
 
     let fairPath = "";
     let fairDots = [];
-    let fMin = 0;
-    let fMax = 1;
     if (fairs.length) {
-      const fairVals = fairs.map((f) => f.value);
-      fMin = Math.min(...fairVals);
-      fMax = Math.max(...fairVals);
-      if (fMin === fMax) {
-        const d = Math.abs(fMin || 1) * 0.08;
-        fMin -= d;
-        fMax += d;
-      }
-      const ysFair = (v) => pad.t + (1 - (v - fMin) / (fMax - fMin)) * ih;
-      fairPath = fairs.map((f, i) => `${i ? "L" : "M"} ${xs(f.ts)} ${ysFair(f.value)}`).join(" ");
+      fairPath = fairs.map((f, i) => `${i ? "L" : "M"} ${xs(f.ts)} ${ys(f.value)}`).join(" ");
       fairDots = fairs.map((f) => ({
         cx: xs(f.ts),
-        cy: ysFair(f.value),
+        cy: ys(f.value),
         year: f.year,
+        valueLabel: formatPrice(f.value),
       }));
     }
 
@@ -115,18 +106,9 @@ export function FairValueChart({
 
     const priceTicks = [0, 1, 2, 3].map((i) => {
       const ratio = i / 3;
-      const value = pMax - (pMax - pMin) * ratio;
-      return { y: pad.t + ih * ratio, value, side: "left" };
+      const value = yMax - (yMax - yMin) * ratio;
+      return { y: pad.t + ih * ratio, value };
     });
-
-    const fairTicks =
-      fairs.length > 0
-        ? [0, 1, 2, 3].map((i) => {
-            const ratio = i / 3;
-            const value = fMax - (fMax - fMin) * ratio;
-            return { y: pad.t + ih * ratio, value, side: "right" };
-          })
-        : [];
 
     return {
       pricePath,
@@ -134,7 +116,6 @@ export function FairValueChart({
       fairDots,
       xTicks,
       priceTicks,
-      fairTicks,
       hasFair: fairs.length > 0,
     };
   }, [monthlyPrices, yearlyFairValue, iw, ih, lang]);
@@ -166,18 +147,6 @@ export function FairValueChart({
           </g>
         ))}
 
-        {fairTicks.map((tick, i) => (
-          <text
-            key={`fg-${i}`}
-            x={w - pad.r + 8}
-            y={tick.y + 4}
-            textAnchor="start"
-            className="tp-fv-chart-axis tp-fv-chart-axis-fair"
-          >
-            {formatPrice(tick.value)}
-          </text>
-        ))}
-
         <line x1={pad.l} y1={h - pad.b} x2={w - pad.r} y2={h - pad.b} stroke="#d8e2ef" />
 
         {pricePath ? (
@@ -204,7 +173,10 @@ export function FairValueChart({
         {fairDots.map((d) => (
           <g key={d.year}>
             <circle cx={d.cx} cy={d.cy} r="5" fill="#fff" stroke="#00b368" strokeWidth="2.5" />
-            <text x={d.cx} y={d.cy - 10} textAnchor="middle" className="tp-fv-chart-year">
+            <text x={d.cx} y={d.cy - 11} textAnchor="middle" className="tp-fv-chart-fv-value">
+              {d.valueLabel}
+            </text>
+            <text x={d.cx} y={d.cy + 17} textAnchor="middle" className="tp-fv-chart-year">
               {d.year}
             </text>
           </g>
