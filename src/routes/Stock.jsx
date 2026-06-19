@@ -665,7 +665,7 @@ export default function Stock() {
           chartError={fvChart.error}
           chartData={fvChart.data}
           onRetryChart={loadFvChart}
-          chartWidth={isMobile ? 320 : 640}
+          chartWidth={isMobile ? 300 : 580}
         />
 
         {/* 1. Executive Summary */}
