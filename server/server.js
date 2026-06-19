@@ -30,6 +30,7 @@ import { MARKET_UNIVERSE_TTL_MS } from "./marketUniverseCache.js";
 import { buildHomeSignals } from "./homeSignals.js";
 import { getHomeSignals, HOME_SIGNALS_TTL_MS } from "./homeSignalsCache.js";
 import { dcfSymbolCandidates, fetchDcfWithFallback } from "./fmpDcf.js";
+import { fetchFairValueChartData } from "./fmpFairValueChart.js";
 import { buildStocksCatalogPayload } from "./stocksCatalogApi.js";
 import { findStockByTicker, CURRENCY_BY_MARKET } from "./stockCatalogLookup.js";
 import { injectSeoIntoSpaHtml, buildStockStaticFallback } from "./spaHtmlSeo.js";
@@ -916,6 +917,23 @@ app.get(["/api/fmp/dcf", "/api/fmp/dcf/:symbol"], async (req, res) => {
       });
     }
     res.status(502).json({ error: msg });
+  }
+});
+
+/** Yearly EV fair value + monthly price history for the DCF hero chart. */
+app.get(["/api/fmp/fair-value-chart", "/api/fmp/fair-value-chart/:symbol"], async (req, res) => {
+  const key = fmpApiKey();
+  if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  const symbol = fmpSymbolFromRequest(req);
+  if (!symbol) return res.status(400).json({ error: "symbol query parameter required" });
+  try {
+    const data = await cachedFmp(`fmp:fv-chart:v1:${symbol}`, 6 * 3600_000, async () => {
+      return fetchFairValueChartData(symbol, key);
+    });
+    res.json(data);
+  } catch (err) {
+    console.error("[fmp/fair-value-chart]", symbol, err.message);
+    res.status(502).json({ error: err.message });
   }
 });
 

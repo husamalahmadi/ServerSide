@@ -2146,6 +2146,188 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
   }
 }
 
+/* —— DCF hero: price vs EV fair value chart —— */
+.tp-dcf-chart-wrap {
+  position: relative;
+  margin-top: 1.25rem;
+  padding: 1rem 1rem 0.85rem;
+  border-radius: var(--tp-radius-md);
+  border: 1px solid #cfe0fb;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(6px);
+}
+
+.tp-dcf-chart-dcf-box {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  z-index: 2;
+  max-width: min(240px, 46%);
+  padding: 0.65rem 0.75rem;
+  border-radius: 12px;
+  border: 1px solid #b8d4f5;
+  background: linear-gradient(145deg, #ffffff 0%, #f3f8ff 100%);
+  box-shadow: 0 8px 24px rgba(44, 123, 229, 0.12);
+}
+
+.tp-dcf-chart-dcf-box.is-rtl {
+  right: auto;
+  left: 0.85rem;
+}
+
+.tp-dcf-chart-dcf-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tp-muted);
+  margin-bottom: 0.2rem;
+}
+
+.tp-dcf-chart-dcf-value {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--tp-ink-strong);
+  line-height: 1.1;
+}
+
+.tp-dcf-chart-dcf-value span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--tp-muted);
+}
+
+.tp-dcf-chart-dcf-lock {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #92400e;
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  margin-bottom: 0.35rem;
+}
+
+.tp-dcf-chart-dcf-hint {
+  margin: 0.35rem 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--tp-muted);
+}
+
+.tp-dcf-chart-signin {
+  margin-top: 0.55rem;
+  width: 100%;
+  justify-content: center;
+  font-size: 12px;
+  padding: 0.45rem 0.65rem;
+}
+
+.tp-dcf-chart-loading,
+.tp-dcf-chart-error {
+  min-height: 180px;
+  display: grid;
+  place-content: center;
+  gap: 0.65rem;
+  text-align: center;
+  color: var(--tp-muted);
+  font-size: 13px;
+}
+
+.tp-dcf-chart-skel {
+  width: 100%;
+  height: 160px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #eef3fa 25%, #f8fafc 50%, #eef3fa 75%);
+  background-size: 200% 100%;
+  animation: tp-dcf-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes tp-dcf-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.tp-fv-chart {
+  padding-top: 4.5rem;
+}
+
+.tp-fv-chart-svg {
+  width: 100%;
+  display: block;
+  max-width: 100%;
+}
+
+.tp-fv-chart-axis {
+  font-size: 10px;
+  fill: #748194;
+}
+
+.tp-fv-chart-axis-fair {
+  fill: #059669;
+}
+
+.tp-fv-chart-year {
+  font-size: 9px;
+  font-weight: 700;
+  fill: #059669;
+}
+
+.tp-fv-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  justify-content: center;
+  margin-top: 0.65rem;
+  font-size: 12px;
+  font-weight: 600;
+  color: #344050;
+}
+
+.tp-fv-chart-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.tp-fv-chart-swatch {
+  width: 18px;
+  height: 3px;
+  border-radius: 999px;
+  background: #2c7be5;
+}
+
+.tp-fv-chart-swatch-fair {
+  background: #00b368;
+  background-image: repeating-linear-gradient(
+    90deg,
+    #00b368 0 6px,
+    transparent 6px 10px
+  );
+}
+
+.tp-fv-chart-empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--tp-muted);
+  font-size: 13px;
+}
+
+@media (max-width: 640px) {
+  .tp-dcf-chart-dcf-box {
+    position: static;
+    max-width: 100%;
+    margin-bottom: 0.75rem;
+  }
+
+  .tp-fv-chart {
+    padding-top: 0;
+  }
+}
+
 /* —— Homepage live signals —— */
 .tp-signals-panel {
   margin-bottom: 1.25rem;

@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { CompareBar } from "./StockCharts.jsx";
+import { FairValueChart } from "./FairValueChart.jsx";
 import { GoogleGIcon } from "../GoogleGIcon.jsx";
 import { RetryButton } from "../RetryButton.jsx";
 import { fmt2 } from "../../domain/formatting.js";
@@ -12,6 +13,7 @@ function pctClass(n) {
 export function StockDcfHero({
   t,
   dir,
+  lang = "en",
   currency,
   loading,
   error,
@@ -21,6 +23,11 @@ export function StockDcfHero({
   onSignIn,
   onRetry,
   signInBusy,
+  chartLoading = false,
+  chartError = "",
+  chartData = null,
+  onRetryChart,
+  chartWidth = 640,
 }) {
   const signInLock = useRef(false);
 
@@ -39,6 +46,63 @@ export function StockDcfHero({
     discountPct = ((dcf - price) / price) * 100;
   }
   const hasDcf = locked ? Boolean(data?.hasDcf) : Number.isFinite(dcf);
+  const showChart = chartLoading || chartError || chartData;
+  const monthlyPrices = chartData?.monthlyPrices || [];
+  const yearlyFairValue = chartData?.yearlyFairValue || [];
+
+  const chartBlock = showChart ? (
+    <div className="tp-dcf-chart-wrap" id="tp-dcf-fair-value-chart">
+      <div className={`tp-dcf-chart-dcf-box ${dir === "rtl" ? "is-rtl" : ""}`}>
+        {locked ? (
+          <>
+            <div className="tp-dcf-chart-dcf-lock">{t("DCF_HERO_HIDDEN")}</div>
+            <p className="tp-dcf-chart-dcf-hint">{t("DCF_CHART_DIRECTION_LOCKED")}</p>
+            <button
+              type="button"
+              className="tp-signin-google tp-dcf-chart-signin"
+              onClick={handleSignIn}
+              disabled={signInBusy}
+            >
+              <GoogleGIcon size={14} />
+              {t("DCF_HERO_SIGNIN")}
+            </button>
+          </>
+        ) : Number.isFinite(dcf) ? (
+          <>
+            <div className="tp-dcf-chart-dcf-label">{t("DCF_FAIR_VALUE")}</div>
+            <div className="tp-dcf-chart-dcf-value">
+              {fmt2(dcf)} <span>{currency}</span>
+            </div>
+            <p className="tp-dcf-chart-dcf-hint">{t("DCF_CHART_DIRECTION")}</p>
+          </>
+        ) : (
+          <p className="tp-dcf-chart-dcf-hint">{t("DCF_CHART_DIRECTION")}</p>
+        )}
+      </div>
+
+      {chartLoading ? (
+        <div className="tp-dcf-chart-loading">
+          <div className="tp-dcf-chart-skel" />
+          <p>{t("FV_CHART_LOADING")}</p>
+        </div>
+      ) : chartError ? (
+        <div className="tp-dcf-chart-error">
+          <p>{chartError}</p>
+          {onRetryChart ? <RetryButton onRetry={onRetryChart} t={t} /> : null}
+        </div>
+      ) : (
+        <FairValueChart
+          monthlyPrices={monthlyPrices}
+          yearlyFairValue={yearlyFairValue}
+          currency={currency}
+          dir={dir}
+          lang={lang}
+          t={t}
+          w={chartWidth}
+        />
+      )}
+    </div>
+  ) : null;
 
   return (
     <section className="tp-dcf-hero" dir={dir} aria-label={t("DCF_HERO_ARIA")}>
@@ -56,6 +120,7 @@ export function StockDcfHero({
         <div className="tp-dcf-hero-body tp-dcf-hero-loading">
           <div className="tp-dcf-skel-value" />
           <p>{t("DCF_HERO_LOADING")}</p>
+          {chartBlock}
         </div>
       ) : error ? (
         <div className="tp-dcf-hero-body tp-dcf-hero-error">
@@ -65,6 +130,7 @@ export function StockDcfHero({
       ) : !hasDcf ? (
         <div className="tp-dcf-hero-body tp-dcf-hero-empty">
           <p>{t("DCF_HERO_UNAVAILABLE")}</p>
+          {chartBlock}
         </div>
       ) : locked ? (
         <div className="tp-dcf-hero-body tp-dcf-hero-locked">
@@ -104,6 +170,7 @@ export function StockDcfHero({
               <p className="tp-dcf-teaser-copy">{t("DCF_HERO_TEASER")}</p>
             </div>
           </div>
+          {chartBlock}
         </div>
       ) : (
         <div className="tp-dcf-hero-body tp-dcf-hero-unlocked">
@@ -137,6 +204,7 @@ export function StockDcfHero({
               <p className="tp-dcf-unlocked-note">{t("DCF_HERO_UNLOCKED_NOTE")}</p>
             </div>
           </div>
+          {chartBlock}
         </div>
       )}
     </section>

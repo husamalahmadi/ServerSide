@@ -132,6 +132,12 @@ export default {
     "A full DCF readout is ready for this stock. Members see the fair value that drives our flagship valuation call.",
   DCF_HERO_UNLOCKED_NOTE:
     "DCF is shown first because it captures future cash flows; the section below blends EV, P/S, and P/E approaches.",
+  DCF_CHART_DIRECTION: "This is the direction of fair value.",
+  DCF_CHART_DIRECTION_LOCKED: "Sign in to see the DCF fair value — your guide to where intrinsic value is heading.",
+  FV_CHART_LOADING: "Loading price vs fair value chart…",
+  FV_CHART_NO_DATA: "Historical price data is not available for this symbol yet.",
+  FV_CHART_PRICE: "Stock price (monthly)",
+  FV_CHART_FAIR_VALUE: "EV fair value (yearly)",
   FAIR_VALUE_SECTION: "2. Fair value analysis",
   REV_INC_TITLE: "4. Revenue & income",
   EQUITY_FCF_TITLE: "5. Equity & free cash flow",

@@ -16,6 +16,7 @@ import { CompareBar, ChartBlock } from "../components/stock/StockCharts.jsx";
 import { StockNewsSidebar } from "../components/StockNewsSidebar.jsx";
 import { StockDcfHero } from "../components/stock/StockDcfHero.jsx";
 import { fetchStockDcf } from "../services/dcfService.js";
+import { fetchFairValueChart } from "../services/fairValueChartService.js";
 import { fetchKeyMetrics } from "../services/keyMetricsService.js";
 import { fmt2, fmtBill, trendText, calcTrend } from "../domain/formatting.js";
 import { usePageMeta } from "../hooks/usePageMeta.js";
@@ -88,6 +89,7 @@ export default function Stock() {
   const [peersCountdown, setPeersCountdown] = useState(0);
   const [peersRequested, setPeersRequested] = useState(false);
   const [dcf, setDcf] = useState({ loading: false, error: "", data: null });
+  const [fvChart, setFvChart] = useState({ loading: false, error: "", data: null });
   const [keyMetrics, setKeyMetrics] = useState({ loading: false, error: "", data: null });
   const [fmpSymbol, setFmpSymbol] = useState("");
 
@@ -218,6 +220,22 @@ export default function Stock() {
     if (!catalogReady || !fmpSymbol) return;
     loadDcf();
   }, [catalogReady, fmpSymbol, loadDcf, user?.id]);
+
+  const loadFvChart = useCallback(async () => {
+    if (!fmpSymbol) return;
+    try {
+      setFvChart({ loading: true, error: "", data: null });
+      const data = await fetchFairValueChart(fmpSymbol);
+      setFvChart({ loading: false, error: "", data });
+    } catch (e) {
+      setFvChart({ loading: false, error: String(e?.message || e), data: null });
+    }
+  }, [fmpSymbol]);
+
+  useEffect(() => {
+    if (!catalogReady || !fmpSymbol) return;
+    loadFvChart();
+  }, [catalogReady, fmpSymbol, loadFvChart]);
 
   const loadKeyMetrics = useCallback(async () => {
     if (!fmpSymbol) return;
@@ -633,6 +651,7 @@ export default function Stock() {
         <StockDcfHero
           t={t}
           dir={dir}
+          lang={lang}
           currency={currency}
           loading={dcf.loading}
           error={dcf.error}
@@ -642,6 +661,11 @@ export default function Stock() {
           onSignIn={login}
           onRetry={loadDcf}
           signInBusy={signInNavigating.current}
+          chartLoading={fvChart.loading}
+          chartError={fvChart.error}
+          chartData={fvChart.data}
+          onRetryChart={loadFvChart}
+          chartWidth={isMobile ? 320 : 640}
         />
 
         {/* 1. Executive Summary */}
