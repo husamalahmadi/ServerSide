@@ -1,3 +1,5 @@
+import { buildStockNarrative, stockNarrativeToStaticHtml } from "../shared/seo/stockNarrative.js";
+
 function escapeHtml(text) {
   return String(text ?? "")
     .replace(/&/g, "&amp;")
@@ -106,28 +108,37 @@ const MARKET_LABEL = {
 /**
  * Noscript / crawler-visible main block for /stock/:ticker requests.
  */
-export function buildStockStaticFallback({ hit, market, lang, seo }) {
+export function buildStockStaticFallback({ hit, market, lang, seo, currency }) {
   const isAr = lang === "ar";
   const ticker = escapeHtml(hit.ticker);
   const name = escapeHtml(hit.name);
   const marketLabel = escapeHtml(MARKET_LABEL[isAr ? "ar" : "en"][market] || market);
   const industry = hit.industry ? escapeHtml(hit.industry) : "";
-  const description = escapeHtml(seo?.metaDescription || seo?.description || "");
   const subhead = industry
     ? isAr
       ? `${marketLabel} · ${industry}`
       : `${marketLabel} · ${industry}`
     : marketLabel;
 
+  const narrative = buildStockNarrative({
+    lang,
+    ticker: hit.ticker,
+    companyName: hit.name,
+    market,
+    industry: hit.industry || "",
+    currency: currency || "USD",
+  });
+  const narrativeHtml = stockNarrativeToStaticHtml(narrative, escapeHtml);
+
   return `<main id="tp-static-fallback" class="tp-static-shell" aria-hidden="true">
       <h1 class="tp-static-hero">${name} (${ticker})</h1>
-      <p>${description}</p>
       <p class="tp-static-subhead">${subhead}</p>
+      ${narrativeHtml}
       <nav aria-label="Site">
-        <a href="/">Home</a>
-        <a href="/blogs">Blogs</a>
-        <a href="/about">About</a>
-        <a href="/contact">Contact</a>
+        <a href="/">${isAr ? "الرئيسية" : "Home"}</a>
+        <a href="/blogs">${isAr ? "المدونة" : "Blogs"}</a>
+        <a href="/about">${isAr ? "من نحن" : "About"}</a>
+        <a href="/contact">${isAr ? "اتصل بنا" : "Contact"}</a>
         <a href="/sitemap.xml">Sitemap</a>
         <a href="/stock/AAPL">Apple (AAPL)</a>
         <a href="/stock/2222">Saudi Aramco (2222)</a>

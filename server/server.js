@@ -1448,6 +1448,7 @@ function stockSeoInjectForRequest(req) {
         market: found.market,
         lang,
         seo,
+        currency: CURRENCY_BY_MARKET[found.market],
       }),
     };
   } catch (err) {

@@ -27,6 +27,7 @@ import { WatchlistManager } from "../components/WatchlistManager.jsx";
 import { GoogleGIcon } from "../components/GoogleGIcon.jsx";
 import { exportElementAsPdf } from "../utils/exportPdf.js";
 import { buildStockSeo } from "../seo/structuredData.js";
+import { buildStockNarrative } from "../seo/stockNarrative.js";
 import { fmpImageStockUrl } from "../../shared/fmpLogoUrl.js";
 
 /* Page */
@@ -426,23 +427,31 @@ export default function Stock() {
   );
   usePageMeta(seo);
 
-  const analysisSummary = useMemo(() => {
-    const name = companyDisplayName || ticker;
-    const fairTxt = Number.isFinite(Number(fairAvg)) ? `${fmt2(fairAvg)} ${currency}` : t("NOT_AVAILABLE");
-    const priceTxt = Number.isFinite(Number(price)) ? `${fmt2(price)} ${currency}` : t("NOT_AVAILABLE");
-    if (lang === "ar") {
-      return [
-        `تحليل سهم ${name} (${ticker}) على TruePrice.Cash يركز على مقارنة السعر الحالي (${priceTxt}) بالقيمة العادلة التقديرية (${fairTxt}).`,
-        "المنهجية تعتمد على البيانات المالية الأساسية مثل الإيرادات والدخل التشغيلي وصافي الدخل والتدفق النقدي الحر لتقديم قراءة عملية للمستثمر.",
-        "هذا التقرير تعليمي ولا يُعد توصية شراء أو بيع، ويجب دعمه ببحثك الشخصي وإدارة المخاطر.",
-      ];
-    }
-    return [
-      `${name} (${ticker}) stock analysis on TruePrice.Cash compares current market price (${priceTxt}) against estimated fair value (${fairTxt}).`,
-      "The framework uses core fundamentals such as revenue, operating income, net income, and free cash flow to provide a practical investor snapshot.",
-      "This report is educational only and not financial advice; combine it with your own research and risk management.",
-    ];
-  }, [companyDisplayName, ticker, fairAvg, price, currency, lang, t]);
+  const stockNarrative = useMemo(() => {
+    const prof = lang === "ar" && translatedProfile ? translatedProfile : profile;
+    return buildStockNarrative({
+      lang,
+      ticker,
+      companyName: companyDisplayName,
+      market,
+      industry: prof?.industry || "",
+      sector: prof?.sector || "",
+      currency,
+      price,
+      fairValue: fairAvg,
+      companyDescription: prof?.description || "",
+    });
+  }, [
+    companyDisplayName,
+    ticker,
+    fairAvg,
+    price,
+    currency,
+    lang,
+    market,
+    profile,
+    translatedProfile,
+  ]);
 
   // Key Metrics as a table: metrics are rows, fiscal years are columns (newest → oldest).
   const kmCols = useMemo(
@@ -764,9 +773,27 @@ export default function Stock() {
         </Card>
 
         <Card title={lang === "ar" ? "ملف السهم" : "Stock Profile"}>
-          <div style={{ display: "grid", gap: 10, color: "#334155", lineHeight: 1.75, fontSize: 14 }}>
-            {analysisSummary.map((line) => (
-              <p key={line} style={{ margin: 0 }}>{line}</p>
+          <div style={{ display: "grid", gap: 16, color: "#334155", lineHeight: 1.75, fontSize: 14 }}>
+            {stockNarrative.sections.map((sec) => (
+              <section key={sec.id}>
+                <h3
+                  style={{
+                    margin: "0 0 8px",
+                    fontSize: 15,
+                    fontWeight: 800,
+                    color: "#1e293b",
+                  }}
+                >
+                  {sec.heading}
+                </h3>
+                <div style={{ display: "grid", gap: 8 }}>
+                  {sec.paragraphs.map((line) => (
+                    <p key={line.slice(0, 48)} style={{ margin: 0 }}>
+                      {line}
+                    </p>
+                  ))}
+                </div>
+              </section>
             ))}
           </div>
         </Card>

@@ -9,8 +9,7 @@ import { buildStockSeo } from "../shared/seo/structuredData.js";
 import { findStockByTicker, CURRENCY_BY_MARKET } from "../server/stockCatalogLookup.js";
 import { injectSeoIntoSpaHtml, buildStockStaticFallback } from "../server/spaHtmlSeo.js";
 
-const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const indexHtml = readFileSync(join(root, "server/static/index.html"), "utf8");
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");const indexHtml = readFileSync(join(root, "server/static/index.html"), "utf8");
 configureSeoSiteUrl("https://trueprice.cash");
 
 function renderStock(ticker, lang = "en") {
@@ -30,6 +29,7 @@ function renderStock(ticker, lang = "en") {
       market: found.market,
       lang,
       seo,
+      currency: CURRENCY_BY_MARKET[found.market],
     }),
   });
 }
@@ -48,7 +48,12 @@ for (const [ticker, lang] of [
   console.log("title:", title.slice(0, 80));
   console.log("desc:", desc.slice(0, 100));
   console.log("jsonLd WebPage:", hasLd);
-  console.log("custom fallback:", fallback);
+  const hasNarrative = html.includes("Valuation approach") || html.includes("منهجية التقييم");
+  const wordApprox = html.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
+  console.log("narrative sections:", hasNarrative);
+  console.log("approx word count:", wordApprox);
+  if (!hasNarrative) throw new Error(`Missing narrative for ${ticker}`);
+  if (wordApprox < 400) throw new Error(`Thin fallback HTML for ${ticker} (${wordApprox} words)`);
   if (!title || title.includes("Fair Value for US, TASI, Tokyo")) {
     throw new Error(`Generic title for ${ticker}`);
   }
