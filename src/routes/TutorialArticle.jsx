@@ -7,8 +7,10 @@ import { TutorialArticleNav } from "../components/tutorial/TutorialArticleNav.js
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { buildTutorialArticleSeo } from "../seo/structuredData.js";
 import { tutorialHtmlConfig } from "../utils/sanitizeHtml.js";
+import { useI18n } from "../i18n.jsx";
 
 export default function TutorialArticle() {
+  const { t } = useI18n();
   const { slug } = useParams();
   const article = TUTORIAL_BY_SLUG[slug];
 
@@ -73,7 +75,7 @@ export default function TutorialArticle() {
       </div>
 
       <TutorialArticleNav prev={article.prev} next={article.next} />
-      <SiteFooter />
+      <SiteFooter t={t} />
     </article>
   );
 }

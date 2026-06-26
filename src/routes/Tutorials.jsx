@@ -5,12 +5,14 @@ import { SiteFooter } from "../components/SiteFooter.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { buildTutorialsIndexSeo } from "../seo/structuredData.js";
 import { stripHtmlToText } from "../utils/sanitizeHtml.js";
+import { useI18n } from "../i18n.jsx";
 
 function stripTitle(html) {
   return stripHtmlToText(String(html || "").replace(/<br\s*\/?>/gi, " "));
 }
 
 export default function Tutorials() {
+  const { t } = useI18n();
   const seo = useMemo(() => buildTutorialsIndexSeo({ articles: TUTORIAL_ARTICLES }), []);
   usePageMeta(seo);
 
@@ -53,7 +55,7 @@ export default function Tutorials() {
         ))}
       </ol>
 
-      <SiteFooter />
+      <SiteFooter t={t} />
     </div>
   );
 }
