@@ -1,5 +1,6 @@
 /**
- * Import tutorial HTML from content/tutorials/source/*.html into src/data/tutorials/articles.js
+ * Import tutorial HTML from content/tutorials/source (en) and source-ar (ar)
+ * into src/data/tutorials/articles.js
  * Run: node scripts/sync-tutorials.mjs
  */
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from "node:fs";
@@ -8,7 +9,8 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
-const SOURCE_DIR = join(ROOT, "content", "tutorials", "source");
+const SOURCE_EN = join(ROOT, "content", "tutorials", "source");
+const SOURCE_AR = join(ROOT, "content", "tutorials", "source-ar");
 const OUT_FILE = join(ROOT, "src", "data", "tutorials", "articles.js");
 
 const SLUG_BY_FILE = {
@@ -22,6 +24,11 @@ const SLUG_BY_FILE = {
   "08-stock-picking-process": "stock-picking-process",
   "09-earnings-reports": "earnings-reports",
   "10-financial-red-flags": "financial-red-flags",
+};
+
+const META_LABELS = {
+  en: { readingTime: "Reading time", level: "Level", series: "Series" },
+  ar: { readingTime: "وقت القراءة", level: "المستوى", series: "السلسلة" },
 };
 
 function extract(tag, html, attr) {
@@ -51,115 +58,54 @@ function rewriteTutorialLinks(html) {
     const re = new RegExp(`${fileStem}\\.html`, "gi");
     out = out.replace(re, `/tutorials/${slug}`);
   }
-  out = out.replace(/href="\/tutorials\/([^"]+)"/g, (_, slug) => `href="/tutorials/${slug}"`);
   return out;
 }
 
-function parseArticleNav(contentHtml) {
-  const navBlock = contentHtml.match(/<nav class="article-nav"[\s\S]*?<\/nav>/i)?.[0] || "";
-  let prev = null;
-  let next = null;
-  const pills = [...navBlock.matchAll(/<a class="nav-pill" href="([^"]*)"[\s\S]*?<span class="nav-pill-title">([^<]*)<\/span>/gi)];
-  for (const [, href, title] of pills) {
-    const slug = href.replace(/^\/?tutorials\//, "").replace(/\.html$/, "").replace(/^\d+-/, "");
-    const mapped = Object.values(SLUG_BY_FILE).includes(slug)
-      ? slug
-      : SLUG_BY_FILE[href.replace(/\.html$/, "").split("/").pop()] || null;
-    if (!mapped) continue;
-    const entry = { slug: mapped, title: title.trim() };
-    if (/previous|←/i.test(navBlock.slice(0, navBlock.indexOf(href)))) {
-      prev = entry;
-    } else {
-      next = entry;
-    }
+function parseMetaItem(html, labels) {
+  for (const label of Object.values(labels)) {
+    const re = new RegExp(
+      `<span class="meta-label">${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}<\\/span>\\s*<span class="meta-value">([^<]*)<\\/span>`,
+      "i"
+    );
+    const val = html.match(re)?.[1]?.trim();
+    if (val) return val;
   }
-  if (pills.length === 1) {
-    const [, href, title] = pills[0];
-    const stem = href.replace(/\.html$/, "").replace(/^.*\//, "");
-    const slug = SLUG_BY_FILE[stem];
-    if (slug) next = { slug, title: title.trim() };
-  }
-  if (pills.length === 2) {
-    const [a, b] = pills;
-    const slugA = SLUG_BY_FILE[a[1].replace(/\.html$/, "").replace(/^.*\//, "")];
-    const slugB = SLUG_BY_FILE[b[1].replace(/\.html$/, "").replace(/^.*\//, "")];
-    if (slugA) prev = { slug: slugA, title: a[2].trim() };
-    if (slugB) next = { slug: slugB, title: b[2].trim() };
-  }
-  return { prev, next };
+  return "";
 }
 
-function parseMetaItem(html, label) {
-  const re = new RegExp(
-    `<span class="meta-label">${label}<\\/span>\\s*<span class="meta-value">([^<]*)<\\/span>`,
-    "i"
-  );
-  return html.match(re)?.[1]?.trim() || "";
-}
-
-function parseFile(filename) {
+function parseFile(filename, sourceDir, lang) {
   const stem = filename.replace(/\.html$/i, "");
   const slug = SLUG_BY_FILE[stem];
   if (!slug) throw new Error(`Unknown tutorial file: ${filename}`);
 
-  const raw = readFileSync(join(SOURCE_DIR, filename), "utf8");
+  const raw = readFileSync(join(sourceDir, filename), "utf8");
   const body = stripOuterNav(raw);
   const heroBlock = extract("header", body, 'class="hero"') || extract("div", body, 'class="hero"');
   const contentMatch = body.match(/<main class="content-wrap">([\s\S]*?)<\/main>/i);
   let contentHtml = contentMatch?.[1]?.trim() || "";
 
-  const { prev, next } = parseArticleNav(contentHtml);
   contentHtml = contentHtml.replace(/<nav class="article-nav"[\s\S]*?<\/nav>/i, "").trim();
   contentHtml = rewriteTutorialLinks(contentHtml);
 
   const h1Inner = extract("h1", heroBlock).replace(/\s+/g, " ").trim();
   const order = Number(stem.split("-")[0]) || 0;
+  const labels = META_LABELS[lang] || META_LABELS.en;
 
   return {
-    slug,
-    order,
     documentTitle: extractTitle(raw),
     metaDescription: extractMeta(raw, "description"),
     seriesLabel: extract("span", heroBlock, 'class="series-label"').replace(/<[^>]+>/g, ""),
     titleHtml: h1Inner,
-    subtitle: extract("p", heroBlock, 'class="hero-sub"').replace(/<[^>]+>/g, "") || extract("p", heroBlock, 'class="hero-sub"'),
-    readingTime: parseMetaItem(heroBlock, "Reading time"),
-    level: parseMetaItem(heroBlock, "Level"),
-    series: parseMetaItem(heroBlock, "Series"),
+    subtitle:
+      extract("p", heroBlock, 'class="hero-sub"').replace(/<[^>]+>/g, "") ||
+      extract("p", heroBlock, 'class="hero-sub"'),
+    readingTime: parseMetaItem(heroBlock, { readingTime: labels.readingTime }),
+    level: parseMetaItem(heroBlock, { level: labels.level }),
+    series: parseMetaItem(heroBlock, { series: labels.series }),
     bodyHtml: contentHtml,
-    prev,
-    next,
+    order,
+    slug,
   };
-}
-
-function main() {
-  if (!existsSync(SOURCE_DIR)) {
-    console.error(`Missing ${SOURCE_DIR}. Add tutorial HTML files first.`);
-    process.exit(1);
-  }
-  const files = readdirSync(SOURCE_DIR)
-    .filter((f) => /^\d{2}-.+\.html$/i.test(f))
-    .sort();
-  if (!files.length) {
-    console.error("No tutorial HTML files found.");
-    process.exit(1);
-  }
-
-  const articles = files.map(parseFile).sort((a, b) => a.order - b.order);
-
-  for (let i = 0; i < articles.length; i++) {
-    if (!articles[i].prev && i > 0) {
-      articles[i].prev = { slug: articles[i - 1].slug, title: stripTags(articles[i - 1].titleHtml) };
-    }
-    if (!articles[i].next && i < articles.length - 1) {
-      articles[i].next = { slug: articles[i + 1].slug, title: stripTags(articles[i + 1].titleHtml) };
-    }
-  }
-
-  const out = `/** Generated by scripts/sync-tutorials.mjs — do not edit by hand. */\nexport const TUTORIAL_ARTICLES = ${JSON.stringify(articles, null, 2)};\n\nexport const TUTORIAL_BY_SLUG = Object.fromEntries(TUTORIAL_ARTICLES.map((a) => [a.slug, a]));\n`;
-  mkdirSync(dirname(OUT_FILE), { recursive: true });
-  writeFileSync(OUT_FILE, out, "utf8");
-  console.log(`[sync-tutorials] Wrote ${articles.length} articles → ${OUT_FILE}`);
 }
 
 function stripTags(s) {
@@ -168,6 +114,68 @@ function stripTags(s) {
     .replace(/<[^>]+>/g, "")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function main() {
+  if (!existsSync(SOURCE_EN)) {
+    console.error(`Missing ${SOURCE_EN}. Add tutorial HTML files first.`);
+    process.exit(1);
+  }
+  const files = readdirSync(SOURCE_EN)
+    .filter((f) => /^\d{2}-.+\.html$/i.test(f))
+    .sort();
+  if (!files.length) {
+    console.error("No tutorial HTML files found.");
+    process.exit(1);
+  }
+
+  const hasAr = existsSync(SOURCE_AR);
+  if (!hasAr) {
+    console.warn(`[sync-tutorials] No ${SOURCE_AR} — Arabic will fall back to English.`);
+  }
+
+  const articles = files.map((filename) => {
+    const en = parseFile(filename, SOURCE_EN, "en");
+    const { slug, order, ...enLocale } = en;
+    let arLocale = null;
+    if (hasAr && existsSync(join(SOURCE_AR, filename))) {
+      const ar = parseFile(filename, SOURCE_AR, "ar");
+      const { slug: _s, order: _o, ...rest } = ar;
+      arLocale = rest;
+    }
+    return { slug, order, locales: { en: enLocale, ...(arLocale ? { ar: arLocale } : {}) } };
+  });
+
+  articles.sort((a, b) => a.order - b.order);
+
+  for (let i = 0; i < articles.length; i++) {
+    for (const lang of ["en", "ar"]) {
+      if (!articles[i].locales[lang]) continue;
+      const titleOf = (a) => stripTags(a.locales[lang]?.titleHtml || "");
+      if (i > 0 && articles[i - 1].locales[lang]) {
+        articles[i].locales[lang].prev = {
+          slug: articles[i - 1].slug,
+          title: titleOf(articles[i - 1]),
+        };
+      }
+      if (i < articles.length - 1 && articles[i + 1].locales[lang]) {
+        articles[i].locales[lang].next = {
+          slug: articles[i + 1].slug,
+          title: titleOf(articles[i + 1]),
+        };
+      }
+    }
+  }
+
+  const out = `/** Generated by scripts/sync-tutorials.mjs — do not edit by hand. */
+export const TUTORIAL_ARTICLES = ${JSON.stringify(articles, null, 2)};
+
+export const TUTORIAL_BY_SLUG = Object.fromEntries(TUTORIAL_ARTICLES.map((a) => [a.slug, a]));
+`;
+  mkdirSync(dirname(OUT_FILE), { recursive: true });
+  writeFileSync(OUT_FILE, out, "utf8");
+  const arCount = articles.filter((a) => a.locales.ar).length;
+  console.log(`[sync-tutorials] Wrote ${articles.length} articles (${arCount} with Arabic) → ${OUT_FILE}`);
 }
 
 main();

@@ -7,6 +7,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { TUTORIAL_ARTICLES } from "../src/data/tutorials/articles.js";
+import { tutorialLocale } from "../src/data/tutorials/resolve.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");

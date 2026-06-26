@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>النسب المالية الرئيسية التي يجب على كل مستثمر معرفتها | TruePrice.Cash</title>
+  <meta name="description" content="تعرّف على أهم النسب المالية — P/E وP/B وROE والدين/حقوق الملكية وغيرها — وما تخبرك به عن الشركة والسهم."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--ink:#0f1117;--ink-soft:#3a3d4a;--ink-muted:#767b8a;--gold:#c9a84c;--gold-light:#f0d98a;--gold-faint:#fdf7e8;--white:#fff;--surface:#f9f8f6;--border:#e8e4dc;--link:#1a5c9e;--link-hover:#c9a84c;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:var(--surface);color:var(--ink);line-height:1.75;font-size:17px;}
+    nav{background:var(--ink);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;}
+    .nav-brand{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.25rem;text-decoration:none;}
+    .nav-links{display:flex;gap:24px;}.nav-links a{color:#aab0c0;text-decoration:none;font-size:.85rem;font-weight:500;transition:color .2s;}.nav-links a:hover{color:var(--gold);}
+    .progress-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+    .hero{background:var(--ink);color:#fff;padding:80px 40px 60px;}.hero-inner{max-width:820px;margin:0 auto;}
+    .series-label{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;display:block;}
+    .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;line-height:1.15;margin-bottom:20px;}
+    .hero h1 em{font-style:normal;color:var(--gold);}
+    .hero-sub{font-size:1.1rem;color:#b0b8c8;max-width:640px;}
+    .hero-meta{margin-top:36px;display:flex;gap:32px;flex-wrap:wrap;}
+    .meta-item{display:flex;flex-direction:column;gap:2px;}
+    .meta-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-muted);text-transform:uppercase;letter-spacing:1.5px;}
+    .meta-value{font-size:.9rem;color:#d0d8e8;font-weight:500;}
+    .content-wrap{max-width:820px;margin:0 auto;padding:60px 40px 100px;}
+    .toc{background:var(--gold-faint);border-left:3px solid var(--gold);padding:24px 28px;margin-bottom:52px;border-radius:0 6px 6px 0;}
+    .toc-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:14px;}
+    .toc ol{padding-left:20px;}.toc li{margin-bottom:6px;}.toc a{color:var(--link);text-decoration:none;font-size:.92rem;font-weight:500;}.toc a:hover{color:var(--link-hover);text-decoration:underline;}
+    .section{margin-bottom:60px;}
+    h2{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;border-top:1px solid var(--border);padding-top:32px;margin-bottom:18px;}
+    h3{font-size:1.15rem;font-weight:600;margin:28px 0 12px;}
+    p{margin-bottom:18px;color:var(--ink-soft);}
+    a{color:var(--link);text-decoration:underline;text-underline-offset:2px;transition:color .2s;}a:hover{color:var(--link-hover);}
+    .callout{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--gold);padding:20px 24px;border-radius:0 8px 8px 0;margin:28px 0;}
+    .callout-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin-bottom:8px;}
+    .callout p{margin:0;font-size:.95rem;}
+    .table-wrap{overflow-x:auto;margin:24px 0 36px;}
+    table{width:100%;border-collapse:collapse;font-size:.92rem;}
+    thead{background:var(--ink);color:#fff;}thead th{padding:12px 16px;text-align:left;font-weight:600;font-size:.82rem;letter-spacing:.5px;}
+    tbody tr{border-bottom:1px solid var(--border);}tbody tr:nth-child(even){background:var(--gold-faint);}
+    tbody td{padding:12px 16px;color:var(--ink-soft);vertical-align:top;}tbody td:first-child{font-weight:600;color:var(--ink);}
+    .ratio-group{margin-bottom:40px;}
+    .ratio-group-title{font-family:'JetBrains Mono',monospace;font-size:.75rem;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+    .ratio-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;}
+    .ratio-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px 20px;}
+    .ratio-name{font-size:.78rem;color:var(--gold);font-weight:700;margin-bottom:4px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;}
+    .ratio-formula{font-size:.85rem;font-weight:600;color:var(--ink);margin-bottom:8px;font-family:'JetBrains Mono',monospace;}
+    .ratio-desc{font-size:.85rem;color:var(--ink-muted);line-height:1.55;}
+    .sources{background:var(--ink);color:#fff;border-radius:10px;padding:32px 36px;margin-top:60px;}
+    .sources h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);margin-bottom:18px;}
+    .sources ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+    .sources li{font-size:.88rem;color:#aab0c0;display:flex;gap:10px;align-items:baseline;}
+    .sources li::before{content:"→";color:var(--gold);flex-shrink:0;}
+    .sources a{color:#7ab3e0;text-decoration:none;}.sources a:hover{color:var(--gold);text-decoration:underline;}
+    .article-nav{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:60px;padding-top:32px;border-top:1px solid var(--border);}
+    .nav-pill{display:inline-flex;flex-direction:column;gap:4px;padding:14px 20px;background:var(--white);border:1px solid var(--border);border-radius:8px;text-decoration:none;max-width:260px;transition:border-color .2s;}
+    .nav-pill:hover{border-color:var(--gold);}
+    .nav-pill-label{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--ink-muted);font-family:'JetBrains Mono',monospace;}
+    .nav-pill-title{font-size:.9rem;font-weight:600;color:var(--ink);}
+    @media(max-width:640px){.hero{padding:50px 20px 40px;}.content-wrap{padding:40px 20px 60px;}nav{padding:0 20px;}}
+  </style>
+</head>
+<body>
+<nav><a class="nav-brand" href="https://trueprice.cash">TruePrice.Cash</a><div class="nav-links"><a href="https://trueprice.cash">الرئيسية</a><a href="https://trueprice.cash/screener">المُصفّي</a><a href="#">الدروس</a></div></nav>
+<div class="progress-bar"></div>
+<header class="hero"><div class="hero-inner">
+  <span class="series-label">الدرس 05 من 10 · سلسلة التحليل الأساسي</span>
+  <h1><em>النسب المالية الرئيسية</em> التي يجب على كل مستثمر معرفتها<br/>(P/E، P/B، ROE، الدين/حقوق الملكية وغيرها)</h1>
+  <p class="hero-sub">النسب هي اختصارات التحليل الأساسي — تضغّط آلاف الأرقام في عدد قليل من الإشارات. إليك أهمها وما تخبرك به بالضبط.</p>
+  <div class="hero-meta">
+    <div class="meta-item"><span class="meta-label">وقت القراءة</span><span class="meta-value">15 دقيقة</span></div>
+    <div class="meta-item"><span class="meta-label">المستوى</span><span class="meta-value">مبتدئ–متوسط</span></div>
+    <div class="meta-item"><span class="meta-label">السلسلة</span><span class="meta-value">التحليل الأساسي</span></div>
+  </div>
+</div></header>
+<main class="content-wrap">
+  <nav class="toc" aria-label="جدول المحتويات"><div class="toc-title">في هذا المقال</div><ol>
+    <li><a href="#valuation">نسب التقييم</a></li>
+    <li><a href="#profitability">نسب الربحية</a></li>
+    <li><a href="#leverage">نسب الرافعة المالية</a></li>
+    <li><a href="#efficiency">نسب الكفاءة</a></li>
+    <li><a href="#growth">مؤشرات النمو</a></li>
+    <li><a href="#using-ratios">كيفية استخدام النسب عملياً</a></li>
+  </ol></nav>
+
+  <section class="section" id="valuation">
+    <h2>نسب التقييم</h2>
+    <p>تقارن نسب التقييم سعر السهم بمقياس لقيمة الأعمال الأساسية. وتجيب عن السؤال الجوهري: <em>هل هذا السهم رخيص أم غالٍ نسبةً لما تُنتجه الشركة؟</em></p>
+    <p>المرجع الكلاسيكي لجميع مضاعفات التقييم هو <a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/pedata.html" target="_blank" rel="noopener">مجموعة بيانات P/E للأستاذ Damodaran حسب الصناعة في NYU Stern</a>، المُحدَّثة سنوياً. قارن المضاعفات دائماً ضمن نفس الصناعة، لا عبر قطاعات مختلفة.</p>
+    <div class="ratio-group">
+      <div class="ratio-group-title">مضاعفات السعر</div>
+      <div class="ratio-cards">
+        <div class="ratio-card"><div class="ratio-name">P/E Ratio</div><div class="ratio-formula">السعر ÷ EPS</div><div class="ratio-desc">أكثر مقياس تقييم استشهاداً. كم تدفع مقابل كل ريال من الأرباح. <a href="https://www.investopedia.com/terms/p/price-earningsratio.asp" target="_blank" rel="noopener">شرح معمّق ←</a></div></div>
+        <div class="ratio-card"><div class="ratio-name">Forward P/E</div><div class="ratio-formula">السعر ÷ EPS للسنة القادمة</div><div class="ratio-desc">يستخدم الأرباح المتوقعة. أكثر فائدة من P/E التاريخي للشركات النامية. <a href="https://www.investopedia.com/terms/f/forwardpe.asp" target="_blank" rel="noopener">اعرف المزيد ←</a></div></div>
+        <div class="ratio-card"><div class="ratio-name">PEG Ratio</div><div class="ratio-formula">P/E ÷ معدل نمو EPS</div><div class="ratio-desc">يعدّل P/E للنمو. PEG &lt; 1 غالباً يشير إلى تقييم أقل من القيمة. المفضل لدى Peter Lynch. <a href="https://www.investopedia.com/terms/p/pegratio.asp" target="_blank" rel="noopener">اعرف المزيد ←</a></div></div>
+        <div class="ratio-card"><div class="ratio-name">P/B Ratio</div><div class="ratio-formula">السعر ÷ القيمة الدفترية للسهم</div><div class="ratio-desc">يقارن السعر السوقي بالقيمة المحاسبية. أساسي في استثمار القيمة على أسلوب Graham. <a href="https://www.investopedia.com/terms/p/price-to-bookratio.asp" target="_blank" rel="noopener">اعرف المزيد ←</a></div></div>
+        <div class="ratio-card"><div class="ratio-name">P/S Ratio</div><div class="ratio-formula">القيمة السوقية ÷ الإيرادات</div><div class="ratio-desc">مفيد لشركات النمو غير المربحة حيث لا ينطبق P/E. <a href="https://www.investopedia.com/terms/p/price-to-salesratio.asp" target="_blank" rel="noopener">اعرف المزيد ←</a></div></div>
+        <div class="ratio-card"><div class="ratio-name">EV/EBITDA</div><div class="ratio-formula">Enterprise Value ÷ EBITDA</div><div class="ratio-desc">مقياس تقييم محايد لهيكل رأس المال. مفضل لدى محترفي M&amp;A. <a href="https://www.investopedia.com/terms/e/ev-ebitda.asp" target="_blank" rel="noopener">اعرف المزيد ←</a></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="profitability">
+    <h2>نسب الربحية</h2>
+    <p>تقيس مدى كفاءة الشركة في تحويل الإيرادات والأصول إلى أرباح. الأعلى أفضل عموماً — لكن قارن دائماً مع الأقران في الصناعة باستخدام <a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/roe.html" target="_blank" rel="noopener">مجموعة بيانات ROE لدى Damodaran حسب القطاع</a>.</p>
+    <div class="ratio-group">
+      <div class="ratio-group-title">مقاييس العائد</div>
+      <div class="ratio-cards">
+        <div class="ratio-card"><div class="ratio-name">ROE</div><div class="ratio-formula">صافي الدخل ÷ حقوق المساهمين</div><div class="ratio-desc">المقياس المفضل لدى Warren Buffett لقياس جودة الإدارة. الهدف: فوق 15% باستمرار. <a href="https://www.investopedia.com/terms/r/returnonequity.asp" target="_blank" rel="noopener">اعرف المزيد ←</a></div></div>
+        <div class="ratio-card"><div class="ratio-name">ROA</div><div class="ratio-formula">صافي الدخل ÷ إجمالي الأصول</div><div class="ratio-desc">مدى كفاءة الأصول في توليد الربح. حاسم في الصناعات كثيفة رأس المال. <a href="https://www.investopedia.com/terms/r/returnonassets.asp" target="_blank" rel="noopener">اعرف المزيد ←</a></div></div>
+        <div class="ratio-card"><div class="ratio-name">ROIC</div><div class="ratio-formula">NOPAT ÷ رأس المال المستثمر</div><div class="ratio-desc">المعيار الذهبي — يقيس العوائد على كل رأس المال المُستثمر. الشركات ذات ROIC &gt; WACC تخلق قيمة للمساهمين. <a href="https://www.investopedia.com/terms/r/returnoninvestedcapital.asp" target="_blank" rel="noopener">اعرف المزيد ←</a></div></div>
+        <div class="ratio-card"><div class="ratio-name">Gross Margin</div><div class="ratio-formula">إجمالي الربح ÷ الإيرادات</div><div class="ratio-desc">مؤشر قوة التسعير وكفاءة الإنتاج. الهوامش الإجمالية المستدامة تشير إلى خندق تنافسي. <a href="https://www.investopedia.com/terms/g/grossmargin.asp" target="_blank" rel="noopener">اعرف المزيد ←</a></div></div>
+        <div class="ratio-card"><div class="ratio-name">Net Margin</div><div class="ratio-formula">صافي الدخل ÷ الإيرادات</div><div class="ratio-desc">الربحية النهائية. قارن عبر الزمن ومع الأقران، لا بمعزل. <a href="https://www.investopedia.com/terms/n/net_margin.asp" target="_blank" rel="noopener">اعرف المزيد ←</a></div></div>
+        <div class="ratio-card"><div class="ratio-name">FCF Margin</div><div class="ratio-formula">التدفق النقدي الحر ÷ الإيرادات</div><div class="ratio-desc">النقد المُولَّد لكل ريال من الإيرادات — غالباً أكثر موثوقية من هامش صافي الربح. <a href="https://www.investopedia.com/terms/f/freecashflow.asp" target="_blank" rel="noopener">اعرف المزيد ←</a></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="leverage">
+    <h2>نسب الرافعة المالية</h2>
+    <p>تقيس مقدار الدين الذي تحمله الشركة ومدى قدرتها على خدمته براحة. كما تُظهر <a href="https://www.bis.org/publ/work352.pdf" target="_blank" rel="noopener">أبحاث BIS حول رافعة الشركات</a>، الشركات ذات نسب دين/حقوق ملكية مرتفعة تتفوق أقل في فترات الركود الاقتصادي.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>النسبة</th><th>المعادلة</th><th>النطاق الصحي</th><th>إشارة الخطر</th></tr></thead>
+      <tbody>
+        <tr><td>الدين/حقوق الملكية</td><td>إجمالي الدين ÷ إجمالي حقوق الملكية</td><td>&lt; 1.0x لمعظم القطاعات</td><td>&gt; 2.0x دون أصول داعمة</td></tr>
+        <tr><td>الدين/EBITDA</td><td>إجمالي الدين ÷ EBITDA</td><td>&lt; 3.0x</td><td>&gt; 5.0x يشير إلى ضائقة</td></tr>
+        <tr><td>تغطية الفوائد</td><td>EBIT ÷ مصروف الفوائد</td><td>&gt; 3.0x</td><td>&lt; 1.5x = دفع الفوائد مؤلم</td></tr>
+        <tr><td>نسبة التداول</td><td>الأصول المتداولة ÷ الخصوم المتداولة</td><td>1.5x – 3.0x</td><td>&lt; 1.0x = قد تعجز عن سداد الفواتير</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="section" id="efficiency">
+    <h2>نسب الكفاءة</h2>
+    <p>تكشف مدى كفاءة الإدارة في توظيف الأصول وإدارة رأس المال العامل. وهي مهمة خاصة في الصناعات كثيفة رأس المال مثل البتروكيماويات والصناعات والتجزئة — قطاعات تهيمن على <a href="https://www.saudiexchange.sa/wps/portal/saudiexchange/ourmarkets/market-sectors" target="_blank" rel="noopener">قطاعات سوق تاسي</a>.</p>
+    <div class="ratio-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin:20px 0;">
+      <div class="ratio-card"><div class="ratio-name">Asset Turnover</div><div class="ratio-formula">الإيرادات ÷ إجمالي الأصول</div><div class="ratio-desc">الإيرادات المُولَّدة لكل ريال من الأصول. الأعلى = أكثر كفاءة. <a href="https://www.investopedia.com/terms/a/assetturnover.asp" target="_blank" rel="noopener">اعرف المزيد ←</a></div></div>
+      <div class="ratio-card"><div class="ratio-name">Inventory Turnover</div><div class="ratio-formula">COGS ÷ متوسط المخزون</div><div class="ratio-desc">سرعة بيع المخزون. الأعلى = رأس مال أقل مجمداً في المخزون. <a href="https://www.investopedia.com/terms/i/inventoryturnover.asp" target="_blank" rel="noopener">اعرف المزيد ←</a></div></div>
+      <div class="ratio-card"><div class="ratio-name">Receivables Turnover</div><div class="ratio-formula">الإيرادات ÷ الذمم المدينة</div><div class="ratio-desc">سرعة تحصيل المدفوعات. التباطؤ قد يشير إلى ضائقة مالية لدى العملاء. <a href="https://www.investopedia.com/terms/r/receivableturnoverratio.asp" target="_blank" rel="noopener">اعرف المزيد ←</a></div></div>
+      <div class="ratio-card"><div class="ratio-name">Days Sales Outstanding</div><div class="ratio-formula">AR ÷ الإيرادات × 365</div><div class="ratio-desc">متوسط أيام تحصيل الذمم. الأقل أفضل. <a href="https://www.investopedia.com/terms/d/dso.asp" target="_blank" rel="noopener">اعرف المزيد ←</a></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="growth">
+    <h2>مؤشرات النمو</h2>
+    <p>النمو هو ما يدفع القيمة المستقبلية. انظر دائماً للنمو على أساس لكل سهم (نمو EPS، نمو FCF لكل سطر) لا على الإجمالي — إصدار أسهم جديد قد يضخّم الأرباح الكلية بينما يُخفّف حصة كل مساهم.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>المؤشر</th><th>ما الذي تبحث عنه</th><th>المصدر</th></tr></thead>
+      <tbody>
+        <tr><td>CAGR للإيرادات (3–5 سنوات)</td><td>نمو مستمر &gt; 10% في شركات النمو</td><td>قائمة الدخل عبر الزمن</td></tr>
+        <tr><td>CAGR لـ EPS (3–5 سنوات)</td><td>نمو أسرع من الإيرادات يشير إلى تحسّن الكفاءة</td><td>قائمة الدخل / تاريخ EPS</td></tr>
+        <tr><td>نمو FCF لكل سهم</td><td>أكثر مؤشرات النمو موثوقية</td><td>قائمة التدفقات النقدية</td></tr>
+        <tr><td>نمو القيمة الدفترية لكل سهم</td><td>يقيس تراكم قيمة حقوق الملكية مع الوقت</td><td>الميزانية العمومية</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="section" id="using-ratios">
+    <h2>كيفية استخدام النسب عملياً</h2>
+    <p>لا تُخبرك نسبة واحدة بالقصة كاملة. <a href="https://www.cfainstitute.org/en/membership/professional-development/refresher-readings/financial-analysis-techniques" target="_blank" rel="noopener">يوصي CFA Institute</a> ببناء «فسيفساء نسب» — استخدام نسب التقييم والربحية والرافعة والكفاءة معاً لتكوين صورة متكاملة.</p>
+    <p><a href="https://en.wikipedia.org/wiki/Piotroski_F-score" target="_blank" rel="noopener">Piotroski F-Score</a>، الذي طوره الأستاذ Joseph Piotroski من Stanford، نظام تسجيل من 9 نقاط يجمع نسب الربحية والرافعة والكفاءة. تُظهر الأبحاث الأكاديمية أن أسهم F-Score المرتفع (7–9) تتفوق على الأسهم ذات F-Score المنخفض (0–2) بمتوسط 7.5% سنوياً.</p>
+    <div class="callout">
+      <div class="callout-label">استخدم TruePrice.Cash</div>
+      <p><a href="https://trueprice.cash/screener" target="_blank">مُصفّي TruePrice.Cash</a> يحسب جميع النسب الرئيسية عبر تاسي وS&amp;P 500 وJPX وLSE تلقائياً. صفِّ حسب P/E وROE والدين/حقوق الملكية وغيرها — مع مقارنة الأقران مدمجة.</p>
+    </div>
+  </section>
+
+  <div class="sources"><h3>المصادر وقراءات إضافية</h3><ul>
+    <li><a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/pedata.html" target="_blank" rel="noopener">Damodaran Online — نسب P/E حسب الصناعة</a></li>
+    <li><a href="https://www.cfainstitute.org/en/membership/professional-development/refresher-readings/financial-analysis-techniques" target="_blank" rel="noopener">CFA Institute — تقنيات التحليل المالي</a></li>
+    <li><a href="https://www.investopedia.com/financial-ratios-4689817" target="_blank" rel="noopener">Investopedia — مركز النسب المالية</a></li>
+    <li><a href="https://www.morningstar.com/stocks" target="_blank" rel="noopener">Morningstar — أبحاث الأسهم والنسب</a></li>
+    <li><a href="https://www.macrotrends.net/" target="_blank" rel="noopener">Macrotrends — بيانات النسب التاريخية</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Piotroski_F-score" target="_blank" rel="noopener">Wikipedia — منهجية Piotroski F-Score</a></li>
+  </ul></div>
+  <nav class="article-nav" aria-label="تنقل المقال">
+    <a class="nav-pill" href="/tutorials/cash-flow-statement"><span class="nav-pill-label">السابق</span><span class="nav-pill-title">فك شفرة قائمة التدفقات النقدية</span></a>
+    <a class="nav-pill" href="/tutorials/dcf-valuation"><span class="nav-pill-label">الدرس التالي</span><span class="nav-pill-title">شرح تقييم DCF</span></a>
+  </nav>
+</main>
+</body>
+</html>

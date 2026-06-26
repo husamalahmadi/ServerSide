@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { TUTORIAL_ARTICLES } from "../data/tutorials/articles.js";
+import { resolveTutorialArticles } from "../data/tutorials/resolve.js";
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { buildTutorialsIndexSeo } from "../seo/structuredData.js";
@@ -12,32 +13,41 @@ function stripTitle(html) {
 }
 
 export default function Tutorials() {
-  const { t } = useI18n();
-  const seo = useMemo(() => buildTutorialsIndexSeo({ articles: TUTORIAL_ARTICLES }), []);
+  const { t, lang } = useI18n();
+  const articles = useMemo(
+    () => resolveTutorialArticles(TUTORIAL_ARTICLES, lang),
+    [lang]
+  );
+  const seo = useMemo(() => buildTutorialsIndexSeo({ articles, lang }), [articles, lang]);
   usePageMeta(seo);
 
   return (
     <div className="tp-page tp-tutorials-page">
       <header className="tp-tutorial-landing-hero">
-        <p className="tp-tutorial-series-label">Fundamental Analysis Series</p>
+        <p className="tp-tutorial-series-label">{t("TUTORIALS_SERIES_LABEL")}</p>
         <h1 className="tp-tutorial-landing-title">
-          Learn to invest with <em>fundamentals</em>
+          {lang === "ar" ? (
+            <>
+              تعلّم الاستثمار عبر <em>التحليل الأساسي</em>
+            </>
+          ) : (
+            <>
+              Learn to invest with <em>fundamentals</em>
+            </>
+          )}
         </h1>
-        <p className="tp-tutorial-landing-lead">
-          Ten step-by-step guides — from reading financial statements to spotting red flags — written for
-          serious long-term investors on US, TASI, Tokyo, and London markets.
-        </p>
+        <p className="tp-tutorial-landing-lead">{t("TUTORIALS_HERO_LEAD")}</p>
         <div className="tp-tutorial-landing-stats">
-          <span>{TUTORIAL_ARTICLES.length} tutorials</span>
+          <span>
+            {TUTORIAL_ARTICLES.length} {t("TUTORIALS_COUNT_LABEL")}
+          </span>
           <span aria-hidden>·</span>
-          <span>Beginner to advanced</span>
-          <span aria-hidden>·</span>
-          <span>English</span>
+          <span>{t("TUTORIALS_LEVEL_RANGE")}</span>
         </div>
       </header>
 
       <ol className="tp-tutorial-catalog">
-        {TUTORIAL_ARTICLES.map((article) => (
+        {articles.map((article) => (
           <li key={article.slug}>
             <Link to={`/tutorials/${article.slug}`} className="tp-tutorial-catalog-card">
               <div className="tp-tutorial-catalog-num">{String(article.order).padStart(2, "0")}</div>
@@ -45,11 +55,17 @@ export default function Tutorials() {
                 <h2 className="tp-tutorial-catalog-title">{stripTitle(article.titleHtml)}</h2>
                 <p className="tp-tutorial-catalog-sub">{article.subtitle}</p>
                 <div className="tp-tutorial-catalog-meta">
-                  {article.readingTime ? <span>{article.readingTime} read</span> : null}
+                  {article.readingTime ? (
+                    <span>
+                      {article.readingTime} {t("TUTORIALS_READ_SUFFIX")}
+                    </span>
+                  ) : null}
                   {article.level ? <span>{article.level}</span> : null}
                 </div>
               </div>
-              <span className="tp-tutorial-catalog-arrow" aria-hidden>→</span>
+              <span className="tp-tutorial-catalog-arrow" aria-hidden>
+                {lang === "ar" ? "←" : "→"}
+              </span>
             </Link>
           </li>
         ))}

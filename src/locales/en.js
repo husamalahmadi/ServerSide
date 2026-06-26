@@ -201,6 +201,23 @@ export default {
   ERR_VALUATION_RETRY:
     "Valuation could not be calculated because some data is missing. Please try again in a moment.",
   BLOGS: "Blogs",
+  TUTORIALS: "Tutorials",
+  TUTORIALS_SERIES_LABEL: "Fundamental Analysis Series",
+  TUTORIALS_HERO_LEAD:
+    "Ten step-by-step guides — from reading financial statements to spotting red flags — written for serious long-term investors on US, TASI, Tokyo, and London markets.",
+  TUTORIALS_COUNT_LABEL: "tutorials",
+  TUTORIALS_LEVEL_RANGE: "Beginner to advanced",
+  TUTORIALS_READ_SUFFIX: "read",
+  TUTORIALS_BREADCRUMB_NUM: "Tutorial {num}",
+  TUTORIALS_META_READING: "Reading time",
+  TUTORIALS_META_LEVEL: "Level",
+  TUTORIALS_META_SERIES: "Series",
+  TUTORIALS_NAV_PREV: "Previous",
+  TUTORIALS_NAV_NEXT: "Next tutorial",
+  TUTORIALS_NAV_ARIA: "Tutorial series navigation",
+  SEO_TITLE_TUTORIALS: "Fundamental Analysis Tutorials – TruePrice.Cash",
+  SEO_DESC_TUTORIALS:
+    "Free step-by-step guides on fundamental analysis: income statements, balance sheets, cash flow, ratios, DCF valuation, moats, and red flags for US, TASI, Tokyo, and London investors.",
   ERR_LOAD_BLOGS: "Failed to load blogs.",
   READ_MORE: "Read more",
   PUBLISHED: "Published",

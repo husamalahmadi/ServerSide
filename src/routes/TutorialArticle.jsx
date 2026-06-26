@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { TUTORIAL_BY_SLUG } from "../data/tutorials/articles.js";
+import { TUTORIAL_ARTICLES, TUTORIAL_BY_SLUG } from "../data/tutorials/articles.js";
+import { resolveTutorialArticle } from "../data/tutorials/resolve.js";
 import { SafeHtml } from "../components/SafeHtml.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { TutorialArticleNav } from "../components/tutorial/TutorialArticleNav.jsx";
@@ -10,13 +11,18 @@ import { tutorialHtmlConfig } from "../utils/sanitizeHtml.js";
 import { useI18n } from "../i18n.jsx";
 
 export default function TutorialArticle() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { slug } = useParams();
-  const article = TUTORIAL_BY_SLUG[slug];
+  const base = TUTORIAL_BY_SLUG[slug];
+
+  const article = useMemo(
+    () => (base ? resolveTutorialArticle(base, lang, TUTORIAL_ARTICLES) : null),
+    [base, lang]
+  );
 
   const seo = useMemo(
-    () => (article ? buildTutorialArticleSeo({ article }) : null),
-    [article]
+    () => (article ? buildTutorialArticleSeo({ article, lang }) : null),
+    [article, lang]
   );
   usePageMeta(seo || {});
 
@@ -27,39 +33,33 @@ export default function TutorialArticle() {
   return (
     <article className="tp-page tp-tutorial-article-page">
       <nav className="tp-tutorial-breadcrumb" aria-label="Breadcrumb">
-        <Link to="/tutorials">Tutorials</Link>
+        <Link to="/tutorials">{t("TUTORIALS")}</Link>
         <span aria-hidden>/</span>
-        <span>Tutorial {String(article.order).padStart(2, "0")}</span>
+        <span>{t("TUTORIALS_BREADCRUMB_NUM").replace("{num}", String(article.order).padStart(2, "0"))}</span>
       </nav>
 
       <header className="tp-tutorial-hero">
         {article.seriesLabel ? (
           <p className="tp-tutorial-series-label">{article.seriesLabel}</p>
         ) : null}
-        <SafeHtml
-          html={article.titleHtml}
-          tagName="h1"
-          className="tp-tutorial-hero-title"
-        />
-        {article.subtitle ? (
-          <p className="tp-tutorial-hero-sub">{article.subtitle}</p>
-        ) : null}
+        <SafeHtml html={article.titleHtml} tagName="h1" className="tp-tutorial-hero-title" />
+        {article.subtitle ? <p className="tp-tutorial-hero-sub">{article.subtitle}</p> : null}
         <div className="tp-tutorial-hero-meta">
           {article.readingTime ? (
             <span>
-              <span className="tp-tutorial-meta-label">Reading time</span>
+              <span className="tp-tutorial-meta-label">{t("TUTORIALS_META_READING")}</span>
               <span className="tp-tutorial-meta-value">{article.readingTime}</span>
             </span>
           ) : null}
           {article.level ? (
             <span>
-              <span className="tp-tutorial-meta-label">Level</span>
+              <span className="tp-tutorial-meta-label">{t("TUTORIALS_META_LEVEL")}</span>
               <span className="tp-tutorial-meta-value">{article.level}</span>
             </span>
           ) : null}
           {article.series ? (
             <span>
-              <span className="tp-tutorial-meta-label">Series</span>
+              <span className="tp-tutorial-meta-label">{t("TUTORIALS_META_SERIES")}</span>
               <span className="tp-tutorial-meta-value">{article.series}</span>
             </span>
           ) : null}
@@ -74,7 +74,7 @@ export default function TutorialArticle() {
         />
       </div>
 
-      <TutorialArticleNav prev={article.prev} next={article.next} />
+      <TutorialArticleNav prev={article.prev} next={article.next} t={t} />
       <SiteFooter t={t} />
     </article>
   );

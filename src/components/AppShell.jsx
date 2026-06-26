@@ -93,12 +93,10 @@ export function AppShell() {
             <NavIcon name="blog" />
             {t("BLOGS")}
           </NavLink>
-          {lang === "en" ? (
-            <NavLink to="/tutorials" className="tp-nav-link" onClick={closeSidebar}>
-              <NavIcon name="book" />
-              Tutorials
-            </NavLink>
-          ) : null}
+          <NavLink to="/tutorials" className="tp-nav-link" onClick={closeSidebar}>
+            <NavIcon name="book" />
+            {t("TUTORIALS")}
+          </NavLink>
           <NavLink to="/about" className="tp-nav-link" onClick={closeSidebar}>
             <NavIcon name="info" />
             {t("ABOUT_US")}

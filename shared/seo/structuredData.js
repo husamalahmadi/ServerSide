@@ -273,12 +273,17 @@ function stripTutorialTitle(html) {
     .trim();
 }
 
-export function buildTutorialsIndexSeo({ articles = [] }) {
-  const heading = "Fundamental Analysis Tutorials";
+export function buildTutorialsIndexSeo({ articles = [], lang = "en" }) {
+  const isAr = lang === "ar";
+  const heading = isAr ? "دروس التحليل الأساسي" : "Fundamental Analysis Tutorials";
   const description = formatMetaDescription(
-    "Free step-by-step guides on fundamental analysis: income statements, balance sheets, cash flow, ratios, DCF valuation, moats, and red flags for US, TASI, Tokyo, and London investors."
+    isAr
+      ? "أدلة مجانية خطوة بخطوة في التحليل الأساسي: قائمة الدخل، الميزانية، التدفقات النقدية، النسب، تقييم DCF، الخندق التنافسي، وإشارات الخطر."
+      : "Free step-by-step guides on fundamental analysis: income statements, balance sheets, cash flow, ratios, DCF valuation, moats, and red flags for US, TASI, Tokyo, and London investors."
   );
-  const documentTitle = formatDocumentTitle("Fundamental Analysis Tutorials – TruePrice.Cash");
+  const documentTitle = formatDocumentTitle(
+    isAr ? "دروس التحليل الأساسي – TruePrice.Cash" : "Fundamental Analysis Tutorials – TruePrice.Cash"
+  );
 
   const listId = `${toAbs("/tutorials")}#list`;
   const itemListElement = articles.map((a, i) => ({
@@ -288,12 +293,19 @@ export function buildTutorialsIndexSeo({ articles = [] }) {
     name: stripTutorialTitle(a.titleHtml),
   }));
 
+  const inLanguage = isAr ? "ar" : "en";
+
   return {
     title: heading,
     documentTitle,
     metaDescription: description,
     description,
     pathname: "/tutorials",
+    alternates: {
+      en: "/tutorials?lang=en",
+      ar: "/tutorials?lang=ar",
+      "x-default": "/tutorials",
+    },
     jsonLd: {
       "@context": "https://schema.org",
       "@graph": [
@@ -303,7 +315,7 @@ export function buildTutorialsIndexSeo({ articles = [] }) {
           url: toAbs("/tutorials"),
           name: heading,
           description,
-          inLanguage: "en",
+          inLanguage,
           isPartOf: {
             "@type": "WebSite",
             "@id": `${toAbs("/")}#website`,
@@ -322,7 +334,7 @@ export function buildTutorialsIndexSeo({ articles = [] }) {
           url: toAbs(`/tutorials/${a.slug}`),
           name: stripTutorialTitle(a.titleHtml),
           description: a.metaDescription || a.subtitle,
-          inLanguage: "en",
+          inLanguage,
           learningResourceType: "Tutorial",
           isPartOf: { "@id": listId },
           publisher: {
@@ -336,13 +348,19 @@ export function buildTutorialsIndexSeo({ articles = [] }) {
   };
 }
 
-export function buildTutorialArticleSeo({ article }) {
+export function buildTutorialArticleSeo({ article, lang = "en" }) {
+  const isAr = lang === "ar";
   const pathname = `/tutorials/${article.slug}`;
   const headline = stripTutorialTitle(article.titleHtml);
   const description = formatMetaDescription(article.metaDescription || article.subtitle);
   const documentTitle =
     article.documentTitle ||
-    formatDocumentTitle(`${headline} – TruePrice.Cash Tutorials`);
+    formatDocumentTitle(
+      isAr ? `${headline} – دروس TruePrice.Cash` : `${headline} – TruePrice.Cash Tutorials`
+    );
+
+  const tutorialsLabel = isAr ? "الدروس" : "Tutorials";
+  const homeLabel = isAr ? "الرئيسية" : "Home";
 
   return {
     title: headline,
@@ -350,6 +368,11 @@ export function buildTutorialArticleSeo({ article }) {
     metaDescription: description,
     description,
     pathname,
+    alternates: {
+      en: `/tutorials/${article.slug}?lang=en`,
+      ar: `/tutorials/${article.slug}?lang=ar`,
+      "x-default": `/tutorials/${article.slug}`,
+    },
     jsonLd: {
       "@context": "https://schema.org",
       "@graph": [
@@ -359,11 +382,11 @@ export function buildTutorialArticleSeo({ article }) {
           headline,
           description,
           url: toAbs(pathname),
-          inLanguage: "en",
+          inLanguage: isAr ? "ar" : "en",
           isPartOf: {
             "@type": "CollectionPage",
             url: toAbs("/tutorials"),
-            name: "Fundamental Analysis Tutorials",
+            name: isAr ? "دروس التحليل الأساسي" : "Fundamental Analysis Tutorials",
           },
           publisher: {
             "@type": "Organization",
@@ -379,8 +402,8 @@ export function buildTutorialArticleSeo({ article }) {
         {
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: toAbs("/") },
-            { "@type": "ListItem", position: 2, name: "Tutorials", item: toAbs("/tutorials") },
+            { "@type": "ListItem", position: 1, name: homeLabel, item: toAbs("/") },
+            { "@type": "ListItem", position: 2, name: tutorialsLabel, item: toAbs("/tutorials") },
             { "@type": "ListItem", position: 3, name: headline, item: toAbs(pathname) },
           ],
         },

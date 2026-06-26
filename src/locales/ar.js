@@ -201,6 +201,23 @@ export default {
   ERR_VALUATION_RETRY:
     "تعذر حساب التقييم لأن بعض البيانات غير متوفرة. يرجى المحاولة مرة أخرى بعد قليل.",
   BLOGS: "المدونة",
+  TUTORIALS: "الدروس",
+  TUTORIALS_SERIES_LABEL: "سلسلة التحليل الأساسي",
+  TUTORIALS_HERO_LEAD:
+    "عشرة أدلة تفصيلية — من قراءة القوائم المالية إلى رصد إشارات الخطر — مخصّصة للمستثمرين الجادّين على المدى الطويل في أسواق أمريكا وتداول وطوكيو ولندن.",
+  TUTORIALS_COUNT_LABEL: "دروس",
+  TUTORIALS_LEVEL_RANGE: "من مبتدئ إلى متقدّم",
+  TUTORIALS_READ_SUFFIX: "قراءة",
+  TUTORIALS_BREADCRUMB_NUM: "الدرس {num}",
+  TUTORIALS_META_READING: "وقت القراءة",
+  TUTORIALS_META_LEVEL: "المستوى",
+  TUTORIALS_META_SERIES: "السلسلة",
+  TUTORIALS_NAV_PREV: "السابق",
+  TUTORIALS_NAV_NEXT: "الدرس التالي",
+  TUTORIALS_NAV_ARIA: "التنقل بين دروس السلسلة",
+  SEO_TITLE_TUTORIALS: "دروس التحليل الأساسي – TruePrice.Cash",
+  SEO_DESC_TUTORIALS:
+    "أدلة مجانية خطوة بخطوة في التحليل الأساسي: قائمة الدخل، الميزانية، التدفقات النقدية، النسب، تقييم DCF، الخندق التنافسي، وإشارات الخطر — لمستثمري أمريكا وتداول وطوكيو ولندن.",
   ERR_LOAD_BLOGS: "فشل تحميل المدونات.",
   READ_MORE: "اقرأ المزيد",
   PUBLISHED: "تاريخ النشر",

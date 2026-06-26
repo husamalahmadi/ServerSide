@@ -4228,3 +4228,48 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
     padding: 1rem;
   }
 }
+
+/* RTL tutorial layout */
+[dir="rtl"] .tp-tutorial-content {
+  text-align: right;
+}
+
+[dir="rtl"] .tp-tutorial-content .toc {
+  border-inline-start: 3px solid var(--tp-primary);
+  border-inline-end: 0;
+}
+
+[dir="rtl"] .tp-tutorial-content .callout {
+  border-inline-start: 3px solid var(--tp-primary);
+  border-inline-end: 0;
+}
+
+[dir="rtl"] .tp-tutorial-content th,
+[dir="rtl"] .tp-tutorial-content td {
+  text-align: right;
+}
+
+[dir="rtl"] .tp-tutorial-content .is-row,
+[dir="rtl"] .tp-tutorial-content .bs-row,
+[dir="rtl"] .tp-tutorial-content .cf-row {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .tp-tutorial-nav-pill--next {
+  text-align: start;
+}
+
+[dir="rtl"] .tp-tutorial-breadcrumb {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+[dir="rtl"] .tp-tutorial-catalog-card {
+  direction: rtl;
+}
+
+[dir="rtl"] .tp-tutorial-hero-meta,
+[dir="rtl"] .tp-tutorial-landing-stats {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
