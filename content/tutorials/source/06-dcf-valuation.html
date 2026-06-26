@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>How to Calculate Intrinsic Value Using DCF | TruePrice.Cash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--ink:#0f1117;--ink-soft:#3a3d4a;--ink-muted:#767b8a;--gold:#c9a84c;--gold-light:#f0d98a;--gold-faint:#fdf7e8;--white:#fff;--surface:#f9f8f6;--border:#e8e4dc;--link:#1a5c9e;--link-hover:#c9a84c;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:var(--surface);color:var(--ink);line-height:1.75;font-size:17px;}
+    nav{background:var(--ink);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;}
+    .nav-brand{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.25rem;text-decoration:none;}
+    .nav-links{display:flex;gap:24px;}.nav-links a{color:#aab0c0;text-decoration:none;font-size:.85rem;font-weight:500;transition:color .2s;}.nav-links a:hover{color:var(--gold);}
+    .progress-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+    .hero{background:var(--ink);color:#fff;padding:80px 40px 60px;}.hero-inner{max-width:820px;margin:0 auto;}
+    .series-label{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;display:block;}
+    .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;line-height:1.15;margin-bottom:20px;}
+    .hero h1 em{font-style:normal;color:var(--gold);}
+    .hero-sub{font-size:1.1rem;color:#b0b8c8;max-width:640px;}
+    .hero-meta{margin-top:36px;display:flex;gap:32px;flex-wrap:wrap;}
+    .meta-item{display:flex;flex-direction:column;gap:2px;}
+    .meta-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-muted);text-transform:uppercase;letter-spacing:1.5px;}
+    .meta-value{font-size:.9rem;color:#d0d8e8;font-weight:500;}
+    .content-wrap{max-width:820px;margin:0 auto;padding:60px 40px 100px;}
+    .toc{background:var(--gold-faint);border-left:3px solid var(--gold);padding:24px 28px;margin-bottom:52px;border-radius:0 6px 6px 0;}
+    .toc-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:14px;}
+    .toc ol{padding-left:20px;}.toc li{margin-bottom:6px;}.toc a{color:var(--link);text-decoration:none;font-size:.92rem;font-weight:500;}.toc a:hover{color:var(--link-hover);text-decoration:underline;}
+    .section{margin-bottom:60px;}
+    h2{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;border-top:1px solid var(--border);padding-top:32px;margin-bottom:18px;}
+    h3{font-size:1.15rem;font-weight:600;margin:28px 0 12px;}
+    p{margin-bottom:18px;color:var(--ink-soft);}
+    a{color:var(--link);text-decoration:underline;text-underline-offset:2px;transition:color .2s;}a:hover{color:var(--link-hover);}
+    .callout{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--gold);padding:20px 24px;border-radius:0 8px 8px 0;margin:28px 0;}
+    .callout-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin-bottom:8px;}
+    .callout p{margin:0;font-size:.95rem;}
+    .table-wrap{overflow-x:auto;margin:24px 0 36px;}
+    table{width:100%;border-collapse:collapse;font-size:.92rem;}
+    thead{background:var(--ink);color:#fff;}thead th{padding:12px 16px;text-align:left;font-weight:600;font-size:.82rem;letter-spacing:.5px;}
+    tbody tr{border-bottom:1px solid var(--border);}tbody tr:nth-child(even){background:var(--gold-faint);}
+    tbody td{padding:12px 16px;color:var(--ink-soft);vertical-align:top;}tbody td:first-child{font-weight:600;color:var(--ink);}
+    .formula-box{background:var(--ink);color:var(--white);border-radius:10px;padding:28px 32px;margin:28px 0;font-family:'JetBrains Mono',monospace;}
+    .formula-title{font-size:.72rem;text-transform:uppercase;letter-spacing:2px;color:var(--gold);margin-bottom:14px;}
+    .formula-text{font-size:1.1rem;line-height:2;}
+    .formula-text span{color:var(--gold-light);}
+    .dcf-table{background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:28px 0;}
+    .dcf-table table{margin:0;}
+    .sources{background:var(--ink);color:#fff;border-radius:10px;padding:32px 36px;margin-top:60px;}
+    .sources h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);margin-bottom:18px;}
+    .sources ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+    .sources li{font-size:.88rem;color:#aab0c0;display:flex;gap:10px;align-items:baseline;}
+    .sources li::before{content:"→";color:var(--gold);flex-shrink:0;}
+    .sources a{color:#7ab3e0;text-decoration:none;}.sources a:hover{color:var(--gold);text-decoration:underline;}
+    .article-nav{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:60px;padding-top:32px;border-top:1px solid var(--border);}
+    .nav-pill{display:inline-flex;flex-direction:column;gap:4px;padding:14px 20px;background:var(--white);border:1px solid var(--border);border-radius:8px;text-decoration:none;max-width:260px;transition:border-color .2s;}
+    .nav-pill:hover{border-color:var(--gold);}
+    .nav-pill-label{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--ink-muted);font-family:'JetBrains Mono',monospace;}
+    .nav-pill-title{font-size:.9rem;font-weight:600;color:var(--ink);}
+    @media(max-width:640px){.hero{padding:50px 20px 40px;}.content-wrap{padding:40px 20px 60px;}nav{padding:0 20px;}}
+  </style>
+</head>
+<body>
+<nav><a class="nav-brand" href="https://trueprice.cash">TruePrice.Cash</a><div class="nav-links"><a href="https://trueprice.cash">Home</a><a href="https://trueprice.cash/screener">Screener</a><a href="#">Tutorials</a></div></nav>
+<div class="progress-bar"></div>
+<header class="hero"><div class="hero-inner">
+  <span class="series-label">Tutorial 06 of 10 · Fundamental Analysis Series</span>
+  <h1>How to Calculate <em>Intrinsic Value</em><br/>Using DCF (Discounted Cash Flow)</h1>
+  <p class="hero-sub">DCF is the most rigorous — and most humbling — valuation method in finance. When done correctly, it reveals what a business is genuinely worth, independent of what the market says.</p>
+  <div class="hero-meta"><div class="meta-item"><span class="meta-label">Reading time</span><span class="meta-value">16 min</span></div><div class="meta-item"><span class="meta-label">Level</span><span class="meta-value">Intermediate–Advanced</span></div></div>
+</div></header>
+<main class="content-wrap">
+  <nav class="toc"><div class="toc-title">In this article</div><ol>
+    <li><a href="#what-is-dcf">What is DCF?</a></li>
+    <li><a href="#time-value">The Time Value of Money</a></li>
+    <li><a href="#step-by-step">DCF: Step-by-Step</a></li>
+    <li><a href="#wacc">Understanding the Discount Rate (WACC)</a></li>
+    <li><a href="#terminal-value">Terminal Value</a></li>
+    <li><a href="#worked-example">A Worked Example</a></li>
+    <li><a href="#limitations">DCF Limitations & Sensitivity</a></li>
+  </ol></nav>
+
+  <section class="section" id="what-is-dcf">
+    <h2>What is DCF?</h2>
+    <p>Discounted Cash Flow (DCF) analysis estimates the present value of a company based on its expected future cash flows. It is the theoretical foundation of almost all company valuation in professional finance, used by investment banks, private equity firms, and institutional asset managers worldwide.</p>
+    <p><a href="https://aswathdamodaran.blogspot.com/2012/01/dcf-myth-1-if-you-have-dcf-model-you.html" target="_blank" rel="noopener">Professor Damodaran at NYU Stern</a>, widely considered the world's leading authority on valuation, calls DCF "the ultimate test of investing discipline" — it forces you to make explicit assumptions about every driver of value.</p>
+  </section>
+
+  <section class="section" id="time-value">
+    <h2>The Time Value of Money</h2>
+    <p>The core principle of DCF is that SAR 1 today is worth more than SAR 1 in the future — because today's riyal can be invested to earn a return. Therefore, future cash flows must be "discounted" back to their present value.</p>
+    <div class="formula-box">
+      <div class="formula-title">Present Value Formula</div>
+      <div class="formula-text">PV = <span>CF<sub>n</sub></span> ÷ (1 + r)<sup>n</sup></div>
+    </div>
+    <p>Where CF is the future cash flow, r is the discount rate, and n is the number of years. The <a href="https://www.khanacademy.org/economics-finance-domain/core-finance/interest-tutorial/present-value/v/time-value-of-money" target="_blank" rel="noopener">Khan Academy's time value of money series</a> explains this concept clearly with worked examples and is free to access.</p>
+  </section>
+
+  <section class="section" id="step-by-step">
+    <h2>DCF: Step-by-Step</h2>
+    <p><strong>Step 1 — Project Free Cash Flow:</strong> Forecast the company's free cash flow for 5–10 years. Use the historical FCF as the base and apply a growth rate derived from revenue trends, margin expectations, and capital expenditure forecasts.</p>
+    <p><strong>Step 2 — Choose a Discount Rate (WACC):</strong> The Weighted Average Cost of Capital (WACC) reflects the return investors require. A riskier business demands a higher discount rate. See the section below for how to calculate it.</p>
+    <p><strong>Step 3 — Calculate Terminal Value:</strong> Beyond year 10, you assume the business grows at a stable "terminal growth rate" (typically 2–3%, close to long-term GDP growth). This is discounted back to today.</p>
+    <p><strong>Step 4 — Sum All Present Values:</strong> Add the discounted cash flows for all years plus the discounted terminal value to get Enterprise Value. Subtract net debt to get equity value, then divide by shares outstanding for intrinsic value per share.</p>
+  </section>
+
+  <section class="section" id="wacc">
+    <h2>Understanding the Discount Rate (WACC)</h2>
+    <div class="formula-box">
+      <div class="formula-title">WACC Formula</div>
+      <div class="formula-text">WACC = <span>(E/V × Re)</span> + <span>(D/V × Rd × (1 – Tax))</span></div>
+    </div>
+    <p>Where E = equity, D = debt, V = total capital, Re = cost of equity, Rd = cost of debt.</p>
+    <p>The <strong>cost of equity</strong> is typically calculated using the <a href="https://www.investopedia.com/terms/c/capm.asp" target="_blank" rel="noopener">Capital Asset Pricing Model (CAPM)</a>: Re = Risk-Free Rate + Beta × (Market Risk Premium). For TASI stocks, the risk-free rate is typically approximated by the <a href="https://www.sama.gov.sa/en-US/EconomicReports/Pages/YearlyStatistics.aspx" target="_blank" rel="noopener">Saudi Government Bond yield</a>, available from SAMA. For global equity risk premia by country, <a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/ctryprem.html" target="_blank" rel="noopener">Damodaran's country risk premium dataset</a> is the standard source.</p>
+  </section>
+
+  <section class="section" id="terminal-value">
+    <h2>Terminal Value</h2>
+    <p>Terminal value often accounts for 60–80% of total DCF value, which is why the terminal growth rate assumption is so critical. The two main methods:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Method</th><th>Formula</th><th>When to Use</th></tr></thead>
+      <tbody>
+        <tr><td>Gordon Growth Model</td><td>FCF × (1 + g) ÷ (WACC − g)</td><td>Mature businesses with stable growth</td></tr>
+        <tr><td>Exit Multiple</td><td>EBITDA × Industry EV/EBITDA Multiple</td><td>When reliable comparable transactions exist</td></tr>
+      </tbody>
+    </table></div>
+    <p>Never use a terminal growth rate above long-term nominal GDP growth. <a href="https://www.imf.org/en/Publications/WEO" target="_blank" rel="noopener">IMF World Economic Outlook</a> provides long-term GDP growth forecasts by country, a useful sanity check.</p>
+  </section>
+
+  <section class="section" id="worked-example">
+    <h2>A Worked Example</h2>
+    <p>Assume a company generates SAR 500M in FCF today, growing at 10% for 5 years, then 3% in perpetuity. WACC = 9%. Here are the projected and discounted cash flows:</p>
+    <div class="dcf-table"><table>
+      <thead><tr><th>Year</th><th>FCF (SAR M)</th><th>Discount Factor (9%)</th><th>Present Value</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>550</td><td>0.917</td><td>504</td></tr>
+        <tr><td>2</td><td>605</td><td>0.842</td><td>509</td></tr>
+        <tr><td>3</td><td>666</td><td>0.772</td><td>514</td></tr>
+        <tr><td>4</td><td>732</td><td>0.708</td><td>518</td></tr>
+        <tr><td>5</td><td>805</td><td>0.650</td><td>523</td></tr>
+        <tr><td>Terminal Value</td><td>805 × 1.03 ÷ (0.09 − 0.03)</td><td>= SAR 13,819M</td><td>8,982</td></tr>
+        <tr style="font-weight:700"><td>Enterprise Value</td><td></td><td></td><td>SAR 11,550M</td></tr>
+      </tbody>
+    </table></div>
+    <p>Subtract net debt (say SAR 1,200M) → Equity Value = SAR 10,350M. Divide by 200M shares → Intrinsic value = <strong>SAR 51.75 per share</strong>. If the stock trades at SAR 40, the margin of safety is 23% — potentially a compelling buy.</p>
+    <p>TruePrice.Cash's <a href="https://trueprice.cash" target="_blank">DCF engine</a> automates this calculation for every TASI stock, pulling live financial data and applying sector-appropriate WACC estimates.</p>
+  </section>
+
+  <section class="section" id="limitations">
+    <h2>DCF Limitations & Sensitivity</h2>
+    <p>DCF is highly sensitive to input assumptions. Changing the WACC by 1% or the terminal growth rate by 0.5% can change the intrinsic value by 20–30%. This is not a weakness unique to DCF — it reflects genuine uncertainty about the future.</p>
+    <div class="callout"><div class="callout-label">Best Practice</div><p>Always run a sensitivity table — a matrix showing intrinsic value across a range of WACC and growth rate combinations. This gives you a <em>range</em> of fair values, not a false point estimate. Excel templates for this are available free at <a href="https://www.wallstreetprep.com/knowledge/dcf-model/" target="_blank" rel="noopener">Wall Street Prep's DCF model guide</a>.</p></div>
+    <p>The greatest investors acknowledge that DCF provides a framework for disciplined thinking, not a precise answer. As Buffett noted, <a href="https://www.berkshirehathaway.com/letters/1992.html" target="_blank" rel="noopener">in his 1992 letter</a>, it's better to be approximately right than precisely wrong.</p>
+  </section>
+
+  <div class="sources"><h3>Sources & Further Reading</h3><ul>
+    <li><a href="https://aswathdamodaran.blogspot.com/" target="_blank" rel="noopener">Damodaran Online — Complete DCF Valuation Resources</a></li>
+    <li><a href="https://www.investopedia.com/terms/d/dcf.asp" target="_blank" rel="noopener">Investopedia — Discounted Cash Flow Analysis</a></li>
+    <li><a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/ctryprem.html" target="_blank" rel="noopener">Damodaran — Country Risk Premium Dataset</a></li>
+    <li><a href="https://www.wallstreetprep.com/knowledge/dcf-model/" target="_blank" rel="noopener">Wall Street Prep — DCF Model Complete Guide</a></li>
+    <li><a href="https://www.khanacademy.org/economics-finance-domain/core-finance/interest-tutorial/present-value/v/time-value-of-money" target="_blank" rel="noopener">Khan Academy — Time Value of Money</a></li>
+    <li><a href="https://www.sama.gov.sa/en-US/EconomicReports/Pages/YearlyStatistics.aspx" target="_blank" rel="noopener">SAMA — Saudi Economic Reports & Bond Yields</a></li>
+    <li><a href="https://www.imf.org/en/Publications/WEO" target="_blank" rel="noopener">IMF — World Economic Outlook</a></li>
+  </ul></div>
+  <nav class="article-nav"><a class="nav-pill" href="05-financial-ratios.html"><span class="nav-pill-label">← Previous</span><span class="nav-pill-title">Key Financial Ratios</span></a><a class="nav-pill" href="07-competitive-moat.html"><span class="nav-pill-label">Next Tutorial →</span><span class="nav-pill-title">Analyzing Competitive Moats</span></a></nav>
+</main>
+</body>
+</html>

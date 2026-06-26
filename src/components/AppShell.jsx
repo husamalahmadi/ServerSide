@@ -27,6 +27,12 @@ function NavIcon({ name }) {
       />
     ),
     blog: <path d="M6 5h12v14H8l-2 2V5z" stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinejoin="round" />,
+    book: (
+      <>
+        <path d="M5 4h11a2 2 0 012 2v14l-4-2-4 2-4-2-4 2V6a2 2 0 012-2z" stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinejoin="round" />
+        <path d="M9 8h6M9 12h4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      </>
+    ),
     info: (
       <>
         <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" fill="none" />
@@ -87,6 +93,12 @@ export function AppShell() {
             <NavIcon name="blog" />
             {t("BLOGS")}
           </NavLink>
+          {lang === "en" ? (
+            <NavLink to="/tutorials" className="tp-nav-link" onClick={closeSidebar}>
+              <NavIcon name="book" />
+              Tutorials
+            </NavLink>
+          ) : null}
           <NavLink to="/about" className="tp-nav-link" onClick={closeSidebar}>
             <NavIcon name="info" />
             {t("ABOUT_US")}

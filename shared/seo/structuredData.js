@@ -264,3 +264,127 @@ export function buildBlogsSeo({ lang, posts = [], postsCount }) {
     },
   };
 }
+
+function stripTutorialTitle(html) {
+  return String(html || "")
+    .replace(/<br\s*\/?>/gi, " ")
+    .replace(/<[^>]+>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+export function buildTutorialsIndexSeo({ articles = [] }) {
+  const heading = "Fundamental Analysis Tutorials";
+  const description = formatMetaDescription(
+    "Free step-by-step guides on fundamental analysis: income statements, balance sheets, cash flow, ratios, DCF valuation, moats, and red flags for US, TASI, Tokyo, and London investors."
+  );
+  const documentTitle = formatDocumentTitle("Fundamental Analysis Tutorials – TruePrice.Cash");
+
+  const listId = `${toAbs("/tutorials")}#list`;
+  const itemListElement = articles.map((a, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    url: toAbs(`/tutorials/${a.slug}`),
+    name: stripTutorialTitle(a.titleHtml),
+  }));
+
+  return {
+    title: heading,
+    documentTitle,
+    metaDescription: description,
+    description,
+    pathname: "/tutorials",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "@id": listId,
+          url: toAbs("/tutorials"),
+          name: heading,
+          description,
+          inLanguage: "en",
+          isPartOf: {
+            "@type": "WebSite",
+            "@id": `${toAbs("/")}#website`,
+            url: toAbs("/"),
+            name: "TruePrice.Cash",
+          },
+          mainEntity: {
+            "@type": "ItemList",
+            numberOfItems: articles.length,
+            itemListElement,
+          },
+        },
+        ...articles.map((a) => ({
+          "@type": "LearningResource",
+          "@id": `${toAbs(`/tutorials/${a.slug}`)}#article`,
+          url: toAbs(`/tutorials/${a.slug}`),
+          name: stripTutorialTitle(a.titleHtml),
+          description: a.metaDescription || a.subtitle,
+          inLanguage: "en",
+          learningResourceType: "Tutorial",
+          isPartOf: { "@id": listId },
+          publisher: {
+            "@type": "Organization",
+            name: "TruePrice.Cash",
+            url: toAbs("/"),
+          },
+        })),
+      ],
+    },
+  };
+}
+
+export function buildTutorialArticleSeo({ article }) {
+  const pathname = `/tutorials/${article.slug}`;
+  const headline = stripTutorialTitle(article.titleHtml);
+  const description = formatMetaDescription(article.metaDescription || article.subtitle);
+  const documentTitle =
+    article.documentTitle ||
+    formatDocumentTitle(`${headline} – TruePrice.Cash Tutorials`);
+
+  return {
+    title: headline,
+    documentTitle,
+    metaDescription: description,
+    description,
+    pathname,
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Article",
+          "@id": `${toAbs(pathname)}#article`,
+          headline,
+          description,
+          url: toAbs(pathname),
+          inLanguage: "en",
+          isPartOf: {
+            "@type": "CollectionPage",
+            url: toAbs("/tutorials"),
+            name: "Fundamental Analysis Tutorials",
+          },
+          publisher: {
+            "@type": "Organization",
+            name: "TruePrice.Cash",
+            url: toAbs("/"),
+          },
+          author: {
+            "@type": "Organization",
+            name: "TruePrice.Cash",
+            url: toAbs("/"),
+          },
+        },
+        {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: toAbs("/") },
+            { "@type": "ListItem", position: 2, name: "Tutorials", item: toAbs("/tutorials") },
+            { "@type": "ListItem", position: 3, name: headline, item: toAbs(pathname) },
+          ],
+        },
+      ],
+    },
+  };
+}

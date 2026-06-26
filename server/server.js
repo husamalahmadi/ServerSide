@@ -1467,6 +1467,8 @@ app.get("*", (req, res, next) => {
     /^\/$/,
     /^\/about\/?$/,
     /^\/blogs\/?$/,
+    /^\/tutorials\/?$/,
+    /^\/tutorials\/[^/]+\/?$/,
     /^\/contact\/?$/,
     /^\/profile\/?$/,
     /^\/profile\/setup\/?$/,

@@ -6,6 +6,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { TUTORIAL_ARTICLES } from "../src/data/tutorials/articles.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -84,9 +85,16 @@ function main() {
     { loc: `${SITE}/us-markets`, changefreq: "daily", priority: "0.8" },
     { loc: `${SITE}/sa-markets`, changefreq: "daily", priority: "0.8" },
     { loc: `${SITE}/blogs`, changefreq: "weekly", priority: "0.9" },
+    { loc: `${SITE}/tutorials`, changefreq: "monthly", priority: "0.9" },
     { loc: `${SITE}/about`, changefreq: "monthly", priority: "0.7" },
     { loc: `${SITE}/contact`, changefreq: "monthly", priority: "0.7" },
   ];
+
+  const tutorialPages = TUTORIAL_ARTICLES.map((a) => ({
+    loc: `${SITE}/tutorials/${a.slug}`,
+    changefreq: "monthly",
+    priority: "0.85",
+  }));
 
   const stockLocs = [];
   for (const t of [...usTickers, ...saTickers, ...jpTickers, ...ukTickers]) {
@@ -102,6 +110,9 @@ function main() {
   for (const { loc, changefreq, priority } of staticPages) {
     lines.push(urlEntry(loc, changefreq, priority));
   }
+  for (const { loc, changefreq, priority } of tutorialPages) {
+    lines.push(urlEntry(loc, changefreq, priority));
+  }
   for (const loc of uniqueStockLocs) {
     lines.push(urlEntry(loc, "weekly", "0.6"));
   }
@@ -109,7 +120,7 @@ function main() {
   lines.push("</urlset>", "");
 
   writeFileSync(OUT, lines.join("\n"), "utf8");
-  console.log(`[sitemap] Wrote ${OUT} (${staticPages.length + uniqueStockLocs.length} URLs)`);
+  console.log(`[sitemap] Wrote ${OUT} (${staticPages.length + tutorialPages.length + uniqueStockLocs.length} URLs)`);
 }
 
 main();

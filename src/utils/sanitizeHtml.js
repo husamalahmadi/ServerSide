@@ -10,6 +10,17 @@ const defaultConfig = {
   ALLOWED_ATTR: ["href", "target", "rel"],
 };
 
+/** Rich HTML for synced tutorial articles (tables, callouts, TOC, etc.). */
+export const tutorialHtmlConfig = {
+  ALLOWED_TAGS: [
+    "p", "br", "strong", "em", "u", "a", "ul", "ol", "li",
+    "h1", "h2", "h3", "h4", "blockquote", "code", "pre",
+    "div", "section", "nav", "span",
+    "table", "thead", "tbody", "tr", "th", "td",
+  ],
+  ALLOWED_ATTR: ["href", "target", "rel", "class", "id", "aria-label", "style"],
+};
+
 /**
  * Returns sanitized HTML safe to render with dangerouslySetInnerHTML.
  * @param {string} dirty - Raw HTML string

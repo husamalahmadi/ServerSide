@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>How to Pick Stocks: A Step-by-Step Screening Process | TruePrice.Cash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--ink:#0f1117;--ink-soft:#3a3d4a;--ink-muted:#767b8a;--gold:#c9a84c;--gold-light:#f0d98a;--gold-faint:#fdf7e8;--white:#fff;--surface:#f9f8f6;--border:#e8e4dc;--link:#1a5c9e;--link-hover:#c9a84c;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:var(--surface);color:var(--ink);line-height:1.75;font-size:17px;}
+    nav{background:var(--ink);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;}
+    .nav-brand{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.25rem;text-decoration:none;}
+    .nav-links{display:flex;gap:24px;}.nav-links a{color:#aab0c0;text-decoration:none;font-size:.85rem;font-weight:500;transition:color .2s;}.nav-links a:hover{color:var(--gold);}
+    .progress-bar{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+    .hero{background:var(--ink);color:#fff;padding:80px 40px 60px;}.hero-inner{max-width:820px;margin:0 auto;}
+    .series-label{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;display:block;}
+    .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;line-height:1.15;margin-bottom:20px;}
+    .hero h1 em{font-style:normal;color:var(--gold);}
+    .hero-sub{font-size:1.1rem;color:#b0b8c8;max-width:640px;}
+    .hero-meta{margin-top:36px;display:flex;gap:32px;flex-wrap:wrap;}
+    .meta-item{display:flex;flex-direction:column;gap:2px;}
+    .meta-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink-muted);text-transform:uppercase;letter-spacing:1.5px;}
+    .meta-value{font-size:.9rem;color:#d0d8e8;font-weight:500;}
+    .content-wrap{max-width:820px;margin:0 auto;padding:60px 40px 100px;}
+    .toc{background:var(--gold-faint);border-left:3px solid var(--gold);padding:24px 28px;margin-bottom:52px;border-radius:0 6px 6px 0;}
+    .toc-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:14px;}
+    .toc ol{padding-left:20px;}.toc li{margin-bottom:6px;}.toc a{color:var(--link);text-decoration:none;font-size:.92rem;font-weight:500;}.toc a:hover{color:var(--link-hover);text-decoration:underline;}
+    .section{margin-bottom:60px;}
+    h2{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;border-top:1px solid var(--border);padding-top:32px;margin-bottom:18px;}
+    h3{font-size:1.15rem;font-weight:600;margin:28px 0 12px;}
+    p{margin-bottom:18px;color:var(--ink-soft);}
+    a{color:var(--link);text-decoration:underline;text-underline-offset:2px;transition:color .2s;}a:hover{color:var(--link-hover);}
+    .callout{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--gold);padding:20px 24px;border-radius:0 8px 8px 0;margin:28px 0;}
+    .callout-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin-bottom:8px;}
+    .callout p{margin:0;font-size:.95rem;}
+    .pipeline{display:flex;flex-direction:column;gap:0;}
+    .pipeline-step{display:flex;gap:24px;position:relative;padding-bottom:32px;}
+    .pipeline-step:last-child{padding-bottom:0;}
+    .pipeline-step:not(:last-child)::before{content:'';position:absolute;left:22px;top:48px;bottom:0;width:2px;background:var(--border);}
+    .pipeline-num{width:46px;height:46px;border-radius:50%;background:var(--ink);color:var(--gold);font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:1;}
+    .pipeline-body{flex:1;padding-top:8px;}
+    .pipeline-body h4{font-size:1rem;font-weight:700;margin-bottom:6px;color:var(--ink);}
+    .pipeline-body p{font-size:.9rem;color:var(--ink-muted);margin:0;}
+    .strategy-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin:24px 0;}
+    .strategy-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:20px;}
+    .strategy-name{font-weight:700;font-size:.95rem;color:var(--ink);margin-bottom:8px;}
+    .strategy-criteria{font-size:.85rem;color:var(--ink-muted);line-height:1.6;}
+    .strategy-link{display:inline-block;margin-top:10px;font-size:.82rem;font-family:'JetBrains Mono',monospace;color:var(--gold);}
+    .table-wrap{overflow-x:auto;margin:24px 0 36px;}
+    table{width:100%;border-collapse:collapse;font-size:.92rem;}
+    thead{background:var(--ink);color:#fff;}thead th{padding:12px 16px;text-align:left;font-weight:600;font-size:.82rem;letter-spacing:.5px;}
+    tbody tr{border-bottom:1px solid var(--border);}tbody tr:nth-child(even){background:var(--gold-faint);}
+    tbody td{padding:12px 16px;color:var(--ink-soft);vertical-align:top;}tbody td:first-child{font-weight:600;color:var(--ink);}
+    .sources{background:var(--ink);color:#fff;border-radius:10px;padding:32px 36px;margin-top:60px;}
+    .sources h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);margin-bottom:18px;}
+    .sources ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+    .sources li{font-size:.88rem;color:#aab0c0;display:flex;gap:10px;align-items:baseline;}
+    .sources li::before{content:"→";color:var(--gold);flex-shrink:0;}
+    .sources a{color:#7ab3e0;text-decoration:none;}.sources a:hover{color:var(--gold);text-decoration:underline;}
+    .article-nav{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:60px;padding-top:32px;border-top:1px solid var(--border);}
+    .nav-pill{display:inline-flex;flex-direction:column;gap:4px;padding:14px 20px;background:var(--white);border:1px solid var(--border);border-radius:8px;text-decoration:none;max-width:260px;transition:border-color .2s;}
+    .nav-pill:hover{border-color:var(--gold);}
+    .nav-pill-label{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--ink-muted);font-family:'JetBrains Mono',monospace;}
+    .nav-pill-title{font-size:.9rem;font-weight:600;color:var(--ink);}
+    @media(max-width:640px){.hero{padding:50px 20px 40px;}.content-wrap{padding:40px 20px 60px;}nav{padding:0 20px;}}
+  </style>
+</head>
+<body>
+<nav><a class="nav-brand" href="https://trueprice.cash">TruePrice.Cash</a><div class="nav-links"><a href="https://trueprice.cash">Home</a><a href="https://trueprice.cash/screener">Screener</a><a href="#">Tutorials</a></div></nav>
+<div class="progress-bar"></div>
+<header class="hero"><div class="hero-inner">
+  <span class="series-label">Tutorial 08 of 10 · Fundamental Analysis Series</span>
+  <h1>How to <em>Pick Stocks:</em><br/>A Step-by-Step Screening Process</h1>
+  <p class="hero-sub">With thousands of stocks across TASI, S&P 500, JPX, and LSE, the challenge isn't finding good stocks — it's filtering down to them efficiently. Here is a repeatable process that works.</p>
+  <div class="hero-meta"><div class="meta-item"><span class="meta-label">Reading time</span><span class="meta-value">15 min</span></div><div class="meta-item"><span class="meta-label">Level</span><span class="meta-value">Intermediate</span></div></div>
+</div></header>
+<main class="content-wrap">
+  <nav class="toc"><div class="toc-title">In this article</div><ol>
+    <li><a href="#universe">Step 1: Define Your Investment Universe</a></li>
+    <li><a href="#quantitative-screen">Step 2: Apply Quantitative Filters</a></li>
+    <li><a href="#qualitative-review">Step 3: Qualitative Review</a></li>
+    <li><a href="#valuation-check">Step 4: Valuation Check</a></li>
+    <li><a href="#portfolio-fit">Step 5: Portfolio Fit Assessment</a></li>
+    <li><a href="#proven-strategies">Proven Screening Strategies to Adapt</a></li>
+  </ol></nav>
+
+  <section class="section" id="universe">
+    <h2>Step 1: Define Your Investment Universe</h2>
+    <p>Start by deciding which markets you will invest in. This isn't about picking countries — it's about defining where your informational edge lies. If you live in Saudi Arabia and follow TASI news closely, you may have a genuine edge over the average global investor analyzing TASI mid-caps.</p>
+    <p><a href="https://www.msci.com/our-solutions/indexes/equity-indexes" target="_blank" rel="noopener">MSCI's market classification</a> divides global markets into Developed, Emerging, and Frontier — each with distinct risk and return profiles. Saudi Arabia was upgraded from Frontier to Emerging Market status in 2019, attracting significant passive fund inflows from benchmarks like the <a href="https://www.msci.com/msci-emerging-markets" target="_blank" rel="noopener">MSCI Emerging Markets Index</a>.</p>
+    <p>Also consider sector focus: are you a generalist or do you want to develop deep expertise in one sector (e.g., petrochemicals, banking, real estate)? Sector specialists often outperform because they can catch nuances that generalists miss.</p>
+  </section>
+
+  <section class="section" id="quantitative-screen">
+    <h2>Step 2: Apply Quantitative Filters</h2>
+    <p>Screening eliminates the vast majority of candidates based on measurable financial criteria. Here is a sample screening framework adaptable to any investment style:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Filter</th><th>Conservative Value</th><th>Quality Growth</th><th>Deep Value</th></tr></thead>
+      <tbody>
+        <tr><td>P/E Ratio</td><td>&lt; 20x</td><td>&lt; 35x with &gt;15% EPS growth</td><td>&lt; 10x</td></tr>
+        <tr><td>P/B Ratio</td><td>&lt; 2.5x</td><td>Any if ROE &gt; 25%</td><td>&lt; 0.8x</td></tr>
+        <tr><td>ROE</td><td>&gt; 12%</td><td>&gt; 20%</td><td>&gt; 8%</td></tr>
+        <tr><td>Debt/EBITDA</td><td>&lt; 2.5x</td><td>&lt; 3.0x</td><td>&lt; 4.0x</td></tr>
+        <tr><td>Revenue Growth (3yr)</td><td;&gt; 5%</td><td>&gt; 15%</td><td>Positive</td></tr>
+        <tr><td>FCF Positive?</td><td>Required</td><td>Required</td><td>Not required</td></tr>
+        <tr><td>Dividend Yield</td><td>&gt; 2%</td><td>Optional</td><td>&gt; 3%</td></tr>
+      </tbody>
+    </table></div>
+    <p>The <a href="https://trueprice.cash/screener" target="_blank">TruePrice.Cash stock screener</a> lets you apply these filters across TASI, S&P 500, JPX, and LSE simultaneously. For TASI specifically, cross-reference with <a href="https://www.saudiexchange.sa/wps/portal/saudiexchange/ourmarkets/market-watch/market-summary" target="_blank" rel="noopener">the Tadawul market summary</a> for sector performance context.</p>
+    <div class="callout"><div class="callout-label">Tool Tip</div><p>Run your screen on a Monday morning when markets open. Price-to-earnings and price-to-book ratios change with market prices daily — screening on a day with unusual market moves can bias results. Use a rolling 4-week average price if precision matters.</p></div>
+  </section>
+
+  <section class="section" id="qualitative-review">
+    <h2>Step 3: Qualitative Review</h2>
+    <p>After quantitative screening, you'll typically have 20–50 candidates. Now the real work begins: reading the annual reports, listening to earnings calls, and assessing management quality.</p>
+    <div class="pipeline">
+      <div class="pipeline-step"><div class="pipeline-num">A</div><div class="pipeline-body"><h4>Read the Annual Report (Cover to Cover)</h4><p>Pay particular attention to the <em>risks section</em> — what management acknowledges as threats. Also read the notes to financial statements, where problems often hide. Find annual reports at <a href="https://www.annualreports.com/" target="_blank" rel="noopener">AnnualReports.com</a> or the company's investor relations page.</p></div></div>
+      <div class="pipeline-step"><div class="pipeline-num">B</div><div class="pipeline-body"><h4>Listen to the Last 3 Earnings Calls</h4><p>How does management communicate? Are they confident and specific, or vague and defensive? Do they meet their own guidance? Transcripts are free on <a href="https://www.fool.com/earnings-call-transcripts/" target="_blank" rel="noopener">The Motley Fool's transcript archive</a> and <a href="https://seekingalpha.com/earnings/earnings-call-transcripts" target="_blank" rel="noopener">Seeking Alpha</a>.</p></div></div>
+      <div class="pipeline-step"><div class="pipeline-num">C</div><div class="pipeline-body"><h4>Research Insider Ownership & Transactions</h4><p>Executives buying their own stock with personal money is a bullish signal. Heavy insider selling is not necessarily bearish (diversification, taxes) but is worth noting. For TASI, insider disclosures are published on <a href="https://www.saudiexchange.sa/wps/portal/saudiexchange/ourmarkets/market-watch/market-summary" target="_blank" rel="noopener">the Tadawul regulatory announcements page</a>.</p></div></div>
+      <div class="pipeline-step"><div class="pipeline-num">D</div><div class="pipeline-body"><h4>Check Analyst Coverage & Consensus Estimates</h4><p>Know the consensus view before forming your own. If every sell-side analyst has a "Buy" rating, where is your upside? The most profitable investments are often in under-covered, misunderstood companies. <a href="https://finance.yahoo.com" target="_blank" rel="noopener">Yahoo Finance</a> aggregates analyst estimates for free.</p></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="valuation-check">
+    <h2>Step 4: Valuation Check</h2>
+    <p>By now your list should be down to 5–10 companies. Run a proper valuation on each:</p>
+    <p>Use at least two methods — typically DCF (covered in <a href="06-dcf-valuation.html">Tutorial 6</a>) and a relative valuation using EV/EBITDA or P/E multiples vs comparable companies. If both methods suggest undervaluation, conviction is higher. If they diverge significantly, investigate why.</p>
+    <p>Calculate a <strong>fair value range</strong> rather than a point estimate. If your DCF gives SAR 80–110 and the stock trades at SAR 72, you have a potential margin of safety across the entire range. If it trades at SAR 95 (middle of your range), the upside is limited.</p>
+  </section>
+
+  <section class="section" id="portfolio-fit">
+    <h2>Step 5: Portfolio Fit Assessment</h2>
+    <p>A great stock in isolation may be a poor addition to your portfolio. Before buying, ask:</p>
+    <p><strong>Correlation:</strong> Does this stock move with the rest of your portfolio? Adding a second petrochemical company when you already own Sabic creates concentrated exposure to oil prices. <a href="https://www.portfoliovisualizer.com/" target="_blank" rel="noopener">Portfolio Visualizer</a> is a free tool to check correlations across your holdings.</p>
+    <p><strong>Position sizing:</strong> The <a href="https://en.wikipedia.org/wiki/Kelly_criterion" target="_blank" rel="noopener">Kelly Criterion</a> provides a mathematical framework for position sizing based on edge and odds — most professional investors use a fractional Kelly (25–50%) to reduce variance.</p>
+    <p><strong>Conviction level:</strong> Reserve your largest positions for your highest-conviction ideas — those where you've done the deepest work and understand the business better than the market does.</p>
+  </section>
+
+  <section class="section" id="proven-strategies">
+    <h2>Proven Screening Strategies to Adapt</h2>
+    <div class="strategy-grid">
+      <div class="strategy-card"><div class="strategy-name">Magic Formula (Greenblatt)</div><div class="strategy-criteria">Ranks stocks by earnings yield + ROIC. Buy top-ranked stocks across sectors annually.</div><a class="strategy-link" href="https://www.magicformulainvesting.com/" target="_blank" rel="noopener">magicformulainvesting.com →</a></div>
+      <div class="strategy-card"><div class="strategy-name">Piotroski F-Score</div><div class="strategy-criteria">9-point scoring of profitability, leverage & efficiency. Buy high F-score (7–9) value stocks.</div><a class="strategy-link" href="https://www.investopedia.com/terms/p/piotroski-score.asp" target="_blank" rel="noopener">Investopedia guide →</a></div>
+      <div class="strategy-card"><div class="strategy-name">GARP (Lynch)</div><div class="strategy-criteria">Growth at a Reasonable Price. PEG ratio &lt; 1 with strong earnings momentum.</div><a class="strategy-link" href="https://www.investopedia.com/terms/g/garp.asp" target="_blank" rel="noopener">Investopedia guide →</a></div>
+      <div class="strategy-card"><div class="strategy-name">Net-Net (Graham)</div><div class="strategy-criteria">Buy when market cap &lt; net current asset value (current assets minus all liabilities). Deep value.</div><a class="strategy-link" href="https://www.investopedia.com/terms/n/net-net.asp" target="_blank" rel="noopener">Investopedia guide →</a></div>
+    </div>
+    <p>Academic validation of quantitative screening strategies is extensive. The <a href="https://www.aqr.com/Insights/Research" target="_blank" rel="noopener">AQR Capital Management research library</a> and <a href="https://www.researchaffiliates.com/publications" target="_blank" rel="noopener">Research Affiliates</a> publish peer-reviewed studies on factor-based investing — the academic backbone of systematic screening.</p>
+  </section>
+
+  <div class="sources"><h3>Sources & Further Reading</h3><ul>
+    <li><a href="https://www.msci.com/our-solutions/indexes/equity-indexes" target="_blank" rel="noopener">MSCI — Global Equity Index Methodology</a></li>
+    <li><a href="https://www.magicformulainvesting.com/" target="_blank" rel="noopener">Joel Greenblatt — Magic Formula Investing</a></li>
+    <li><a href="https://www.investopedia.com/terms/p/piotroski-score.asp" target="_blank" rel="noopener">Investopedia — Piotroski F-Score</a></li>
+    <li><a href="https://www.aqr.com/Insights/Research" target="_blank" rel="noopener">AQR Capital — Quantitative Investment Research</a></li>
+    <li><a href="https://www.portfoliovisualizer.com/" target="_blank" rel="noopener">Portfolio Visualizer — Free Portfolio Analysis Tool</a></li>
+    <li><a href="https://seekingalpha.com/earnings/earnings-call-transcripts" target="_blank" rel="noopener">Seeking Alpha — Earnings Call Transcripts</a></li>
+    <li><a href="https://www.annualreports.com/" target="_blank" rel="noopener">AnnualReports.com — Company Annual Reports Archive</a></li>
+  </ul></div>
+  <nav class="article-nav"><a class="nav-pill" href="07-competitive-moat.html"><span class="nav-pill-label">← Previous</span><span class="nav-pill-title">Analyzing Competitive Moats</span></a><a class="nav-pill" href="09-earnings-reports.html"><span class="nav-pill-label">Next Tutorial →</span><span class="nav-pill-title">Understanding Earnings Reports</span></a></nav>
+</main>
+</body>
+</html>

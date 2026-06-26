@@ -21,6 +21,11 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://trueprice.cash/tutorials</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://trueprice.cash/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -29,6 +34,56 @@
     <loc>https://trueprice.cash/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/tutorials/what-is-fundamental-analysis</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/tutorials/income-statement</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/tutorials/balance-sheet</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/tutorials/cash-flow-statement</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/tutorials/financial-ratios</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/tutorials/dcf-valuation</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/tutorials/competitive-moat</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/tutorials/stock-picking-process</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/tutorials/earnings-reports</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/tutorials/financial-red-flags</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
   </url>
   <url>
     <loc>https://trueprice.cash/stock/020Y.L</loc>
