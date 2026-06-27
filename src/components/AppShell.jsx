@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useMatch } from "react-router-dom";
 import { StockSearchBox } from "./StockSearchBox.jsx";
 import { MarketIndexStrip } from "./MarketIndexStrip.jsx";
 import { useI18n } from "../i18n.jsx";
+import { tutorialIndexPath } from "../hooks/useTutorialLocale.js";
 import { UserBar } from "./UserBar.jsx";
 import { LangToggle } from "./LangToggle.jsx";
 function NavIcon({ name }) {
@@ -93,7 +94,7 @@ export function AppShell() {
             <NavIcon name="blog" />
             {t("BLOGS")}
           </NavLink>
-          <NavLink to="/tutorials" className="tp-nav-link" onClick={closeSidebar}>
+          <NavLink to={tutorialIndexPath(lang)} className="tp-nav-link" onClick={closeSidebar}>
             <NavIcon name="book" />
             {t("TUTORIALS")}
           </NavLink>

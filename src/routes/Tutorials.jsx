@@ -7,18 +7,23 @@ import { usePageMeta } from "../hooks/usePageMeta.js";
 import { buildTutorialsIndexSeo } from "../seo/structuredData.js";
 import { stripHtmlToText } from "../utils/sanitizeHtml.js";
 import { useI18n } from "../i18n.jsx";
+import {
+  tutorialArticlePath,
+  useTutorialLocale,
+} from "../hooks/useTutorialLocale.js";
 
 function stripTitle(html) {
   return stripHtmlToText(String(html || "").replace(/<br\s*\/?>/gi, " "));
 }
 
 export default function Tutorials() {
-  const { t, lang } = useI18n();
+  const { t } = useI18n();
+  const locale = useTutorialLocale();
   const articles = useMemo(
-    () => resolveTutorialArticles(TUTORIAL_ARTICLES, lang),
-    [lang]
+    () => resolveTutorialArticles(TUTORIAL_ARTICLES, locale),
+    [locale]
   );
-  const seo = useMemo(() => buildTutorialsIndexSeo({ articles, lang }), [articles, lang]);
+  const seo = useMemo(() => buildTutorialsIndexSeo({ articles, lang: locale }), [articles, locale]);
   usePageMeta(seo);
 
   return (
@@ -26,7 +31,7 @@ export default function Tutorials() {
       <header className="tp-tutorial-landing-hero">
         <p className="tp-tutorial-series-label">{t("TUTORIALS_SERIES_LABEL")}</p>
         <h1 className="tp-tutorial-landing-title">
-          {lang === "ar" ? (
+          {locale === "ar" ? (
             <>
               تعلّم الاستثمار عبر <em>التحليل الأساسي</em>
             </>
@@ -49,7 +54,7 @@ export default function Tutorials() {
       <ol className="tp-tutorial-catalog">
         {articles.map((article) => (
           <li key={article.slug}>
-            <Link to={`/tutorials/${article.slug}`} className="tp-tutorial-catalog-card">
+            <Link to={tutorialArticlePath(locale, article.slug)} className="tp-tutorial-catalog-card">
               <div className="tp-tutorial-catalog-num">{String(article.order).padStart(2, "0")}</div>
               <div className="tp-tutorial-catalog-body">
                 <h2 className="tp-tutorial-catalog-title">{stripTitle(article.titleHtml)}</h2>
@@ -64,7 +69,7 @@ export default function Tutorials() {
                 </div>
               </div>
               <span className="tp-tutorial-catalog-arrow" aria-hidden>
-                {lang === "ar" ? "←" : "→"}
+                {locale === "ar" ? "←" : "→"}
               </span>
             </Link>
           </li>

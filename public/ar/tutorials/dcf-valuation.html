@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>كيفية حساب القيمة الجوهرية باستخدام DCF | TruePrice.Cash</title>
+  <meta name="description" content="تعلّم طريقة التدفقات النقدية المخصومة (DCF) خطوة بخطوة — من WACC إلى القيمة النهائية — لتحديد القيمة العادلة لأي سهم. Explore tickers, compare valuations, and" />
+  <link rel="canonical" href="https://trueprice.cash/ar/tutorials/dcf-valuation" />
+  <link rel="alternate" hreflang="en" href="https://trueprice.cash/en/tutorials/dcf-valuation" />
+  <link rel="alternate" hreflang="ar" href="https://trueprice.cash/ar/tutorials/dcf-valuation" />
+  <link rel="alternate" hreflang="x-default" href="https://trueprice.cash/en/tutorials/dcf-valuation" />
+  <meta property="og:title" content="كيفية حساب القيمة الجوهرية باستخدام DCF | TruePrice.Cash" />
+  <meta property="og:description" content="تعلّم طريقة التدفقات النقدية المخصومة (DCF) خطوة بخطوة — من WACC إلى القيمة النهائية — لتحديد القيمة العادلة لأي سهم. Explore tickers, compare valuations, and" />
+  <meta property="og:url" content="https://trueprice.cash/ar/tutorials/dcf-valuation" />
+  <meta property="og:type" content="article" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","@id":"https://trueprice.cash/ar/tutorials/dcf-valuation#article","headline":"كيفية حساب القيمة الجوهرية باستخدام DCF (التدفقات النقدية المخصومة)","description":"تعلّم طريقة التدفقات النقدية المخصومة (DCF) خطوة بخطوة — من WACC إلى القيمة النهائية — لتحديد القيمة العادلة لأي سهم. Explore tickers, compare valuations, and","url":"https://trueprice.cash/ar/tutorials/dcf-valuation","inLanguage":"ar","isPartOf":{"@type":"CollectionPage","url":"https://trueprice.cash/ar/tutorials","name":"دروس التحليل الأساسي"},"publisher":{"@type":"Organization","name":"TruePrice.Cash","url":"https://trueprice.cash/"},"author":{"@type":"Organization","name":"TruePrice.Cash","url":"https://trueprice.cash/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"الرئيسية","item":"https://trueprice.cash/"},{"@type":"ListItem","position":2,"name":"الدروس","item":"https://trueprice.cash/ar/tutorials"},{"@type":"ListItem","position":3,"name":"كيفية حساب القيمة الجوهرية باستخدام DCF (التدفقات النقدية المخصومة)","item":"https://trueprice.cash/ar/tutorials/dcf-valuation"}]}]}</script>
+  <style>
+    :root { --tp-primary: #2c7be5; --tp-ink: #1a2b42; --tp-muted: #5a6b85; --tp-border: #d4e6fb; }
+    body { font-family: system-ui,Segoe UI,Roboto,sans-serif; margin: 0; color: var(--tp-ink); line-height: 1.65; background: #f6faff; }
+    .wrap { max-width: 820px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+    header.site { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--tp-border); }
+    header.site a { color: var(--tp-primary); text-decoration: none; font-weight: 600; font-size: 14px; }
+    .brand { font-weight: 800; font-size: 1.1rem; color: var(--tp-ink); }
+    .hero { background: linear-gradient(140deg,#fff,#eef5ff); border: 1px solid var(--tp-border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
+    .hero h1 { margin: 0 0 0.5rem; font-size: 1.75rem; line-height: 1.25; }
+    .hero h1 em { font-style: normal; color: var(--tp-primary); }
+    .hero p { margin: 0; color: var(--tp-muted); font-size: 15px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; font-size: 13px; color: var(--tp-muted); }
+    article { background: #fff; border: 1px solid var(--tp-border); border-radius: 12px; padding: 1.25rem 1.35rem; }
+    article a { color: var(--tp-primary); }
+    article h2 { margin: 1.5rem 0 0.75rem; font-size: 1.25rem; }
+    article h3 { margin: 1rem 0 0.5rem; font-size: 1.05rem; }
+    article p { margin: 0 0 0.85rem; font-size: 15px; }
+    article table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 1rem 0; }
+    article th, article td { border: 1px solid var(--tp-border); padding: 0.5rem 0.65rem; text-align: start; }
+    article th { background: #f0f6ff; }
+    .catalog { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.65rem; }
+    .catalog a { display: block; padding: 0.85rem 1rem; background: #fff; border: 1px solid var(--tp-border); border-radius: 10px; color: var(--tp-ink); text-decoration: none; font-weight: 600; }
+    .catalog a:hover { border-color: var(--tp-primary); }
+    .series-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1.25rem; }
+    .series-nav a { display: block; padding: 0.75rem 1rem; background: #fff; border: 1px solid var(--tp-border); border-radius: 10px; text-decoration: none; color: var(--tp-primary); font-weight: 600; font-size: 14px; }
+    footer { margin-top: 2rem; text-align: center; font-size: 12px; color: var(--tp-muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="site">
+      <a class="brand" href="/">TruePrice.Cash</a>
+      <div>
+        <a href="/en/tutorials">English</a>
+        ·
+        <a href="/ar/tutorials">العربية</a>
+        ·
+        <a href="/">الرئيسية</a>
+      </div>
+    </header>
+    <div class="hero">
+      <p style="font-size:11px;font-weight:700;color:var(--tp-primary);text-transform:uppercase;letter-spacing:.06em;">الدرس 06 من 10 · سلسلة التحليل الأساسي</p>
+      <h1>كيفية حساب <em>القيمة الجوهرية</em><br/>باستخدام DCF (التدفقات النقدية المخصومة)</h1>
+      <p>تُعد طريقة DCF أكثر أساليب التقييم صرامة — وأكثرها تواضعاً — في عالم المال. عند تطبيقها بشكل صحيح، تكشف عن القيمة الحقيقية للشركة بغضّ النظر عما يقوله السوق.</p>
+      <div class="meta">
+        <span>16 دقيقة</span>
+        <span>متوسط–متقدم</span>
+      </div>
+    </div>
+    <article><nav class="toc"><div class="toc-title">في هذا المقال</div><ol>
+    <li><a href="#what-is-dcf">ما هي طريقة DCF؟</a></li>
+    <li><a href="#time-value">القيمة الزمنية للنقود</a></li>
+    <li><a href="#step-by-step">DCF: خطوة بخطوة</a></li>
+    <li><a href="#wacc">فهم معدل الخصم (WACC)</a></li>
+    <li><a href="#terminal-value">القيمة النهائية</a></li>
+    <li><a href="#worked-example">مثال تطبيقي</a></li>
+    <li><a href="#limitations">قيود DCF والحساسية</a></li>
+  </ol></nav>
+
+  <section class="section" id="what-is-dcf">
+    <h2>ما هي طريقة DCF؟</h2>
+    <p>تحليل التدفقات النقدية المخصومة (DCF) يقدّر القيمة الحالية للشركة بناءً على تدفقاتها النقدية المستقبلية المتوقعة. وهو الأساس النظري لمعظم تقييمات الشركات في التمويل الاحترافي، ويستخدمه بنوك الاستثمار وشركات الأسهم الخاصة ومديرو الأصول المؤسسيون حول العالم.</p>
+    <p>يصف <a href="https://aswathdamodaran.blogspot.com/2012/01/dcf-myth-1-if-you-have-dcf-model-you.html" target="_blank" rel="noopener">البروفيسور داموداران من NYU Stern</a>، الذي يُعدّ المرجع الأول عالمياً في التقييم، طريقة DCF بأنها «الاختبار النهائي لانضباط الاستثمار» — فهي تجبرك على تحديد افتراضاتك صراحةً حول كل محرّك للقيمة.</p>
+  </section>
+
+  <section class="section" id="time-value">
+    <h2>القيمة الزمنية للنقود</h2>
+    <p>المبدأ الأساسي في DCF هو أن ريالاً واحداً اليوم يستحق أكثر من ريال واحد في المستقبل — لأن ريال اليوم يمكن استثماره لتحقيق عائد. لذلك يجب «خصم» التدفقات النقدية المستقبلية إلى قيمتها الحالية.</p>
+    <div class="formula-box">
+      <div class="formula-title">معادلة القيمة الحالية</div>
+      <div class="formula-text">PV = <span>CF<sub>n</sub></span> ÷ (1 + r)<sup>n</sup></div>
+    </div>
+    <p>حيث CF هو التدفق النقدي المستقبلي، و r هو معدل الخصم، و n هو عدد السنوات. تشرح <a href="https://www.khanacademy.org/economics-finance-domain/core-finance/interest-tutorial/present-value/v/time-value-of-money" target="_blank" rel="noopener">سلسلة Khan Academy حول القيمة الزمنية للنقود</a> هذا المفهوم بوضوح مع أمثلة تطبيقية، وهي متاحة مجاناً.</p>
+  </section>
+
+  <section class="section" id="step-by-step">
+    <h2>DCF: خطوة بخطوة</h2>
+    <p><strong>الخطوة 1 — توقع التدفق النقدي الحر:</strong> توقّع التدفق النقدي الحر للشركة لمدة 5–10 سنوات. استخدم التدفق النقدي الحر التاريخي كأساس وطبّق معدل نمو مستمداً من اتجاهات الإيرادات وتوقعات الهوامش وتوقعات النفقات الرأسمالية.</p>
+    <p><strong>الخطوة 2 — اختيار معدل الخصم (WACC):</strong> يعكس متوسط التكلفة المرجّح لرأس المال (WACC) العائد الذي يطلبه المستثمرون. كلما زادت مخاطر الشركة، ارتفع معدل الخصم المطلوب. راجع القسم أدناه لمعرفة كيفية حسابه.</p>
+    <p><strong>الخطوة 3 — حساب القيمة النهائية:</strong> بعد السنة العاشرة، تفترض أن الشركة تنمو بمعدل «نهائي مستقر» (عادة 2–3%، قريب من نمو الناتج المحلي الإجمالي طويل الأجل). ثم تُخصم هذه القيمة إلى اليوم.</p>
+    <p><strong>الخطوة 4 — جمع جميع القيم الحالية:</strong> اجمع التدفقات النقدية المخصومة لجميع السنوات مع القيمة النهائية المخصومة للحصول على قيمة المؤسسة. اطرح صافي الدين للحصول على قيمة حقوق الملكية، ثم اقسم على عدد الأسهم القائمة للحصول على القيمة الجوهرية للسهم.</p>
+  </section>
+
+  <section class="section" id="wacc">
+    <h2>فهم معدل الخصم (WACC)</h2>
+    <div class="formula-box">
+      <div class="formula-title">معادلة WACC</div>
+      <div class="formula-text">WACC = <span>(E/V × Re)</span> + <span>(D/V × Rd × (1 – Tax))</span></div>
+    </div>
+    <p>حيث E = حقوق الملكية، D = الدين، V = إجمالي رأس المال، Re = تكلفة حقوق الملكية، Rd = تكلفة الدين.</p>
+    <p>تُحسب <strong>تكلفة حقوق الملكية</strong> عادةً باستخدام <a href="https://www.investopedia.com/terms/c/capm.asp" target="_blank" rel="noopener">نموذج تسعير الأصول الرأسمالية (CAPM)</a>: Re = معدل خالي من المخاطر + بيتا × (علاوة مخاطر السوق). بالنسبة لأسهم تاسي، يُقارَب معدل خالي من المخاطر عادةً <a href="https://www.sama.gov.sa/en-US/EconomicReports/Pages/YearlyStatistics.aspx" target="_blank" rel="noopener">بعائد السندات الحكومية السعودية</a> المتاح من SAMA. وللحصول على علاوات مخاطر الأسهم العالمية حسب الدولة، <a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/ctryprem.html" target="_blank" rel="noopener">مجموعة بيانات علاوة مخاطر الدولة لداموداران</a> هي المصدر المعياري.</p>
+  </section>
+
+  <section class="section" id="terminal-value">
+    <h2>القيمة النهائية</h2>
+    <p>غالباً ما تمثل القيمة النهائية 60–80% من إجمالي قيمة DCF، ولهذا يكون افتراض معدل النمو النهائي حاسماً. الطريقتان الرئيسيتان:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>الطريقة</th><th>المعادلة</th><th>متى تُستخدم</th></tr></thead>
+      <tbody>
+        <tr><td>نموذج Gordon Growth</td><td>FCF × (1 + g) ÷ (WACC − g)</td><td>الشركات الناضجة ذات النمو المستقر</td></tr>
+        <tr><td>مضاعف الخروج</td><td>EBITDA × مضاعف EV/EBITDA للقطاع</td><td>عند توفر صفقات مقارنة موثوقة</td></tr>
+      </tbody>
+    </table></div>
+    <p>لا تستخدم أبداً معدل نمو نهائياً أعلى من نمو الناتج المحلي الإجمالي الاسمي طويل الأجل. يوفر <a href="https://www.imf.org/en/Publications/WEO" target="_blank" rel="noopener">توقعات صندوق النقد الدولي للاقتصاد العالمي</a> توقعات نمو الناتج المحلي الإجمالي طويل الأجل حسب الدولة، وهي فحص منطقي مفيد.</p>
+  </section>
+
+  <section class="section" id="worked-example">
+    <h2>مثال تطبيقي</h2>
+    <p>لنفترض أن شركة تولّد 500 مليون ريال من التدفق النقدي الحر اليوم، بنمو 10% لمدة 5 سنوات، ثم 3% إلى ما لا نهاية. WACC = 9%. فيما يلي التدفقات النقدية المتوقعة والمخصومة:</p>
+    <div class="dcf-table"><table>
+      <thead><tr><th>السنة</th><th>FCF (مليون ريال)</th><th>عامل الخصم (9%)</th><th>القيمة الحالية</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>550</td><td>0.917</td><td>504</td></tr>
+        <tr><td>2</td><td>605</td><td>0.842</td><td>509</td></tr>
+        <tr><td>3</td><td>666</td><td>0.772</td><td>514</td></tr>
+        <tr><td>4</td><td>732</td><td>0.708</td><td>518</td></tr>
+        <tr><td>5</td><td>805</td><td>0.650</td><td>523</td></tr>
+        <tr><td>القيمة النهائية</td><td>805 × 1.03 ÷ (0.09 − 0.03)</td><td>= 13,819 مليون ريال</td><td>8,982</td></tr>
+        <tr style="font-weight:700"><td>قيمة المؤسسة</td><td></td><td></td><td>11,550 مليون ريال</td></tr>
+      </tbody>
+    </table></div>
+    <p>اطرح صافي الدين (لنقل 1,200 مليون ريال) ← قيمة حقوق الملكية = 10,350 مليون ريال. اقسم على 200 مليون سهم ← القيمة الجوهرية = <strong>51.75 ريال للسهم</strong>. إذا كان السهم يتداول عند 40 ريالاً، فإن هامش الأمان 23% — وهو قد يكون فرصة شراء جذابة.</p>
+    <p>يُؤتمت <a href="https://trueprice.cash" target="_blank">محرك DCF</a> في TruePrice.Cash هذا الحساب لكل سهم في تاسي، مع سحب البيانات المالية الحية وتطبيق تقديرات WACC مناسبة للقطاع.</p>
+  </section>
+
+  <section class="section" id="limitations">
+    <h2>قيود DCF والحساسية</h2>
+    <p>تتأثر طريقة DCF بشدة بافتراضات المدخلات. تغيير WACC بنسبة 1% أو معدل النمو النهائي بـ 0.5% قد يغيّر القيمة الجوهرية بنسبة 20–30%. هذا ليس ضعفاً خاصاً بـ DCF — بل يعكس عدم اليقين الحقيقي بشأن المستقبل.</p>
+    <div class="callout"><div class="callout-label">أفضل ممارسة</div><p>شغّل دائماً جدول حساسية — مصفوفة تُظهر القيمة الجوهرية عبر مجموعة من تركيبات WACC ومعدلات النمو. هذا يمنحك <em>نطاقاً</em> من القيم العادلة، لا تقديراً نقطةً زائفاً. قوالب Excel لهذا الغرض متاحة مجاناً في <a href="https://www.wallstreetprep.com/knowledge/dcf-model/" target="_blank" rel="noopener">دليل نموذج DCF من Wall Street Prep</a>.</p></div>
+    <p>يعترف أعظم المستثمرين بأن DCF يوفر إطاراً للتفكير المنضبط، لا إجابة دقيقة. كما لاحظ Buffett <a href="https://www.berkshirehathaway.com/letters/1992.html" target="_blank" rel="noopener">في رسالته لعام 1992</a>، من الأفضل أن تكون صحيحاً تقريباً بدلاً من أن تكون خاطئاً بدقة.</p>
+  </section>
+
+  <div class="sources"><h3>المصادر وقراءات إضافية</h3><ul>
+    <li><a href="https://aswathdamodaran.blogspot.com/" target="_blank" rel="noopener">Damodaran Online — موارد DCF الكاملة للتقييم</a></li>
+    <li><a href="https://www.investopedia.com/terms/d/dcf.asp" target="_blank" rel="noopener">Investopedia — تحليل التدفقات النقدية المخصومة</a></li>
+    <li><a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/ctryprem.html" target="_blank" rel="noopener">Damodaran — مجموعة بيانات علاوة مخاطر الدولة</a></li>
+    <li><a href="https://www.wallstreetprep.com/knowledge/dcf-model/" target="_blank" rel="noopener">Wall Street Prep — الدليل الكامل لنموذج DCF</a></li>
+    <li><a href="https://www.khanacademy.org/economics-finance-domain/core-finance/interest-tutorial/present-value/v/time-value-of-money" target="_blank" rel="noopener">Khan Academy — القيمة الزمنية للنقود</a></li>
+    <li><a href="https://www.sama.gov.sa/en-US/EconomicReports/Pages/YearlyStatistics.aspx" target="_blank" rel="noopener">SAMA — التقارير الاقتصادية السعودية وعوائد السندات</a></li>
+    <li><a href="https://www.imf.org/en/Publications/WEO" target="_blank" rel="noopener">IMF — التوقعات الاقتصادية العالمية</a></li>
+  </ul></div></article>
+    <nav class="series-nav" aria-label="Series"><a href="/ar/tutorials/financial-ratios">← النسب المالية الرئيسية التي يجب على كل مستثمر معرفتها (P/E، P/B، ROE، الدين/حقوق الملكية وغيرها)</a><a href="/ar/tutorials/competitive-moat">كيفية تحليل الخندق التنافسي للشركة قبل الاستثمار →</a></nav>
+    <footer>© TruePrice.Cash</footer>
+  </div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 // FILE: src/routes/App.jsx
 import React, { Suspense, useEffect, useRef } from "react";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from "react-router-dom";
 import { trackPageView } from "../analytics.js";
 import { AuthProvider } from "../context/AuthContext.jsx";
 import { I18nProvider } from "../i18n.jsx";
@@ -45,6 +45,11 @@ function AnalyticsRouteSync() {
 
 function Lazy({ children }) {
   return <Suspense fallback={<RouteFallback />}>{children}</Suspense>;
+}
+
+function LegacyTutorialArticleRedirect() {
+  const { slug } = useParams();
+  return <Navigate to={`/en/tutorials/${encodeURIComponent(slug || "")}`} replace />;
 }
 
 export default function App() {
@@ -114,8 +119,10 @@ export default function App() {
                     </Lazy>
                   }
                 />
+                <Route path="/tutorials" element={<Navigate to="/en/tutorials" replace />} />
+                <Route path="/tutorials/:slug" element={<LegacyTutorialArticleRedirect />} />
                 <Route
-                  path="/tutorials"
+                  path="/en/tutorials"
                   element={
                     <Lazy>
                       <Tutorials />
@@ -123,7 +130,23 @@ export default function App() {
                   }
                 />
                 <Route
-                  path="/tutorials/:slug"
+                  path="/ar/tutorials"
+                  element={
+                    <Lazy>
+                      <Tutorials />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/en/tutorials/:slug"
+                  element={
+                    <Lazy>
+                      <TutorialArticle />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/ar/tutorials/:slug"
                   element={
                     <Lazy>
                       <TutorialArticle />

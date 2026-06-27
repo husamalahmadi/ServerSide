@@ -21,7 +21,12 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/tutorials</loc>
+    <loc>https://trueprice.cash/en/tutorials</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/ar/tutorials</loc>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -36,52 +41,102 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/tutorials/what-is-fundamental-analysis</loc>
+    <loc>https://trueprice.cash/en/tutorials/what-is-fundamental-analysis</loc>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/tutorials/income-statement</loc>
+    <loc>https://trueprice.cash/ar/tutorials/what-is-fundamental-analysis</loc>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/tutorials/balance-sheet</loc>
+    <loc>https://trueprice.cash/en/tutorials/income-statement</loc>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/tutorials/cash-flow-statement</loc>
+    <loc>https://trueprice.cash/ar/tutorials/income-statement</loc>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/tutorials/financial-ratios</loc>
+    <loc>https://trueprice.cash/en/tutorials/balance-sheet</loc>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/tutorials/dcf-valuation</loc>
+    <loc>https://trueprice.cash/ar/tutorials/balance-sheet</loc>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/tutorials/competitive-moat</loc>
+    <loc>https://trueprice.cash/en/tutorials/cash-flow-statement</loc>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/tutorials/stock-picking-process</loc>
+    <loc>https://trueprice.cash/ar/tutorials/cash-flow-statement</loc>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/tutorials/earnings-reports</loc>
+    <loc>https://trueprice.cash/en/tutorials/financial-ratios</loc>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://trueprice.cash/tutorials/financial-red-flags</loc>
+    <loc>https://trueprice.cash/ar/tutorials/financial-ratios</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/en/tutorials/dcf-valuation</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/ar/tutorials/dcf-valuation</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/en/tutorials/competitive-moat</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/ar/tutorials/competitive-moat</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/en/tutorials/stock-picking-process</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/ar/tutorials/stock-picking-process</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/en/tutorials/earnings-reports</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/ar/tutorials/earnings-reports</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/en/tutorials/financial-red-flags</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://trueprice.cash/ar/tutorials/financial-red-flags</loc>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>

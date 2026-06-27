@@ -35,7 +35,11 @@ import { buildStocksCatalogPayload } from "./stocksCatalogApi.js";
 import { findStockByTicker, CURRENCY_BY_MARKET } from "./stockCatalogLookup.js";
 import { injectSeoIntoSpaHtml, buildStockStaticFallback } from "./spaHtmlSeo.js";
 import { configureSeoSiteUrl } from "../shared/seo/siteUrl.js";
-import { buildStockSeo } from "../shared/seo/structuredData.js";
+import { buildStockSeo, buildTutorialArticleSeo, buildTutorialsIndexSeo } from "../shared/seo/structuredData.js";
+import { buildTutorialSpaStaticFallback } from "../shared/seo/tutorialStatic.js";
+import { parseTutorialPath } from "../shared/seo/tutorialPaths.js";
+import { TUTORIAL_ARTICLES, TUTORIAL_BY_SLUG } from "../src/data/tutorials/articles.js";
+import { resolveTutorialArticle, resolveTutorialArticles } from "../src/data/tutorials/resolve.js";
 import { isUsableScreenerRow, screenerMarketUsable } from "../src/domain/screenerMetrics.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -1457,16 +1461,61 @@ function stockSeoInjectForRequest(req) {
   }
 }
 
+function tutorialSeoInjectForRequest(req) {
+  const parsed = parseTutorialPath(req.path);
+  if (!parsed) return null;
+  try {
+    const { locale, slug } = parsed;
+    if (slug) {
+      const base = TUTORIAL_BY_SLUG[slug];
+      if (!base) return null;
+      const article = resolveTutorialArticle(base, locale, TUTORIAL_ARTICLES);
+      if (!article) return null;
+      const seo = buildTutorialArticleSeo({ article, lang: locale });
+      return {
+        seo,
+        staticFallbackHtml: buildTutorialSpaStaticFallback({ locale, article }),
+      };
+    }
+    const articles = resolveTutorialArticles(TUTORIAL_ARTICLES, locale);
+    const seo = buildTutorialsIndexSeo({ articles, lang: locale });
+    return {
+      seo,
+      staticFallbackHtml: buildTutorialSpaStaticFallback({ locale, articles, indexSeo: seo }),
+    };
+  } catch (err) {
+    console.warn("[static] tutorial SEO lookup failed:", err?.message || err);
+    return null;
+  }
+}
+
+function trySendTutorialStatic(req, res, next) {
+  if (req.method !== "GET" && req.method !== "HEAD") return next();
+  const parsed = parseTutorialPath(req.path);
+  if (!parsed) return next();
+  const file = parsed.slug
+    ? join(staticPath, parsed.locale, "tutorials", `${parsed.slug}.html`)
+    : join(staticPath, parsed.locale, "tutorials", "index.html");
+  if (!existsSync(file)) return next();
+  res.setHeader("Cache-Control", "public, max-age=3600");
+  return res.sendFile(file, (err) => {
+    if (err) next(err);
+  });
+}
+
 app.get("*", (req, res, next) => {
   if (req.path.startsWith("/api") || req.path.startsWith("/auth")) return next();
   // Missing hashed files must not fall through to SPA HTML (wrong MIME / confusing errors).
   if (req.path.startsWith("/assets")) {
     return res.status(404).type("text/plain").send("Not found");
   }
+  trySendTutorialStatic(req, res, () => {
   const knownRoutePatterns = [
     /^\/$/,
     /^\/about\/?$/,
     /^\/blogs\/?$/,
+    /^\/(en|ar)\/tutorials\/?$/,
+    /^\/(en|ar)\/tutorials\/[^/]+\/?$/,
     /^\/tutorials\/?$/,
     /^\/tutorials\/[^/]+\/?$/,
     /^\/contact\/?$/,
@@ -1486,7 +1535,9 @@ app.get("*", (req, res, next) => {
   }
   try {
     const canonical = isKnownSpaRoute ? canonicalUrlForPath(req.path) : `${CANONICAL_SITE}/`;
-    const seoInject = isKnownSpaRoute ? stockSeoInjectForRequest(req) : null;
+    const seoInject = isKnownSpaRoute
+      ? tutorialSeoInjectForRequest(req) || stockSeoInjectForRequest(req)
+      : null;
     const html = renderSpaIndexHtml(indexHtml, canonical, seoInject);
     res.type("html").send(html);
   } catch (err) {
@@ -1498,6 +1549,7 @@ app.get("*", (req, res, next) => {
       }
     });
   }
+  });
 });
 
 // Avoid Express default HTML error pages (wrong MIME for /assets debugging).

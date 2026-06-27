@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>فهم الميزانية العمومية | TruePrice.Cash</title>
+  <meta name="description" content="تعلّم قراءة الميزانية العمومية — الأصول والخصوم وحقوق الملكية — لتقييم الصحة المالية واستقرار الشركة. Explore tickers, compare valuations, and read" />
+  <link rel="canonical" href="https://trueprice.cash/ar/tutorials/balance-sheet" />
+  <link rel="alternate" hreflang="en" href="https://trueprice.cash/en/tutorials/balance-sheet" />
+  <link rel="alternate" hreflang="ar" href="https://trueprice.cash/ar/tutorials/balance-sheet" />
+  <link rel="alternate" hreflang="x-default" href="https://trueprice.cash/en/tutorials/balance-sheet" />
+  <meta property="og:title" content="فهم الميزانية العمومية | TruePrice.Cash" />
+  <meta property="og:description" content="تعلّم قراءة الميزانية العمومية — الأصول والخصوم وحقوق الملكية — لتقييم الصحة المالية واستقرار الشركة. Explore tickers, compare valuations, and read" />
+  <meta property="og:url" content="https://trueprice.cash/ar/tutorials/balance-sheet" />
+  <meta property="og:type" content="article" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","@id":"https://trueprice.cash/ar/tutorials/balance-sheet#article","headline":"فهم الميزانية العمومية: الأصول والخصوم وحقوق الملكية","description":"تعلّم قراءة الميزانية العمومية — الأصول والخصوم وحقوق الملكية — لتقييم الصحة المالية واستقرار الشركة. Explore tickers, compare valuations, and read","url":"https://trueprice.cash/ar/tutorials/balance-sheet","inLanguage":"ar","isPartOf":{"@type":"CollectionPage","url":"https://trueprice.cash/ar/tutorials","name":"دروس التحليل الأساسي"},"publisher":{"@type":"Organization","name":"TruePrice.Cash","url":"https://trueprice.cash/"},"author":{"@type":"Organization","name":"TruePrice.Cash","url":"https://trueprice.cash/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"الرئيسية","item":"https://trueprice.cash/"},{"@type":"ListItem","position":2,"name":"الدروس","item":"https://trueprice.cash/ar/tutorials"},{"@type":"ListItem","position":3,"name":"فهم الميزانية العمومية: الأصول والخصوم وحقوق الملكية","item":"https://trueprice.cash/ar/tutorials/balance-sheet"}]}]}</script>
+  <style>
+    :root { --tp-primary: #2c7be5; --tp-ink: #1a2b42; --tp-muted: #5a6b85; --tp-border: #d4e6fb; }
+    body { font-family: system-ui,Segoe UI,Roboto,sans-serif; margin: 0; color: var(--tp-ink); line-height: 1.65; background: #f6faff; }
+    .wrap { max-width: 820px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+    header.site { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--tp-border); }
+    header.site a { color: var(--tp-primary); text-decoration: none; font-weight: 600; font-size: 14px; }
+    .brand { font-weight: 800; font-size: 1.1rem; color: var(--tp-ink); }
+    .hero { background: linear-gradient(140deg,#fff,#eef5ff); border: 1px solid var(--tp-border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
+    .hero h1 { margin: 0 0 0.5rem; font-size: 1.75rem; line-height: 1.25; }
+    .hero h1 em { font-style: normal; color: var(--tp-primary); }
+    .hero p { margin: 0; color: var(--tp-muted); font-size: 15px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; font-size: 13px; color: var(--tp-muted); }
+    article { background: #fff; border: 1px solid var(--tp-border); border-radius: 12px; padding: 1.25rem 1.35rem; }
+    article a { color: var(--tp-primary); }
+    article h2 { margin: 1.5rem 0 0.75rem; font-size: 1.25rem; }
+    article h3 { margin: 1rem 0 0.5rem; font-size: 1.05rem; }
+    article p { margin: 0 0 0.85rem; font-size: 15px; }
+    article table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 1rem 0; }
+    article th, article td { border: 1px solid var(--tp-border); padding: 0.5rem 0.65rem; text-align: start; }
+    article th { background: #f0f6ff; }
+    .catalog { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.65rem; }
+    .catalog a { display: block; padding: 0.85rem 1rem; background: #fff; border: 1px solid var(--tp-border); border-radius: 10px; color: var(--tp-ink); text-decoration: none; font-weight: 600; }
+    .catalog a:hover { border-color: var(--tp-primary); }
+    .series-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1.25rem; }
+    .series-nav a { display: block; padding: 0.75rem 1rem; background: #fff; border: 1px solid var(--tp-border); border-radius: 10px; text-decoration: none; color: var(--tp-primary); font-weight: 600; font-size: 14px; }
+    footer { margin-top: 2rem; text-align: center; font-size: 12px; color: var(--tp-muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="site">
+      <a class="brand" href="/">TruePrice.Cash</a>
+      <div>
+        <a href="/en/tutorials">English</a>
+        ·
+        <a href="/ar/tutorials">العربية</a>
+        ·
+        <a href="/">الرئيسية</a>
+      </div>
+    </header>
+    <div class="hero">
+      <p style="font-size:11px;font-weight:700;color:var(--tp-primary);text-transform:uppercase;letter-spacing:.06em;">الدرس 03 من 10 · سلسلة التحليل الأساسي</p>
+      <h1>فهم <em>الميزانية العمومية:</em><br/>الأصول والخصوم وحقوق الملكية</h1>
+      <p>الميزانية العمومية لقطة لما تملكه الشركة وما تدين به وما يتبقى للمساهمين. أتقنها، وستتقن لغة الصحة المالية.</p>
+      <div class="meta">
+        <span>13 دقيقة</span>
+        <span>مبتدئ–متوسط</span>
+      </div>
+    </div>
+    <article><nav class="toc" aria-label="جدول المحتويات">
+    <div class="toc-title">في هذا المقال</div>
+    <ol>
+      <li><a href="#what-is">ما هي الميزانية العمومية؟</a></li>
+      <li><a href="#fundamental-equation">المعادلة المحاسبية الأساسية</a></li>
+      <li><a href="#assets">الأصول: ما تملكه الشركة</a></li>
+      <li><a href="#liabilities">الخصوم: ما على الشركة</a></li>
+      <li><a href="#equity">حقوق المساهمين</a></li>
+      <li><a href="#ratios">نسب الميزانية العمومية الرئيسية</a></li>
+      <li><a href="#red-flags">علامات تحذيرية في الميزانية</a></li>
+    </ol>
+  </nav>
+
+  <section class="section" id="what-is">
+    <h2>ما هي الميزانية العمومية؟</h2>
+    <p>الميزانية العمومية — وتُسمى رسمياً <strong>قائمة المركز المالي</strong> بموجب <a href="https://www.ifrs.org/issued-standards/list-of-standards/ias-1-presentation-of-financial-statements/" target="_blank" rel="noopener">IAS 1</a> — تُظهر المركز المالي للشركة في لحظة زمنية واحدة. على عكس قائمة الدخل (التي تغطي فترة)، فإن الميزانية العمومية صورة فوتوغرافية ليوم واحد، عادةً آخر يوم في الربع أو السنة المالية.</p>
+    <p>أكّد Warren Buffett مراراً على أهمية الميزانية العمومية مقارنةً بقائمة الدخل. في <a href="https://www.berkshirehathaway.com/letters/letters.html" target="_blank" rel="noopener">رسائله السنوية لمساهمي Berkshire Hathaway</a>، يحذّر من أن الأرباح قد تُهندس، لكن الميزانية العمومية أصعب في التلاعب بها على المدى الطويل.</p>
+  </section>
+
+  <section class="section" id="fundamental-equation">
+    <h2>المعادلة المحاسبية الأساسية</h2>
+    <div class="equation">
+      <div class="equation-text"><span>الأصول</span> = <span>الخصوم</span> + <span>حقوق المساهمين</span></div>
+      <div class="equation-sub">هذه المعادلة متوازنة دائماً — وهي أساس القيد المزدوج، الذي طوره في البندقية بالقرن الخامس عشر <a href="https://en.wikipedia.org/wiki/Luca_Pacioli" target="_blank" rel="noopener" style="color:#7ab3e0;">Luca Pacioli</a>.</div>
+    </div>
+    <p>ما <em>تملكه</em> الشركة يجب أن يساوي ما <em>تدين</em> به (للدائنين) زائد ما <em>ينتمي</em> للمساهمين. إذا لم تتوازن الأرقام، فهناك خطأ محاسبي.</p>
+  </section>
+
+  <section class="section" id="assets">
+    <h2>الأصول: ما تملكه الشركة</h2>
+    <div class="bs-grid">
+      <div class="bs-col">
+        <div class="bs-col-header">الأصول (بالمليون ريال)</div>
+        <div class="bs-row"><span class="bs-label"><strong>الأصول المتداولة</strong></span><span class="bs-val"></span></div>
+        <div class="bs-row"><span class="bs-label indent">النقد وما في حكمه</span><span class="bs-val">2,100</span></div>
+        <div class="bs-row"><span class="bs-label indent">الذمم المدينة</span><span class="bs-val">1,450</span></div>
+        <div class="bs-row"><span class="bs-label indent">المخزون</span><span class="bs-val">820</span></div>
+        <div class="bs-row subtotal"><span class="bs-label"><strong>إجمالي الأصول المتداولة</strong></span><span class="bs-val">4,370</span></div>
+        <div class="bs-row"><span class="bs-label"><strong>الأصول غير المتداولة</strong></span><span class="bs-val"></span></div>
+        <div class="bs-row"><span class="bs-label indent">الممتلكات والمصانع والمعدات</span><span class="bs-val">6,200</span></div>
+        <div class="bs-row"><span class="bs-label indent">الأصول غير الملموسة</span><span class="bs-val">1,100</span></div>
+        <div class="bs-row subtotal"><span class="bs-label"><strong>إجمالي الأصول</strong></span><span class="bs-val">11,670</span></div>
+      </div>
+      <div class="bs-col">
+        <div class="bs-col-header">الخصوم وحقوق الملكية (بالمليون ريال)</div>
+        <div class="bs-row"><span class="bs-label"><strong>الخصوم المتداولة</strong></span><span class="bs-val"></span></div>
+        <div class="bs-row"><span class="bs-label indent">الذمم الدائنة</span><span class="bs-val">980</span></div>
+        <div class="bs-row"><span class="bs-label indent">الديون قصيرة الأجل</span><span class="bs-val">500</span></div>
+        <div class="bs-row subtotal"><span class="bs-label"><strong>إجمالي الخصوم المتداولة</strong></span><span class="bs-val">1,480</span></div>
+        <div class="bs-row"><span class="bs-label"><strong>الخصوم غير المتداولة</strong></span><span class="bs-val"></span></div>
+        <div class="bs-row"><span class="bs-label indent">الديون طويلة الأجل</span><span class="bs-val">3,200</span></div>
+        <div class="bs-row subtotal"><span class="bs-label"><strong>إجمالي الخصوم</strong></span><span class="bs-val">4,680</span></div>
+        <div class="bs-row"><span class="bs-label indent">رأس المال</span><span class="bs-val">3,000</span></div>
+        <div class="bs-row"><span class="bs-label indent">الأرباح المحتجزة</span><span class="bs-val">3,990</span></div>
+        <div class="bs-row subtotal"><span class="bs-label"><strong>إجمالي الخ + حقوق الملكية</strong></span><span class="bs-val">11,670</span></div>
+      </div>
+    </div>
+    <h3>الأصول المتداولة مقابل غير المتداولة</h3>
+    <p><strong>الأصول المتداولة</strong> يمكن تحويلها إلى نقد خلال 12 شهراً — النقد والذمم المدينة والمخزون. <strong>الأصول غير المتداولة</strong> طويلة الأجل: العقارات والمعدات والشهرة من الاستحواذات. يُعدّ <a href="https://www.accountingtools.com/articles/what-is-a-current-asset.html" target="_blank" rel="noopener">دليل AccountingTools للأصول المتداولة</a> مرجعاً عملياً.</p>
+    <p><strong>الشهرة (Goodwill)</strong> تستحق اهتماماً خاصاً: تُنشأ عندما تدفع الشركة أكثر من قيمة الاستحواذ، وإذا أخفق ذلك العمل، تُخفَّض الشهرة — ما قد يمحو مليارات من الميزانية بين ليلة وضحاها. يحكم <a href="https://www.ifrs.org/issued-standards/list-of-standards/ifrs-3-business-combinations/" target="_blank" rel="noopener">IFRS 3</a> كيفية تسجيل الشهرة واختبارها.</p>
+  </section>
+
+  <section class="section" id="liabilities">
+    <h2>الخصوم: ما على الشركة</h2>
+    <p>الخصوم هي الالتزامات التي يجب على الشركة سدادها في نهاية المطاف. تشمل <strong>الخصوم المتداولة</strong> (مستحقة خلال 12 شهراً) الذمم الدائنة والقروض قصيرة الأجل. وتشمل <strong>الخصوم غير المتداولة</strong> السندات طويلة الأجل والتزامات المعاشات والضرائب المؤجلة.</p>
+    <p>الدين ليس سيئاً بذاته — بل قد يضخّم العوائد. لكن الدين الزائد نسبةً إلى حقوق الملكية يخلق هشاشة. تتتبع <a href="https://www.federalreserve.gov/releases/z1/" target="_blank" rel="noopener">بيانات الحسابات المالية للاحتياطي الفيدرالي</a> اتجاهات الرافعة المالية للشركات الأمريكية عبر القطاعات.</p>
+  </section>
+
+  <section class="section" id="equity">
+    <h2>حقوق المساهمين</h2>
+    <p>حقوق الملكية هي الحصة المتبقية — ما يتبقى للمساهمين بعد سداد جميع الخصوم. وتتكون من رأس المال المدفوع (ما دفعه المستثمرون) زائد الأرباح المحتجزة (الأرباح المحتفظ بها في الشركة بدلاً من توزيعها كأرباح).</p>
+    <p>الشركة ذات <em>حقوق ملكية سالبة</em> تدين نظرياً بأكثر مما تملك. قد يكون ذلك علامة تحذيرية، أو قد يكون مقصوداً (شركات مثل McDonald's لديها حقوق ملكية سالبة بسبب إعادة شراء الأسهم العدوانية). السياق مهم للغاية — راجع <a href="https://www.investopedia.com/terms/n/negativeequity.asp" target="_blank" rel="noopener">Investopedia حول حقوق المساهمين السالبة</a>.</p>
+  </section>
+
+  <section class="section" id="ratios">
+    <h2>نسب الميزانية العمومية الرئيسية</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>النسبة</th><th>المعادلة</th><th>ما تقيسه</th><th>النطاق الصحي</th></tr></thead>
+        <tbody>
+          <tr><td>نسبة التداول</td><td>الأصول المتداولة ÷ الخصوم المتداولة</td><td>السيولة قصيرة الأجل</td><td>1.5x – 3.0x</td></tr>
+          <tr><td>نسبة السيولة السريعة</td><td>(الأصول المتداولة – المخزون) ÷ الخصوم المتداولة</td><td>تغطية الأصول السائلة</td><td>&gt; 1.0x</td></tr>
+          <tr><td>الدين/حقوق الملكية</td><td>إجمالي الدين ÷ إجمالي حقوق الملكية</td><td>الرافعة المالية</td><td>يختلف حسب القطاع</td></tr>
+          <tr><td>السعر/الدفترية (P/B)</td><td>القيمة السوقية ÷ القيمة الدفترية لحقوق الملكية</td><td>علاوة السوق على الأصول</td><td>&lt; 1x = قد تكون مقيّمة بأقل من قيمتها</td></tr>
+          <tr><td>معدل دوران الأصول</td><td>الإيرادات ÷ إجمالي الأصول</td><td>كفاءة استخدام الأصول</td><td>الأعلى أفضل</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>يوفر فصل <a href="https://www.cfainstitute.org/en/membership/professional-development/refresher-readings/financial-analysis-techniques" target="_blank" rel="noopener">تقنيات التحليل المالي لدى CFA Institute</a> معالجة دقيقة لجميع هذه النسب مع أمثلة تطبيقية.</p>
+  </section>
+
+  <section class="section" id="red-flags">
+    <h2>علامات تحذيرية في الميزانية</h2>
+    <p><strong>نمو سريع في المخزون:</strong> المخزون الذي ينمو أسرع من المبيعات قد يشير إلى تراكم منتجات غير مباعة — أي ضعف في الطلب. سبق ذلك انهيار عدة شركات تجزئة، كما وثّق <a href="https://www.wsj.com/articles/why-inventories-matter-so-much-to-investors-11651000200" target="_blank" rel="noopener">The Wall Street Journal</a>.</p>
+    <p><strong>أصول غير ملموسة وشهرة كبيرة نسبةً إلى إجمالي الأصول:</strong> إذا تجاوزت 60% من الأصول غير ملموسة، فإن خفضاً واحداً للشهرة قد يدمر القيمة الدفترية. تُظهر <a href="https://www.sciencedirect.com/science/article/abs/pii/S0165410101000349" target="_blank" rel="noopener">الأبحاث الأكاديمية حول خفض الشهرة</a> أن هذه الخفضات غالباً ما تتبع استحواذات تمت عند ذروة التقييم.</p>
+    <p><strong>ديون مستحقة خلال 12 شهراً لا تستطيع الشركة إعادة تمويلها:</strong> قارن الجزء المتداول من الديون طويلة الأجل مع النقد المتوفر. إذا كان الدين يستحق والنقد غير كافٍ، قد تواجه الشركة أزمة سيولة.</p>
+    <div class="callout">
+      <div class="callout-label">نصيحة احترافية</div>
+      <p>قارن الميزانية العمومية على مدى 3–5 سنوات، لا الفترة الأخيرة فقط. تدهور نسبة التداول أو ارتفاع الدين أو انكماش القيمة الدفترية مع الوقت يحكي قصة أوضح من أي لقطة واحدة.</p>
+    </div>
+  </section>
+
+  <div class="sources">
+    <h3>المصادر وقراءات إضافية</h3>
+    <ul>
+      <li><a href="https://www.ifrs.org/issued-standards/list-of-standards/ias-1-presentation-of-financial-statements/" target="_blank" rel="noopener">IASB — IAS 1: قائمة المركز المالي</a></li>
+      <li><a href="https://www.investopedia.com/terms/b/balancesheet.asp" target="_blank" rel="noopener">Investopedia — الدليل الشامل للميزانية العمومية</a></li>
+      <li><a href="https://www.berkshirehathaway.com/letters/letters.html" target="_blank" rel="noopener">Berkshire Hathaway — رسائل Warren Buffett السنوية</a></li>
+      <li><a href="https://www.cfainstitute.org/en/membership/professional-development/refresher-readings/financial-analysis-techniques" target="_blank" rel="noopener">CFA Institute — تقنيات التحليل المالي</a></li>
+      <li><a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/pbvdata.html" target="_blank" rel="noopener">Damodaran Online — السعر إلى الدفترية حسب الصناعة</a></li>
+      <li><a href="https://www.accountingtools.com/articles/what-is-a-balance-sheet.html" target="_blank" rel="noopener">AccountingTools — شرح الميزانية العمومية</a></li>
+    </ul>
+  </div></article>
+    <nav class="series-nav" aria-label="Series"><a href="/ar/tutorials/income-statement">← كيفية قراءة قائمة الدخل للشركة كالمحترفين</a><a href="/ar/tutorials/cash-flow-statement">قائمة التدفقات النقدية مفسّرة: لماذا النقد هو الملك →</a></nav>
+    <footer>© TruePrice.Cash</footer>
+  </div>
+</body>
+</html>

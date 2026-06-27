@@ -2,8 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>فهم تقارير الأرباح: ما الذي تبحث عنه كل ربع سنة | TruePrice.Cash</title>
-  <meta name="description" content="دليل شامل لقراءة تقارير الأرباح الفصلية — من EPS والإيرادات إلى التوجيهات ومكالمات الأرباح ورد فعل السوق."/>
+  <title>فهم تقارير الأرباح: ما الذي تبحث عنه كل ربع | TruePrice.Cash</title>
+  <meta name="description" content="تعلّم قراءة تقارير الأرباح الفصلية — EPS والإيرادات والتوجيهات ومكالمات الأرباح — وكيفية تفسير رد فعل السوق."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
@@ -35,7 +35,7 @@
     .callout{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--gold);padding:20px 24px;border-radius:0 8px 8px 0;margin:28px 0;}
     .callout-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin-bottom:8px;}
     .callout p{margin:0;font-size:.95rem;}
-    .table-wrap{overflow-x:auto;margin:24px 0 36px;}
+    .table-wrap{overدفق-x:auto;margin:24px 0 36px;}
     table{width:100%;border-collapse:collapse;font-size:.92rem;}
     thead{background:var(--ink);color:#fff;}thead th{padding:12px 16px;text-align:left;font-weight:600;font-size:.82rem;letter-spacing:.5px;}
     tbody tr{border-bottom:1px solid var(--border);}tbody tr:nth-child(even){background:var(--gold-faint);}
@@ -59,13 +59,17 @@
   </style>
 </head>
 <body>
-<nav><a class="nav-brand" href="https://trueprice.cash">TruePrice.Cash</a><div class="nav-links"><a href="https://trueprice.cash">الرئيسية</a><a href="https://trueprice.cash/screener">أداة الفرز</a><a href="#">الدروس</a></div></nav>
+<nav><a class="nav-brand" href="https://trueprice.cash">TruePrice.Cash</a><div class="nav-links"><a href="https://trueprice.cash">الرئيسية</a><a href="https://trueprice.cash/screener">المُصفّي</a><a href="#">الدروس</a></div></nav>
 <div class="progress-bar"></div>
 <header class="hero"><div class="hero-inner">
   <span class="series-label">الدرس 09 من 10 · سلسلة التحليل الأساسي</span>
-  <h1>فهم <em>تقارير الأرباح:</em><br/>ما الذي تبحث عنه كل ربع سنة</h1>
-  <p class="hero-sub">موسم الأرباح هو وقت تحرك الأسواق بأشدها — وغالباً في الاتجاه الخاطئ. المستثمرون الذين يفهمون ما تحتويه تقارير الأرباح فعلاً يتداولون على أساس الحقائق، لا العناوين.</p>
-  <div class="hero-meta"><div class="meta-item"><span class="meta-label">وقت القراءة</span><span class="meta-value">13 دقيقة</span></div><div class="meta-item"><span class="meta-label">المستوى</span><span class="meta-value">متوسط</span></div><div class="meta-item"><span class="meta-label">السلسلة</span><span class="meta-value">التحليل الأساسي</span></div></div>
+  <h1>فهم <em>تقارير الأرباح:</em><br/>ما الذي تبحث عنه كل ربع</h1>
+  <p class="hero-sub">موسم الأرباح هو وقت تحرك الأسواق بأشدها — وغالباً في الاتجاه الخاطئ. المستثمرون الذين يفهمون محتوى تقارير الأرباح فعلياً يتداولون على أساس الحقائق، لا العناوين.</p>
+  <div class="hero-meta">
+    <div class="meta-item"><span class="meta-label">وقت القراءة</span><span class="meta-value">13 دقيقة</span></div>
+    <div class="meta-item"><span class="meta-label">المستوى</span><span class="meta-value">متوسط</span></div>
+    <div class="meta-item"><span class="meta-label">السلسلة</span><span class="meta-value">التحليل الأساسي</span></div>
+  </div>
 </div></header>
 <main class="content-wrap">
   <nav class="toc"><div class="toc-title">في هذا المقال</div><ol>
@@ -73,90 +77,93 @@
     <li><a href="#eps-revenue">EPS والإيرادات: الأرقام الرئيسية</a></li>
     <li><a href="#guidance">التوجيهات: أهم رقم</a></li>
     <li><a href="#earnings-call">كيفية تحليل مكالمة الأرباح</a></li>
-    <li><a href="#beyond-eps">ما بعد EPS: ما الذي يهم حقاً</a></li>
+    <li><a href="#beyond-eps">ما وراء EPS: ما يهم فعلاً</a></li>
     <li><a href="#market-reaction">فهم رد فعل السوق</a></li>
     <li><a href="#tasi-earnings">تقويم أرباح تاسي والمصادر</a></li>
   </ol></nav>
 
   <section class="section" id="what-is-earnings">
     <h2>ما هو تقرير الأرباح؟</h2>
-    <p>تقرير الأرباح (يُسمى أيضاً التقرير الفصلي أو إيداع Q) هو إفصاح عام عن النتائج المالية للشركة خلال آخر ثلاثة أشهر. الشركات المدرجة ملزمة قانوناً بنشرها — في الولايات المتحدة عبر <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&type=10-Q" target="_blank" rel="noopener">إيداعات SEC 10-Q</a>، ولشركات تاسي عبر <a href="https://www.saudiexchange.sa/wps/portal/saudiexchange/ourmarkets/market-watch" target="_blank" rel="noopener">بوابة إفصاح تداول</a>.</p>
-    <p>يتضمن تقرير الأرباح عادة القوائم المالية الثلاث (قائمة الدخل، الميزانية، التدفقات النقدية)، وتعليقات الإدارة (MD&A — Management Discussion &amp; Analysis)، والتوجيهات المستقبلية. تستضيف معظم الشركات أيضاً <strong>مكالمة أرباح</strong> مباشرة يعرض فيها المدراء النتائج ويجيبون على أسئلة المحللين.</p>
+    <p>تقرير الأرباح (ويُسمى أيضاً التقرير الفصلي أو إفصاح Q) هو إفصاح عام عن النتائج المالية للشركة لآخر ثلاثة أشهر. الشركات المدرجة ملزمة قانوناً بنشرها — في أمريكا عبر <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&type=10-Q" target="_blank" rel="noopener">إيداعات SEC 10-Q</a>، ولشركات تاسي عبر <a href="https://www.saudiexchange.sa/wps/portal/saudiexchange/ourmarkets/market-watch" target="_blank" rel="noopener">بوابة إفصاح تداول</a>.</p>
+    <p>يتضمن تقرير الأرباح عادةً القوائم المالية الثلاث (قائمة الدخل والميزانية وقائمة التدفقات النقدية)، وتعليق الإدارة (MD&amp;A — المناقشة والتحليل الإداري)، والتوجيهات المستقبلية. كما تستضيف معظم الشركات <strong>مكالمة أرباح</strong> مباشرة يعرض فيها المدراء النتائج ويجيبون على أسئلة المحللين.</p>
   </section>
 
   <section class="section" id="eps-revenue">
     <h2>EPS والإيرادات: الأرقام الرئيسية</h2>
-    <p>الرقمان اللذان تبدأ بهما وسائل الإعلام المالية دائماً هما <strong>EPS (ربحية السهم)</strong> و<strong>الإيرادات</strong>، مقارنةً بتوقعات إجماع المحللين. «التفوق» (الفعلي يتجاوز الإجماع) يرفع السهم عادة؛ و«الإخفاق» (الفعلي دون الإجماع) يهبطه.</p>
-    <p>لكن هذا الإطار مضلّل. المهم ليس فقط ما إذا كانت الشركة تفوقت هذا الربع، بل <em>لماذا</em> تفوقت، وهل هذا التفوق مستدام. شركة تتفوق في EPS بخفض البحث والتطوير تختلف جذرياً عن شركة تتفوق لأن العملاء سرّعوا الطلبات.</p>
-    <div class="callout"><div class="callout-label">نقطة حاسمة</div><p>افصل دائماً <strong>جودة الإيرادات</strong> (نمو عضوي مقابل بنود لمرة واحدة) عن الكمية. تحقق مما إذا كان نمو الإيرادات جاء من الحجم (الوحدات المباعة) أو السعر (القوة التسعيرية) — الأخير أكثر قيمة بكثير ويدل على قوة الخندق.</p></div>
-    <p><a href="https://www.wsj.com/market-data/stocks/earnings-calendar" target="_blank" rel="noopener">تقويم أرباح Wall Street Journal</a> و <a href="https://finance.yahoo.com/calendar/earnings" target="_blank" rel="noopener">متتبع أرباح Yahoo Finance</a> يجمعان تقديرات الإجماع والنتائج الفعلية في الوقت الفعلي.</p>
+    <p>الرقمان اللذان تبدأ بهما وسائل الإعلام المالية دائماً هما <strong>EPS (ربحية السهم)</strong> و<strong>الإيرادات</strong>، مقارنةً بتقديرات إجماع المحللين. «تجاوز التوقعات» (actual يتجاوز consensus) يرفع السهم عادةً؛ «أقل من التوقعات» يهبطه.</p>
+    <p>لكن هذا الإطار مضلّل. المهم ليس فقط هل تجاوزت الشركة هذا الربع، بل <em>لماذا</em> تجاوزت، وهل هذا التجاوز مستدام. شركة تتجاوز EPS بخفض R&amp;D مختلفة جذرياً عن شركة تتجاوز EPS لأن العملاء سرّعوا الطلبات.</p>
+    <div class="callout"><div class="callout-label">نقطة حاسمة</div><p>افصل دائماً <strong>جودة الإيرادات</strong> (نمو عضوي مقابل بنود لمرة واحدة) عن الكمية. تحقّق مما إذا كان نمو الإيرادات جاء من الحجم (الوحدات المباعة) أم من السعر (قوة التسعير) — الأخير أثمن بكثير ويدل على قوة الخندق.</p></div>
+    <p><a href="https://www.wsj.com/market-data/stocks/earnings-calendar" target="_blank" rel="noopener">تقويم أرباح Wall Street Journal</a> و<a href="https://finance.yahoo.com/calendar/earnings" target="_blank" rel="noopener">متتبع أرباح Yahoo Finance</a> يجمعان تقديرات الإجماع والنتائج الفعلية في الوقت الفعلي.</p>
   </section>
 
   <section class="section" id="guidance">
     <h2>التوجيهات: أهم رقم</h2>
-    <p>يقول المحترفون غالباً: «الماضي مُبلّغ عنه. المستقبل مُسعّر.» لذا <strong>التوجيهات المستقبلية</strong> — نظرة الإدارة للربع التالي أو السنة كاملة — تحرك الأسهم أكثر من النتائج المُبلّغ عنها.</p>
-    <p>إذا تفوقت الشركة في أرباح Q3 لكن خفّضت توجيهات Q4، ينخفض السهم عادة. وإذا أخفقت في Q3 لكن رفعت توجيهات السنة كاملة، يرتفع غالباً. السوق يسعّر دائماً الـ 12–24 شهراً القادمة، لا الـ 3 أشهر الماضية.</p>
-    <p>عند قراءة التوجيهات، انتبه إلى:</p>
+    <p>يقول المحترفون غالباً: «الماضي مُبلّغ. المستقبل مُسعَّر.» لذلك <strong>التوجيه المستقبلي</strong> — نظرة الإدارة للربع القادم أو السنة كاملة — يحرّك الأسهم أكثر من النتائج المُبلّغة.</p>
+    <p>إذا تجاوزت الشركة أرباح Q3 لكن خفّضت توجيه Q4، ينخفض السهم عادةً. إذا أخفقت Q3 لكن رفعت توجيه السنة، يرتفع غالباً. السوق يسعّر دائماً الـ 12–24 شهراً القادمة، لا الـ 3 أشهر الماضية.</p>
+    <p>عند قراءة التوجيه، انتبه إلى:</p>
     <div class="table-wrap"><table>
       <thead><tr><th>عنصر التوجيه</th><th>ما الذي تقيّمه</th></tr></thead>
       <tbody>
-        <tr><td>نطاق الإيرادات</td><td>هل النطاق ضيق (ثقة) أم واسع (عدم يقين)؟ هل هو فوق أو دون إجماع المحللين؟</td></tr>
-        <tr><td>توجيه الهوامش</td><td>هل يُتوقع توسع الهوامش أو ثباتها أو ضغطها؟ هذا يكشف مسار ضغط التكاليف.</td></tr>
-        <tr><td>خطط CapEx</td><td>ارتفاع CapEx قد يعني استثماراً للنمو (إيجابي) أو صيانة (محايد) — السياق يحدد.</td></tr>
-        <tr><td>سجل التوجيهات</td><td>هل تعود الإدارة للتوجيه بتحفظ ثم التفوق (sandbagging) أم بتفاؤل ثم الإخفاق؟</td></tr>
+        <tr><td>نطاق الإيرادات</td><td>هل النطاق ضيق (ثقة) أم واسع (عدم يقين)؟ هل فوق أو دون إجماع المحللين؟</td></tr>
+        <tr><td>توجيه الهوامش</td><td>هل الهوامش متوقعة للتوسع أو الثبات أو الانكماش؟ يكشف مسار ضغط التكاليف.</td></tr>
+        <tr><td>خطط CapEx</td><td>CapEx مرتفع قد يعني استثمار نمو (إيجابي) أو صيانة (محايد) — السياق يحدد.</td></tr>
+        <tr><td>تاريخ التوجيه</td><td>هل الإدارة تُوجّه بتحفظ وتتجاوز (sandbagging) أم بتفاؤل وتُخفق؟</td></tr>
       </tbody>
     </table></div>
   </section>
 
   <section class="section" id="earnings-call">
     <h2>كيفية تحليل مكالمة الأرباح</h2>
-    <p>نص مكالمة الأرباح غالباً أثمن من القوائم المالية، لأنه يكشف تفكير الإدارة في الوقت الفعلي. ينشر <a href="https://www.fool.com/earnings-call-transcripts/" target="_blank" rel="noopener">Motley Fool</a> و <a href="https://seekingalpha.com/earnings/earnings-call-transcripts" target="_blank" rel="noopener">Seeking Alpha</a> النصوص كاملة، عادة خلال ساعات من المكالمة.</p>
+    <p>نص مكالمة الأرباح غالباً أثمن من القوائم المالية، لأنه يكشف تفكير الإدارة في الوقت الفعلي. ينشر <a href="https://www.fool.com/earnings-call-transcripts/" target="_blank" rel="noopener">Motley Fool</a> و<a href="https://seekingalpha.com/earnings/earnings-call-transcripts" target="_blank" rel="noopener">Seeking Alpha</a> النصوص الكاملة، عادةً خلال ساعات من المكالمة.</p>
     <p>إشارات رئيسية للبحث عنها:</p>
-    <p><strong>ثقة اللغة:</strong> قارن كيف تناقش الإدارة محرّكات النمو. لغة واثقة ومحددة («نتوقع توسيع عدد متاجرنا في السعودية من 45 إلى 60 بحلول Q4») تختلف جذرياً عن التحفظ المبهم («نستكشف فرصاً لتوسيع حضورنا»).</p>
-    <p><strong>الموضوعات المتجنّبة:</strong> إذا سأل محلل عن قضية عمل رئيسية وتحوّلت الإدارة أو أعطت إجابة غير مباشرة، فهذا الموضوع يستحق تحقيقاً أعمق. يغطي <a href="https://www.institutionalinvestor.com/" target="_blank" rel="noopener">Institutional Investor</a> بانتظام كيف تكشف أسئلة المحللين عن مصداقية الإدارة.</p>
-    <p><strong>تشكك المحللين:</strong> إذا كان محللو البيع يركزون باستمرار على نفس القضية، فهم يشيرون إلى قلق لم يستطيعوا بعد تحديده كمياً. استمع بعناية لما يُسأل، لا للإجابات فقط.</p>
+    <p><strong>ثقة اللغة:</strong> قارن كيف تناقش الإدارة محركات النمو. لغة واثقة ومحددة («نتوقع توسيع عدد متاجرنا في السعودية من 45 إلى 60 بحلول Q4») مختلفة جذرياً عن التحفظ المبهم («نستكشف فرصاً لتوسيع حضورنا»).</p>
+    <p><strong>الموضوعات المتجنّبة:</strong> إذا سأل محلل عن قضية أعمال محورية وتهرّبت الإدارة أو أجابت بلا مضمون، فهذا الموضوع يستحق تحقيقاً أعمق. يغطي <a href="https://www.institutionalinvestor.com/" target="_blank" rel="noopener">Institutional Investor</a> بانتظام كيف تكشف أسئلة المحللين عن مصداقية الإدارة.</p>
+    <p><strong>شكوك المحللين:</strong> إذا ضغط محللو sell-side ذوو الخبرة مراراً على نفس القضية، فهم يُشيرون إلى قلق لا يستطيعون قياسه بعد. استمع بعناية لما يُسأل، لا للإجابات فقط.</p>
   </section>
 
   <section class="section" id="beyond-eps">
-    <h2>ما بعد EPS: ما الذي يهم حقاً</h2>
-    <p>من السهل تلاعب EPS عبر إعادة شراء الأسهم وخيارات المحاسبة وإدارة الضرائب. ينظر المستثمرون المتمرسون أعمق:</p>
+    <h2>ما وراء EPS: ما يهم فعلاً</h2>
+    <p>EPS سهل التصنيع عبر إعادة الشراء والخيارات المحاسبية وإدارة الضرائب. ينظر المستثمرون المتمرسون أعمق:</p>
     <div class="checklist">
-      <div class="checklist-title">قائمة فحص الأرباح الفصلية</div>
-      <div class="check-item">هل نما التدفق النقدي التشغيلي بمعدل لا يقل عن صافي الدخل؟</div>
-      <div class="check-item">هل ثبت هامش الربح الإجمالي أو اتسع مقارنة بنفس الربع من العام الماضي؟</div>
-      <div class="check-item">هل تنمو مصاريف SG&amp;A أبطأ من الإيرادات (رافعة تشغيلية)؟</div>
-      <div class="check-item">هل نما backlog الشركة / الحجوزات / خط الطلبات أم انكمش؟</div>
-      <div class="check-item">ماذا حدث للذمم المدينة والمخزون مقارنة بنمو الإيرادات؟</div>
-      <div class="check-item">هل كان تفوق EPS مدفوعاً بإعادة الشراء (انخفاض عدد الأسهم) أم بنمو أرباح حقيقي؟</div>
-      <div class="check-item">هل حدّثت الشركة توجيهاتها السنوية أم حافظت عليها أم سحبتها؟</div>
+      <div class="checklist-title">قائمة تحقق الأرباح الفصلية</div>
+      <div class="check-item">هل نما التدفق النقدي التشغيلي بنفس سرعة صافي الدخل على الأقل؟</div>
+      <div class="check-item">هل ثبت هامش الربح الإجمالي أو اتسع مقارنةً بنفس الربع العام الماضي؟</div>
+      <div class="check-item">هل نمت مصروفات SG&amp;A أبطأ من الإيرادات (رافعة تشغيلية)؟</div>
+      <div class="check-item">هل نما backlog / الحجوزات / خط الأوامر أم انكمش؟</div>
+      <div class="check-item">ماذا حدث للذمم المدينة والمخزون نسبةً لنمو الإيرادات؟</div>
+      <div class="check-item">هل جاء تجاوز EPS من إعادة الشراء (انخفاض عدد الأسهم) أم نمو أرباح حقيقي؟</div>
+      <div class="check-item">هل حدّثت الشركة أو حافظت على أو سحبت التوجيه السنوي؟</div>
       <div class="check-item">هل وُجدت رسوم أو مكاسب لمرة واحدة شوّهت الرقم الرئيسي؟</div>
     </div>
   </section>
 
   <section class="section" id="market-reaction">
     <h2>فهم رد فعل السوق</h2>
-    <p>خطأ شائع هو افتراض أن سهماً ينخفض 10% بعد «التفوق» يُعاقب ظلماً. السوق عادة عقلاني — يتفاعل مع شيء في التفاصيل تفوته العناوين: توجيهات مخفّضة، ضغط هوامش، ارتفاع تكاليف اكتساب العملاء، أو تغير في المشهد التنافسي.</p>
-    <p>تُظهر <a href="https://academic.oup.com/rfs/article/23/8/3009/1595547" target="_blank" rel="noopener">أبحاث أكاديمية منشورة في Review of Financial Studies</a> أن انجراف ما بعد إعلان الأرباح (PEAD) — ميل الأسهم للاستمرار في الاتجاه الذي اتخذته بعد مفاجأة الأرباح لعدة أسابيع — من أشد الشذوذات استمراراً في الأسواق المالية.</p>
-    <p>يعني ذلك: إذا قفز سهم بقوة على أرباح قوية <strong>و</strong> أكّدت الأساسيات الحركة، غالباً ما يستمر الاتجاه. والعكس: انخفاض حاد على نتائج سيئة حقيقية (لا مجرد إخفاق مقابل توقعات مرتفعة) يعكس معلومات يستغرق السوق وقتاً لتسعيرها بالكامل.</p>
+    <p>خطأ كلاسيكي هو افتراض أن سهماً ينخفض 10% بعد «تجاوز» التوقعات يُعاقب ظلماً. السوق غالباً عقلاني — يتفاعل مع شيء في التفاصيل تفوت العناوين: توجيه مخفّض، انكماش الهوامش، ارتفاع تكاليف اكتساب العملاء، أو تغيّر في المشهد التنافسي.</p>
+    <p><a href="https://academic.oup.com/rfs/article/23/8/3009/1595547" target="_blank" rel="noopener">بحث أكاديمي نُشر في Review of Financial Studies</a> يُظهر أن انجراف ما بعد إعلان الأرباح (PEAD) — ميل الأسهم للاستمرار في الاتجاه الذي اتخذته بعد مفاجأة الأرباح لعدة أسابيع — من أكثر الشذوذات استمراراً في الأسواق المالية.</p>
+    <p>يعني ذلك: إذا قفز سهم بقوة على أرباح قوية <em>و</em> أكّدت الأساسيات الحركة، غالباً ما يستمر الاتجاه. والعكس: هبوط حاد على نتائج سيئة حقيقية (لا مجرد أقل من توقعات مرتفعة) يعكس معلومات يحتاج السوق وقتاً لتسعيرها بالكامل.</p>
   </section>
 
   <section class="section" id="tasi-earnings">
     <h2>تقويم أرباح تاسي والمصادر</h2>
-    <p>تُبلّغ الشركات المدرجة في السعودية (تاسي) عادة عن نتائجها الفصلية خلال 45 يوماً من نهاية الربع. يتبع الإبلاغ نهاية السنة الهجرية (رغم أن كثيراً منها يُبلّغ الآن على أساس سنة مالية ميلادية).</p>
+    <p>الشركات السعودية المدرجة (تاسي) تُبلّغ عادةً عن نتائجها الفصلية خلال 45 يوماً من نهاية الربع. يتبع الإفصاح نهاية السنة الهجرية (رغم أن كثيراً منها يُبلّغ الآن على أساس سنة ميلادية).</p>
     <p>مصادر رئيسية لأرباح تاسي:</p>
-    <p><a href="https://cma.org.sa/en/Pages/default.aspx" target="_blank" rel="noopener">هيئة السوق المالية (CMA)</a> هي الجهة المنظمة وتُلزم بنشر جميع الإفصاحات الجوهرية بما فيها الأرباح على منصتها الرسمية. <a href="https://www.saudiexchange.sa/wps/portal/saudiexchange/listing/news-and-announcements" target="_blank" rel="noopener">صفحة إعلانات تداول</a> هي التغذية الرسمية الفورية. يقدّم كل من <a href="https://www.argaam.com/" target="_blank" rel="noopener">Argaam</a> و <a href="https://www.mubasher.info/" target="_blank" rel="noopener">Mubasher</a> تحليل أرباح بالعربية. يدمج TruePrice.Cash بيانات مالية من مصادر متعددة لتتبع أداء شركات تاسي مع الزمن.</p>
+    <p><a href="https://cma.org.sa/en/Pages/default.aspx" target="_blank" rel="noopener">هيئة السوق المالية (CMA)</a> هي الجهة المنظمة وتُلزم بنشر جميع الإفصاحات الجوهرية بما فيها الأرباح على منصتها الرسمية. <a href="https://www.saudiexchange.sa/wps/portal/saudiexchange/listing/news-and-announcements" target="_blank" rel="noopener">صفحة إعلانات تداول</a> هي مصدر الإفصاح الفوري الرسمي. يوفّر كل من <a href="https://www.argaam.com/" target="_blank" rel="noopener">Argaam</a> و<a href="https://www.mubasher.info/" target="_blank" rel="noopener">Mubasher</a> تحليل أرباح بالعربية. TruePrice.Cash يدمج بيانات مالية من مصادر متعددة لتتبع أداء شركات تاسي عبر الزمن.</p>
   </section>
 
   <div class="sources"><h3>المصادر وقراءات إضافية</h3><ul>
     <li><a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&type=10-Q" target="_blank" rel="noopener">SEC EDGAR — التقرير الفصلي (10-Q)</a></li>
     <li><a href="https://seekingalpha.com/earnings/earnings-call-transcripts" target="_blank" rel="noopener">Seeking Alpha — نصوص مكالمات الأرباح</a></li>
     <li><a href="https://finance.yahoo.com/calendar/earnings" target="_blank" rel="noopener">Yahoo Finance — تقويم الأرباح</a></li>
-    <li><a href="https://www.saudiexchange.sa/wps/portal/saudiexchange/listing/news-and-announcements" target="_blank" rel="noopener">Tadawul — بوابة الإعلانات الرسمية</a></li>
-    <li><a href="https://cma.org.sa/en/Pages/default.aspx" target="_blank" rel="noopener">CMA Saudi Arabia — منظم السوق المالي</a></li>
+    <li><a href="https://www.saudiexchange.sa/wps/portal/saudiexchange/listing/news-and-announcements" target="_blank" rel="noopener">تداول — بوابة الإعلانات الرسمية</a></li>
+    <li><a href="https://cma.org.sa/en/Pages/default.aspx" target="_blank" rel="noopener">CMA السعودية — منظم السوق المالي</a></li>
     <li><a href="https://www.wsj.com/market-data/stocks/earnings-calendar" target="_blank" rel="noopener">Wall Street Journal — تقويم الأرباح</a></li>
     <li><a href="https://www.investopedia.com/terms/e/earningsreport.asp" target="_blank" rel="noopener">Investopedia — دليل تقرير الأرباح</a></li>
   </ul></div>
-  <nav class="article-nav"><a class="nav-pill" href="/tutorials/stock-picking-process"><span class="nav-pill-label">← السابق</span><span class="nav-pill-title">كيفية اختيار الأسهم: خطوة بخطوة</span></a><a class="nav-pill" href="/tutorials/financial-red-flags"><span class="nav-pill-label">الدرس التالي →</span><span class="nav-pill-title">علامات تحذيرية في القوائم المالية</span></a></nav>
+  <nav class="article-nav" aria-label="تنقل المقال">
+    <a class="nav-pill" href="/tutorials/stock-picking-process"><span class="nav-pill-label">← السابق</span><span class="nav-pill-title">كيفية اختيار الأسهم: خطوة بخطوة</span></a>
+    <a class="nav-pill" href="/tutorials/financial-red-flags"><span class="nav-pill-label">الدرس التالي →</span><span class="nav-pill-title">علامات تحذيرية في القوائم المالية</span></a>
+  </nav>
 </main>
 </body>
 </html>

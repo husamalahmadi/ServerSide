@@ -285,11 +285,12 @@ export function buildTutorialsIndexSeo({ articles = [], lang = "en" }) {
     isAr ? "دروس التحليل الأساسي – TruePrice.Cash" : "Fundamental Analysis Tutorials – TruePrice.Cash"
   );
 
-  const listId = `${toAbs("/tutorials")}#list`;
+  const indexPath = isAr ? "/ar/tutorials" : "/en/tutorials";
+  const listId = `${toAbs(indexPath)}#list`;
   const itemListElement = articles.map((a, i) => ({
     "@type": "ListItem",
     position: i + 1,
-    url: toAbs(`/tutorials/${a.slug}`),
+    url: toAbs(`${isAr ? "/ar" : "/en"}/tutorials/${a.slug}`),
     name: stripTutorialTitle(a.titleHtml),
   }));
 
@@ -300,11 +301,11 @@ export function buildTutorialsIndexSeo({ articles = [], lang = "en" }) {
     documentTitle,
     metaDescription: description,
     description,
-    pathname: "/tutorials",
+    pathname: indexPath,
     alternates: {
-      en: "/tutorials?lang=en",
-      ar: "/tutorials?lang=ar",
-      "x-default": "/tutorials",
+      en: "/en/tutorials",
+      ar: "/ar/tutorials",
+      "x-default": "/en/tutorials",
     },
     jsonLd: {
       "@context": "https://schema.org",
@@ -312,7 +313,7 @@ export function buildTutorialsIndexSeo({ articles = [], lang = "en" }) {
         {
           "@type": "CollectionPage",
           "@id": listId,
-          url: toAbs("/tutorials"),
+          url: toAbs(indexPath),
           name: heading,
           description,
           inLanguage,
@@ -328,10 +329,12 @@ export function buildTutorialsIndexSeo({ articles = [], lang = "en" }) {
             itemListElement,
           },
         },
-        ...articles.map((a) => ({
+        ...articles.map((a) => {
+          const articlePath = `${isAr ? "/ar" : "/en"}/tutorials/${a.slug}`;
+          return {
           "@type": "LearningResource",
-          "@id": `${toAbs(`/tutorials/${a.slug}`)}#article`,
-          url: toAbs(`/tutorials/${a.slug}`),
+          "@id": `${toAbs(articlePath)}#article`,
+          url: toAbs(articlePath),
           name: stripTutorialTitle(a.titleHtml),
           description: a.metaDescription || a.subtitle,
           inLanguage,
@@ -342,7 +345,8 @@ export function buildTutorialsIndexSeo({ articles = [], lang = "en" }) {
             name: "TruePrice.Cash",
             url: toAbs("/"),
           },
-        })),
+        };
+        }),
       ],
     },
   };
@@ -350,7 +354,7 @@ export function buildTutorialsIndexSeo({ articles = [], lang = "en" }) {
 
 export function buildTutorialArticleSeo({ article, lang = "en" }) {
   const isAr = lang === "ar";
-  const pathname = `/tutorials/${article.slug}`;
+  const pathname = `${isAr ? "/ar" : "/en"}/tutorials/${article.slug}`;
   const headline = stripTutorialTitle(article.titleHtml);
   const description = formatMetaDescription(article.metaDescription || article.subtitle);
   const documentTitle =
@@ -369,9 +373,9 @@ export function buildTutorialArticleSeo({ article, lang = "en" }) {
     description,
     pathname,
     alternates: {
-      en: `/tutorials/${article.slug}?lang=en`,
-      ar: `/tutorials/${article.slug}?lang=ar`,
-      "x-default": `/tutorials/${article.slug}`,
+      en: `/en/tutorials/${article.slug}`,
+      ar: `/ar/tutorials/${article.slug}`,
+      "x-default": `/en/tutorials/${article.slug}`,
     },
     jsonLd: {
       "@context": "https://schema.org",
@@ -385,7 +389,7 @@ export function buildTutorialArticleSeo({ article, lang = "en" }) {
           inLanguage: isAr ? "ar" : "en",
           isPartOf: {
             "@type": "CollectionPage",
-            url: toAbs("/tutorials"),
+            url: toAbs(isAr ? "/ar/tutorials" : "/en/tutorials"),
             name: isAr ? "دروس التحليل الأساسي" : "Fundamental Analysis Tutorials",
           },
           publisher: {
@@ -403,7 +407,7 @@ export function buildTutorialArticleSeo({ article, lang = "en" }) {
           "@type": "BreadcrumbList",
           itemListElement: [
             { "@type": "ListItem", position: 1, name: homeLabel, item: toAbs("/") },
-            { "@type": "ListItem", position: 2, name: tutorialsLabel, item: toAbs("/tutorials") },
+            { "@type": "ListItem", position: 2, name: tutorialsLabel, item: toAbs(isAr ? "/ar/tutorials" : "/en/tutorials") },
             { "@type": "ListItem", position: 3, name: headline, item: toAbs(pathname) },
           ],
         },

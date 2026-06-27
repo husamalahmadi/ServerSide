@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Understanding the Balance Sheet | TruePrice.Cash</title>
+  <meta name="description" content="Learn to read a balance sheet — assets, liabilities, and equity — to assess a company's financial health and stability. Explore tickers, compare valuations," />
+  <link rel="canonical" href="https://trueprice.cash/en/tutorials/balance-sheet" />
+  <link rel="alternate" hreflang="en" href="https://trueprice.cash/en/tutorials/balance-sheet" />
+  <link rel="alternate" hreflang="ar" href="https://trueprice.cash/ar/tutorials/balance-sheet" />
+  <link rel="alternate" hreflang="x-default" href="https://trueprice.cash/en/tutorials/balance-sheet" />
+  <meta property="og:title" content="Understanding the Balance Sheet | TruePrice.Cash" />
+  <meta property="og:description" content="Learn to read a balance sheet — assets, liabilities, and equity — to assess a company's financial health and stability. Explore tickers, compare valuations," />
+  <meta property="og:url" content="https://trueprice.cash/en/tutorials/balance-sheet" />
+  <meta property="og:type" content="article" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","@id":"https://trueprice.cash/en/tutorials/balance-sheet#article","headline":"Understanding the Balance Sheet: Assets, Liabilities & Equity Explained","description":"Learn to read a balance sheet — assets, liabilities, and equity — to assess a company's financial health and stability. Explore tickers, compare valuations,","url":"https://trueprice.cash/en/tutorials/balance-sheet","inLanguage":"en","isPartOf":{"@type":"CollectionPage","url":"https://trueprice.cash/en/tutorials","name":"Fundamental Analysis Tutorials"},"publisher":{"@type":"Organization","name":"TruePrice.Cash","url":"https://trueprice.cash/"},"author":{"@type":"Organization","name":"TruePrice.Cash","url":"https://trueprice.cash/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://trueprice.cash/"},{"@type":"ListItem","position":2,"name":"Tutorials","item":"https://trueprice.cash/en/tutorials"},{"@type":"ListItem","position":3,"name":"Understanding the Balance Sheet: Assets, Liabilities & Equity Explained","item":"https://trueprice.cash/en/tutorials/balance-sheet"}]}]}</script>
+  <style>
+    :root { --tp-primary: #2c7be5; --tp-ink: #1a2b42; --tp-muted: #5a6b85; --tp-border: #d4e6fb; }
+    body { font-family: system-ui,Segoe UI,Roboto,sans-serif; margin: 0; color: var(--tp-ink); line-height: 1.65; background: #f6faff; }
+    .wrap { max-width: 820px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+    header.site { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--tp-border); }
+    header.site a { color: var(--tp-primary); text-decoration: none; font-weight: 600; font-size: 14px; }
+    .brand { font-weight: 800; font-size: 1.1rem; color: var(--tp-ink); }
+    .hero { background: linear-gradient(140deg,#fff,#eef5ff); border: 1px solid var(--tp-border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
+    .hero h1 { margin: 0 0 0.5rem; font-size: 1.75rem; line-height: 1.25; }
+    .hero h1 em { font-style: normal; color: var(--tp-primary); }
+    .hero p { margin: 0; color: var(--tp-muted); font-size: 15px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; font-size: 13px; color: var(--tp-muted); }
+    article { background: #fff; border: 1px solid var(--tp-border); border-radius: 12px; padding: 1.25rem 1.35rem; }
+    article a { color: var(--tp-primary); }
+    article h2 { margin: 1.5rem 0 0.75rem; font-size: 1.25rem; }
+    article h3 { margin: 1rem 0 0.5rem; font-size: 1.05rem; }
+    article p { margin: 0 0 0.85rem; font-size: 15px; }
+    article table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 1rem 0; }
+    article th, article td { border: 1px solid var(--tp-border); padding: 0.5rem 0.65rem; text-align: start; }
+    article th { background: #f0f6ff; }
+    .catalog { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.65rem; }
+    .catalog a { display: block; padding: 0.85rem 1rem; background: #fff; border: 1px solid var(--tp-border); border-radius: 10px; color: var(--tp-ink); text-decoration: none; font-weight: 600; }
+    .catalog a:hover { border-color: var(--tp-primary); }
+    .series-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1.25rem; }
+    .series-nav a { display: block; padding: 0.75rem 1rem; background: #fff; border: 1px solid var(--tp-border); border-radius: 10px; text-decoration: none; color: var(--tp-primary); font-weight: 600; font-size: 14px; }
+    footer { margin-top: 2rem; text-align: center; font-size: 12px; color: var(--tp-muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="site">
+      <a class="brand" href="/">TruePrice.Cash</a>
+      <div>
+        <a href="/en/tutorials">English</a>
+        ·
+        <a href="/ar/tutorials">العربية</a>
+        ·
+        <a href="/">Dashboard</a>
+      </div>
+    </header>
+    <div class="hero">
+      <p style="font-size:11px;font-weight:700;color:var(--tp-primary);text-transform:uppercase;letter-spacing:.06em;">Tutorial 03 of 10 · Fundamental Analysis Series</p>
+      <h1>Understanding the <em>Balance Sheet:</em><br/>Assets, Liabilities & Equity Explained</h1>
+      <p>The balance sheet is a snapshot of what a company owns, what it owes, and what's left for shareholders. Master it, and you master the language of financial health.</p>
+      <div class="meta">
+        <span>13 min</span>
+        <span>Beginner–Intermediate</span>
+      </div>
+    </div>
+    <article><nav class="toc" aria-label="Table of contents">
+    <div class="toc-title">In this article</div>
+    <ol>
+      <li><a href="#what-is">What is a Balance Sheet?</a></li>
+      <li><a href="#fundamental-equation">The Fundamental Accounting Equation</a></li>
+      <li><a href="#assets">Assets: What the Company Owns</a></li>
+      <li><a href="#liabilities">Liabilities: What the Company Owes</a></li>
+      <li><a href="#equity">Shareholders' Equity</a></li>
+      <li><a href="#ratios">Key Balance Sheet Ratios</a></li>
+      <li><a href="#red-flags">Balance Sheet Red Flags</a></li>
+    </ol>
+  </nav>
+
+  <section class="section" id="what-is">
+    <h2>What is a Balance Sheet?</h2>
+    <p>The balance sheet — officially called the <strong>Statement of Financial Position</strong> under <a href="https://www.ifrs.org/issued-standards/list-of-standards/ias-1-presentation-of-financial-statements/" target="_blank" rel="noopener">IAS 1</a> — shows a company's financial position at a single point in time. Unlike the income statement (which covers a period), the balance sheet is a photograph taken on one day, typically the last day of the quarter or fiscal year.</p>
+    <p>Warren Buffett has consistently emphasized the balance sheet over the income statement. In his <a href="https://www.berkshirehathaway.com/letters/letters.html" target="_blank" rel="noopener">annual letters to Berkshire Hathaway shareholders</a>, he warns that earnings can be engineered, but the balance sheet is harder to fake over time.</p>
+  </section>
+
+  <section class="section" id="fundamental-equation">
+    <h2>The Fundamental Accounting Equation</h2>
+    <div class="equation">
+      <div class="equation-text"><span>Assets</span> = <span>Liabilities</span> + <span>Shareholders' Equity</span></div>
+      <div class="equation-sub">This equation always balances — it is the foundation of double-entry bookkeeping, developed in 15th-century Venice by <a href="https://en.wikipedia.org/wiki/Luca_Pacioli" target="_blank" rel="noopener" style="color:#7ab3e0;">Luca Pacioli</a>.</div>
+    </div>
+    <p>What the company <em>owns</em> must equal what it <em>owes</em> (to creditors) plus what <em>belongs to shareholders</em>. If the numbers don't balance, there's an accounting error.</p>
+  </section>
+
+  <section class="section" id="assets">
+    <h2>Assets: What the Company Owns</h2>
+    <div class="bs-grid">
+      <div class="bs-col">
+        <div class="bs-col-header">ASSETS (SAR millions)</div>
+        <div class="bs-row"><span class="bs-label"><strong>Current Assets</strong></span><span class="bs-val"></span></div>
+        <div class="bs-row"><span class="bs-label indent">Cash & Equivalents</span><span class="bs-val">2,100</span></div>
+        <div class="bs-row"><span class="bs-label indent">Accounts Receivable</span><span class="bs-val">1,450</span></div>
+        <div class="bs-row"><span class="bs-label indent">Inventory</span><span class="bs-val">820</span></div>
+        <div class="bs-row subtotal"><span class="bs-label"><strong>Total Current Assets</strong></span><span class="bs-val">4,370</span></div>
+        <div class="bs-row"><span class="bs-label"><strong>Non-Current Assets</strong></span><span class="bs-val"></span></div>
+        <div class="bs-row"><span class="bs-label indent">Property, Plant & Equipment</span><span class="bs-val">6,200</span></div>
+        <div class="bs-row"><span class="bs-label indent">Intangible Assets</span><span class="bs-val">1,100</span></div>
+        <div class="bs-row subtotal"><span class="bs-label"><strong>TOTAL ASSETS</strong></span><span class="bs-val">11,670</span></div>
+      </div>
+      <div class="bs-col">
+        <div class="bs-col-header">LIABILITIES & EQUITY (SAR millions)</div>
+        <div class="bs-row"><span class="bs-label"><strong>Current Liabilities</strong></span><span class="bs-val"></span></div>
+        <div class="bs-row"><span class="bs-label indent">Accounts Payable</span><span class="bs-val">980</span></div>
+        <div class="bs-row"><span class="bs-label indent">Short-Term Debt</span><span class="bs-val">500</span></div>
+        <div class="bs-row subtotal"><span class="bs-label"><strong>Total Current Liabilities</strong></span><span class="bs-val">1,480</span></div>
+        <div class="bs-row"><span class="bs-label"><strong>Non-Current Liabilities</strong></span><span class="bs-val"></span></div>
+        <div class="bs-row"><span class="bs-label indent">Long-Term Debt</span><span class="bs-val">3,200</span></div>
+        <div class="bs-row subtotal"><span class="bs-label"><strong>Total Liabilities</strong></span><span class="bs-val">4,680</span></div>
+        <div class="bs-row"><span class="bs-label indent">Common Stock</span><span class="bs-val">3,000</span></div>
+        <div class="bs-row"><span class="bs-label indent">Retained Earnings</span><span class="bs-val">3,990</span></div>
+        <div class="bs-row subtotal"><span class="bs-label"><strong>TOTAL L + EQUITY</strong></span><span class="bs-val">11,670</span></div>
+      </div>
+    </div>
+    <h3>Current vs Non-Current Assets</h3>
+    <p><strong>Current assets</strong> can be converted to cash within 12 months — cash, receivables, inventory. <strong>Non-current assets</strong> are long-term: property, equipment, goodwill from acquisitions. The <a href="https://www.accountingtools.com/articles/what-is-a-current-asset.html" target="_blank" rel="noopener">AccountingTools guide to current assets</a> is a practical reference.</p>
+    <p><strong>Goodwill</strong> deserves special attention: it's created when a company overpays for an acquisition, and if that business underperforms, the goodwill gets "impaired" — wiping billions from the balance sheet overnight. <a href="https://www.ifrs.org/issued-standards/list-of-standards/ifrs-3-business-combinations/" target="_blank" rel="noopener">IFRS 3</a> governs how goodwill is recorded and tested.</p>
+  </section>
+
+  <section class="section" id="liabilities">
+    <h2>Liabilities: What the Company Owes</h2>
+    <p>Liabilities are the obligations a company must eventually pay. <strong>Current liabilities</strong> (due within 12 months) include accounts payable and short-term loans. <strong>Non-current liabilities</strong> include long-term bonds, pension obligations, and deferred tax liabilities.</p>
+    <p>Debt is not inherently bad — it can amplify returns. But too much debt relative to equity creates fragility. The <a href="https://www.federalreserve.gov/releases/z1/" target="_blank" rel="noopener">Federal Reserve's Financial Accounts data</a> tracks corporate leverage trends across U.S. sectors.</p>
+  </section>
+
+  <section class="section" id="equity">
+    <h2>Shareholders' Equity</h2>
+    <p>Equity is the residual interest — what's left for shareholders after all liabilities are paid. It consists of paid-in capital (money investors put in) plus retained earnings (profits kept in the business rather than paid as dividends).</p>
+    <p>A company with <em>negative equity</em> technically owes more than it owns. This can be a warning sign, or it can be intentional (companies like McDonald's have negative equity due to aggressive share buybacks). Context matters enormously — see <a href="https://www.investopedia.com/terms/n/negativeequity.asp" target="_blank" rel="noopener">Investopedia on negative shareholders' equity</a>.</p>
+  </section>
+
+  <section class="section" id="ratios">
+    <h2>Key Balance Sheet Ratios</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Ratio</th><th>Formula</th><th>What It Measures</th><th>Healthy Range</th></tr></thead>
+        <tbody>
+          <tr><td>Current Ratio</td><td>Current Assets ÷ Current Liabilities</td><td>Short-term liquidity</td><td>1.5x – 3.0x</td></tr>
+          <tr><td>Quick Ratio</td><td>(Current Assets – Inventory) ÷ Current Liabilities</td><td>Liquid assets coverage</td><td>&gt; 1.0x</td></tr>
+          <tr><td>Debt/Equity</td><td>Total Debt ÷ Total Equity</td><td>Financial leverage</td><td>Varies by sector</td></tr>
+          <tr><td>Price/Book (P/B)</td><td>Market Cap ÷ Book Value of Equity</td><td>Market premium over assets</td><td>&lt; 1x = potentially undervalued</td></tr>
+          <tr><td>Asset Turnover</td><td>Revenue ÷ Total Assets</td><td>Efficiency of asset use</td><td>Higher is better</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The <a href="https://www.cfainstitute.org/en/membership/professional-development/refresher-readings/financial-analysis-techniques" target="_blank" rel="noopener">CFA Institute's Financial Analysis Techniques</a> chapter provides a rigorous treatment of all these ratios with worked examples.</p>
+  </section>
+
+  <section class="section" id="red-flags">
+    <h2>Balance Sheet Red Flags</h2>
+    <p><strong>Rapidly growing inventory:</strong> Inventory growing faster than sales may indicate unsold products building up — demand is weakening. This preceded several retail collapses documented by <a href="https://www.wsj.com/articles/why-inventories-matter-so-much-to-investors-11651000200" target="_blank" rel="noopener">The Wall Street Journal</a>.</p>
+    <p><strong>Large intangible assets and goodwill relative to total assets:</strong> If 60%+ of assets are intangible, a single impairment charge can devastate book value. <a href="https://www.sciencedirect.com/science/article/abs/pii/S0165410101000349" target="_blank" rel="noopener">Academic research on goodwill impairment</a> shows these write-downs often follow acquisitions done at peak valuations.</p>
+    <p><strong>Debt due within 12 months that the company can't refinance:</strong> Check the current portion of long-term debt against cash on hand. If debt is maturing and cash is insufficient, the company may face a liquidity crisis.</p>
+    <div class="callout">
+      <div class="callout-label">Pro Tip</div>
+      <p>Compare the balance sheet over 3–5 years, not just the latest period. Deterioration in the current ratio, rising debt, or shrinking book value over time tells a more revealing story than any single snapshot.</p>
+    </div>
+  </section>
+
+  <div class="sources">
+    <h3>Sources & Further Reading</h3>
+    <ul>
+      <li><a href="https://www.ifrs.org/issued-standards/list-of-standards/ias-1-presentation-of-financial-statements/" target="_blank" rel="noopener">IASB — IAS 1: Statement of Financial Position</a></li>
+      <li><a href="https://www.investopedia.com/terms/b/balancesheet.asp" target="_blank" rel="noopener">Investopedia — Balance Sheet Complete Guide</a></li>
+      <li><a href="https://www.berkshirehathaway.com/letters/letters.html" target="_blank" rel="noopener">Berkshire Hathaway — Warren Buffett's Annual Letters</a></li>
+      <li><a href="https://www.cfainstitute.org/en/membership/professional-development/refresher-readings/financial-analysis-techniques" target="_blank" rel="noopener">CFA Institute — Financial Analysis Techniques</a></li>
+      <li><a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/pbvdata.html" target="_blank" rel="noopener">Damodaran Online — Price-to-Book by Industry</a></li>
+      <li><a href="https://www.accountingtools.com/articles/what-is-a-balance-sheet.html" target="_blank" rel="noopener">AccountingTools — Balance Sheet Explained</a></li>
+    </ul>
+  </div></article>
+    <nav class="series-nav" aria-label="Series"><a href="/en/tutorials/income-statement">← How to Read a Company's Income Statement Like a Pro</a><a href="/en/tutorials/cash-flow-statement">Cash Flow Statement Decoded: Why Cash Is King →</a></nav>
+    <footer>© TruePrice.Cash</footer>
+  </div>
+</body>
+</html>

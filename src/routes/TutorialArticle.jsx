@@ -9,31 +9,42 @@ import { usePageMeta } from "../hooks/usePageMeta.js";
 import { buildTutorialArticleSeo } from "../seo/structuredData.js";
 import { tutorialHtmlConfig } from "../utils/sanitizeHtml.js";
 import { useI18n } from "../i18n.jsx";
+import {
+  tutorialIndexPath,
+  useTutorialLocale,
+} from "../hooks/useTutorialLocale.js";
+import { localizeTutorialBodyHtml } from "../../shared/seo/tutorialPaths.js";
 
 export default function TutorialArticle() {
-  const { t, lang } = useI18n();
+  const { t } = useI18n();
+  const locale = useTutorialLocale();
   const { slug } = useParams();
   const base = TUTORIAL_BY_SLUG[slug];
 
   const article = useMemo(
-    () => (base ? resolveTutorialArticle(base, lang, TUTORIAL_ARTICLES) : null),
-    [base, lang]
+    () => (base ? resolveTutorialArticle(base, locale, TUTORIAL_ARTICLES) : null),
+    [base, locale]
+  );
+
+  const bodyHtml = useMemo(
+    () => (article ? localizeTutorialBodyHtml(article.bodyHtml, locale) : ""),
+    [article, locale]
   );
 
   const seo = useMemo(
-    () => (article ? buildTutorialArticleSeo({ article, lang }) : null),
-    [article, lang]
+    () => (article ? buildTutorialArticleSeo({ article, lang: locale }) : null),
+    [article, locale]
   );
   usePageMeta(seo || {});
 
   if (!article) {
-    return <Navigate to="/tutorials" replace />;
+    return <Navigate to={tutorialIndexPath(locale)} replace />;
   }
 
   return (
     <article className="tp-page tp-tutorial-article-page">
       <nav className="tp-tutorial-breadcrumb" aria-label="Breadcrumb">
-        <Link to="/tutorials">{t("TUTORIALS")}</Link>
+        <Link to={tutorialIndexPath(locale)}>{t("TUTORIALS")}</Link>
         <span aria-hidden>/</span>
         <span>{t("TUTORIALS_BREADCRUMB_NUM").replace("{num}", String(article.order).padStart(2, "0"))}</span>
       </nav>
@@ -68,13 +79,13 @@ export default function TutorialArticle() {
 
       <div className="tp-card tp-tutorial-body-card">
         <SafeHtml
-          html={article.bodyHtml}
+          html={bodyHtml}
           className="tp-tutorial-content"
           sanitizeConfig={tutorialHtmlConfig}
         />
       </div>
 
-      <TutorialArticleNav prev={article.prev} next={article.next} t={t} />
+      <TutorialArticleNav prev={article.prev} next={article.next} locale={locale} t={t} />
       <SiteFooter t={t} />
     </article>
   );
