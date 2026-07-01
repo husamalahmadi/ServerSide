@@ -24,6 +24,11 @@ const SLUG_BY_FILE = {
   "08-stock-picking-process": "stock-picking-process",
   "09-earnings-reports": "earnings-reports",
   "10-financial-red-flags": "financial-red-flags",
+  "11-understanding-dividends": "understanding-dividends",
+  "12-sector-analysis": "sector-analysis",
+  "13-reading-annual-report": "reading-annual-report",
+  "14-macro-investing": "macro-investing",
+  "15-portfolio-construction": "portfolio-construction",
 };
 
 const META_LABELS = {
