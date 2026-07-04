@@ -32,7 +32,7 @@ import { getHomeSignals, HOME_SIGNALS_TTL_MS } from "./homeSignalsCache.js";
 import { dcfSymbolCandidates, fetchDcfWithFallback } from "./fmpDcf.js";
 import { fetchFairValueChartData } from "./fmpFairValueChart.js";
 import { buildStocksCatalogPayload } from "./stocksCatalogApi.js";
-import { findStockByTicker, CURRENCY_BY_MARKET } from "./stockCatalogLookup.js";
+import { findStockByTicker, CURRENCY_BY_MARKET, getCatalogPools } from "./stockCatalogLookup.js";
 import { injectSeoIntoSpaHtml, buildStockStaticFallback } from "./spaHtmlSeo.js";
 import { configureSeoSiteUrl } from "../shared/seo/siteUrl.js";
 import { buildStockSeo, buildTutorialArticleSeo, buildTutorialsIndexSeo } from "../shared/seo/structuredData.js";
@@ -1523,6 +1523,8 @@ app.get("*", (req, res, next) => {
     /^\/profile\/setup\/?$/,
     /^\/profile\/[^/]+\/?$/,
     /^\/stock\/[^/]+\/?$/,
+    /^\/us-markets\/?$/,
+    /^\/sa-markets\/?$/,
   ];
   const isKnownSpaRoute = knownRoutePatterns.some((re) => re.test(req.path));
   const indexHtml = join(staticPath, "index.html");
@@ -1564,4 +1566,9 @@ app.listen(PORT, () => {
   console.log(`Server running at ${SERVER_URL}`);
   console.log(`Client: ${CLIENT_URL}`);
   ensureScreenerCacheWarm();
+  try {
+    getCatalogPools();
+  } catch (e) {
+    console.warn("[seo] pool warm failed:", e?.message || e);
+  }
 });

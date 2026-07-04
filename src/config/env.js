@@ -38,7 +38,7 @@ export function getBaseUrl() {
 }
 
 /** Canonical web origin (API proxied at /api/*). Avoids bare-domain 301 breaking fetch. */
-const PRODUCTION_API_ORIGIN = "https://www.trueprice.cash";
+const PRODUCTION_API_ORIGIN = "https://trueprice.cash";
 
 function getResolvedApiUrlString() {
   let s = (import.meta.env.VITE_API_URL ?? "").toString().trim();

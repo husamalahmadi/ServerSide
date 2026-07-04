@@ -10,7 +10,7 @@ services:
     buildCommand: npm install --include=dev && npm run build && cd server && npm install
     # Same as package.json "render:start" — build client into server/static then run API.
     startCommand: npm run render:start
-    plan: free
+    plan: starter
     envVars:
       - key: DB_PATH
         value: /var/data/trueprice.db
