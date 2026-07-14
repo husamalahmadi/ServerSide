@@ -1403,7 +1403,7 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
   background: var(--tp-surface2);
 }
 
-/* —— Home: market news (compact, narrow items) —— */
+/* —— Home: market news —— */
 .tp-home-news {
   margin-bottom: 1rem;
 }
@@ -1434,13 +1434,18 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
 
 .tp-home-news-scroll.tp-news-list {
   gap: 0.35rem;
+  width: 100%;
 }
 
 .tp-home-news-scroll > li {
-  max-width: min(100%, 28rem);
+  width: 100%;
+  max-width: 100%;
 }
 
 .tp-home-news .tp-news-item-link {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
   padding: 0.45rem 0.55rem;
   font-size: 12px;
   line-height: 1.35;
