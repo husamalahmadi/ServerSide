@@ -4273,3 +4273,405 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
   flex-direction: row-reverse;
   justify-content: flex-end;
 }
+
+/* —— Brand mark (print / PDF) —— */
+.tp-brand-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.tp-brand-mark-icon {
+  flex-shrink: 0;
+  border-radius: var(--tp-radius);
+  background: linear-gradient(135deg, var(--tp-primary) 0%, #5b9cf5 100%);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.tp-brand-mark-text {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.tp-brand-mark-title {
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--tp-ink-strong);
+  line-height: 1.15;
+}
+
+.tp-brand-mark-tag {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--tp-muted);
+  letter-spacing: 0.02em;
+}
+
+.tp-brand-mark--compact .tp-brand-mark-title {
+  font-size: 12px;
+}
+
+/* —— Stock report print / PDF chrome —— */
+.tp-report-print-chrome {
+  display: none;
+}
+
+.tp-print-cover {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  margin-bottom: 1.25rem;
+  padding: 1.1rem 1.2rem 1.15rem;
+  border: 1px solid #c7daf5;
+  border-radius: 10px;
+  background: linear-gradient(160deg, #ffffff 0%, #f4f8ff 55%, #eaf2ff 100%);
+}
+
+.tp-print-cover-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.85rem;
+  margin-bottom: 0.95rem;
+  border-bottom: 2px solid var(--tp-primary);
+}
+
+.tp-print-cover-doc {
+  text-align: end;
+}
+
+.tp-print-cover-kicker {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tp-primary-dark);
+}
+
+.tp-print-cover-site {
+  margin-top: 0.15rem;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--tp-muted);
+}
+
+.tp-print-cover-main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tp-print-cover-logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  border-radius: 10px;
+  border: 1px solid var(--tp-border);
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.tp-print-cover-headings {
+  min-width: 0;
+}
+
+.tp-print-cover-title {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: var(--tp-ink-strong);
+  line-height: 1.2;
+}
+
+.tp-print-cover-industry {
+  margin: 0.25rem 0 0;
+  font-size: 13px;
+  color: var(--tp-muted);
+}
+
+.tp-print-cover-ticker {
+  margin: 0.35rem 0 0;
+  font-size: 12px;
+  color: var(--tp-ink);
+}
+
+.tp-print-cover-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.tp-print-metric {
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--tp-border-soft);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.tp-print-metric-label {
+  display: block;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tp-muted);
+  margin-bottom: 0.2rem;
+}
+
+.tp-print-metric-value {
+  display: block;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--tp-ink-strong);
+}
+
+.tp-print-metric-value--pos {
+  color: #047857;
+}
+
+.tp-print-metric-value--neg {
+  color: #b91c1c;
+}
+
+.tp-print-running-header,
+.tp-print-running-footer {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 16mm 12mm 18mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #12263f !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body::before {
+    display: none !important;
+  }
+
+  .no-print,
+  .tp-sidebar,
+  .tp-sidebar-backdrop,
+  .tp-topbar,
+  .tp-site-footer,
+  .tp-news-sidebar,
+  .tp-static-shell {
+    display: none !important;
+  }
+
+  .tp-app,
+  .tp-main,
+  .tp-content,
+  .tp-page,
+  .tp-stock-page,
+  .tp-stock-body,
+  .tp-stock-report-col {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+
+  .tp-report-print-chrome {
+    display: block !important;
+  }
+
+  .tp-print-running-header {
+    display: flex !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 0 6px;
+    border-bottom: 1px solid #c7daf5;
+    background: #fff;
+    z-index: 9999;
+  }
+
+  .tp-print-running-meta {
+    display: grid;
+    gap: 0.1rem;
+    text-align: end;
+    font-size: 10px;
+    color: var(--tp-muted);
+  }
+
+  .tp-print-running-type {
+    font-weight: 800;
+    color: var(--tp-primary-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tp-print-running-footer {
+    display: grid !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    gap: 0.12rem;
+    padding: 6px 0 0;
+    border-top: 1px solid var(--tp-border);
+    background: #fff;
+    font-size: 9px;
+    color: var(--tp-muted);
+    z-index: 9999;
+  }
+
+  .tp-print-running-footer span:last-child {
+    font-size: 8px;
+    line-height: 1.35;
+  }
+
+  .tp-stock-report-col {
+    padding-top: 12mm !important;
+    padding-bottom: 14mm !important;
+  }
+
+  .tp-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 0.85rem;
+    border: 1px solid #dbe4ef !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    background: #fff !important;
+  }
+
+  .tp-card-head {
+    padding: 0.65rem 0.9rem !important;
+    background: #f8fafc !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+  }
+
+  .tp-card-title {
+    font-size: 13px !important;
+    color: #12263f !important;
+  }
+
+  .tp-card-pad {
+    padding: 0.85rem 0.9rem !important;
+  }
+
+  .tp-dcf-hero {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    border: 1px solid #c7daf5 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+  }
+
+  .tp-dcf-hero-glow {
+    display: none !important;
+  }
+
+  button,
+  .tp-signin-google,
+  .tp-btn-outline-light {
+    display: none !important;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 8px;
+    color: #64748b;
+    word-break: break-all;
+  }
+
+  svg {
+    max-width: 100%;
+  }
+
+  table {
+    font-size: 10px !important;
+  }
+
+  .tp-print-cover-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  [dir="rtl"] .tp-print-cover-doc {
+    text-align: start;
+  }
+
+  [dir="rtl"] .tp-print-running-meta {
+    text-align: start;
+  }
+}
+
+body.tp-pdf-export {
+  background: #fff !important;
+}
+
+body.tp-pdf-export .no-print,
+body.tp-pdf-export .tp-sidebar,
+body.tp-pdf-export .tp-sidebar-backdrop,
+body.tp-pdf-export .tp-topbar,
+body.tp-pdf-export .tp-site-footer,
+body.tp-pdf-export .tp-news-sidebar {
+  display: none !important;
+}
+
+body.tp-pdf-export .tp-app,
+body.tp-pdf-export .tp-main,
+body.tp-pdf-export .tp-content,
+body.tp-pdf-export .tp-page,
+body.tp-pdf-export .tp-stock-page,
+body.tp-pdf-export .tp-stock-body,
+body.tp-pdf-export .tp-stock-report-col {
+  display: block !important;
+  width: 100% !important;
+  max-width: 960px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+body.tp-pdf-export .tp-report-print-chrome {
+  display: block !important;
+}
+
+body.tp-pdf-export .tp-print-running-header,
+body.tp-pdf-export .tp-print-running-footer {
+  display: none !important;
+}
+
+body.tp-pdf-export .tp-card {
+  border: 1px solid #dbe4ef !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  background: #fff !important;
+  margin-bottom: 0.85rem;
+}
+
+body.tp-pdf-export button,
+body.tp-pdf-export .tp-signin-google {
+  display: none !important;
+}
+
+body.tp-pdf-export .tp-dcf-hero-glow {
+  display: none !important;
+}
+

@@ -26,6 +26,7 @@ import { StockComments } from "../components/StockComments.jsx";
 import { WatchlistManager } from "../components/WatchlistManager.jsx";
 import { GoogleGIcon } from "../components/GoogleGIcon.jsx";
 import { exportElementAsPdf } from "../utils/exportPdf.js";
+import { StockReportPrintShell } from "../components/stock/StockReportPrintShell.jsx";
 import { buildStockSeo } from "../seo/structuredData.js";
 import { buildStockNarrative } from "../seo/stockNarrative.js";
 import { fmpImageStockUrl } from "../../shared/fmpLogoUrl.js";
@@ -62,8 +63,13 @@ export default function Stock() {
     if (!reportContentRef.current || pdfExporting) return;
     setPdfExporting(true);
     try {
-      const filename = `${ticker || "report"}-${new Date().toISOString().slice(0, 10)}.pdf`;
-      await exportElementAsPdf(reportContentRef.current, filename);
+      const safeName = (companyDisplayName || ticker || "report").replace(/[^\w\s-]/g, "").trim().slice(0, 48);
+      const filename = `${ticker || "report"}${safeName ? `-${safeName}` : ""}-${new Date().toISOString().slice(0, 10)}.pdf`;
+      await exportElementAsPdf(reportContentRef.current, filename, {
+        title: `${ticker} · ${companyDisplayName || ticker}`,
+        date: `${t("REPORT_DATE")}: ${reportDate}`,
+        disclaimer: t("PRINT_FOOTER_DISCLAIMER"),
+      });
     } catch (e) {
       console.error("PDF export failed:", e);
     } finally {
@@ -553,6 +559,20 @@ export default function Stock() {
         }}
       >
         <div ref={reportContentRef} className="tp-stock-report-col tp-stock-content-rail">
+        <StockReportPrintShell
+          t={t}
+          dir={dir}
+          ticker={ticker}
+          companyName={companyDisplayName}
+          industry={(lang === "ar" && translatedProfile?.industry) || profile?.industry || ""}
+          reportDate={reportDate}
+          price={price}
+          fairAvg={fairAvg}
+          currency={currency}
+          logoUrl={logoUrl && !logoLoadError ? logoUrl : null}
+          reportUrl={typeof window !== "undefined" ? window.location.href : `https://trueprice.cash/stock/${ticker}`}
+        />
+
         {/* Banner */}
         <div
           className="no-print tp-stock-banner"
@@ -1177,8 +1197,10 @@ export default function Stock() {
           )}
         </Card>
 
-        <WatchlistManager ticker={ticker} t={t} />
-        <StockComments ticker={ticker} t={t} />
+        <div className="no-print">
+          <WatchlistManager ticker={ticker} t={t} />
+          <StockComments ticker={ticker} t={t} />
+        </div>
 
         {/* Appendix */}
         <Card title={t("APPENDIX")}>
