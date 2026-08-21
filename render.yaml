@@ -2,6 +2,15 @@
 # Native Node (no Docker) — avoids "Dockerfile: no such file" on some Render builds.
 # Set in dashboard: FMP_API_KEY (quotes + stock profile), CLIENT_URL, SERVER_URL, SESSION_SECRET,
 # Google OAuth, and build-time VITE_* (VITE_API_URL = your API HTTPS URL if the UI is on another host).
+#
+# Fair-value email alerts (optional — the app runs fine without them):
+#   RESEND_API_KEY      Resend API key. Requires a verified sending domain: add Resend's
+#                       DKIM/SPF DNS records for trueprice.cash at GoDaddy first.
+#   EMAIL_FROM          e.g. "TruePrice <alerts@trueprice.cash>" — must be on that domain.
+#   INTERNAL_TASK_TOKEN Shared secret for POST /api/internal/dispatch-emails. The in-process
+#                       daily timer only fires while the instance is awake, so on a sleeping
+#                       free-tier instance point an external scheduler (cron-job.org) at that
+#                       route with header x-internal-token to get reliable daily delivery.
 services:
   - type: web
     name: trueprice-api

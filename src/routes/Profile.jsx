@@ -18,9 +18,33 @@ export default function Profile() {
   const [editForm, setEditForm] = useState({ handle: "", name: "", bio: "", dateOfBirth: "" });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [emailAlerts, setEmailAlerts] = useState(true);
+  const [emailPrefError, setEmailPrefError] = useState("");
   const apiUrl = getApiUrl();
 
   const isOwnProfile = currentUser && (urlHandle === currentUser.handle || (!urlHandle && currentUser));
+
+  useEffect(() => {
+    if (currentUser) setEmailAlerts(currentUser.email_fv_alerts !== 0);
+  }, [currentUser]);
+
+  const toggleEmailAlerts = async (next) => {
+    setEmailAlerts(next);
+    setEmailPrefError("");
+    try {
+      const res = await fetch(`${apiUrl}/api/me/email-prefs`, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ emailFvAlerts: next }),
+      });
+      if (!res.ok) throw new Error("save failed");
+      await refreshUser();
+    } catch {
+      setEmailAlerts(!next);
+      setEmailPrefError(t("PROFILE_EMAIL_ALERTS_SAVE_FAILED"));
+    }
+  };
 
   useEffect(() => {
     if (!apiUrl) return;
@@ -319,6 +343,36 @@ export default function Profile() {
             )}
 
             {error && <div style={{ color: "#b91c1c", marginTop: 8, fontSize: 14 }}>{error}</div>}
+
+            {isOwnProfile && (
+              <div
+                style={{
+                  marginTop: 16,
+                  padding: 12,
+                  borderRadius: 8,
+                  border: "1px solid #e5e7eb",
+                  background: "#f8fafc",
+                }}
+              >
+                <label style={{ display: "flex", alignItems: "flex-start", gap: 8, cursor: "pointer" }}>
+                  <input
+                    type="checkbox"
+                    checked={emailAlerts}
+                    onChange={(e) => void toggleEmailAlerts(e.target.checked)}
+                    style={{ marginTop: 3 }}
+                  />
+                  <span>
+                    <span style={{ fontWeight: 600, fontSize: 14 }}>{t("PROFILE_EMAIL_ALERTS")}</span>
+                    <span style={{ display: "block", fontSize: 12, color: "#64748b", marginTop: 2 }}>
+                      {t("PROFILE_EMAIL_ALERTS_HINT")}
+                    </span>
+                  </span>
+                </label>
+                {emailPrefError && (
+                  <div style={{ color: "#b91c1c", marginTop: 8, fontSize: 13 }}>{emailPrefError}</div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </Card>

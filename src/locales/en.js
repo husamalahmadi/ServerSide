@@ -257,6 +257,10 @@ export default {
   ITEMS: "stocks",
   WATCHLIST_SAVE_FAILED:
     "Could not update the watchlist. Ensure the API server is running and you are signed in.",
+  PROFILE_EMAIL_ALERTS: "Fair-value email alerts",
+  PROFILE_EMAIL_ALERTS_HINT:
+    "Email me when a stock on my watchlists moves 10% or more in fair value, or flips between undervalued and overvalued.",
+  PROFILE_EMAIL_ALERTS_SAVE_FAILED: "Could not save your email preference. Please try again.",
   WATCHLIST_FV_LABEL: "Fair value",
   WATCHLIST_FV_MOVED: "Fair value moved {pct}%",
   WATCHLIST_FV_NOW_UNDERVALUED: "Now undervalued",

@@ -40,6 +40,15 @@ import {
   watchlistItemCurrency,
   WATCHLIST_ITEM_FV_COLUMNS,
 } from "./watchlistFairValue.js";
+import {
+  emailConfigured,
+  migrateEmailNotificationSchema,
+  runFairValueEmailDispatchIfIdle,
+  secretMatches,
+  startFairValueEmailCron,
+  unsubscribeByToken,
+} from "./emailNotifications.js";
+import { renderUnsubscribePage } from "./emailTemplates.js";
 import { injectSeoIntoSpaHtml, buildStockStaticFallback } from "./spaHtmlSeo.js";
 import { configureSeoSiteUrl } from "../shared/seo/siteUrl.js";
 import { buildStockSeo, buildTutorialArticleSeo, buildTutorialsIndexSeo } from "../shared/seo/structuredData.js";
@@ -80,6 +89,7 @@ if (!cols.includes("profile_completed")) {
 }
 if (!cols.includes("current_session_id")) db.exec("ALTER TABLE users ADD COLUMN current_session_id TEXT");
 migrateWatchlistFairValueColumns(db);
+migrateEmailNotificationSchema(db);
 const portCols = db.prepare("PRAGMA table_info(portfolios)").all().map((c) => c.name);
 if (!portCols.includes("cash")) {
   db.exec("ALTER TABLE portfolios ADD COLUMN cash REAL NOT NULL DEFAULT 100000");
@@ -355,7 +365,10 @@ app.get(
   }
 );
 app.get("/auth/me", (req, res) => {
-  res.json({ user: req.user || null });
+  if (!req.user) return res.json({ user: null });
+  // The unsubscribe token acts as a bearer link from email; it never needs to reach the SPA.
+  const { unsubscribe_token: _token, ...user } = req.user;
+  res.json({ user });
 });
 app.post("/auth/logout", (req, res) => {
   const userId = req.user?.id ?? null;
@@ -507,6 +520,41 @@ app.get("/api/activity/me", requireAuth, (req, res) => {
     "SELECT * FROM activity_log WHERE user_id = ? ORDER BY created_at DESC LIMIT 50"
   ).all(req.user.id);
   res.json({ items: rows });
+});
+
+// Email notification preferences
+app.put("/api/me/email-prefs", requireAuth, (req, res) => {
+  const { emailFvAlerts } = req.body || {};
+  if (typeof emailFvAlerts !== "boolean") {
+    return res.status(400).json({ error: "emailFvAlerts must be a boolean" });
+  }
+  db.prepare("UPDATE users SET email_fv_alerts=?, updated_at=datetime('now') WHERE id=?").run(
+    emailFvAlerts ? 1 : 0,
+    req.user.id
+  );
+  res.json({ ok: true, emailFvAlerts });
+});
+
+/** One-click unsubscribe from an email link — no auth, and neutral for unknown tokens. */
+app.get("/api/email/unsubscribe", (req, res) => {
+  unsubscribeByToken(db, req.query?.token);
+  res.status(200).type("html").send(renderUnsubscribePage({ siteUrl: CLIENT_URL }));
+});
+
+/**
+ * External scheduler entry point for the email digest. Render's free tier sleeps, so an
+ * in-process timer alone can miss days; point a scheduled ping (e.g. cron-job.org) here
+ * with the shared secret to drive dispatch reliably.
+ */
+app.post("/api/internal/dispatch-emails", (req, res) => {
+  const expected = (process.env.INTERNAL_TASK_TOKEN || "").trim();
+  if (!expected) return res.status(503).json({ error: "INTERNAL_TASK_TOKEN not configured" });
+  if (!secretMatches(req.get("x-internal-token"), expected)) {
+    return res.status(403).json({ error: "Forbidden" });
+  }
+  if (!emailConfigured()) return res.status(503).json({ error: "email not configured" });
+  void runFairValueEmailDispatchIfIdle({ db, siteUrl: CLIENT_URL, apiUrl: SERVER_URL });
+  res.status(202).json({ ok: true, started: true });
 });
 
 // Comments
@@ -1598,5 +1646,11 @@ app.listen(PORT, () => {
     financialsStore: fmpFinancialsStore,
     apiKeyFn: fmpApiKey,
     delayMs: Number(process.env.WATCHLIST_FV_DELAY_MS || 350),
+  });
+  startFairValueEmailCron({
+    db,
+    siteUrl: CLIENT_URL,
+    apiUrl: SERVER_URL,
+    delayMs: Number(process.env.EMAIL_SEND_DELAY_MS || 400),
   });
 });

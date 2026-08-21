@@ -252,9 +252,9 @@ function applyFairValueToRows({ db, entry, fairValue, price }) {
       markNotified.run(fairValue, row.id);
       counts.notified += 1;
 
-      // TODO(email): fast-follow — send this same change as an email digest here.
-      // The row is already deduped via last_notified_fv, so an email sender can read
-      // recent 'watchlist_fv_change' activity rows without re-running detection.
+      // The activity row above is what email alerts read: emailNotifications.js picks up
+      // recent unsent 'watchlist_fv_change' rows and digests them, so detection lives
+      // here only and is never repeated downstream.
     }
   })();
 
