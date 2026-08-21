@@ -3497,6 +3497,22 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
   text-decoration: underline;
 }
 
+/* —— Methodology page (reuses About layout) —— */
+.tp-methodology-lead {
+  margin-top: 0.85rem;
+}
+
+.tp-methodology-equation {
+  margin: 0 0 0.9rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--tp-radius);
+  border: 1px solid #cfe0fb;
+  background: var(--tp-primary-soft);
+  color: var(--tp-primary-dark);
+  font-size: 14.5px;
+  font-weight: 800;
+  line-height: 1.6;
+}
 /* —— Contact page (matches About gradient) —— */
 .tp-contact-page {
   max-width: 760px;

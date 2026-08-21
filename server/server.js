@@ -1513,6 +1513,7 @@ app.get("*", (req, res, next) => {
   const knownRoutePatterns = [
     /^\/$/,
     /^\/about\/?$/,
+    /^\/methodology\/?$/,
     /^\/blogs\/?$/,
     /^\/(en|ar)\/tutorials\/?$/,
     /^\/(en|ar)\/tutorials\/[^/]+\/?$/,

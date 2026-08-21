@@ -87,6 +87,7 @@ function main() {
     { loc: `${SITE}/blogs`, changefreq: "weekly", priority: "0.9" },
     { loc: `${SITE}/en/tutorials`, changefreq: "monthly", priority: "0.9" },
     { loc: `${SITE}/ar/tutorials`, changefreq: "monthly", priority: "0.9" },
+    { loc: `${SITE}/methodology`, changefreq: "monthly", priority: "0.8" },
     { loc: `${SITE}/about`, changefreq: "monthly", priority: "0.7" },
     { loc: `${SITE}/contact`, changefreq: "monthly", priority: "0.7" },
   ];

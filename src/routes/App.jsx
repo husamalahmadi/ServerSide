@@ -13,6 +13,7 @@ import Home from "./Home.jsx";
 const Stock = React.lazy(() => import("./Stock.jsx"));
 const Contact = React.lazy(() => import("./Contact.jsx"));
 const AboutUs = React.lazy(() => import("./AboutUs.jsx"));
+const Methodology = React.lazy(() => import("./Methodology.jsx"));
 const Blogs = React.lazy(() => import("./Blogs.jsx"));
 const Tutorials = React.lazy(() => import("./Tutorials.jsx"));
 const TutorialArticle = React.lazy(() => import("./TutorialArticle.jsx"));
@@ -108,6 +109,14 @@ export default function App() {
                   element={
                     <Lazy>
                       <AboutUs />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/methodology"
+                  element={
+                    <Lazy>
+                      <Methodology />
                     </Lazy>
                   }
                 />

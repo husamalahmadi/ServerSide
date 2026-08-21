@@ -98,6 +98,10 @@ export function AppShell() {
             <NavIcon name="book" />
             {t("TUTORIALS")}
           </NavLink>
+          <NavLink to="/methodology" className="tp-nav-link" onClick={closeSidebar}>
+            <NavIcon name="info" />
+            {t("METHODOLOGY_NAV")}
+          </NavLink>
           <NavLink to="/about" className="tp-nav-link" onClick={closeSidebar}>
             <NavIcon name="info" />
             {t("ABOUT_US")}

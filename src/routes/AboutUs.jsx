@@ -232,6 +232,7 @@ export default function AboutUs() {
           {L.about.body.map((p) => (
             <p key={p} className="tp-about-body">{p}</p>
           ))}
+          <p className="tp-about-body">{t("METHODOLOGY_INDEPENDENCE_BODY")}</p>
         </div>
 
         <div className="tp-about-pillars">

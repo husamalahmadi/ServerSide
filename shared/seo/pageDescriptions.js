@@ -6,6 +6,12 @@ export const META_DESC_MAX_LEN = 160;
 export const DEFAULT_META_DESCRIPTION =
   "TruePrice.Cash stock screener for US, TASI, Tokyo & London markets — fair value analysis, London Focus preset, blogs, and fundamentals.";
 
+/** /methodology description per language (120–160 characters). */
+export const METHODOLOGY_META_DESCRIPTION = {
+  en: "See exactly how TruePrice.Cash calculates fair value: enterprise value plus cash minus debt, divided by shares outstanding, with FMP data and clear limits.",
+  ar: "اكتشف كيف تحسب TruePrice.Cash القيمة العادلة للسهم: قيمة المنشأة زائد النقد ناقص الدين مقسوماً على عدد الأسهم، مع بيانات FMP وحدود واضحة للتقدير.",
+};
+
 const PAD_SUFFIX =
   " Explore tickers, compare valuations, and read fundamentals on TruePrice.Cash.";
 

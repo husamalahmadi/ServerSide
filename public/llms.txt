@@ -11,6 +11,7 @@ The site compares market price to estimated fair value using enterprise value, b
 - [US market performance](https://trueprice.cash/us-markets): US sector/industry snapshots, movers, and S&P 500 universe with live prices.
 - [TASI market performance](https://trueprice.cash/sa-markets): Saudi market movers and full TASI listing with prices.
 - [Blogs](https://trueprice.cash/blogs): Articles and market commentary.
+- [Methodology](https://trueprice.cash/methodology): How fair value is calculated (enterprise value plus cash minus debt, divided by shares outstanding), data sources, limits, and independence statement.
 - [About](https://trueprice.cash/about): About TruePrice.Cash.
 - [Contact](https://trueprice.cash/contact): Contact page.
 

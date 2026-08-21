@@ -9,6 +9,12 @@ const BRAND_SUFFIX = ` – ${BRAND}`;
 export const DEFAULT_DOCUMENT_TITLE =
   "TruePrice.Cash – Fair Value for US, TASI, Tokyo & LSE";
 
+/** /methodology title per language (50–60 characters). */
+export const METHODOLOGY_DOCUMENT_TITLE = {
+  en: "How We Calculate Fair Value – TruePrice.Cash Method",
+  ar: "كيف نحسب القيمة العادلة للأسهم – منهجية TruePrice.Cash",
+};
+
 /**
  * Build a document title between 50 and 60 characters.
  * @param {string} [pageTitle] short label from the route (optional)

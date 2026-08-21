@@ -16,6 +16,7 @@ export const FOOTER_STOCK_LINKS = [
 const SITE_LINKS = [
   { to: "/", labelKey: "FOOTER_HOME" },
   { to: "/blogs", labelKey: "BLOGS" },
+  { to: "/methodology", labelKey: "METHODOLOGY_NAV" },
   { to: "/about", labelKey: "ABOUT_US" },
   { to: "/contact", labelKey: "CONTACT_US" },
 ];
@@ -35,8 +36,17 @@ const footerHeadingStyle = {
   marginBottom: 10,
 };
 
+const footerDisclaimerStyle = {
+  margin: "0 0 12px",
+  textAlign: "start",
+  fontSize: 11,
+  lineHeight: 1.7,
+  color: "var(--tp-muted)",
+};
+
 /**
- * Sitewide footer: internal navigation, deep stock links, XML sitemap, and external market references.
+ * Sitewide footer: internal navigation, deep stock links, XML sitemap, external market
+ * references, and the CMA disclaimer shown on every route.
  */
 export function SiteFooter({ t }) {
   return (
@@ -95,6 +105,7 @@ export function SiteFooter({ t }) {
           </ul>
         </nav>
       </div>
+      <p style={footerDisclaimerStyle}>{t("CMA_DISCLAIMER")}</p>
       <p style={{ margin: 0, textAlign: "center", fontSize: 11 }}>© TruePrice.Cash</p>
     </footer>
   );

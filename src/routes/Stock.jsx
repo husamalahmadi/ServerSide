@@ -496,6 +496,15 @@ export default function Stock() {
     ];
   }, [lang, kmCurrency]);
 
+  const howWeCalculateLink = (
+    <Link
+      to="/methodology"
+      style={{ color: "#2563eb", fontWeight: 700, fontSize: 13, textDecoration: "underline" }}
+    >
+      {t("HOW_WE_CALCULATE_LINK")}
+    </Link>
+  );
+
   const keyMetricsCard = (
     <Card title={lang === "ar" ? "٣. المؤشرات المالية الرئيسية" : "3. Key Metrics"}>
       {!fmpSymbol ? (
@@ -696,6 +705,10 @@ export default function Stock() {
           onRetryChart={loadFvChart}
           chartWidth={isMobile ? 300 : 580}
         />
+
+        <div className="no-print" style={{ margin: "8px 0 16px", direction: dir }}>
+          {howWeCalculateLink}
+        </div>
 
         {/* 1. Executive Summary */}
         <Card title={t("EXEC_SUM")}>
@@ -1113,6 +1126,7 @@ export default function Stock() {
                     ? t("INVESTMENT_HOLD")
                     : t("INVESTMENT_AVOID")}
               </div>
+              <div className="no-print">{howWeCalculateLink}</div>
               <div
                 style={{
                   fontWeight: 600,

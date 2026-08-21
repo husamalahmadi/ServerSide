@@ -321,4 +321,28 @@ export default {
   FOOTER_EXCHANGE_NYSE: "NYSE",
   FOOTER_EXCHANGE_TADAWUL: "Saudi Exchange (Tadawul)",
   FOOTER_EXCHANGE_TSE: "Japan Exchange Group (JPX)",
+  METHODOLOGY_NAV: "Methodology",
+  METHODOLOGY_TITLE: "How we calculate fair value",
+  METHODOLOGY_INTRO:
+    "Every fair value on TruePrice.Cash comes from the same published method. This page explains what we calculate, where the numbers come from, what the verdict means, and where our estimates stop being useful.",
+  METHODOLOGY_FORMULA_HEADING: "How we calculate fair value",
+  METHODOLOGY_FORMULA_EQUATION:
+    "(Enterprise value + cash − debt) ÷ shares outstanding = fair value per share",
+  METHODOLOGY_FORMULA_BODY:
+    "We start with the company's enterprise value — what the whole business is worth to everyone with a claim on it, both shareholders and lenders. We add the cash the company holds, because that cash belongs to its owners, and we subtract its debt, because that has to be paid back. What is left is the value that belongs to shareholders. We divide it by the number of shares outstanding, and the result is our fair value for a single share.",
+  METHODOLOGY_DATA_HEADING: "Where our data comes from",
+  METHODOLOGY_DATA_BODY:
+    "The figures come from Financial Modeling Prep (FMP), which collects them from company filings. We read enterprise value, cash, total debt, and shares outstanding from those reports. They refresh when a company publishes a new fiscal period, so a fair value can stay unchanged until the next quarterly or annual report is released.",
+  METHODOLOGY_VERDICT_HEADING: "What “overvalued” and “undervalued” mean",
+  METHODOLOGY_VERDICT_BODY:
+    "We compare the current market price with the fair value we calculated. If the price sits below our fair value, the stock shows as undervalued; if it sits above, it shows as overvalued. The verdict is a comparison of two numbers at a single moment — it says nothing about when, or whether, the market will agree.",
+  METHODOLOGY_LIMITS_HEADING: "Our limits",
+  METHODOLOGY_LIMITS_BODY:
+    "A fair value is a model-based estimate, not a price target and not a forecast. It relies on reported data that can be revised, restated, or incomplete, and it cannot capture management quality, competition, regulation, or anything else that has not yet reached the financial statements. Nothing here is investment advice — treat it as one input in your own research.",
+  METHODOLOGY_INDEPENDENCE_HEADING: "How we stay independent",
+  METHODOLOGY_INDEPENDENCE_BODY:
+    "We do not sell investment advice, we do not take positions in the companies we cover, and we do not accept payment to change or promote a verdict. The same formula runs on every company, so the number you see is the number the method produced.",
+  HOW_WE_CALCULATE_LINK: "How we calculate this",
+  CMA_DISCLAIMER:
+    "TruePrice.cash provides model-based fair-value estimates for informational purposes only. This is not investment advice or a recommendation to buy or sell any security. Fair-value figures are algorithmic estimates and may be inaccurate. Always do your own research and consult a licensed financial advisor. TruePrice.cash is not authorized by the Saudi Capital Market Authority (CMA) to provide investment advice.",
 };

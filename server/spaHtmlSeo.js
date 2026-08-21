@@ -137,6 +137,7 @@ export function buildStockStaticFallback({ hit, market, lang, seo, currency }) {
       <nav aria-label="Site">
         <a href="/">${isAr ? "الرئيسية" : "Home"}</a>
         <a href="/blogs">${isAr ? "المدونة" : "Blogs"}</a>
+        <a href="/methodology">${isAr ? "المنهجية" : "Methodology"}</a>
         <a href="/about">${isAr ? "من نحن" : "About"}</a>
         <a href="/contact">${isAr ? "اتصل بنا" : "Contact"}</a>
         <a href="/sitemap.xml">Sitemap</a>
