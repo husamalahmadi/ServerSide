@@ -33,6 +33,13 @@ import { dcfSymbolCandidates, fetchDcfWithFallback } from "./fmpDcf.js";
 import { fetchFairValueChartData } from "./fmpFairValueChart.js";
 import { buildStocksCatalogPayload } from "./stocksCatalogApi.js";
 import { findStockByTicker, CURRENCY_BY_MARKET, getCatalogPools } from "./stockCatalogLookup.js";
+import {
+  migrateWatchlistFairValueColumns,
+  snapshotFairValueOnAdd,
+  startWatchlistFairValueCron,
+  watchlistItemCurrency,
+  WATCHLIST_ITEM_FV_COLUMNS,
+} from "./watchlistFairValue.js";
 import { injectSeoIntoSpaHtml, buildStockStaticFallback } from "./spaHtmlSeo.js";
 import { configureSeoSiteUrl } from "../shared/seo/siteUrl.js";
 import { buildStockSeo, buildTutorialArticleSeo, buildTutorialsIndexSeo } from "../shared/seo/structuredData.js";
@@ -72,6 +79,7 @@ if (!cols.includes("profile_completed")) {
   db.exec("UPDATE users SET profile_completed=1"); // Existing users already have profiles
 }
 if (!cols.includes("current_session_id")) db.exec("ALTER TABLE users ADD COLUMN current_session_id TEXT");
+migrateWatchlistFairValueColumns(db);
 const portCols = db.prepare("PRAGMA table_info(portfolios)").all().map((c) => c.name);
 if (!portCols.includes("cash")) {
   db.exec("ALTER TABLE portfolios ADD COLUMN cash REAL NOT NULL DEFAULT 100000");
@@ -443,6 +451,25 @@ app.patch("/api/users/me", requireAuth, (req, res) => {
   res.json({ user });
 });
 
+const WATCHLIST_ITEMS_SQL = `SELECT ticker, created_at, ${WATCHLIST_ITEM_FV_COLUMNS}
+   FROM watchlist_items WHERE watchlist_id=? ORDER BY datetime(created_at) DESC`;
+
+/** Watchlist row for the client: ticker plus its fair-value snapshot and change flag. */
+function watchlistItemsFor(watchlistId) {
+  return db
+    .prepare(WATCHLIST_ITEMS_SQL)
+    .all(watchlistId)
+    .map((i) => ({
+      ticker: i.ticker,
+      created_at: i.created_at || null,
+      fair_value_at_add: i.fair_value_at_add ?? null,
+      last_known_fv: i.last_known_fv ?? null,
+      fv_updated_at: i.fv_updated_at || null,
+      fv_change_reason: i.fv_change_reason || null,
+      currency: watchlistItemCurrency(i.ticker),
+    }));
+}
+
 // User profile: get profile by handle (watchlists, comments). Owner sees all lists; others only public.
 app.get("/api/users/:handle", (req, res) => {
   const { handle } = req.params;
@@ -453,15 +480,10 @@ app.get("/api/users/:handle", (req, res) => {
   const watchlistsSql = isOwner
     ? "SELECT w.* FROM watchlists w WHERE w.user_id=? ORDER BY w.created_at DESC"
     : "SELECT w.* FROM watchlists w WHERE w.user_id=? AND w.is_public=1 ORDER BY w.created_at DESC";
-  const watchlists = db.prepare(watchlistsSql).all(u.id).map((w) => {
-    const items = db
-      .prepare("SELECT ticker, created_at FROM watchlist_items WHERE watchlist_id=? ORDER BY datetime(created_at) DESC")
-      .all(w.id);
-    return {
-      ...w,
-      items: items.map((i) => ({ ticker: i.ticker, created_at: i.created_at || null })),
-    };
-  });
+  const watchlists = db.prepare(watchlistsSql).all(u.id).map((w) => ({
+    ...w,
+    items: watchlistItemsFor(w.id),
+  }));
   const comments = db.prepare(
     `SELECT c.id, c.ticker, c.body, c.created_at,
       (SELECT COUNT(*) FROM comment_likes WHERE comment_id=c.id) as like_count
@@ -553,15 +575,7 @@ app.delete("/api/comments/:id", requireGoogleAuth, (req, res) => {
 // Watchlists
 app.get("/api/watchlists/me", requireAuth, (req, res) => {
   const lists = db.prepare("SELECT * FROM watchlists WHERE user_id=? ORDER BY created_at DESC").all(req.user.id);
-  const withItems = lists.map((l) => {
-    const items = db
-      .prepare("SELECT ticker, created_at FROM watchlist_items WHERE watchlist_id=? ORDER BY datetime(created_at) DESC")
-      .all(l.id);
-    return {
-      ...l,
-      items: items.map((i) => ({ ticker: i.ticker, created_at: i.created_at || null })),
-    };
-  });
+  const withItems = lists.map((l) => ({ ...l, items: watchlistItemsFor(l.id) }));
   res.json({ watchlists: withItems });
 });
 app.get("/api/watchlists/:handle/:slug", (req, res) => {
@@ -570,13 +584,7 @@ app.get("/api/watchlists/:handle/:slug", (req, res) => {
   if (!u) return res.status(404).json({ error: "User not found" });
   const list = db.prepare("SELECT * FROM watchlists WHERE user_id=? AND slug=? AND is_public=1").get(u.id, slug);
   if (!list) return res.status(404).json({ error: "Watchlist not found" });
-  const items = db
-    .prepare("SELECT ticker, created_at FROM watchlist_items WHERE watchlist_id=? ORDER BY datetime(created_at) DESC")
-    .all(list.id);
-  res.json({
-    ...list,
-    items: items.map((i) => ({ ticker: i.ticker, created_at: i.created_at || null })),
-  });
+  res.json({ ...list, items: watchlistItemsFor(list.id) });
 });
 app.post("/api/watchlists", requireGoogleAuth, (req, res) => {
   const { name, isPublic = true } = req.body || {};
@@ -601,10 +609,19 @@ app.put("/api/watchlists/:id/items", requireGoogleAuth, (req, res) => {
 
   if (action === "add") {
     const existing = db.prepare("SELECT id FROM watchlist_items WHERE watchlist_id=? AND ticker=?").get(id, t);
-    if (!existing) {
-      db.prepare("INSERT INTO watchlist_items (watchlist_id, ticker) VALUES (?, ?)").run(id, t);
-    }
-    return res.json({ ok: true, ticker: t });
+    if (existing) return res.json({ ok: true, ticker: t });
+
+    db.prepare("INSERT INTO watchlist_items (watchlist_id, ticker) VALUES (?, ?)").run(id, t);
+    // Snapshot the fair value the user is acting on. Cached financials land before the
+    // response; a cache miss finishes in the background so the add never waits on FMP.
+    const { snapshot } = snapshotFairValueOnAdd({
+      db,
+      watchlistId: id,
+      ticker: t,
+      apiKey: fmpApiKey(),
+      financialsStore: fmpFinancialsStore,
+    });
+    return res.json({ ok: true, ticker: t, fairValueAtAdd: snapshot });
   }
 
   db.prepare("DELETE FROM watchlist_items WHERE watchlist_id=? AND ticker=?").run(id, t);
@@ -639,8 +656,12 @@ app.get("/api/feed", requireAuth, (req, res) => {
   const ids = following.map((f) => f.following_id);
   if (ids.length === 0) return res.json({ items: [] });
   const placeholders = ids.map(() => "?").join(",");
+  // Fair-value changes are personal notifications (and can name a private watchlist),
+  // so they stay out of followers' feeds and are only served by /api/activity/me.
   const rows = db.prepare(
-    `SELECT * FROM activity_log WHERE user_id IN (${placeholders}) ORDER BY created_at DESC LIMIT 50`
+    `SELECT * FROM activity_log WHERE user_id IN (${placeholders})
+       AND type <> 'watchlist_fv_change'
+     ORDER BY created_at DESC LIMIT 50`
   ).all(...ids);
   res.json({ items: rows });
 });
@@ -1572,4 +1593,10 @@ app.listen(PORT, () => {
   } catch (e) {
     console.warn("[seo] pool warm failed:", e?.message || e);
   }
+  startWatchlistFairValueCron({
+    db,
+    financialsStore: fmpFinancialsStore,
+    apiKeyFn: fmpApiKey,
+    delayMs: Number(process.env.WATCHLIST_FV_DELAY_MS || 350),
+  });
 });

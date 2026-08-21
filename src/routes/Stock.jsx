@@ -30,6 +30,7 @@ import { StockReportPrintShell } from "../components/stock/StockReportPrintShell
 import { buildStockSeo } from "../seo/structuredData.js";
 import { buildStockNarrative } from "../seo/stockNarrative.js";
 import { fmpImageStockUrl } from "../../shared/fmpLogoUrl.js";
+import { isUndervalued } from "../../shared/fairValueVerdict.js";
 
 /* Page */
 export default function Stock() {
@@ -381,11 +382,8 @@ export default function Stock() {
 
   const investmentAdvice = useMemo(() => {
     const p = Number(price);
-    const avg = Number(fairAvg);
-    const evVal = Number(fair?.fairEV);
-    const hasPrice = Number.isFinite(p) && p > 0;
-    const avgGtPrice = hasPrice && Number.isFinite(avg) && avg > p;
-    const evGtPrice = hasPrice && Number.isFinite(evVal) && evVal > p;
+    const avgGtPrice = isUndervalued(p, fairAvg);
+    const evGtPrice = isUndervalued(p, fair?.fairEV);
     const revUp = calcTrend(serRevenue).kind === "up";
     const opUp = calcTrend(serOp).kind === "up";
     const netUp = calcTrend(serNet).kind === "up";

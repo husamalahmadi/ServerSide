@@ -58,11 +58,17 @@ CREATE TABLE IF NOT EXISTS watchlists (
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+-- Fair-value columns are also added by a guarded migration in server.js for existing DBs.
 CREATE TABLE IF NOT EXISTS watchlist_items (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   watchlist_id INTEGER NOT NULL,
   ticker TEXT NOT NULL,
   created_at TEXT DEFAULT (datetime('now')),
+  fair_value_at_add REAL,
+  last_known_fv REAL,
+  last_notified_fv REAL,
+  fv_updated_at TEXT,
+  fv_change_reason TEXT,
   UNIQUE(watchlist_id, ticker),
   FOREIGN KEY (watchlist_id) REFERENCES watchlists(id)
 );

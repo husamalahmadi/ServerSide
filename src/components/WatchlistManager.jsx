@@ -2,14 +2,12 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 import { getApiUrl } from "../config/env.js";
 import { Card } from "./Card.jsx";
+import { WatchlistFvMeta } from "./WatchlistFvMeta.jsx";
 
 function normalizeWatchlists(raw) {
   return (raw || []).map((list) => ({
     ...list,
-    items: (list.items || []).map((x) => {
-      if (typeof x === "string") return { ticker: x };
-      return { ticker: x.ticker, created_at: x.created_at };
-    }),
+    items: (list.items || []).map((x) => (typeof x === "string" ? { ticker: x } : { ...x })),
   }));
 }
 
@@ -222,19 +220,33 @@ export function WatchlistManager({ ticker, t }) {
               <div
                 key={list.id}
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  display: "grid",
+                  gap: 8,
                   padding: "8px 12px",
                   background: "#f8fafc",
                   borderRadius: 8,
                   border: "1px solid #e5e7eb",
                 }}
               >
-                <span style={{ fontWeight: 600, fontSize: 14 }}>{list.name}</span>
-                <span style={{ fontSize: 13, color: "#64748b" }}>
-                  {(list.items || []).length} {trans("ITEMS") || "stocks"}
-                </span>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+                  <span style={{ fontWeight: 600, fontSize: 14 }}>{list.name}</span>
+                  <span style={{ fontSize: 13, color: "#64748b" }}>
+                    {(list.items || []).length} {trans("ITEMS") || "stocks"}
+                  </span>
+                </div>
+                {(list.items || []).length ? (
+                  <div style={{ display: "grid", gap: 6 }}>
+                    {list.items.map((item) => (
+                      <div
+                        key={item.ticker}
+                        style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 8, fontSize: 13 }}
+                      >
+                        <span style={{ fontWeight: 700 }}>{item.ticker}</span>
+                        <WatchlistFvMeta item={item} t={trans} />
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
               </div>
             ))}
           </div>

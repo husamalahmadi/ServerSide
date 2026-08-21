@@ -257,6 +257,10 @@ export default {
   ITEMS: "stocks",
   WATCHLIST_SAVE_FAILED:
     "Could not update the watchlist. Ensure the API server is running and you are signed in.",
+  WATCHLIST_FV_LABEL: "Fair value",
+  WATCHLIST_FV_MOVED: "Fair value moved {pct}%",
+  WATCHLIST_FV_NOW_UNDERVALUED: "Now undervalued",
+  WATCHLIST_FV_NOW_OVERVALUED: "Now overvalued",
   PROFILE_LOADING: "Loading…",
   PROFILE_USER_NOT_FOUND: "User not found.",
   PROFILE_DISPLAY_NAME: "Display name",

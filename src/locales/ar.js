@@ -257,6 +257,10 @@ export default {
   ITEMS: "أسهم",
   WATCHLIST_SAVE_FAILED:
     "تعذّر تحديث قائمة المراقبة. تأكد أن خادم الـ API يعمل وأنك مسجّل الدخول.",
+  WATCHLIST_FV_LABEL: "القيمة العادلة",
+  WATCHLIST_FV_MOVED: "تغيّرت القيمة العادلة بنسبة {pct}٪",
+  WATCHLIST_FV_NOW_UNDERVALUED: "أصبح مقوَّماً بأقل من قيمته",
+  WATCHLIST_FV_NOW_OVERVALUED: "أصبح مقوَّماً بأكثر من قيمته",
   PROFILE_LOADING: "جار التحميل…",
   PROFILE_USER_NOT_FOUND: "المستخدم غير موجود.",
   PROFILE_DISPLAY_NAME: "الاسم المعروض",

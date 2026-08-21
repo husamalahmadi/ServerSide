@@ -5,6 +5,7 @@ import { useI18n } from "../i18n.jsx";
 import { getApiUrl } from "../config/env.js";
 import { Card } from "../components/Card.jsx";
 import { AvatarImg } from "../components/AvatarImg.jsx";
+import { WatchlistFvMeta } from "../components/WatchlistFvMeta.jsx";
 export default function Profile() {
   const { handle: urlHandle } = useParams();
   const location = useLocation();
@@ -343,7 +344,7 @@ export default function Profile() {
                   {(list.items || []).map((item) => {
                     const sym = typeof item === "string" ? item : item.ticker;
                     return (
-                      <div key={sym}>
+                      <div key={sym} style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
                         <Link
                           to={`/stock/${sym}`}
                           style={{
@@ -358,6 +359,7 @@ export default function Profile() {
                         >
                           {sym}
                         </Link>
+                        {typeof item === "string" ? null : <WatchlistFvMeta item={item} t={t} />}
                       </div>
                     );
                   })}

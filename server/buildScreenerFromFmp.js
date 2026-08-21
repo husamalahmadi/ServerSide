@@ -20,7 +20,7 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-function fmpSymbolFor(market, ticker) {
+export function fmpSymbolFor(market, ticker) {
   if (market === "us") return ticker.toUpperCase();
   if (market === "sa") return `${ticker}.SR`;
   if (market === "uk") {
