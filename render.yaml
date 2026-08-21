@@ -5,12 +5,18 @@
 #
 # Fair-value email alerts (optional — the app runs fine without them):
 #   RESEND_API_KEY      Resend API key. Requires a verified sending domain: add Resend's
-#                       DKIM/SPF DNS records for trueprice.cash at GoDaddy first.
+#                       DKIM/SPF DNS records for trueprice.cash at GoDaddy first, or sends
+#                       fail with only a warning in the logs.
 #   EMAIL_FROM          e.g. "TruePrice <alerts@trueprice.cash>" — must be on that domain.
-#   INTERNAL_TASK_TOKEN Shared secret for POST /api/internal/dispatch-emails. The in-process
-#                       daily timer only fires while the instance is awake, so on a sleeping
-#                       free-tier instance point an external scheduler (cron-job.org) at that
-#                       route with header x-internal-token to get reliable daily delivery.
+#   INTERNAL_TASK_TOKEN Long random shared secret for the two scheduler routes below.
+#
+# Daily jobs and the free-tier caveat: the fair-value sweep and the email digest both run on
+# in-process timers, which only fire while the instance is awake. On a sleeping instance,
+# drive them from one external scheduler (cron-job.org) with header x-internal-token:
+#   POST /api/internal/run-sweep        recompute watchlist fair values, flag changes
+#   POST /api/internal/dispatch-emails  email the changes the sweep found
+# Schedule the sweep first and the digest 15–30 minutes later, so the day's changes exist
+# before the email goes out. Both routes return 202 immediately and run in the background.
 services:
   - type: web
     name: trueprice-api

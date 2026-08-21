@@ -35,6 +35,7 @@ import { buildStocksCatalogPayload } from "./stocksCatalogApi.js";
 import { findStockByTicker, CURRENCY_BY_MARKET, getCatalogPools } from "./stockCatalogLookup.js";
 import {
   migrateWatchlistFairValueColumns,
+  runWatchlistFairValueSweepIfIdle,
   snapshotFairValueOnAdd,
   startWatchlistFairValueCron,
   watchlistItemCurrency,
@@ -542,16 +543,33 @@ app.get("/api/email/unsubscribe", (req, res) => {
 });
 
 /**
- * External scheduler entry point for the email digest. Render's free tier sleeps, so an
- * in-process timer alone can miss days; point a scheduled ping (e.g. cron-job.org) here
- * with the shared secret to drive dispatch reliably.
+ * Both daily jobs also run on in-process timers, but Render's free tier sleeps, so those
+ * timers can miss days. These routes let one external scheduler (e.g. cron-job.org) drive
+ * the sweep first and the email digest a few minutes later, which is the only reliable
+ * order — the digest can only mail changes the sweep has already found.
  */
-app.post("/api/internal/dispatch-emails", (req, res) => {
+const requireInternalToken = (req, res, next) => {
   const expected = (process.env.INTERNAL_TASK_TOKEN || "").trim();
   if (!expected) return res.status(503).json({ error: "INTERNAL_TASK_TOKEN not configured" });
   if (!secretMatches(req.get("x-internal-token"), expected)) {
     return res.status(403).json({ error: "Forbidden" });
   }
+  next();
+};
+
+app.post("/api/internal/run-sweep", requireInternalToken, (req, res) => {
+  const apiKey = fmpApiKey();
+  if (!apiKey) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  void runWatchlistFairValueSweepIfIdle({
+    db,
+    apiKey,
+    financialsStore: fmpFinancialsStore,
+    delayMs: Number(process.env.WATCHLIST_FV_DELAY_MS || 350),
+  });
+  res.status(202).json({ ok: true, started: true });
+});
+
+app.post("/api/internal/dispatch-emails", requireInternalToken, (req, res) => {
   if (!emailConfigured()) return res.status(503).json({ error: "email not configured" });
   void runFairValueEmailDispatchIfIdle({ db, siteUrl: CLIENT_URL, apiUrl: SERVER_URL });
   res.status(202).json({ ok: true, started: true });
