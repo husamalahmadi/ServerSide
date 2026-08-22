@@ -49,7 +49,7 @@ import {
   startFairValueEmailCron,
   unsubscribeByToken,
 } from "./emailNotifications.js";
-import { renderUnsubscribePage } from "./emailTemplates.js";
+import { renderUnsubscribeConfirmPage, renderUnsubscribePage } from "./emailTemplates.js";
 import { injectSeoIntoSpaHtml, buildStockStaticFallback } from "./spaHtmlSeo.js";
 import { configureSeoSiteUrl } from "../shared/seo/siteUrl.js";
 import { buildStockSeo, buildTutorialArticleSeo, buildTutorialsIndexSeo } from "../shared/seo/structuredData.js";
@@ -536,8 +536,22 @@ app.put("/api/me/email-prefs", requireAuth, (req, res) => {
   res.json({ ok: true, emailFvAlerts });
 });
 
-/** One-click unsubscribe from an email link — no auth, and neutral for unknown tokens. */
+/**
+ * Unsubscribe from an email link — no auth, and neutral for unknown tokens either way.
+ *
+ * The GET only asks, because mail clients and security scanners prefetch links in email
+ * and would otherwise unsubscribe people who never clicked. The POST is what acts on it,
+ * serving both the page's button and the one-click control Gmail and Outlook render from
+ * the List-Unsubscribe headers.
+ */
 app.get("/api/email/unsubscribe", (req, res) => {
+  res
+    .status(200)
+    .type("html")
+    .send(renderUnsubscribeConfirmPage({ siteUrl: CLIENT_URL, token: req.query?.token }));
+});
+
+app.post("/api/email/unsubscribe", (req, res) => {
   unsubscribeByToken(db, req.query?.token);
   res.status(200).type("html").send(renderUnsubscribePage({ siteUrl: CLIENT_URL }));
 });

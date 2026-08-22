@@ -116,7 +116,7 @@ export function secretMatches(provided, expected) {
  * Send one email. Never throws — callers get `{ ok, id?, error? }` so a provider
  * outage can't take down a cron run.
  */
-export async function sendEmail({ to, subject, html, text }) {
+export async function sendEmail({ to, subject, html, text, headers }) {
   const apiKey = (process.env.RESEND_API_KEY || "").trim();
   const from = emailFromAddress();
   if (!apiKey || !from) {
@@ -127,7 +127,7 @@ export async function sendEmail({ to, subject, html, text }) {
 
   try {
     if (!resendClient) resendClient = new Resend(apiKey);
-    const { data, error } = await resendClient.emails.send({ from, to, subject, html, text });
+    const { data, error } = await resendClient.emails.send({ from, to, subject, html, text, headers });
     if (error) return { ok: false, error: error.message || String(error) };
     return { ok: true, id: data?.id };
   } catch (err) {
@@ -210,7 +210,18 @@ export async function runFairValueEmailDispatch({ db, siteUrl, apiUrl, delayMs =
       unsubscribeUrl,
     });
 
-    const result = await sendEmail({ to: recipient.email, subject, html, text });
+    const result = await sendEmail({
+      to: recipient.email,
+      subject,
+      html,
+      text,
+      // RFC 8058: lets Gmail and Outlook show their own unsubscribe control, which they
+      // action with a POST to this URL. Mail clients read it as a sender-quality signal.
+      headers: {
+        "List-Unsubscribe": `<${unsubscribeUrl}>`,
+        "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+      },
+    });
     if (result.ok) {
       db.transaction(() => {
         for (const change of recipient.changes) recordSend.run(change.activityId, recipient.userId);

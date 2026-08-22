@@ -72,6 +72,23 @@ const UNSUBSCRIBED_PAGE_COPY = {
   },
 };
 
+const UNSUBSCRIBE_CONFIRM_COPY = {
+  en: {
+    dir: "ltr",
+    TITLE: "Turn off fair-value emails?",
+    BODY: "You will stop receiving emails when a stock on your watchlists moves 10% or more in fair value, or flips between undervalued and overvalued.",
+    CONFIRM: "Yes, unsubscribe",
+    BACK: "Keep them on",
+  },
+  ar: {
+    dir: "rtl",
+    TITLE: "إيقاف رسائل القيمة العادلة؟",
+    BODY: "لن تصلك رسائل عندما تتغيّر القيمة العادلة لسهم في قوائم مراقبتك بنسبة 10% أو أكثر، أو عندما يتحوّل بين مقوَّم بأقل من قيمته ومقوَّم بأعلى منها.",
+    CONFIRM: "نعم، إلغاء الاشتراك",
+    BACK: "الإبقاء عليها",
+  },
+};
+
 function escapeHtml(s) {
   return String(s ?? "")
     .replace(/&/g, "&amp;")
@@ -250,9 +267,53 @@ ${footerBlockHtml("ar", unsubscribeUrl)}
   return { subject: subjectFor(normalized), html, text };
 }
 
+function unsubscribePageShell(title, blocksHtml) {
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>${escapeHtml(title)} — TruePrice.cash</title>
+</head>
+<body style="margin:0;background:${PAGE_BG};font-family:system-ui,Arial,sans-serif;">
+  <main style="max-width:560px;margin:0 auto;padding:48px 24px;">
+    <div style="background:#ffffff;border-radius:10px;padding:28px;border-top:3px solid ${GOLD};">
+      <div style="font:700 16px/1 system-ui,Arial,sans-serif;color:${NAVY};margin-bottom:24px;">TruePrice<span style="color:${GOLD};">.cash</span></div>
+${blocksHtml}
+    </div>
+  </main>
+</body>
+</html>`;
+}
+
 /**
- * Unsubscribe confirmation. Shown for any token, valid or not, so the page never
- * reveals whether a token exists.
+ * Asks before unsubscribing. The link in an email is a GET, and mail clients and security
+ * scanners prefetch those, so the GET must not change anything — this page does, via a
+ * POST the reader has to click.
+ */
+export function renderUnsubscribeConfirmPage({ siteUrl, token }) {
+  const site = String(siteUrl || "").replace(/\/+$/, "");
+  const action = `/api/email/unsubscribe?token=${encodeURIComponent(String(token || ""))}`;
+  const block = (lang) => {
+    const copy = UNSUBSCRIBE_CONFIRM_COPY[lang];
+    return `
+      <section dir="${copy.dir}" style="margin:0 0 28px 0;">
+        <h1 style="margin:0 0 8px 0;font:700 22px/1.3 system-ui,Arial,sans-serif;color:${NAVY};">${escapeHtml(copy.TITLE)}</h1>
+        <p style="margin:0 0 16px 0;font:400 15px/1.7 system-ui,Arial,sans-serif;color:${INK};">${escapeHtml(copy.BODY)}</p>
+        <form method="POST" action="${escapeHtml(action)}" style="margin:0 0 12px 0;">
+          <button type="submit" style="padding:10px 18px;border:none;border-radius:8px;background:${NAVY};color:#ffffff;font:600 14px/1 system-ui,Arial,sans-serif;cursor:pointer;">${escapeHtml(copy.CONFIRM)}</button>
+        </form>
+        <a href="${escapeHtml(site || "/")}" style="font:600 14px/1 system-ui,Arial,sans-serif;color:${NAVY};">${escapeHtml(copy.BACK)}</a>
+      </section>`;
+  };
+
+  return unsubscribePageShell("Unsubscribe", `${block("en")}\n${block("ar")}`);
+}
+
+/**
+ * Shown after unsubscribing, for any token, valid or not, so the page never reveals
+ * whether a token exists.
  */
 export function renderUnsubscribePage({ siteUrl }) {
   const site = String(siteUrl || "").replace(/\/+$/, "");
@@ -266,22 +327,5 @@ export function renderUnsubscribePage({ siteUrl }) {
       </section>`;
   };
 
-  return `<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="robots" content="noindex">
-  <title>Unsubscribed — TruePrice.cash</title>
-</head>
-<body style="margin:0;background:${PAGE_BG};font-family:system-ui,Arial,sans-serif;">
-  <main style="max-width:560px;margin:0 auto;padding:48px 24px;">
-    <div style="background:#ffffff;border-radius:10px;padding:28px;border-top:3px solid ${GOLD};">
-      <div style="font:700 16px/1 system-ui,Arial,sans-serif;color:${NAVY};margin-bottom:24px;">TruePrice<span style="color:${GOLD};">.cash</span></div>
-${block("en")}
-${block("ar")}
-    </div>
-  </main>
-</body>
-</html>`;
+  return unsubscribePageShell("Unsubscribed", `${block("en")}\n${block("ar")}`);
 }
