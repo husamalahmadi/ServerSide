@@ -64,6 +64,8 @@ export function resolveWatchlistTicker(ticker) {
   if (!found) return null;
   return {
     ticker: raw.toUpperCase(),
+    name: found.hit.name || null,
+    industry: found.hit.industry || null,
     market: found.market,
     fmpSymbol: fmpSymbolFor(found.market, found.hit.ticker),
     currency: CURRENCY_BY_MARKET[found.market] || "USD",

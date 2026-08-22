@@ -5,7 +5,8 @@ import { useI18n } from "../i18n.jsx";
 import { getApiUrl } from "../config/env.js";
 import { Card } from "../components/Card.jsx";
 import { AvatarImg } from "../components/AvatarImg.jsx";
-import { WatchlistFvMeta } from "../components/WatchlistFvMeta.jsx";
+import { ProfileWatchlists } from "../components/profile/ProfileWatchlists.jsx";
+
 export default function Profile() {
   const { handle: urlHandle } = useParams();
   const location = useLocation();
@@ -184,7 +185,7 @@ export default function Profile() {
   const u = profile.user;
 
   return (
-    <div style={{ maxWidth: 720, margin: "0 auto", padding: 24 }} dir={dir} lang={lang}>
+    <div className="tp-profile" style={{ maxWidth: 900, margin: "0 auto", padding: 24 }} dir={dir} lang={lang}>
       <Card>
         <div style={{ display: "flex", gap: 20, flexWrap: "wrap", alignItems: "flex-start" }}>
           <div>
@@ -377,51 +378,8 @@ export default function Profile() {
         </div>
       </Card>
 
-      {/* Watchlists */}
-      <Card title={t("WATCHLISTS")}>
-        {profile.watchlists?.length === 0 ? (
-          <div style={{ color: "#64748b" }}>{t("PROFILE_NO_PUBLIC_WATCHLISTS")}</div>
-        ) : (
-          <div style={{ display: "grid", gap: 12 }}>
-            {profile.watchlists?.map((list) => (
-              <div
-                key={list.id}
-                style={{
-                  padding: 12,
-                  background: "#f8fafc",
-                  borderRadius: 8,
-                  border: "1px solid #e5e7eb",
-                }}
-              >
-                <div style={{ fontWeight: 600, marginBottom: 8 }}>{list.name}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  {(list.items || []).map((item) => {
-                    const sym = typeof item === "string" ? item : item.ticker;
-                    return (
-                      <div key={sym} style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
-                        <Link
-                          to={`/stock/${sym}`}
-                          style={{
-                            display: "inline-block",
-                            padding: "4px 10px",
-                            background: "#1a3a2a",
-                            color: "#fff",
-                            borderRadius: 6,
-                            fontSize: 13,
-                            textDecoration: "none",
-                          }}
-                        >
-                          {sym}
-                        </Link>
-                        {typeof item === "string" ? null : <WatchlistFvMeta item={item} t={t} />}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+      <Card title={t("WATCHLISTS")} className="tp-wl-card">
+        <ProfileWatchlists watchlists={profile.watchlists} t={t} />
       </Card>
 
       {/* Stock comments */}

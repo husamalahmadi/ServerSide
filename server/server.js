@@ -36,9 +36,9 @@ import { findStockByTicker, CURRENCY_BY_MARKET, getCatalogPools } from "./stockC
 import {
   migrateWatchlistFairValueColumns,
   runWatchlistFairValueSweepIfIdle,
+  resolveWatchlistTicker,
   snapshotFairValueOnAdd,
   startWatchlistFairValueCron,
-  watchlistItemCurrency,
   WATCHLIST_ITEM_FV_COLUMNS,
 } from "./watchlistFairValue.js";
 import {
@@ -468,20 +468,26 @@ app.patch("/api/users/me", requireAuth, (req, res) => {
 const WATCHLIST_ITEMS_SQL = `SELECT ticker, created_at, ${WATCHLIST_ITEM_FV_COLUMNS}
    FROM watchlist_items WHERE watchlist_id=? ORDER BY datetime(created_at) DESC`;
 
-/** Watchlist row for the client: ticker plus its fair-value snapshot and change flag. */
+/** Watchlist row for the client: ticker, catalog identity, and fair-value snapshot. */
 function watchlistItemsFor(watchlistId) {
   return db
     .prepare(WATCHLIST_ITEMS_SQL)
     .all(watchlistId)
-    .map((i) => ({
-      ticker: i.ticker,
-      created_at: i.created_at || null,
-      fair_value_at_add: i.fair_value_at_add ?? null,
-      last_known_fv: i.last_known_fv ?? null,
-      fv_updated_at: i.fv_updated_at || null,
-      fv_change_reason: i.fv_change_reason || null,
-      currency: watchlistItemCurrency(i.ticker),
-    }));
+    .map((i) => {
+      const resolved = resolveWatchlistTicker(i.ticker);
+      return {
+        ticker: i.ticker,
+        created_at: i.created_at || null,
+        fair_value_at_add: i.fair_value_at_add ?? null,
+        last_known_fv: i.last_known_fv ?? null,
+        fv_updated_at: i.fv_updated_at || null,
+        fv_change_reason: i.fv_change_reason || null,
+        currency: resolved?.currency || null,
+        name: resolved?.name || null,
+        market: resolved?.market || null,
+        industry: resolved?.industry || null,
+      };
+    });
 }
 
 // User profile: get profile by handle (watchlists, comments). Owner sees all lists; others only public.
