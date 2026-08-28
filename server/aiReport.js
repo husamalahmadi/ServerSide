@@ -2,7 +2,7 @@ import Database from "better-sqlite3";
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || "";
 const FMP_API_KEY = process.env.FMP_API_KEY || "";
-const CACHE_TTL_SEC = 7 * 24 * 60 * 60;
+const CACHE_TTL_SEC = 30 * 24 * 60 * 60;
 
 let _db = null;
 function getDb() {

@@ -77,7 +77,7 @@ export function AiReport({ symbol, t }) {
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12, marginBottom: 16, padding: "14px 20px", background: "linear-gradient(135deg, #0d1f3c, #1a3c5e)", border: "1px solid #c9a84c", borderRadius: 10 }}>
         <div>
           <div style={{ color: "#c9a84c", fontWeight: 700, fontSize: 15, marginBottom: 3 }}>🤖 AI Financial Analyst Report</div>
-          <div style={{ color: "#a0aec0", fontSize: 12 }}>Bilingual (EN/AR) · Powered by Claude · Data from FMP · Cached 7 days</div>
+          <div style={{ color: "#a0aec0", fontSize: 12 }}>Bilingual (EN/AR) · Powered by Claude · Data from FMP · Cached 30 days</div>
         </div>
         <div style={{ display: "flex", gap: 8 }}>
           {status === "done" && (
