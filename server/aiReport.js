@@ -261,7 +261,11 @@ Fill ALL fields marked with "..." with real analysis based on actual FMP data. R
       messages: [
         {
           role: "user",
-          content: `Generate a complete investment report for stock symbol ${symbol}. Fetch real data from the FMP URLs above. Fill all fields with actual numbers and analysis. Return only the JSON object.`,
+          content: `Generate a complete investment report for stock symbol ${symbol}. Fetch real data from the FMP URLs in your instructions. Return ONLY the raw JSON object. Do not include any text, explanation, or markdown before or after the JSON. Start your response with { and end with }`,
+        },
+        {
+          role: "assistant",
+          content: "{",
         },
       ],
     }),
@@ -277,10 +281,11 @@ Fill ALL fields marked with "..." with real analysis based on actual FMP data. R
   const textBlock = data?.content?.find((b) => b.type === "text");
   if (!textBlock?.text) throw new Error("Claude returned no content");
 
-  let raw = textBlock.text.trim()
-    .replace(/^```json\s*/i, "")
-    .replace(/^```\s*/i, "")
-    .replace(/\s*```$/i, "");
+  let raw = textBlock.text.trim();
+  // Add back the { we used as prefill
+  raw = "{" + raw;
+  // Remove any trailing markdown
+  raw = raw.replace(/\s*```$/i, "").trim();
 
   let parsed;
   try {
