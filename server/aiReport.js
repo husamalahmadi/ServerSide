@@ -91,7 +91,7 @@ export async function generateAiReport(symbol, forceRefresh = false) {
     `/v1/agents/${AGENT_ID}/sessions/${sessionId}/messages`,
     "POST",
     {
-      model: "claude-sonnet-4-6",
+      model: "claude-sonnet-4-20250514",
       messages: [
         {
           role: "user",
