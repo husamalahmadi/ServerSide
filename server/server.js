@@ -50,6 +50,8 @@ import {
   unsubscribeByToken,
 } from "./emailNotifications.js";
 import { renderUnsubscribeConfirmPage, renderUnsubscribePage } from "./emailTemplates.js";
+import { generateAiReport } from "./aiReport.js";
+import { renderAiReport } from "./aiReportRenderer.js";
 import { injectSeoIntoSpaHtml, buildStockStaticFallback } from "./spaHtmlSeo.js";
 import { configureSeoSiteUrl } from "../shared/seo/siteUrl.js";
 import { buildStockSeo, buildTutorialArticleSeo, buildTutorialsIndexSeo } from "../shared/seo/structuredData.js";
@@ -1428,6 +1430,41 @@ function ensureScreenerCacheWarm() {
     scheduleScreenerRebuildIfNeeded(true);
   }
 }
+
+// ─── AI Report Routes ──────────────────────────────────────────────────────────
+
+// requireAuth is already defined in this file — it blocks unauthenticated users
+// Only signed-in users can generate or view AI reports
+
+app.get("/api/ai-report/:symbol", requireAuth, async (req, res) => {
+  const symbol = (req.params.symbol || "").toUpperCase().trim();
+  if (!symbol) return res.status(400).json({ error: "symbol required" });
+  const forceRefresh = req.query.refresh === "1";
+  try {
+    const { report, source } = await generateAiReport(symbol, forceRefresh);
+    res.json({ ok: true, symbol, source, report });
+  } catch (err) {
+    console.error("[ai-report] error:", err.message);
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+app.get("/api/ai-report/:symbol/html", requireAuth, async (req, res) => {
+  const symbol = (req.params.symbol || "").toUpperCase().trim();
+  if (!symbol) return res.status(400).send("symbol required");
+  const forceRefresh = req.query.refresh === "1";
+  try {
+    const { report } = await generateAiReport(symbol, forceRefresh);
+    const html = renderAiReport(report, symbol);
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.send(html);
+  } catch (err) {
+    console.error("[ai-report/html] error:", err.message);
+    res.status(500).send(`<p style="color:red">Report generation failed: ${err.message}</p>`);
+  }
+});
+
+// ─── End AI Report Routes ──────────────────────────────────────────────────────
 
 let stocksCatalogCache = null;
 app.get("/api/catalog", (req, res) => {

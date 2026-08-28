@@ -27,6 +27,10 @@ services:
     startCommand: npm run render:start
     plan: starter
     envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: CLAUDE_AGENT_ID
+        sync: false
       - key: DB_PATH
         value: /var/data/trueprice.db
       - key: FMP_FINANCIALS_DIR

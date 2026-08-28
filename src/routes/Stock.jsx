@@ -31,6 +31,7 @@ import { buildStockSeo } from "../seo/structuredData.js";
 import { buildStockNarrative } from "../seo/stockNarrative.js";
 import { fmpImageStockUrl } from "../../shared/fmpLogoUrl.js";
 import { isUndervalued } from "../../shared/fairValueVerdict.js";
+import { AiReport } from "../components/stock/AiReport.jsx";
 
 /* Page */
 export default function Stock() {
@@ -1208,6 +1209,13 @@ export default function Stock() {
             </div>
           )}
         </Card>
+
+        {/* AI Financial Analyst Report — signed-in users only */}
+        <div className="no-print" style={{ marginBottom: 8 }}>
+          <Card title="🤖 AI Analyst Report">
+            <AiReport symbol={fmpSymbol || ticker} t={t} />
+          </Card>
+        </div>
 
         <div className="no-print">
           <WatchlistManager ticker={ticker} t={t} />
