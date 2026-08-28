@@ -255,8 +255,8 @@ Fill ALL fields marked with "..." with real analysis based on actual FMP data. R
       "content-type": "application/json",
     },
     body: JSON.stringify({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 8000,
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 16000,
       system: systemPrompt,
       messages: [
         {
