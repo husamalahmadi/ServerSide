@@ -25,9 +25,7 @@ function readCached(symbol) {
     if (!row) return null;
     if (Math.floor(Date.now() / 1000) - row.generated_at > CACHE_TTL_SEC) return null;
     return JSON.parse(row.report_json);
-  } catch {
-    return null;
-  }
+  } catch { return null; }
 }
 
 function writeCache(symbol, report) {
@@ -40,10 +38,36 @@ function writeCache(symbol, report) {
   }
 }
 
+// Step 1: YOUR SERVER fetches real data from FMP
+async function fetchFMPData(symbol) {
+  const base = "https://financialmodelingprep.com/stable";
+  const key = FMP_API_KEY;
+
+  console.log(`[aiReport] fetching FMP data for ${symbol}...`);
+
+  const [incomeRes, balanceRes, cashflowRes, profileRes] = await Promise.all([
+    fetch(`${base}/income-statement?symbol=${symbol}&limit=4&apikey=${key}`),
+    fetch(`${base}/balance-sheet-statement?symbol=${symbol}&limit=2&apikey=${key}`),
+    fetch(`${base}/cash-flow-statement?symbol=${symbol}&limit=2&apikey=${key}`),
+    fetch(`${base}/profile?symbol=${symbol}&apikey=${key}`)
+  ]);
+
+  const [income, balance, cashflow, profile] = await Promise.all([
+    incomeRes.json(),
+    balanceRes.json(),
+    cashflowRes.json(),
+    profileRes.json()
+  ]);
+
+  console.log(`[aiReport] FMP income records: ${income?.length || 0}, profile: ${profile?.[0]?.companyName || "unknown"}`);
+
+  return { income, balance, cashflow, profile };
+}
+
 export async function generateAiReport(symbol, forceRefresh = false) {
   if (!ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY not set");
 
-  console.log(`[aiReport] symbol=${symbol} key_set=${!!ANTHROPIC_API_KEY} fmp_set=${!!FMP_API_KEY}`);
+  console.log(`[aiReport] symbol=${symbol}`);
 
   if (!forceRefresh) {
     const cached = readCached(symbol);
@@ -53,199 +77,43 @@ export async function generateAiReport(symbol, forceRefresh = false) {
     }
   }
 
-  console.log(`[aiReport] calling Claude API for ${symbol}...`);
+  // Step 1: Fetch real data from FMP first
+  const fmpData = await fetchFMPData(symbol);
 
-  const systemPrompt = `You are a financial analyst for TruePrice.Cash. Given a stock symbol, analyze financial data from FMP and return a bilingual JSON investment report.
+  const profile = fmpData.profile?.[0] || {};
+  const incomeStatements = fmpData.income || [];
+  const balanceSheets = fmpData.balance || [];
+  const cashFlows = fmpData.cashflow || [];
 
-Use these FMP endpoints (replace SYMBOL with actual symbol):
-https://financialmodelingprep.com/stable/income-statement?symbol=SYMBOL&apikey=${FMP_API_KEY}
-https://financialmodelingprep.com/stable/balance-sheet-statement?symbol=SYMBOL&apikey=${FMP_API_KEY}
-https://financialmodelingprep.com/stable/cash-flow-statement?symbol=SYMBOL&apikey=${FMP_API_KEY}
-
-Symbol rules:
-- Saudi TASI numbers (like 3003): add .SR → 3003.SR
-- US stocks: no suffix → AAPL
-- Japan: add .T
-- UK: add .L
-
-Return ONLY a valid JSON object — no markdown, no explanation. Structure:
-{
-  "symbol": "3003.SR",
-  "companyName": "City Cement Company",
-  "reportDate": "2026-08-28",
-  "currentPrice": "SAR 20.00",
-  "currency": "SAR",
-  "charts": {
-    "years": ["2022","2023","2024","2025"],
-    "revenue": [1.2, 1.4, 1.5, 1.3],
-    "operatingIncome": [0.2, 0.3, 0.25, 0.2],
-    "operatingCashFlow": [0.3, 0.35, 0.28, 0.22]
-  },
-  "english": {
-    "executiveSummary": "...",
-    "revenueAnalysis": "...",
-    "margins": {
-      "years": ["2022","2023","2024","2025"],
-      "grossMargin": ["20%","22%","21%","19%"],
-      "operatingMargin": ["15%","18%","16%","14%"],
-      "netMargin": ["10%","12%","11%","9%"]
-    },
-    "balanceSheet": {
-      "analysis": "...",
-      "items": [
-        {"label": "Total Assets", "prior": "SAR 2.1B", "latest": "SAR 2.3B", "change": "+10%"},
-        {"label": "Total Liabilities", "prior": "SAR 0.8B", "latest": "SAR 0.9B", "change": "+12%"},
-        {"label": "Total Equity", "prior": "SAR 1.3B", "latest": "SAR 1.4B", "change": "+8%"},
-        {"label": "Short-Term Debt", "prior": "SAR 0.1B", "latest": "SAR 0.15B", "change": "+50%"},
-        {"label": "Long-Term Debt", "prior": "SAR 0.3B", "latest": "SAR 0.28B", "change": "-7%"},
-        {"label": "Cash & Equivalents", "prior": "SAR 0.4B", "latest": "SAR 0.35B", "change": "-12%"}
-      ]
-    },
-    "cashFlow": {
-      "analysis": "...",
-      "items": [
-        {"label": "Operating Cash Flow", "prior": "SAR 0.28B", "latest": "SAR 0.22B", "assessment": "Declining"},
-        {"label": "Capital Expenditure", "prior": "SAR 0.05B", "latest": "SAR 0.04B", "assessment": "Low"},
-        {"label": "Free Cash Flow", "prior": "SAR 0.23B", "latest": "SAR 0.18B", "assessment": "Positive"},
-        {"label": "FCF Margin", "prior": "15%", "latest": "14%", "assessment": "Healthy"}
-      ]
-    },
-    "ratios": [
-      {"ratio": "P/E Ratio", "value": "12x", "industryAvg": "10-15x", "assessment": "Fair"},
-      {"ratio": "EV/EBITDA", "value": "7x", "industryAvg": "6-9x", "assessment": "Fair"},
-      {"ratio": "ROE", "value": "12%", "industryAvg": "10-15%", "assessment": "Good"},
-      {"ratio": "ROA", "value": "6%", "industryAvg": "5-8%", "assessment": "Good"},
-      {"ratio": "Debt/Equity", "value": "0.3", "industryAvg": "0.4-0.8", "assessment": "Conservative"},
-      {"ratio": "Current Ratio", "value": "1.8", "industryAvg": "1.5+", "assessment": "Adequate"},
-      {"ratio": "Dividend Yield", "value": "4%", "industryAvg": "3-5%", "assessment": "Attractive"}
-    ],
-    "fairValue": {
-      "analysis": "...",
-      "scenarios": [
-        {"scenario": "Bull Case", "value": "SAR 25", "vsCurrentPrice": "+25%", "probability": "20%"},
-        {"scenario": "Base Case", "value": "SAR 21", "vsCurrentPrice": "+5%", "probability": "50%"},
-        {"scenario": "Bear Case", "value": "SAR 16", "vsCurrentPrice": "-20%", "probability": "30%"}
-      ]
-    },
-    "futureOutlook": {
-      "coreBusinessModel": "...",
-      "growthDrivers": ["Vision 2030 construction boom", "Expanding capacity", "Strong domestic demand"],
-      "disruptionRisks": ["Raw material cost inflation", "Regional competition", "Regulatory changes"]
-    },
-    "redFlags": {
-      "verdict": "ok",
-      "verdictText": "No significant red flags detected",
-      "indicators": [
-        {"indicator": "Days Sales in Receivables", "observation": "DSO stable", "status": "ok"},
-        {"indicator": "Gross Margin Index", "observation": "Margins stable", "status": "ok"},
-        {"indicator": "Asset Quality Index", "observation": "Assets growing", "status": "ok"},
-        {"indicator": "Sales Growth Index", "observation": "Moderate growth", "status": "ok"},
-        {"indicator": "Depreciation Index", "observation": "Consistent", "status": "ok"},
-        {"indicator": "SGA Index", "observation": "Controlled", "status": "ok"},
-        {"indicator": "Leverage Index", "observation": "Conservative", "status": "ok"},
-        {"indicator": "Accruals", "observation": "OCF supports earnings", "status": "ok"}
-      ],
-      "summary": "..."
-    },
-    "risks": [
-      {"title": "Raw Material Costs", "description": "..."},
-      {"title": "Competition", "description": "..."},
-      {"title": "Regulatory", "description": "..."},
-      {"title": "Economic Slowdown", "description": "..."},
-      {"title": "FX Risk", "description": "..."}
-    ],
-    "recommendation": {
-      "verdict": "hold",
-      "verdictLabel": "HOLD",
-      "priceTarget": "SAR 21",
-      "upside": "+5%",
-      "justification": "..."
-    }
-  },
-  "arabic": {
-    "executiveSummary": "...",
-    "revenueAnalysis": "...",
-    "margins": {
-      "years": ["2022","2023","2024","2025"],
-      "grossMargin": ["20%","22%","21%","19%"],
-      "operatingMargin": ["15%","18%","16%","14%"],
-      "netMargin": ["10%","12%","11%","9%"]
-    },
-    "balanceSheet": {
-      "analysis": "...",
-      "items": [
-        {"label": "إجمالي الأصول", "prior": "2.1 مليار ريال", "latest": "2.3 مليار ريال", "change": "+10%"},
-        {"label": "إجمالي الخصوم", "prior": "0.8 مليار ريال", "latest": "0.9 مليار ريال", "change": "+12%"},
-        {"label": "إجمالي حقوق الملكية", "prior": "1.3 مليار ريال", "latest": "1.4 مليار ريال", "change": "+8%"},
-        {"label": "الديون قصيرة الأجل", "prior": "0.1 مليار ريال", "latest": "0.15 مليار ريال", "change": "+50%"},
-        {"label": "الديون طويلة الأجل", "prior": "0.3 مليار ريال", "latest": "0.28 مليار ريال", "change": "-7%"},
-        {"label": "النقد والنقد المعادل", "prior": "0.4 مليار ريال", "latest": "0.35 مليار ريال", "change": "-12%"}
-      ]
-    },
-    "cashFlow": {
-      "analysis": "...",
-      "items": [
-        {"label": "التدفق النقدي التشغيلي", "prior": "0.28 مليار ريال", "latest": "0.22 مليار ريال", "assessment": "متراجع"},
-        {"label": "النفقات الرأسمالية", "prior": "0.05 مليار ريال", "latest": "0.04 مليار ريال", "assessment": "منخفض"},
-        {"label": "التدفق النقدي الحر", "prior": "0.23 مليار ريال", "latest": "0.18 مليار ريال", "assessment": "إيجابي"},
-        {"label": "هامش التدفق النقدي الحر", "prior": "15%", "latest": "14%", "assessment": "صحي"}
-      ]
-    },
-    "ratios": [
-      {"ratio": "نسبة السعر إلى الربحية", "value": "12x", "industryAvg": "10-15x", "assessment": "عادل"},
-      {"ratio": "قيمة المؤسسة/الأرباح", "value": "7x", "industryAvg": "6-9x", "assessment": "عادل"},
-      {"ratio": "العائد على حقوق الملكية", "value": "12%", "industryAvg": "10-15%", "assessment": "جيد"},
-      {"ratio": "العائد على الأصول", "value": "6%", "industryAvg": "5-8%", "assessment": "جيد"},
-      {"ratio": "نسبة الدين إلى حقوق الملكية", "value": "0.3", "industryAvg": "0.4-0.8", "assessment": "محافظ"},
-      {"ratio": "النسبة الجارية", "value": "1.8", "industryAvg": "1.5+", "assessment": "كافية"},
-      {"ratio": "عائد الأرباح", "value": "4%", "industryAvg": "3-5%", "assessment": "جذاب"}
-    ],
-    "fairValue": {
-      "analysis": "...",
-      "scenarios": [
-        {"scenario": "السيناريو الصعودي", "value": "25 ريال", "vsCurrentPrice": "+25%", "probability": "20%"},
-        {"scenario": "السيناريو الأساسي", "value": "21 ريال", "vsCurrentPrice": "+5%", "probability": "50%"},
-        {"scenario": "السيناريو الهبوطي", "value": "16 ريال", "vsCurrentPrice": "-20%", "probability": "30%"}
-      ]
-    },
-    "futureOutlook": {
-      "coreBusinessModel": "...",
-      "growthDrivers": ["طفرة البناء في رؤية 2030", "توسعة الطاقة الإنتاجية", "قوة الطلب المحلي"],
-      "disruptionRisks": ["ارتفاع تكاليف المواد الخام", "المنافسة الإقليمية", "التغييرات التنظيمية"]
-    },
-    "redFlags": {
-      "verdict": "ok",
-      "verdictText": "لم يتم اكتشاف إشارات إنذار مهمة",
-      "indicators": [
-        {"indicator": "مؤشر أيام المبيعات في الذمم", "observation": "DSO مستقر", "status": "ok"},
-        {"indicator": "مؤشر الهامش الإجمالي", "observation": "الهوامش مستقرة", "status": "ok"},
-        {"indicator": "مؤشر جودة الأصول", "observation": "الأصول في نمو", "status": "ok"},
-        {"indicator": "مؤشر نمو المبيعات", "observation": "نمو معتدل", "status": "ok"},
-        {"indicator": "مؤشر الاستهلاك", "observation": "متسق", "status": "ok"},
-        {"indicator": "مؤشر المصاريف البيعية والعمومية", "observation": "تحت السيطرة", "status": "ok"},
-        {"indicator": "مؤشر الرافعة المالية", "observation": "محافظ", "status": "ok"},
-        {"indicator": "الاستحقاقات", "observation": "التدفق النقدي يدعم الأرباح", "status": "ok"}
-      ],
-      "summary": "..."
-    },
-    "risks": [
-      {"title": "تكاليف المواد الخام", "description": "..."},
-      {"title": "المنافسة", "description": "..."},
-      {"title": "التنظيم", "description": "..."},
-      {"title": "التباطؤ الاقتصادي", "description": "..."},
-      {"title": "مخاطر العملة", "description": "..."}
-    ],
-    "recommendation": {
-      "verdict": "hold",
-      "verdictLabel": "احتفظ",
-      "priceTarget": "21 ريال",
-      "upside": "+5%",
-      "justification": "..."
-    }
+  if (!incomeStatements.length) {
+    throw new Error(`No financial data found in FMP for symbol ${symbol}`);
   }
-}
 
-Fill ALL fields marked with "..." with real analysis based on actual FMP data. Replace all placeholder numbers with real numbers from FMP. Return only the JSON.`;
+  const currentPrice = profile.price || "N/A";
+  const companyName = profile.companyName || symbol;
+  const currency = profile.currency || "SAR";
+
+  // Step 2: Send the REAL data to Claude for analysis
+  console.log(`[aiReport] sending real FMP data to Claude for ${symbol}...`);
+
+  const dataContext = `
+REAL FINANCIAL DATA FROM FMP API FOR ${symbol}:
+
+Company: ${companyName}
+Current Price: ${currentPrice} ${currency}
+Market Cap: ${profile.mktCap || "N/A"}
+Industry: ${profile.industry || "N/A"}
+Description: ${profile.description || "N/A"}
+
+INCOME STATEMENTS (most recent first):
+${JSON.stringify(incomeStatements, null, 2)}
+
+BALANCE SHEETS (most recent first):
+${JSON.stringify(balanceSheets, null, 2)}
+
+CASH FLOW STATEMENTS (most recent first):
+${JSON.stringify(cashFlows, null, 2)}
+`;
 
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -257,18 +125,196 @@ Fill ALL fields marked with "..." with real analysis based on actual FMP data. R
     body: JSON.stringify({
       model: "claude-sonnet-4-6",
       max_tokens: 16000,
-      system: systemPrompt,
+      system: `You are a financial analyst for TruePrice.Cash. You will be given REAL financial data already fetched from FMP API. Use ONLY the data provided — do not use your training memory for financial figures. Extract the actual numbers from the data and write a professional bilingual investment report.
+
+Return ONLY a valid JSON object — no markdown, no explanation. Use this exact structure:
+
+{
+  "symbol": "${symbol}",
+  "companyName": "${companyName}",
+  "reportDate": "${new Date().toISOString().split("T")[0]}",
+  "currentPrice": "${currentPrice} ${currency}",
+  "currency": "${currency}",
+  "charts": {
+    "years": ["year1","year2","year3","year4"],
+    "revenue": [number, number, number, number],
+    "operatingIncome": [number, number, number, number],
+    "operatingCashFlow": [number, number, number, number]
+  },
+  "english": {
+    "executiveSummary": "4-6 sentences about the company, its position, and investment verdict",
+    "revenueAnalysis": "Analysis of revenue trend with real numbers from the data",
+    "margins": {
+      "years": ["year1","year2","year3","year4"],
+      "grossMargin": ["x%","x%","x%","x%"],
+      "operatingMargin": ["x%","x%","x%","x%"],
+      "netMargin": ["x%","x%","x%","x%"]
+    },
+    "balanceSheet": {
+      "analysis": "Analysis of balance sheet health",
+      "items": [
+        {"label":"Total Assets","prior":"x","latest":"x","change":"x%"},
+        {"label":"Total Liabilities","prior":"x","latest":"x","change":"x%"},
+        {"label":"Total Equity","prior":"x","latest":"x","change":"x%"},
+        {"label":"Short-Term Debt","prior":"x","latest":"x","change":"x%"},
+        {"label":"Long-Term Debt","prior":"x","latest":"x","change":"x%"},
+        {"label":"Cash & Equivalents","prior":"x","latest":"x","change":"x%"}
+      ]
+    },
+    "cashFlow": {
+      "analysis": "Analysis of cash flow quality",
+      "items": [
+        {"label":"Operating Cash Flow","prior":"x","latest":"x","assessment":"x"},
+        {"label":"Capital Expenditure","prior":"x","latest":"x","assessment":"x"},
+        {"label":"Free Cash Flow","prior":"x","latest":"x","assessment":"x"},
+        {"label":"FCF Margin","prior":"x%","latest":"x%","assessment":"x"}
+      ]
+    },
+    "ratios": [
+      {"ratio":"P/E Ratio","value":"x","industryAvg":"10-15x","assessment":"x"},
+      {"ratio":"EV/EBITDA","value":"x","industryAvg":"6-9x","assessment":"x"},
+      {"ratio":"ROE","value":"x%","industryAvg":"10-15%","assessment":"x"},
+      {"ratio":"ROA","value":"x%","industryAvg":"5-8%","assessment":"x"},
+      {"ratio":"Debt/Equity","value":"x","industryAvg":"0.4-0.8","assessment":"x"},
+      {"ratio":"Current Ratio","value":"x","industryAvg":"1.5+","assessment":"x"},
+      {"ratio":"Dividend Yield","value":"x%","industryAvg":"3-5%","assessment":"x"}
+    ],
+    "fairValue": {
+      "analysis": "DCF methodology and assumptions",
+      "scenarios": [
+        {"scenario":"Bull Case","value":"x ${currency}","vsCurrentPrice":"+x%","probability":"20%"},
+        {"scenario":"Base Case","value":"x ${currency}","vsCurrentPrice":"+x%","probability":"50%"},
+        {"scenario":"Bear Case","value":"x ${currency}","vsCurrentPrice":"-x%","probability":"30%"}
+      ]
+    },
+    "futureOutlook": {
+      "coreBusinessModel": "Description of business model",
+      "growthDrivers": ["driver1","driver2","driver3"],
+      "disruptionRisks": ["risk1","risk2","risk3"]
+    },
+    "redFlags": {
+      "verdict": "ok",
+      "verdictText": "No significant red flags detected",
+      "indicators": [
+        {"indicator":"Days Sales in Receivables","observation":"x","status":"ok"},
+        {"indicator":"Gross Margin Index","observation":"x","status":"ok"},
+        {"indicator":"Asset Quality Index","observation":"x","status":"ok"},
+        {"indicator":"Sales Growth Index","observation":"x","status":"ok"},
+        {"indicator":"Depreciation Index","observation":"x","status":"ok"},
+        {"indicator":"SGA Index","observation":"x","status":"ok"},
+        {"indicator":"Leverage Index","observation":"x","status":"ok"},
+        {"indicator":"Accruals","observation":"x","status":"ok"}
+      ],
+      "summary": "Summary of red flag analysis"
+    },
+    "risks": [
+      {"title":"Risk 1","description":"x"},
+      {"title":"Risk 2","description":"x"},
+      {"title":"Risk 3","description":"x"},
+      {"title":"Risk 4","description":"x"},
+      {"title":"Risk 5","description":"x"}
+    ],
+    "recommendation": {
+      "verdict": "hold",
+      "verdictLabel": "HOLD",
+      "priceTarget": "x ${currency}",
+      "upside": "+x%",
+      "justification": "3-4 sentence justification"
+    }
+  },
+  "arabic": {
+    "executiveSummary": "Arabic translation of executive summary",
+    "revenueAnalysis": "Arabic translation of revenue analysis",
+    "margins": {
+      "years": ["year1","year2","year3","year4"],
+      "grossMargin": ["x%","x%","x%","x%"],
+      "operatingMargin": ["x%","x%","x%","x%"],
+      "netMargin": ["x%","x%","x%","x%"]
+    },
+    "balanceSheet": {
+      "analysis": "Arabic balance sheet analysis",
+      "items": [
+        {"label":"إجمالي الأصول","prior":"x","latest":"x","change":"x%"},
+        {"label":"إجمالي الخصوم","prior":"x","latest":"x","change":"x%"},
+        {"label":"إجمالي حقوق الملكية","prior":"x","latest":"x","change":"x%"},
+        {"label":"الديون قصيرة الأجل","prior":"x","latest":"x","change":"x%"},
+        {"label":"الديون طويلة الأجل","prior":"x","latest":"x","change":"x%"},
+        {"label":"النقد والنقد المعادل","prior":"x","latest":"x","change":"x%"}
+      ]
+    },
+    "cashFlow": {
+      "analysis": "Arabic cash flow analysis",
+      "items": [
+        {"label":"التدفق النقدي التشغيلي","prior":"x","latest":"x","assessment":"x"},
+        {"label":"النفقات الرأسمالية","prior":"x","latest":"x","assessment":"x"},
+        {"label":"التدفق النقدي الحر","prior":"x","latest":"x","assessment":"x"},
+        {"label":"هامش التدفق النقدي الحر","prior":"x%","latest":"x%","assessment":"x"}
+      ]
+    },
+    "ratios": [
+      {"ratio":"نسبة السعر إلى الربحية","value":"x","industryAvg":"10-15x","assessment":"x"},
+      {"ratio":"قيمة المؤسسة/الأرباح","value":"x","industryAvg":"6-9x","assessment":"x"},
+      {"ratio":"العائد على حقوق الملكية","value":"x%","industryAvg":"10-15%","assessment":"x"},
+      {"ratio":"العائد على الأصول","value":"x%","industryAvg":"5-8%","assessment":"x"},
+      {"ratio":"نسبة الدين إلى حقوق الملكية","value":"x","industryAvg":"0.4-0.8","assessment":"x"},
+      {"ratio":"النسبة الجارية","value":"x","industryAvg":"1.5+","assessment":"x"},
+      {"ratio":"عائد الأرباح","value":"x%","industryAvg":"3-5%","assessment":"x"}
+    ],
+    "fairValue": {
+      "analysis": "Arabic DCF analysis",
+      "scenarios": [
+        {"scenario":"السيناريو الصعودي","value":"x ${currency}","vsCurrentPrice":"+x%","probability":"20%"},
+        {"scenario":"السيناريو الأساسي","value":"x ${currency}","vsCurrentPrice":"+x%","probability":"50%"},
+        {"scenario":"السيناريو الهبوطي","value":"x ${currency}","vsCurrentPrice":"-x%","probability":"30%"}
+      ]
+    },
+    "futureOutlook": {
+      "coreBusinessModel": "Arabic business model description",
+      "growthDrivers": ["محرك1","محرك2","محرك3"],
+      "disruptionRisks": ["خطر1","خطر2","خطر3"]
+    },
+    "redFlags": {
+      "verdict": "ok",
+      "verdictText": "لم يتم اكتشاف إشارات إنذار مهمة",
+      "indicators": [
+        {"indicator":"مؤشر أيام المبيعات في الذمم","observation":"x","status":"ok"},
+        {"indicator":"مؤشر الهامش الإجمالي","observation":"x","status":"ok"},
+        {"indicator":"مؤشر جودة الأصول","observation":"x","status":"ok"},
+        {"indicator":"مؤشر نمو المبيعات","observation":"x","status":"ok"},
+        {"indicator":"مؤشر الاستهلاك","observation":"x","status":"ok"},
+        {"indicator":"مؤشر المصاريف البيعية والعمومية","observation":"x","status":"ok"},
+        {"indicator":"مؤشر الرافعة المالية","observation":"x","status":"ok"},
+        {"indicator":"الاستحقاقات","observation":"x","status":"ok"}
+      ],
+      "summary": "Arabic red flags summary"
+    },
+    "risks": [
+      {"title":"الخطر 1","description":"x"},
+      {"title":"الخطر 2","description":"x"},
+      {"title":"الخطر 3","description":"x"},
+      {"title":"الخطر 4","description":"x"},
+      {"title":"الخطر 5","description":"x"}
+    ],
+    "recommendation": {
+      "verdict": "hold",
+      "verdictLabel": "احتفظ",
+      "priceTarget": "x ${currency}",
+      "upside": "+x%",
+      "justification": "Arabic justification"
+    }
+  }
+}`,
       messages: [
         {
           role: "user",
-          content: `Generate a complete investment report for stock symbol ${symbol}. Fetch real data from the FMP URLs in your instructions. Fill all fields with actual numbers and analysis. Return ONLY the raw JSON object starting with { and ending with }. No markdown, no explanation, no text before or after the JSON.`,
+          content: `Here is the real financial data for ${symbol} fetched from FMP API. Analyze it and return the JSON report:\n\n${dataContext}`,
         },
       ],
     }),
   });
 
   const data = await res.json();
-  console.log(`[aiReport] Claude status: ${res.status}`, JSON.stringify(data?.error || "ok").slice(0, 200));
+  console.log(`[aiReport] Claude status: ${res.status}`);
 
   if (!res.ok) {
     throw new Error(data?.error?.message || `Claude API error ${res.status}`);
