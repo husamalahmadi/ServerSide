@@ -1212,7 +1212,7 @@ export default function Stock() {
 
         {/* AI Financial Analyst Report — signed-in users only */}
         <div className="no-print" style={{ marginBottom: 8 }}>
-          <Card title="🤖 AI Analyst Report">
+          <Card title={t("AI_REPORT_CARD_TITLE")}>
             <AiReport symbol={fmpSymbol || ticker} t={t} />
           </Card>
         </div>

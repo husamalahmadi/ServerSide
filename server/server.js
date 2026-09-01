@@ -1453,9 +1453,10 @@ app.get("/api/ai-report/:symbol/html", requireAuth, async (req, res) => {
   const symbol = (req.params.symbol || "").toUpperCase().trim();
   if (!symbol) return res.status(400).send("symbol required");
   const forceRefresh = req.query.refresh === "1";
+  const lang = req.query.lang === "ar" ? "ar" : "en";
   try {
     const { report } = await generateAiReport(symbol, forceRefresh);
-    const html = renderAiReport(report, symbol);
+    const html = renderAiReport(report, symbol, lang);
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.send(html);
   } catch (err) {

@@ -323,7 +323,8 @@ function buildArabicReport(ar, charts, symbol) {
 </div>`;
 }
 
-export function renderAiReport(report, symbol) {
+export function renderAiReport(report, symbol, lang = "en") {
+  const isAr = lang === "ar";
   const charts = report.charts || {};
   const en = report.english || {};
   const ar = report.arabic || {};
@@ -339,13 +340,21 @@ export function renderAiReport(report, symbol) {
   const chartRevenue = JSON.stringify(charts.revenue || []);
   const chartOp = JSON.stringify(charts.operatingIncome || []);
   const chartCf = JSON.stringify(charts.operatingCashFlow || []);
+  const pageLang = isAr ? "ar" : "en";
+  const pageDir = isAr ? "rtl" : "ltr";
+  const pageTitle = isAr
+    ? `${escHtml(symbol)} تقرير استثماري — TruePrice.Cash`
+    : `${escHtml(symbol)} Investment Report — TruePrice.Cash`;
+  const bodyHtml = isAr
+    ? buildArabicReport(ar, charts, symbol)
+    : buildEnglishReport(en, charts, symbol);
 
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="${pageLang}" dir="${pageDir}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${escHtml(symbol)} Investment Report — TruePrice.Cash</title>
+<title>${pageTitle}</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -394,12 +403,7 @@ body { font-family: Inter, 'Segoe UI', sans-serif; background: #0a1628; color: #
 <body>
 <div class="tp-ai-wrap">
 
-${buildEnglishReport(en, charts, symbol)}
-
-<hr class="tp-ai-lang-divider">
-<div class="tp-ai-lang-label">◆ النسخة العربية ◆</div>
-
-${buildArabicReport(ar, charts, symbol)}
+${bodyHtml}
 
 </div>
 

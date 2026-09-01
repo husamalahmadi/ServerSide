@@ -362,6 +362,22 @@ export default {
   METHODOLOGY_INDEPENDENCE_BODY:
     "We do not sell investment advice, we do not take positions in the companies we cover, and we do not accept payment to change or promote a verdict. The same formula runs on every company, so the number you see is the number the method produced.",
   HOW_WE_CALCULATE_LINK: "How we calculate this",
+  AI_REPORT_CARD_TITLE: "🤖 AI Analyst Report",
+  AI_REPORT_TITLE: "🤖 AI Financial Analyst Report",
+  AI_REPORT_SUBTITLE: "Powered by Claude · Data from FMP · Cached 30 days",
+  AI_REPORT_GENERATE: "Generate Report",
+  AI_REPORT_REFRESH: "↻ Refresh",
+  AI_REPORT_GENERATING: "Generating your report…",
+  AI_REPORT_GENERATING_HINT: "Fetching financial data from FMP and running AI analysis.",
+  AI_REPORT_GENERATING_WAIT: "This takes 30–60 seconds.",
+  AI_REPORT_FAILED: "Report generation failed:",
+  AI_REPORT_TRY_AGAIN: "Try Again",
+  AI_REPORT_SIGN_IN_TITLE: "Sign in to access AI Reports",
+  AI_REPORT_SIGN_IN_BODY:
+    "Get a full AI-generated investment report in your chosen language, including fair value, red flag detection, future outlook, and a Buy/Hold/Sell recommendation.",
+  AI_REPORT_CONTINUE_GOOGLE: "Continue with Google",
+  AI_REPORT_SIGN_IN_FOOTER: "Free to sign in · No credit card required",
+  AI_REPORT_IFRAME_TITLE: "AI Report for",
   CMA_DISCLAIMER:
     "TruePrice.cash provides model-based fair-value estimates for informational purposes only. This is not investment advice or a recommendation to buy or sell any security. Fair-value figures are algorithmic estimates and may be inaccurate. Always do your own research and consult a licensed financial advisor. TruePrice.cash is not authorized by the Saudi Capital Market Authority (CMA) to provide investment advice.",
 };
