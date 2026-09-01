@@ -1,6 +1,7 @@
 /**
  * aiReportRenderer.js
  * Converts the Claude agent JSON report into a fully styled bilingual HTML page.
+ * Both English and Arabic sections have their own Chart.js charts.
  */
 
 const flagIcon = { ok: "✅", warning: "⚠️", danger: "🚨" };
@@ -27,10 +28,11 @@ function buildEnglishReport(en, charts, symbol) {
 
   return `
 <div dir="ltr" style="text-align:left;">
+
   <div class="report-header">
     <div class="report-symbol">${escHtml(symbol)}</div>
     <div class="report-title">${escHtml(en?.companyName || symbol)} — Investment Research Report</div>
-    <div class="report-meta">TruePrice.Cash · AI Financial Analyst · ${escHtml(en?.reportDate || "")} · Current Price: ${escHtml(en?.currentPrice || "")}</div>
+    <div class="report-meta">TruePrice.Cash &nbsp;·&nbsp; AI Financial Analyst &nbsp;·&nbsp; ${escHtml(en?.reportDate || "")} &nbsp;·&nbsp; Current Price: ${escHtml(en?.currentPrice || "")}</div>
   </div>
 
   <div class="tp-ai-section">
@@ -53,10 +55,20 @@ function buildEnglishReport(en, charts, symbol) {
       </tbody>
     </table>
     </div>` : ""}
+
     <div class="tp-ai-charts-grid">
-      <div class="tp-ai-chart-box"><div class="tp-ai-chart-title">Annual Revenue</div><canvas id="aiRevenueChart"></canvas></div>
-      <div class="tp-ai-chart-box"><div class="tp-ai-chart-title">Annual Operating Income</div><canvas id="aiOperatingChart"></canvas></div>
-      <div class="tp-ai-chart-box tp-ai-chart-full"><div class="tp-ai-chart-title">Annual Operating Cash Flow</div><canvas id="aiCashflowChart"></canvas></div>
+      <div class="tp-ai-chart-box">
+        <div class="tp-ai-chart-title">Annual Revenue</div>
+        <canvas id="enRevenueChart"></canvas>
+      </div>
+      <div class="tp-ai-chart-box">
+        <div class="tp-ai-chart-title">Annual Operating Income</div>
+        <canvas id="enOperatingChart"></canvas>
+      </div>
+      <div class="tp-ai-chart-box tp-ai-chart-full">
+        <div class="tp-ai-chart-title">Annual Operating Cash Flow</div>
+        <canvas id="enCashflowChart"></canvas>
+      </div>
     </div>
   </div>
 
@@ -103,8 +115,12 @@ function buildEnglishReport(en, charts, symbol) {
     <h2 class="tp-ai-h2">7. Business Future Outlook</h2>
     <h3 class="tp-ai-h3">Core Business Model</h3>
     <p>${escHtml(en?.futureOutlook?.coreBusinessModel || "")}</p>
-    ${en?.futureOutlook?.growthDrivers?.length ? `<h3 class="tp-ai-h3">Growth Drivers</h3><ul class="tp-ai-list">${en.futureOutlook.growthDrivers.map((d) => `<li>${escHtml(d)}</li>`).join("")}</ul>` : ""}
-    ${en?.futureOutlook?.disruptionRisks?.length ? `<h3 class="tp-ai-h3">Disruption Risks</h3><ul class="tp-ai-list">${en.futureOutlook.disruptionRisks.map((r) => `<li>${escHtml(r)}</li>`).join("")}</ul>` : ""}
+    ${en?.futureOutlook?.growthDrivers?.length ? `
+    <h3 class="tp-ai-h3">Growth Drivers</h3>
+    <ul class="tp-ai-list">${en.futureOutlook.growthDrivers.map((d) => `<li>${escHtml(d)}</li>`).join("")}</ul>` : ""}
+    ${en?.futureOutlook?.disruptionRisks?.length ? `
+    <h3 class="tp-ai-h3">Disruption Risks</h3>
+    <ul class="tp-ai-list">${en.futureOutlook.disruptionRisks.map((r) => `<li>${escHtml(r)}</li>`).join("")}</ul>` : ""}
   </div>
 
   <div class="tp-ai-section">
@@ -113,42 +129,60 @@ function buildEnglishReport(en, charts, symbol) {
     <h3 class="tp-ai-h3">Beneish M-Score Analysis</h3>
     <div class="tp-ai-table-wrap"><table class="tp-ai-table">
       <thead><tr><th>Indicator</th><th>Observation</th><th>Status</th></tr></thead>
-      <tbody>${en.redFlags.indicators.map((ind) => `<tr><td>${escHtml(ind.indicator)}</td><td>${escHtml(ind.observation)}</td><td style="color:${flagColor[ind.status] || "#e8e8e8"}">${flagIcon[ind.status] || ""} ${escHtml(ind.status)}</td></tr>`).join("")}</tbody>
+      <tbody>${en.redFlags.indicators.map((ind) => `
+        <tr>
+          <td>${escHtml(ind.indicator)}</td>
+          <td>${escHtml(ind.observation)}</td>
+          <td style="color:${flagColor[ind.status] || "#e8e8e8"}">${flagIcon[ind.status] || ""} ${escHtml(ind.status)}</td>
+        </tr>`).join("")}
+      </tbody>
     </table></div>` : ""}
     <p>${escHtml(en?.redFlags?.summary || "")}</p>
-    <p style="color:${flagColor[en?.redFlags?.verdict] || "#e8e8e8"};font-weight:bold;font-size:15px;">${flagIcon[en?.redFlags?.verdict] || ""} ${escHtml(en?.redFlags?.verdictText || "")}</p>
+    <p style="color:${flagColor[en?.redFlags?.verdict] || "#e8e8e8"};font-weight:bold;font-size:15px;">
+      ${flagIcon[en?.redFlags?.verdict] || ""} ${escHtml(en?.redFlags?.verdictText || "")}
+    </p>
   </div>
 
   <div class="tp-ai-section">
     <h2 class="tp-ai-h2">9. Investment Risks</h2>
-    ${en?.risks?.length ? `<ul class="tp-ai-list">${en.risks.map((r) => `<li><strong>${escHtml(r.title)}:</strong> ${escHtml(r.description)}</li>`).join("")}</ul>` : ""}
+    ${en?.risks?.length ? `
+    <ul class="tp-ai-list">
+      ${en.risks.map((r) => `<li><strong>${escHtml(r.title)}:</strong> ${escHtml(r.description)}</li>`).join("")}
+    </ul>` : ""}
   </div>
 
   <div class="tp-ai-section">
     <h2 class="tp-ai-h2">10. Final Recommendation</h2>
     <div class="tp-ai-verdict tp-ai-verdict-${escHtml(verdictClass)}">
       <div class="tp-ai-verdict-label">${escHtml(rec.verdictLabel || rec.verdict || "")}</div>
-      <div class="tp-ai-verdict-target">12-Month Price Target: <strong>${escHtml(rec.priceTarget || "")}</strong> &nbsp;|&nbsp; Upside/Downside: <strong>${escHtml(rec.upside || "")}</strong></div>
+      <div class="tp-ai-verdict-target">
+        12-Month Price Target: <strong>${escHtml(rec.priceTarget || "")}</strong>
+        &nbsp;|&nbsp; Upside/Downside: <strong>${escHtml(rec.upside || "")}</strong>
+      </div>
     </div>
     <p>${escHtml(rec.justification || "")}</p>
   </div>
 
   <div class="tp-ai-disclaimer">
-    <strong>Disclaimer:</strong> This report is for informational purposes only and does not constitute investment advice. TruePrice.Cash is not regulated by the Saudi Capital Market Authority (CMA). Always consult a licensed financial advisor before making investment decisions.
+    <strong>Disclaimer:</strong> This report is for informational purposes only and does not constitute investment advice.
+    TruePrice.Cash is not regulated by the Saudi Capital Market Authority (CMA).
+    Always consult a licensed financial advisor before making investment decisions.
   </div>
+
 </div>`;
 }
 
-function buildArabicReport(ar, symbol) {
+function buildArabicReport(ar, charts, symbol) {
   const rec = ar?.recommendation || {};
   const verdictClass = rec.verdict || "hold";
 
   return `
-<div dir="rtl" style="text-align:right;" class="tp-ai-arabic">
+<div class="tp-ai-arabic" dir="rtl" style="text-align:right;">
+
   <div class="report-header" style="text-align:right;">
     <div class="report-symbol">${escHtml(symbol)}</div>
     <div class="report-title">${escHtml(ar?.companyName || symbol)} — تقرير البحث الاستثماري</div>
-    <div class="report-meta">TruePrice.Cash · محلل مالي بالذكاء الاصطناعي · ${escHtml(ar?.reportDate || "")} · السعر الحالي: ${escHtml(ar?.currentPrice || "")}</div>
+    <div class="report-meta">TruePrice.Cash &nbsp;·&nbsp; محلل مالي بالذكاء الاصطناعي &nbsp;·&nbsp; ${escHtml(ar?.reportDate || "")} &nbsp;·&nbsp; السعر الحالي: ${escHtml(ar?.currentPrice || "")}</div>
   </div>
 
   <div class="tp-ai-section">
@@ -161,15 +195,32 @@ function buildArabicReport(ar, symbol) {
     <p>${escHtml(ar?.revenueAnalysis || "")}</p>
     ${ar?.margins ? `
     <h3 class="tp-ai-h3">هوامش الربحية</h3>
-    <div class="tp-ai-table-wrap"><table class="tp-ai-table">
+    <div class="tp-ai-table-wrap">
+    <table class="tp-ai-table">
       <thead><tr><th>المقياس</th>${ar.margins.years.map((y) => `<th>${escHtml(y)}</th>`).join("")}</tr></thead>
       <tbody>
         <tr><td>هامش الربح الإجمالي</td>${ar.margins.grossMargin.map((v) => `<td>${escHtml(v)}</td>`).join("")}</tr>
         <tr><td>هامش التشغيل</td>${ar.margins.operatingMargin.map((v) => `<td>${escHtml(v)}</td>`).join("")}</tr>
         <tr><td>هامش صافي الربح</td>${ar.margins.netMargin.map((v) => `<td>${escHtml(v)}</td>`).join("")}</tr>
       </tbody>
-    </table></div>` : ""}
-    <p class="tp-ai-chart-note">الرسوم البيانية أعلاه تمثل البيانات المالية للسنوات الأربع الماضية.</p>
+    </table>
+    </div>` : ""}
+
+    <!-- Arabic Charts with Arabic labels -->
+    <div class="tp-ai-charts-grid" style="direction:ltr;">
+      <div class="tp-ai-chart-box">
+        <div class="tp-ai-chart-title" style="direction:rtl;">الإيرادات السنوية</div>
+        <canvas id="arRevenueChart"></canvas>
+      </div>
+      <div class="tp-ai-chart-box">
+        <div class="tp-ai-chart-title" style="direction:rtl;">الدخل التشغيلي السنوي</div>
+        <canvas id="arOperatingChart"></canvas>
+      </div>
+      <div class="tp-ai-chart-box tp-ai-chart-full">
+        <div class="tp-ai-chart-title" style="direction:rtl;">التدفق النقدي التشغيلي السنوي</div>
+        <canvas id="arCashflowChart"></canvas>
+      </div>
+    </div>
   </div>
 
   <div class="tp-ai-section">
@@ -202,7 +253,7 @@ function buildArabicReport(ar, symbol) {
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">٦. تقدير القيمة العادلة</h2>
+    <h2 class="tp-ai-h2">٦. تقدير القيمة العادلة (DCF)</h2>
     <p>${escHtml(ar?.fairValue?.analysis || "")}</p>
     ${ar?.fairValue?.scenarios ? `
     <div class="tp-ai-table-wrap"><table class="tp-ai-table">
@@ -215,8 +266,12 @@ function buildArabicReport(ar, symbol) {
     <h2 class="tp-ai-h2">٧. توقعات مستقبل الأعمال</h2>
     <h3 class="tp-ai-h3">نموذج الأعمال الأساسي</h3>
     <p>${escHtml(ar?.futureOutlook?.coreBusinessModel || "")}</p>
-    ${ar?.futureOutlook?.growthDrivers?.length ? `<h3 class="tp-ai-h3">محركات النمو</h3><ul class="tp-ai-list">${ar.futureOutlook.growthDrivers.map((d) => `<li>${escHtml(d)}</li>`).join("")}</ul>` : ""}
-    ${ar?.futureOutlook?.disruptionRisks?.length ? `<h3 class="tp-ai-h3">مخاطر الاضطراب</h3><ul class="tp-ai-list">${ar.futureOutlook.disruptionRisks.map((r) => `<li>${escHtml(r)}</li>`).join("")}</ul>` : ""}
+    ${ar?.futureOutlook?.growthDrivers?.length ? `
+    <h3 class="tp-ai-h3">محركات النمو</h3>
+    <ul class="tp-ai-list">${ar.futureOutlook.growthDrivers.map((d) => `<li>${escHtml(d)}</li>`).join("")}</ul>` : ""}
+    ${ar?.futureOutlook?.disruptionRisks?.length ? `
+    <h3 class="tp-ai-h3">مخاطر الاضطراب</h3>
+    <ul class="tp-ai-list">${ar.futureOutlook.disruptionRisks.map((r) => `<li>${escHtml(r)}</li>`).join("")}</ul>` : ""}
   </div>
 
   <div class="tp-ai-section">
@@ -225,29 +280,46 @@ function buildArabicReport(ar, symbol) {
     <h3 class="tp-ai-h3">تحليل Beneish M-Score</h3>
     <div class="tp-ai-table-wrap"><table class="tp-ai-table">
       <thead><tr><th>المؤشر</th><th>الملاحظة</th><th>الحالة</th></tr></thead>
-      <tbody>${ar.redFlags.indicators.map((ind) => `<tr><td>${escHtml(ind.indicator)}</td><td>${escHtml(ind.observation)}</td><td style="color:${flagColor[ind.status] || "#e8e8e8"}">${flagIcon[ind.status] || ""}</td></tr>`).join("")}</tbody>
+      <tbody>${ar.redFlags.indicators.map((ind) => `
+        <tr>
+          <td>${escHtml(ind.indicator)}</td>
+          <td>${escHtml(ind.observation)}</td>
+          <td style="color:${flagColor[ind.status] || "#e8e8e8"}">${flagIcon[ind.status] || ""}</td>
+        </tr>`).join("")}
+      </tbody>
     </table></div>` : ""}
     <p>${escHtml(ar?.redFlags?.summary || "")}</p>
-    <p style="color:${flagColor[ar?.redFlags?.verdict] || "#e8e8e8"};font-weight:bold;font-size:15px;">${flagIcon[ar?.redFlags?.verdict] || ""} ${escHtml(ar?.redFlags?.verdictText || "")}</p>
+    <p style="color:${flagColor[ar?.redFlags?.verdict] || "#e8e8e8"};font-weight:bold;font-size:15px;">
+      ${flagIcon[ar?.redFlags?.verdict] || ""} ${escHtml(ar?.redFlags?.verdictText || "")}
+    </p>
   </div>
 
   <div class="tp-ai-section">
     <h2 class="tp-ai-h2">٩. مخاطر الاستثمار</h2>
-    ${ar?.risks?.length ? `<ul class="tp-ai-list">${ar.risks.map((r) => `<li><strong>${escHtml(r.title)}:</strong> ${escHtml(r.description)}</li>`).join("")}</ul>` : ""}
+    ${ar?.risks?.length ? `
+    <ul class="tp-ai-list">
+      ${ar.risks.map((r) => `<li><strong>${escHtml(r.title)}:</strong> ${escHtml(r.description)}</li>`).join("")}
+    </ul>` : ""}
   </div>
 
   <div class="tp-ai-section">
     <h2 class="tp-ai-h2">١٠. التوصية النهائية</h2>
     <div class="tp-ai-verdict tp-ai-verdict-${escHtml(verdictClass)}">
       <div class="tp-ai-verdict-label">${escHtml(rec.verdictLabel || rec.verdict || "")}</div>
-      <div class="tp-ai-verdict-target">هدف السعر لـ12 شهرًا: <strong>${escHtml(rec.priceTarget || "")}</strong> &nbsp;|&nbsp; الارتفاع/الانخفاض: <strong>${escHtml(rec.upside || "")}</strong></div>
+      <div class="tp-ai-verdict-target">
+        هدف السعر لـ12 شهرًا: <strong>${escHtml(rec.priceTarget || "")}</strong>
+        &nbsp;|&nbsp; الارتفاع/الانخفاض: <strong>${escHtml(rec.upside || "")}</strong>
+      </div>
     </div>
     <p>${escHtml(rec.justification || "")}</p>
   </div>
 
   <div class="tp-ai-disclaimer" style="text-align:right;">
-    <strong>إخلاء المسؤولية:</strong> هذا التقرير لأغراض معلوماتية فقط ولا يُعدّ نصيحة استثمارية. منصة TruePrice.Cash غير مرخصة من هيئة السوق المالية (CMA). يُرجى استشارة مستشار مالي مرخص قبل اتخاذ أي قرارات استثمارية.
+    <strong>إخلاء المسؤولية:</strong> هذا التقرير لأغراض معلوماتية فقط ولا يُعدّ نصيحة استثمارية.
+    منصة TruePrice.Cash غير مرخصة من هيئة السوق المالية (CMA).
+    يُرجى استشارة مستشار مالي مرخص قبل اتخاذ أي قرارات استثمارية.
   </div>
+
 </div>`;
 }
 
@@ -300,7 +372,6 @@ body { font-family: Inter, 'Segoe UI', sans-serif; background: #0a1628; color: #
 .tp-ai-chart-box { background: #071428; border: 1px solid #1e3a5f; border-radius: 10px; padding: 16px; }
 .tp-ai-chart-full { grid-column: 1 / -1; }
 .tp-ai-chart-title { color: #c9a84c; font-size: 12px; font-weight: 600; text-align: center; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-.tp-ai-chart-note { color: #718096; font-size: 13px; font-style: italic; }
 .tp-ai-verdict { border-radius: 10px; padding: 18px 24px; margin: 14px 0; text-align: center; }
 .tp-ai-verdict-buy { background: #1a4731; border: 1px solid #68d391; }
 .tp-ai-verdict-hold { background: #3d3000; border: 1px solid #f6c90e; }
@@ -313,28 +384,93 @@ body { font-family: Inter, 'Segoe UI', sans-serif; background: #0a1628; color: #
 .tp-ai-lang-divider { border: none; border-top: 2px solid #c9a84c44; margin: 48px 0 32px; }
 .tp-ai-lang-label { text-align: center; color: #c9a84c; font-size: 13px; margin-bottom: 32px; }
 .tp-ai-disclaimer { background: #071428; border: 1px solid #c9a84c33; border-radius: 8px; padding: 16px 20px; font-size: 12px; color: #718096; margin-top: 32px; line-height: 1.7; }
-@media (max-width: 600px) { .tp-ai-charts-grid { grid-template-columns: 1fr; } .tp-ai-chart-full { grid-column: 1; } .tp-ai-section { padding: 16px; } }
+@media (max-width: 600px) {
+  .tp-ai-charts-grid { grid-template-columns: 1fr; }
+  .tp-ai-chart-full { grid-column: 1; }
+  .tp-ai-section { padding: 16px; }
+}
 </style>
 </head>
 <body>
 <div class="tp-ai-wrap">
+
 ${buildEnglishReport(en, charts, symbol)}
+
 <hr class="tp-ai-lang-divider">
 <div class="tp-ai-lang-label">◆ النسخة العربية ◆</div>
-${buildArabicReport(ar, symbol)}
+
+${buildArabicReport(ar, charts, symbol)}
+
 </div>
+
 <script>
 (function() {
   const years = ${chartYears};
   const revenue = ${chartRevenue};
   const opIncome = ${chartOp};
   const cashflow = ${chartCf};
+
   const gridColor = '#1e3a5f';
   const tickColor = '#a0aec0';
-  const baseOpts = { responsive: true, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: tickColor }, grid: { color: gridColor } }, x: { ticks: { color: tickColor }, grid: { display: false } } } };
-  if (document.getElementById('aiRevenueChart')) new Chart(document.getElementById('aiRevenueChart'), { type: 'bar', data: { labels: years, datasets: [{ data: revenue, backgroundColor: '#c9a84c', borderRadius: 5 }] }, options: baseOpts });
-  if (document.getElementById('aiOperatingChart')) new Chart(document.getElementById('aiOperatingChart'), { type: 'bar', data: { labels: years, datasets: [{ data: opIncome, backgroundColor: '#1a3c5e', borderColor: '#90cdf4', borderWidth: 1, borderRadius: 5 }] }, options: baseOpts });
-  if (document.getElementById('aiCashflowChart')) new Chart(document.getElementById('aiCashflowChart'), { type: 'line', data: { labels: years, datasets: [{ data: cashflow, borderColor: '#68d391', backgroundColor: '#68d39122', borderWidth: 2, pointBackgroundColor: '#68d391', fill: true, tension: 0.4 }] }, options: baseOpts });
+
+  const baseOpts = {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { ticks: { color: tickColor }, grid: { color: gridColor } },
+      x: { ticks: { color: tickColor }, grid: { display: false } }
+    }
+  };
+
+  // ── English Charts ──────────────────────────────────────────
+  if (document.getElementById('enRevenueChart')) {
+    new Chart(document.getElementById('enRevenueChart'), {
+      type: 'bar',
+      data: { labels: years, datasets: [{ data: revenue, backgroundColor: '#c9a84c', borderRadius: 5 }] },
+      options: baseOpts
+    });
+  }
+
+  if (document.getElementById('enOperatingChart')) {
+    new Chart(document.getElementById('enOperatingChart'), {
+      type: 'bar',
+      data: { labels: years, datasets: [{ data: opIncome, backgroundColor: '#1a3c5e', borderColor: '#90cdf4', borderWidth: 1, borderRadius: 5 }] },
+      options: baseOpts
+    });
+  }
+
+  if (document.getElementById('enCashflowChart')) {
+    new Chart(document.getElementById('enCashflowChart'), {
+      type: 'line',
+      data: { labels: years, datasets: [{ data: cashflow, borderColor: '#68d391', backgroundColor: '#68d39122', borderWidth: 2, pointBackgroundColor: '#68d391', fill: true, tension: 0.4 }] },
+      options: baseOpts
+    });
+  }
+
+  // ── Arabic Charts (same data, Arabic labels in chart title divs) ──
+  if (document.getElementById('arRevenueChart')) {
+    new Chart(document.getElementById('arRevenueChart'), {
+      type: 'bar',
+      data: { labels: years, datasets: [{ data: revenue, backgroundColor: '#c9a84c', borderRadius: 5 }] },
+      options: baseOpts
+    });
+  }
+
+  if (document.getElementById('arOperatingChart')) {
+    new Chart(document.getElementById('arOperatingChart'), {
+      type: 'bar',
+      data: { labels: years, datasets: [{ data: opIncome, backgroundColor: '#1a3c5e', borderColor: '#90cdf4', borderWidth: 1, borderRadius: 5 }] },
+      options: baseOpts
+    });
+  }
+
+  if (document.getElementById('arCashflowChart')) {
+    new Chart(document.getElementById('arCashflowChart'), {
+      type: 'line',
+      data: { labels: years, datasets: [{ data: cashflow, borderColor: '#68d391', backgroundColor: '#68d39122', borderWidth: 2, pointBackgroundColor: '#68d391', fill: true, tension: 0.4 }] },
+      options: baseOpts
+    });
+  }
 })();
 </script>
 </body>
