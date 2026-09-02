@@ -112,6 +112,8 @@ export default function Stock() {
     setMarket(null);
     setPrice(null);
     setHeaderError("");
+    setFmpSymbol("");
+    setProfile(null);
     (async () => {
       try {
         const cj = await getCompany(ticker);
@@ -1213,7 +1215,7 @@ export default function Stock() {
         {/* AI Financial Analyst Report — signed-in users only */}
         <div className="no-print" style={{ marginBottom: 8 }}>
           <Card title={t("AI_REPORT_CARD_TITLE")}>
-            <AiReport symbol={fmpSymbol || ticker} t={t} />
+            <AiReport symbol={fmpSymbol} t={t} />
           </Card>
         </div>
 

@@ -18,9 +18,13 @@ export function AiReport({ symbol, t: tProp }) {
   const [htmlContent, setHtmlContent] = useState("");
   const iframeRef = useRef(null);
   const shownLangRef = useRef(lang);
+  const lastSymbolRef = useRef(symbol);
+  const autoLoadRef = useRef(false);
+  const requestIdRef = useRef(0);
 
   const generate = useCallback(async (forceRefresh = false, { keepVisible } = {}) => {
     if (!symbol || !user) return;
+    const requestId = ++requestIdRef.current;
     if (!keepVisible) {
       setStatus("loading");
       setHtmlContent("");
@@ -37,10 +41,14 @@ export function AiReport({ symbol, t: tProp }) {
         throw new Error(text || `HTTP ${res.status}`);
       }
       const html = await res.text();
+      if (requestId !== requestIdRef.current) return;
       shownLangRef.current = lang;
+      lastSymbolRef.current = symbol;
+      autoLoadRef.current = true;
       setHtmlContent(html);
       setStatus("done");
     } catch (err) {
+      if (requestId !== requestIdRef.current) return;
       setErrorMsg(err.message || "Failed to generate report");
       setStatus("error");
     }
@@ -55,9 +63,25 @@ export function AiReport({ symbol, t: tProp }) {
   }, []);
 
   useEffect(() => {
+    if (lastSymbolRef.current === symbol) return;
+    lastSymbolRef.current = symbol;
+    requestIdRef.current += 1;
+    setHtmlContent("");
+    setErrorMsg("");
+    if (symbol && user && autoLoadRef.current) {
+      generate(false);
+    } else if (autoLoadRef.current && user) {
+      setStatus("loading");
+    } else {
+      setStatus("idle");
+    }
+  }, [symbol, user, generate]);
+
+  useEffect(() => {
     if (status !== "done" || shownLangRef.current === lang) return;
+    if (lastSymbolRef.current !== symbol) return;
     generate(false, { keepVisible: true });
-  }, [lang, status, generate]);
+  }, [lang, status, generate, symbol]);
 
   // GUEST — not signed in
   if (!user) {
