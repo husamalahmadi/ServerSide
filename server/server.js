@@ -783,6 +783,13 @@ function fmpSymbolFromRequest(req) {
   return "";
 }
 
+function parseFmpBeta(raw) {
+  if (raw == null || raw === "") return null;
+  const n = Number(raw);
+  if (!Number.isFinite(n) || n === 0) return null;
+  return n;
+}
+
 function mapFmpProfileRow(raw, requestSymbol) {
   if (!raw || typeof raw !== "object") return null;
   const logoUrl = resolveFmpLogoUrl(raw, requestSymbol);
@@ -797,6 +804,7 @@ function mapFmpProfileRow(raw, requestSymbol) {
     CEO: raw.ceo ?? null,
     website: raw.website ?? null,
     phone: raw.phone ?? null,
+    beta: parseFmpBeta(raw.beta),
     logoUrl,
   };
 }
@@ -807,7 +815,7 @@ app.get(["/api/fmp/profile", "/api/fmp/profile/:symbol"], async (req, res) => {
   const symbol = fmpSymbolFromRequest(req);
   if (!symbol) return res.status(400).json({ error: "symbol query parameter required" });
   try {
-    const data = await cachedFmp(`fmp:profile:v2:${symbol}`, 6 * 3600_000, async () => {
+    const data = await cachedFmp(`fmp:profile:v4:${symbol}`, 6 * 3600_000, async () => {
       const url = `${FMP_STABLE_BASE}/profile?${new URLSearchParams({ symbol, apikey: key })}`;
       const r = await fetch(url);
       const text = await r.text();

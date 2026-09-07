@@ -705,6 +705,7 @@ export default function Stock() {
           chartData={fvChart.data}
           onRetryChart={loadFvChart}
           chartWidth={isMobile ? 300 : 580}
+          beta={profile?.beta}
         />
 
         <div className="no-print" style={{ margin: "8px 0 16px", direction: dir }}>

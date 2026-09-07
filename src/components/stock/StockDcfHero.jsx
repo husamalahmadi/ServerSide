@@ -10,6 +10,53 @@ function pctClass(n) {
   return n > 0 ? "tp-dcf-pos" : "tp-dcf-neg";
 }
 
+function parseBeta(value) {
+  if (value == null || value === "") return null;
+  const n = Number(value);
+  if (!Number.isFinite(n) || n === 0) return null;
+  return n;
+}
+
+function betaBand(beta) {
+  if (beta < 0) return "inverse";
+  if (beta < 0.8) return "defensive";
+  if (beta <= 1.2) return "market";
+  return "aggressive";
+}
+
+function formatBeta(beta) {
+  return beta.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function DcfBetaChip({ t, beta }) {
+  const n = parseBeta(beta);
+  if (n == null) return null;
+  const band = betaBand(n);
+  const hintKey = {
+    inverse: "BETA_INVERSE",
+    defensive: "BETA_DEFENSIVE",
+    market: "BETA_MARKET",
+    aggressive: "BETA_AGGRESSIVE",
+  }[band];
+
+  return (
+    <aside
+      className={`tp-dcf-beta tp-dcf-beta-${band}`}
+      title={t("BETA_HINT")}
+      aria-label={`${t("BETA")} ${formatBeta(n)}. ${t(hintKey)}`}
+    >
+      <span className="tp-dcf-unlocked-label">{t("BETA")}</span>
+      <span className="tp-dcf-beta-value" dir="ltr">
+        <span className="tp-dcf-beta-sym" aria-hidden>
+          β
+        </span>
+        {formatBeta(n)}
+      </span>
+      <span className="tp-dcf-beta-hint">{t(hintKey)}</span>
+    </aside>
+  );
+}
+
 export function StockDcfHero({
   t,
   dir,
@@ -28,6 +75,7 @@ export function StockDcfHero({
   chartData = null,
   onRetryChart,
   chartWidth = 640,
+  beta = null,
 }) {
   const signInLock = useRef(false);
 
@@ -49,6 +97,8 @@ export function StockDcfHero({
   const showChart = chartLoading || chartError || chartData;
   const monthlyPrices = chartData?.monthlyPrices || [];
   const yearlyFairValue = chartData?.yearlyFairValue || [];
+  const parsedBeta = parseBeta(beta);
+  const betaChip = <DcfBetaChip t={t} beta={parsedBeta} />;
 
   const chartBlock = showChart ? (
     <div className="tp-dcf-chart-wrap" id="tp-dcf-fair-value-chart">
@@ -69,9 +119,19 @@ export function StockDcfHero({
           </>
         ) : Number.isFinite(dcf) ? (
           <>
-            <div className="tp-dcf-chart-dcf-label">{t("DCF_FAIR_VALUE")}</div>
-            <div className="tp-dcf-chart-dcf-value">
-              {fmt2(dcf)} <span>{currency}</span>
+            <div className="tp-dcf-chart-dcf-row">
+              <div>
+                <div className="tp-dcf-chart-dcf-label">{t("DCF_FAIR_VALUE")}</div>
+                <div className="tp-dcf-chart-dcf-value">
+                  {fmt2(dcf)} <span>{currency}</span>
+                </div>
+              </div>
+              {parsedBeta != null ? (
+                <div className="tp-dcf-chart-beta">
+                  <span className="tp-dcf-chart-dcf-label">{t("BETA")}</span>
+                  <span className="tp-dcf-chart-beta-value" dir="ltr">β {formatBeta(parsedBeta)}</span>
+                </div>
+              ) : null}
             </div>
             <p className="tp-dcf-chart-dcf-hint">{t("DCF_CHART_DIRECTION")}</p>
           </>
@@ -118,27 +178,45 @@ export function StockDcfHero({
 
       {loading ? (
         <div className="tp-dcf-hero-body tp-dcf-hero-loading">
-          <div className="tp-dcf-skel-value" />
-          <p>{t("DCF_HERO_LOADING")}</p>
+          <div className="tp-dcf-headline">
+            <div>
+              <div className="tp-dcf-skel-value" />
+              <p>{t("DCF_HERO_LOADING")}</p>
+            </div>
+            {betaChip}
+          </div>
           {chartBlock}
         </div>
       ) : error ? (
         <div className="tp-dcf-hero-body tp-dcf-hero-error">
-          <p>{error}</p>
-          {onRetry ? <RetryButton onRetry={onRetry} t={t} /> : null}
+          <div className="tp-dcf-headline">
+            <div>
+              <p>{error}</p>
+              {onRetry ? <RetryButton onRetry={onRetry} t={t} /> : null}
+            </div>
+            {betaChip}
+          </div>
         </div>
       ) : !hasDcf ? (
         <div className="tp-dcf-hero-body tp-dcf-hero-empty">
-          <p>{t("DCF_HERO_UNAVAILABLE")}</p>
+          <div className="tp-dcf-headline">
+            <p>{t("DCF_HERO_UNAVAILABLE")}</p>
+            {betaChip}
+          </div>
           {chartBlock}
         </div>
       ) : locked ? (
         <div className="tp-dcf-hero-body tp-dcf-hero-locked">
           <div className="tp-dcf-locked-grid">
             <div className="tp-dcf-locked-main">
-              <div className="tp-dcf-locked-label">{t("DCF_FAIR_VALUE")}</div>
-              <div className="tp-dcf-locked-blur" aria-hidden>
-                <span className="tp-dcf-locked-mask">●●●.●●</span>
+              <div className="tp-dcf-headline">
+                <div>
+                  <div className="tp-dcf-locked-label">{t("DCF_FAIR_VALUE")}</div>
+                  <div className="tp-dcf-locked-blur" aria-hidden>
+                    <span className="tp-dcf-locked-mask">●●●.●●</span>
+                  </div>
+                </div>
+                {betaChip}
               </div>
               <div className="tp-dcf-locked-hint">{t("DCF_HERO_LOCKED_HINT")}</div>
               <ul className="tp-dcf-locked-list">
@@ -176,21 +254,26 @@ export function StockDcfHero({
         <div className="tp-dcf-hero-body tp-dcf-hero-unlocked">
           <div className="tp-dcf-unlocked-grid">
             <div className="tp-dcf-unlocked-main">
-              <div className="tp-dcf-unlocked-label">{t("DCF_FAIR_VALUE")}</div>
-              <div className="tp-dcf-unlocked-value">
-                {fmt2(dcf)} <span className="tp-dcf-unlocked-ccy">{currency}</span>
+              <div className="tp-dcf-headline">
+                <div>
+                  <div className="tp-dcf-unlocked-label">{t("DCF_FAIR_VALUE")}</div>
+                  <div className="tp-dcf-unlocked-value">
+                    {fmt2(dcf)} <span className="tp-dcf-unlocked-ccy">{currency}</span>
+                  </div>
+                  {Number.isFinite(discountPct) ? (
+                    <div className={`tp-dcf-unlocked-pct ${pctClass(discountPct)}`}>
+                      {discountPct > 0 ? "+" : ""}
+                      {discountPct.toFixed(1)}% {t("DCF_VS_PRICE")}
+                    </div>
+                  ) : null}
+                  {data?.date ? (
+                    <div className="tp-dcf-unlocked-date">
+                      {t("DCF_MODEL_DATE")}: {data.date}
+                    </div>
+                  ) : null}
+                </div>
+                {betaChip}
               </div>
-              {Number.isFinite(discountPct) ? (
-                <div className={`tp-dcf-unlocked-pct ${pctClass(discountPct)}`}>
-                  {discountPct > 0 ? "+" : ""}
-                  {discountPct.toFixed(1)}% {t("DCF_VS_PRICE")}
-                </div>
-              ) : null}
-              {data?.date ? (
-                <div className="tp-dcf-unlocked-date">
-                  {t("DCF_MODEL_DATE")}: {data.date}
-                </div>
-              ) : null}
             </div>
             <div className="tp-dcf-unlocked-aside">
               <CompareBar

@@ -2135,6 +2135,128 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
   color: var(--tp-muted);
 }
 
+.tp-dcf-headline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.85rem 1.35rem;
+}
+
+.tp-dcf-headline > div {
+  min-width: 0;
+  flex: 1 1 10.5rem;
+}
+
+.tp-dcf-beta {
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  min-width: 8.75rem;
+  max-width: 13rem;
+  padding-block: 0.7rem 0.75rem;
+  padding-inline: 1rem 0.9rem;
+  border-radius: var(--tp-radius);
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--tp-border-soft);
+  box-shadow: 0 1px 0 rgba(18, 38, 63, 0.04);
+}
+
+.tp-dcf-beta::before {
+  content: "";
+  position: absolute;
+  inset-block: 11px;
+  inset-inline-start: 0;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--tp-primary);
+}
+
+.tp-dcf-beta-defensive::before {
+  background: #047857;
+}
+
+.tp-dcf-beta-market::before {
+  background: var(--tp-primary);
+}
+
+.tp-dcf-beta-aggressive::before {
+  background: #d97706;
+}
+
+.tp-dcf-beta-inverse::before {
+  background: #7c3aed;
+}
+
+.tp-dcf-beta .tp-dcf-unlocked-label {
+  margin-bottom: 0.15rem;
+}
+
+.tp-dcf-beta-value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.28rem;
+  font-size: 1.65rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  color: var(--tp-ink-strong);
+}
+
+.tp-dcf-beta-sym {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--tp-muted);
+  line-height: 1;
+}
+
+.tp-dcf-beta-defensive .tp-dcf-beta-sym {
+  color: #047857;
+}
+
+.tp-dcf-beta-market .tp-dcf-beta-sym {
+  color: var(--tp-primary-dark);
+}
+
+.tp-dcf-beta-aggressive .tp-dcf-beta-sym {
+  color: #d97706;
+}
+
+.tp-dcf-beta-inverse .tp-dcf-beta-sym {
+  color: #7c3aed;
+}
+
+.tp-dcf-beta-hint {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--tp-muted);
+  font-weight: 600;
+}
+
+.tp-dcf-chart-dcf-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.65rem 1rem;
+}
+
+.tp-dcf-chart-beta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 4.5rem;
+}
+
+.tp-dcf-chart-beta-value {
+  font-size: 1.05rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--tp-ink-strong);
+  line-height: 1.15;
+}
+
 @media (max-width: 768px) {
   .tp-dcf-locked-grid,
   .tp-dcf-unlocked-grid {
@@ -2143,6 +2265,16 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
 
   .tp-dcf-unlocked-value {
     font-size: 1.85rem;
+  }
+
+  .tp-dcf-beta {
+    min-width: 7.5rem;
+    max-width: none;
+    flex: 1 1 8rem;
+  }
+
+  .tp-dcf-beta-value {
+    font-size: 1.45rem;
   }
 }
 
@@ -4977,6 +5109,11 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
     display: none !important;
   }
 
+  .tp-dcf-beta {
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+
   button,
   .tp-signin-google,
   .tp-btn-outline-light {
@@ -5064,5 +5201,10 @@ body.tp-pdf-export .tp-signin-google {
 
 body.tp-pdf-export .tp-dcf-hero-glow {
   display: none !important;
+}
+
+body.tp-pdf-export .tp-dcf-beta {
+  background: #fff !important;
+  box-shadow: none !important;
 }
 
