@@ -145,7 +145,7 @@ export default {
   WACC_LABEL: "Cost of capital",
   WACC_OPPORTUNITY: "Investment opportunity",
   WACC_OPPORTUNITY_COPY:
-    "The share price is below this WACC-based intrinsic value — a potentially attractive entry.",
+    "The share price is below WACC — a potentially attractive entry.",
   FV_CHART_LOADING: "Loading price vs fair value chart…",
   FV_CHART_NO_DATA: "Historical price data is not available for this symbol yet.",
   FV_CHART_PRICE: "Market price",

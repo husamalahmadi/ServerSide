@@ -722,7 +722,6 @@ export default function Stock() {
           chartWidth={isMobile ? 300 : 580}
           beta={profile?.beta}
           wacc={customDcf?.wacc}
-          waccFairValue={customDcf?.fairValue}
         />
 
         <div className="no-print" style={{ margin: "8px 0 16px", direction: dir }}>

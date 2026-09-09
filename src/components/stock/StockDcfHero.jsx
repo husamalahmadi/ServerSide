@@ -70,10 +70,10 @@ function formatWacc(pct) {
   return `${pct.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
 }
 
-function isWaccOpportunity(price, fairValue) {
+function isWaccOpportunity(price, waccPct) {
   const p = Number(price);
-  const fv = Number(fairValue);
-  return Number.isFinite(p) && p > 0 && Number.isFinite(fv) && fv > 0 && p < fv;
+  const w = Number(waccPct);
+  return Number.isFinite(p) && p > 0 && Number.isFinite(w) && w > 0 && p < w;
 }
 
 function DcfWaccChip({ t, wacc, opportunity }) {
@@ -114,7 +114,6 @@ export function StockDcfHero({
   chartWidth = 640,
   beta = null,
   wacc = null,
-  waccFairValue = null,
 }) {
   const signInLock = useRef(false);
 
@@ -138,7 +137,8 @@ export function StockDcfHero({
   const yearlyFairValue = chartData?.yearlyFairValue || [];
   const parsedBeta = parseBeta(beta);
   const parsedWacc = parseWaccPct(wacc);
-  const opportunity = isWaccOpportunity(price, waccFairValue);
+  // Opportunity uses live market price vs WACC only — never DCF or EV fair value.
+  const opportunity = isWaccOpportunity(livePrice, parsedWacc);
   const metricChips =
     parsedBeta != null || parsedWacc != null ? (
       <div className="tp-dcf-metric-chips">
