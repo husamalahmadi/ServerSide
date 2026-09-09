@@ -140,6 +140,12 @@ export default {
   BETA_MARKET: "Moves with the market",
   BETA_AGGRESSIVE: "More volatile than the market",
   BETA_INVERSE: "Moves against the market",
+  WACC: "WACC",
+  WACC_HINT: "Weighted average cost of capital — the discount rate used in this DCF.",
+  WACC_LABEL: "Cost of capital",
+  WACC_OPPORTUNITY: "Investment opportunity",
+  WACC_OPPORTUNITY_COPY:
+    "The share price is below this WACC-based intrinsic value — a potentially attractive entry.",
   FV_CHART_LOADING: "Loading price vs fair value chart…",
   FV_CHART_NO_DATA: "Historical price data is not available for this symbol yet.",
   FV_CHART_PRICE: "Market price",

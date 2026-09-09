@@ -30,6 +30,7 @@ import { MARKET_UNIVERSE_TTL_MS } from "./marketUniverseCache.js";
 import { buildHomeSignals } from "./homeSignals.js";
 import { getHomeSignals, HOME_SIGNALS_TTL_MS } from "./homeSignalsCache.js";
 import { dcfSymbolCandidates, fetchDcfWithFallback } from "./fmpDcf.js";
+import { customDcfCandidates, fetchCustomDcfWithFallback } from "./fmpCustomDcf.js";
 import { fetchFairValueChartData } from "./fmpFairValueChart.js";
 import { buildStocksCatalogPayload } from "./stocksCatalogApi.js";
 import { findStockByTicker, CURRENCY_BY_MARKET, getCatalogPools } from "./stockCatalogLookup.js";
@@ -1038,6 +1039,30 @@ app.get(["/api/fmp/dcf", "/api/fmp/dcf/:symbol"], async (req, res) => {
       });
     }
     res.status(502).json({ error: msg });
+  }
+});
+
+/** WACC and WACC-based fair value from FMP custom-discounted-cash-flow. */
+app.get(["/api/fmp/custom-dcf", "/api/fmp/custom-dcf/:symbol"], async (req, res) => {
+  const key = fmpApiKey();
+  if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  const symbol = fmpSymbolFromRequest(req);
+  if (!symbol) return res.status(400).json({ error: "symbol query parameter required" });
+  const market = String(req.query?.market ?? "").trim().toLowerCase();
+  const candidates = customDcfCandidates(symbol, market);
+  try {
+    const row = await cachedFmp(`fmp:custom-dcf:v1:${candidates.join("|")}`, 6 * 3600_000, async () => {
+      return fetchCustomDcfWithFallback(candidates.length ? candidates : [symbol], key);
+    });
+    res.json({
+      symbol: row.symbol,
+      wacc: row.wacc ?? null,
+      fairValue: row.fairValue ?? null,
+      year: row.year ?? null,
+    });
+  } catch (err) {
+    console.error("[fmp/custom-dcf]", candidates.join(","), err.message);
+    res.json({ symbol, wacc: null, fairValue: null, year: null });
   }
 });
 

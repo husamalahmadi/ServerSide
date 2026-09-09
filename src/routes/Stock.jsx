@@ -16,6 +16,7 @@ import { CompareBar, ChartBlock } from "../components/stock/StockCharts.jsx";
 import { StockNewsSidebar } from "../components/StockNewsSidebar.jsx";
 import { StockDcfHero } from "../components/stock/StockDcfHero.jsx";
 import { fetchStockDcf } from "../services/dcfService.js";
+import { fetchCustomDcf } from "../services/customDcfService.js";
 import { fetchFairValueChart } from "../services/fairValueChartService.js";
 import { fetchKeyMetrics } from "../services/keyMetricsService.js";
 import { fmt2, fmtBill, trendText, calcTrend } from "../domain/formatting.js";
@@ -98,6 +99,7 @@ export default function Stock() {
   const [peersCountdown, setPeersCountdown] = useState(0);
   const [peersRequested, setPeersRequested] = useState(false);
   const [dcf, setDcf] = useState({ loading: false, error: "", data: null });
+  const [customDcf, setCustomDcf] = useState(null);
   const [fvChart, setFvChart] = useState({ loading: false, error: "", data: null });
   const [keyMetrics, setKeyMetrics] = useState({ loading: false, error: "", data: null });
   const [fmpSymbol, setFmpSymbol] = useState("");
@@ -114,6 +116,7 @@ export default function Stock() {
     setHeaderError("");
     setFmpSymbol("");
     setProfile(null);
+    setCustomDcf(null);
     (async () => {
       try {
         const cj = await getCompany(ticker);
@@ -231,6 +234,18 @@ export default function Stock() {
     if (!catalogReady || !fmpSymbol) return;
     loadDcf();
   }, [catalogReady, fmpSymbol, loadDcf, user?.id]);
+
+  const loadCustomDcf = useCallback(async () => {
+    if (!fmpSymbol) return;
+    const data = await fetchCustomDcf(fmpSymbol, market);
+    setCustomDcf(data);
+  }, [fmpSymbol, market]);
+
+  useEffect(() => {
+    setCustomDcf(null);
+    if (!catalogReady || !fmpSymbol) return;
+    loadCustomDcf();
+  }, [catalogReady, fmpSymbol, loadCustomDcf]);
 
   const loadFvChart = useCallback(async () => {
     if (!fmpSymbol) return;
@@ -706,6 +721,8 @@ export default function Stock() {
           onRetryChart={loadFvChart}
           chartWidth={isMobile ? 300 : 580}
           beta={profile?.beta}
+          wacc={customDcf?.wacc}
+          waccFairValue={customDcf?.fairValue}
         />
 
         <div className="no-print" style={{ margin: "8px 0 16px", direction: dir }}>

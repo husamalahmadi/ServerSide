@@ -57,6 +57,43 @@ function DcfBetaChip({ t, beta }) {
   );
 }
 
+function parseWaccPct(value) {
+  if (value == null || value === "") return null;
+  const n = Number(value);
+  if (!Number.isFinite(n) || n === 0) return null;
+  const pct = Math.abs(n) <= 1 ? n * 100 : n;
+  if (pct <= 0 || pct > 80) return null;
+  return pct;
+}
+
+function formatWacc(pct) {
+  return `${pct.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
+}
+
+function isWaccOpportunity(price, fairValue) {
+  const p = Number(price);
+  const fv = Number(fairValue);
+  return Number.isFinite(p) && p > 0 && Number.isFinite(fv) && fv > 0 && p < fv;
+}
+
+function DcfWaccChip({ t, wacc, opportunity }) {
+  const pct = parseWaccPct(wacc);
+  if (pct == null) return null;
+  return (
+    <aside
+      className={`tp-dcf-beta tp-dcf-wacc${opportunity ? " tp-dcf-wacc-hot" : ""}`}
+      title={t("WACC_HINT")}
+      aria-label={`${t("WACC")} ${formatWacc(pct)}${opportunity ? `. ${t("WACC_OPPORTUNITY")}` : ""}`}
+    >
+      <span className="tp-dcf-unlocked-label">{t("WACC")}</span>
+      <span className="tp-dcf-beta-value" dir="ltr">
+        {formatWacc(pct)}
+      </span>
+      <span className="tp-dcf-beta-hint">{t("WACC_LABEL")}</span>
+    </aside>
+  );
+}
+
 export function StockDcfHero({
   t,
   dir,
@@ -76,6 +113,8 @@ export function StockDcfHero({
   onRetryChart,
   chartWidth = 640,
   beta = null,
+  wacc = null,
+  waccFairValue = null,
 }) {
   const signInLock = useRef(false);
 
@@ -98,7 +137,21 @@ export function StockDcfHero({
   const monthlyPrices = chartData?.monthlyPrices || [];
   const yearlyFairValue = chartData?.yearlyFairValue || [];
   const parsedBeta = parseBeta(beta);
-  const betaChip = <DcfBetaChip t={t} beta={parsedBeta} />;
+  const parsedWacc = parseWaccPct(wacc);
+  const opportunity = isWaccOpportunity(price, waccFairValue);
+  const metricChips =
+    parsedBeta != null || parsedWacc != null ? (
+      <div className="tp-dcf-metric-chips">
+        <DcfBetaChip t={t} beta={parsedBeta} />
+        <DcfWaccChip t={t} wacc={parsedWacc} opportunity={opportunity} />
+      </div>
+    ) : null;
+  const opportunityBanner = opportunity ? (
+    <div className="tp-dcf-opportunity" role="status">
+      <span className="tp-dcf-opportunity-badge">{t("WACC_OPPORTUNITY")}</span>
+      <p className="tp-dcf-opportunity-copy">{t("WACC_OPPORTUNITY_COPY")}</p>
+    </div>
+  ) : null;
 
   const chartBlock = showChart ? (
     <div className="tp-dcf-chart-wrap" id="tp-dcf-fair-value-chart">
@@ -130,6 +183,12 @@ export function StockDcfHero({
                 <div className="tp-dcf-chart-beta">
                   <span className="tp-dcf-chart-dcf-label">{t("BETA")}</span>
                   <span className="tp-dcf-chart-beta-value" dir="ltr">β {formatBeta(parsedBeta)}</span>
+                </div>
+              ) : null}
+              {parsedWacc != null ? (
+                <div className="tp-dcf-chart-beta">
+                  <span className="tp-dcf-chart-dcf-label">{t("WACC")}</span>
+                  <span className="tp-dcf-chart-beta-value" dir="ltr">{formatWacc(parsedWacc)}</span>
                 </div>
               ) : null}
             </div>
@@ -183,8 +242,9 @@ export function StockDcfHero({
               <div className="tp-dcf-skel-value" />
               <p>{t("DCF_HERO_LOADING")}</p>
             </div>
-            {betaChip}
+            {metricChips}
           </div>
+          {opportunityBanner}
           {chartBlock}
         </div>
       ) : error ? (
@@ -194,15 +254,17 @@ export function StockDcfHero({
               <p>{error}</p>
               {onRetry ? <RetryButton onRetry={onRetry} t={t} /> : null}
             </div>
-            {betaChip}
+            {metricChips}
           </div>
+          {opportunityBanner}
         </div>
       ) : !hasDcf ? (
         <div className="tp-dcf-hero-body tp-dcf-hero-empty">
           <div className="tp-dcf-headline">
             <p>{t("DCF_HERO_UNAVAILABLE")}</p>
-            {betaChip}
+            {metricChips}
           </div>
+          {opportunityBanner}
           {chartBlock}
         </div>
       ) : locked ? (
@@ -216,8 +278,9 @@ export function StockDcfHero({
                     <span className="tp-dcf-locked-mask">●●●.●●</span>
                   </div>
                 </div>
-                {betaChip}
+                {metricChips}
               </div>
+              {opportunityBanner}
               <div className="tp-dcf-locked-hint">{t("DCF_HERO_LOCKED_HINT")}</div>
               <ul className="tp-dcf-locked-list">
                 <li>{t("DCF_HERO_LOCKED_ITEM1")}</li>
@@ -272,8 +335,9 @@ export function StockDcfHero({
                     </div>
                   ) : null}
                 </div>
-                {betaChip}
+                {metricChips}
               </div>
+              {opportunityBanner}
             </div>
             <div className="tp-dcf-unlocked-aside">
               <CompareBar
