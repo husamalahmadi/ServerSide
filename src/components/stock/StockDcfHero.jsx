@@ -1,6 +1,5 @@
-import React, { useRef } from "react";
+import React from "react";
 import { FairValueChart } from "./FairValueChart.jsx";
-import { GoogleGIcon } from "../GoogleGIcon.jsx";
 import { RetryButton } from "../RetryButton.jsx";
 import { fmt2 } from "../../domain/formatting.js";
 
@@ -107,7 +106,6 @@ function FairValueTile({
   value,
   price,
   showVsPrice = true,
-  locked = false,
   loading = false,
   highlight = false,
   emptyHint = "—",
@@ -115,11 +113,10 @@ function FairValueTile({
 }) {
   const n = Number(value);
   const hasValue = Number.isFinite(n);
-  const pct = !locked && !loading && showVsPrice ? vsPricePct(n, price) : null;
+  const pct = !loading && showVsPrice ? vsPricePct(n, price) : null;
   const className = [
     "tp-fv-tile",
     highlight ? "tp-fv-tile-dcf" : "",
-    locked ? "tp-fv-tile-locked" : "",
     !showVsPrice ? "tp-fv-tile-price" : "",
   ]
     .filter(Boolean)
@@ -130,13 +127,6 @@ function FairValueTile({
       <div className="tp-dcf-unlocked-label">{label}</div>
       {loading ? (
         <div className="tp-dcf-skel-value tp-fv-tile-skel" />
-      ) : locked ? (
-        <>
-          <div className="tp-dcf-locked-blur tp-fv-tile-blur" aria-hidden>
-            <span className="tp-dcf-locked-mask">●●●.●●</span>
-          </div>
-          <div className="tp-dcf-teaser-lock">{t("DCF_HERO_HIDDEN")}</div>
-        </>
       ) : hasValue ? (
         <>
           <div className="tp-fv-tile-value">
@@ -166,9 +156,7 @@ export function StockDcfHero({
   error,
   data,
   livePrice,
-  onSignIn,
   onRetry,
-  signInBusy,
   chartLoading = false,
   chartError = "",
   chartData = null,
@@ -181,19 +169,10 @@ export function StockDcfHero({
   fairError = "",
   onRetryFair,
 }) {
-  const signInLock = useRef(false);
-
-  const handleSignIn = () => {
-    if (signInLock.current) return;
-    signInLock.current = true;
-    onSignIn?.();
-  };
-
-  const locked = data?.locked === true;
-  const dcf = locked ? null : Number(data?.dcf);
+  const dcf = Number(data?.dcf);
   const modelPrice = Number(data?.stockPrice);
   const price = Number.isFinite(Number(livePrice)) ? Number(livePrice) : modelPrice;
-  const hasDcf = locked ? Boolean(data?.hasDcf) : Number.isFinite(dcf);
+  const hasDcf = Number.isFinite(dcf);
   const monthlyPrices = chartData?.monthlyPrices || [];
   const yearlyFairValue = chartData?.yearlyFairValue || [];
   const parsedBeta = parseBeta(beta);
@@ -214,7 +193,7 @@ export function StockDcfHero({
     </div>
   ) : null;
 
-  const dcfFooter = !locked && data?.date ? (
+  const dcfFooter = data?.date ? (
     <div className="tp-dcf-unlocked-date">
       {t("DCF_MODEL_DATE")}: {data.date}
     </div>
@@ -231,21 +210,7 @@ export function StockDcfHero({
       <h2 className="tp-dcf-chart-title">{t("FV_CHART_SECTION")}</h2>
       <div className="tp-dcf-chart-wrap" id="tp-dcf-fair-value-chart">
         <div className={`tp-dcf-chart-dcf-box ${dir === "rtl" ? "is-rtl" : ""}`}>
-        {locked ? (
-          <>
-            <div className="tp-dcf-chart-dcf-lock">{t("DCF_HERO_HIDDEN")}</div>
-            <p className="tp-dcf-chart-dcf-hint">{t("DCF_CHART_DIRECTION_LOCKED")}</p>
-            <button
-              type="button"
-              className="tp-signin-google tp-dcf-chart-signin"
-              onClick={handleSignIn}
-              disabled={signInBusy}
-            >
-              <GoogleGIcon size={14} />
-              {t("DCF_HERO_SIGNIN")}
-            </button>
-          </>
-        ) : Number.isFinite(dcf) ? (
+        {Number.isFinite(dcf) ? (
           <>
             <div className="tp-dcf-chart-dcf-label">{t("DCF_FAIR_VALUE")}</div>
             <div className="tp-dcf-chart-dcf-value">
@@ -312,7 +277,6 @@ export function StockDcfHero({
             label={t("DCF_FAIR_VALUE")}
             value={dcf}
             price={price}
-            locked={locked && hasDcf}
             loading={loading}
             highlight
             emptyHint={dcfEmptyHint}
@@ -355,21 +319,6 @@ export function StockDcfHero({
             emptyHint={fairError || "—"}
           />
         </div>
-
-        {locked && hasDcf ? (
-          <div className="tp-fv-signin-row">
-            <p className="tp-dcf-locked-hint">{t("DCF_HERO_LOCKED_HINT")}</p>
-            <button
-              type="button"
-              className="tp-signin-google tp-dcf-signin"
-              onClick={handleSignIn}
-              disabled={signInBusy}
-            >
-              <GoogleGIcon size={14} />
-              {t("DCF_HERO_SIGNIN")}
-            </button>
-          </div>
-        ) : null}
 
         {fairError && onRetryFair ? (
           <div className="tp-fv-fair-retry">

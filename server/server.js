@@ -986,7 +986,7 @@ app.get(["/api/fmp/key-metrics", "/api/fmp/key-metrics/:symbol"], async (req, re
   }
 });
 
-/** DCF fair value — full figure only for signed-in users (FMP stable discounted-cash-flow). */
+/** DCF fair value — public (FMP stable discounted-cash-flow). */
 app.get(["/api/fmp/dcf", "/api/fmp/dcf/:symbol"], async (req, res) => {
   const key = fmpApiKey();
   if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
@@ -999,16 +999,6 @@ app.get(["/api/fmp/dcf", "/api/fmp/dcf/:symbol"], async (req, res) => {
       return fetchDcfWithFallback(candidates.length ? candidates : [symbol], key);
     });
 
-    if (!req.user) {
-      return res.json({
-        locked: true,
-        symbol: row.symbol,
-        date: row.date,
-        stockPrice: row.stockPrice,
-        hasDcf: true,
-      });
-    }
-
     const stockPrice = row.stockPrice;
     let discountPct = null;
     if (Number.isFinite(stockPrice) && stockPrice > 0) {
@@ -1016,7 +1006,6 @@ app.get(["/api/fmp/dcf", "/api/fmp/dcf/:symbol"], async (req, res) => {
     }
 
     res.json({
-      locked: false,
       symbol: row.symbol,
       date: row.date,
       dcf: row.dcf,
@@ -1031,11 +1020,10 @@ app.get(["/api/fmp/dcf", "/api/fmp/dcf/:symbol"], async (req, res) => {
       msg.startsWith("FMP DCF:");
     if (noData) {
       return res.json({
-        locked: !req.user,
         symbol,
         date: null,
         stockPrice: null,
-        hasDcf: false,
+        dcf: null,
       });
     }
     res.status(502).json({ error: msg });

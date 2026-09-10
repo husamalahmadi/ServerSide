@@ -3,7 +3,6 @@ import { fetchWithRetry, readJsonResponse } from "../utils/apiFetch.js";
 
 /**
  * DCF fair value via Express (FMP stable discounted-cash-flow).
- * Guests receive `locked: true` without the DCF figure; signed-in users get full data.
  */
 export async function fetchStockDcf(fmpSymbol, market) {
   const sym = String(fmpSymbol || "").trim();

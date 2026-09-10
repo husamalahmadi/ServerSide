@@ -711,9 +711,7 @@ export default function Stock() {
           error={dcf.error}
           data={dcf.data}
           livePrice={price}
-          onSignIn={login}
           onRetry={loadDcf}
-          signInBusy={signInNavigating.current}
           chartLoading={fvChart.loading}
           chartError={fvChart.error}
           chartData={fvChart.data}
