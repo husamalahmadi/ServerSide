@@ -88,7 +88,7 @@ export function buildStockNarrative({
     ];
 
     const onPage = [
-      "يتضمن هذا التقرير: ملخصاً تنفيذياً، قيمة DCF العادلة، مخطط السعر مقابل القيمة العادلة، تحليل EV / P/S / P/E، مؤشرات مالية رئيسية، اتجاهات الإيرادات والربحية، حقوق الملكية والتدفق النقدي الحر، ومقارنة أقران القطاع عند الطلب.",
+      "يتضمن هذا التقرير: ملخص القيمة العادلة (DCF وEV وP/S والأرباح وحقوق الملكية مقابل السعر الحالي)، مخطط السعر مقابل القيمة العادلة، ملف السهم، مؤشرات مالية رئيسية، اتجاهات الإيرادات والربحية، حقوق الملكية والتدفق النقدي الحر، ومقارنة أقران القطاع عند الطلب.",
       "يمكنك استخدام الصفحة للبحث عن فجوة السعر عن القيمة، ومراجعة اتجاه الأرباح والتدفقات، ثم مقارنة السهم بشركات مماثلة في نفس الصناعة.",
       "هذا المحتوى تعليمي وبحثي فقط ولا يُعد توصية شراء أو بيع أو استثمار. تحقق دائماً من مصادرك وحدود تحمّل المخاطر قبل أي قرار.",
     ];
@@ -114,7 +114,7 @@ export function buildStockNarrative({
     ];
 
     const onPage = [
-      "This report includes an executive summary, DCF fair value, a price vs fair value chart, EV / P/S / P/E valuation rows, key financial metrics, revenue and income trends, equity and free cash flow charts, and optional same-industry peer comparison.",
+      "This report includes a fair value summary (DCF, EV, P/S, earnings, and equity versus the current price), a price vs fair value chart, a stock profile, key financial metrics, revenue and income trends, equity and free cash flow charts, and optional same-industry peer comparison.",
       "Use the page to gauge whether the stock trades at a discount or premium to estimated value, review earnings and cash-flow direction, and compare the name with sector peers.",
       "All content is for education and research only — not buy, sell, or hold advice. Always verify data and align decisions with your own risk tolerance.",
     ];

@@ -12,14 +12,14 @@ import { translateToArabic } from "../services/translateService.js";
 import { Card } from "../components/Card.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { RetryButton } from "../components/RetryButton.jsx";
-import { CompareBar, ChartBlock } from "../components/stock/StockCharts.jsx";
+import { ChartBlock } from "../components/stock/StockCharts.jsx";
 import { StockNewsSidebar } from "../components/StockNewsSidebar.jsx";
 import { StockDcfHero } from "../components/stock/StockDcfHero.jsx";
 import { fetchStockDcf } from "../services/dcfService.js";
 import { fetchCustomDcf } from "../services/customDcfService.js";
 import { fetchFairValueChart } from "../services/fairValueChartService.js";
 import { fetchKeyMetrics } from "../services/keyMetricsService.js";
-import { fmt2, fmtBill, trendText, calcTrend } from "../domain/formatting.js";
+import { fmt2, fmtBill, calcTrend } from "../domain/formatting.js";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useTrackView } from "../hooks/useActivity.js";
@@ -711,7 +711,6 @@ export default function Stock() {
           error={dcf.error}
           data={dcf.data}
           livePrice={price}
-          user={user}
           onSignIn={login}
           onRetry={loadDcf}
           signInBusy={signInNavigating.current}
@@ -722,108 +721,18 @@ export default function Stock() {
           chartWidth={isMobile ? 300 : 580}
           beta={profile?.beta}
           wacc={customDcf?.wacc}
+          fair={fair}
+          fairLoading={val.loading}
+          fairError={val.error}
+          onRetryFair={loadValuation}
         />
 
         <div className="no-print" style={{ margin: "8px 0 16px", direction: dir }}>
           {howWeCalculateLink}
         </div>
 
-        {/* 1. Executive Summary */}
-        <Card title={t("EXEC_SUM")}>
-          {prefetchCountdown > 0 ? (
-            <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
-              <span>{t("WAITING_BEFORE_FETCH")} {prefetchCountdown}s</span>
-              <span style={{ fontSize: 13 }}>{t("WAITING_PREFETCH_HINT")}</span>
-            </div>
-          ) : fin.loading && !fin.data ? (
-            <div style={{ color: "#64748b" }}>Loading…</div>
-          ) : (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "1.2fr 1fr",
-                gap: 16,
-                alignItems: "start",
-                minWidth: 0,
-              }}
-            >
-              <ul style={{ margin: 0, paddingInlineStart: 18, minWidth: 0 }}>
-                <li style={{ overflowWrap: "anywhere" }}><b>{t("REV_GROWTH")}:</b> {trendText(serRevenue, t)}</li>
-                <li style={{ overflowWrap: "anywhere" }}><b>{t("OP_INCOME")}:</b> {trendText(serOp, t)}</li>
-                <li style={{ overflowWrap: "anywhere" }}><b>{t("NET_INCOME")}:</b> {trendText(serNet, t)}</li>
-                <li style={{ overflowWrap: "anywhere" }}><b>{t("FCF")}:</b> {trendText(serFCF, t)}</li>
-                <li style={{ overflowWrap: "anywhere" }}>
-                  <b>{t("STOCK_VALUATION")}:</b> {t("FAIR_ABBR")} ≈ {fmt2(fairAvg)} {currency}
-                </li>
-              </ul>
-
-              <div style={{ display: "flex", justifyContent: isMobile ? "flex-start" : "flex-end", minWidth: 0 }}>
-                <CompareBar current={price ?? 0} fair={fairAvg ?? 0} currency={currency} dir={dir} t={t} />
-              </div>
-            </div>
-          )}
-        </Card>
-
-        {/* 2. Fair value analysis */}
-        <Card title={t("FAIR_VALUE_SECTION")}>
-          {prefetchCountdown > 0 ? (
-            <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
-              <span>{t("WAITING_BEFORE_FETCH")} {prefetchCountdown}s</span>
-              <span style={{ fontSize: 13 }}>{t("WAITING_PREFETCH_HINT")}</span>
-            </div>
-          ) : val.loading && !val.data ? (
-            <div style={{ color: "#64748b" }}>Loading…</div>
-          ) : val.error ? (
-            <div style={{ color: "#b91c1c" }}>
-              {val.error}
-              <RetryButton onRetry={loadValuation} t={t} />
-            </div>
-          ) : (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "1.2fr 1fr",
-                gap: 16,
-                alignItems: "start",
-                minWidth: 0,
-              }}
-            >
-              <div style={{ display: "grid", gap: 8, minWidth: 0 }}>
-                <div style={{ overflowWrap: "anywhere" }}><b>{t("CUR_PRICE")}:</b> {fmt2(price)} {currency}</div>
-                <div style={{ overflowWrap: "anywhere" }}><b>{t("FAIR_AVG")}:</b> {fmt2(fairAvg)} {currency}</div>
-
-                <div style={{ marginTop: 10, fontWeight: 900 }}>{t("VAL_METHODS")}</div>
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr auto",
-                    gap: 6,
-                    maxWidth: 520,
-                    minWidth: 0,
-                  }}
-                >
-                  <div style={{ overflowWrap: "anywhere" }}>{t("EV_SHARE")}</div>
-                  <div style={{ fontWeight: 800, textAlign: "end" }}>{fmt2(fair?.fairEV)} {currency}</div>
-
-                  <div style={{ overflowWrap: "anywhere" }}>{t("PS_BASED")}</div>
-                  <div style={{ fontWeight: 800, textAlign: "end" }}>{fmt2(fair?.fairPS)} {currency}</div>
-
-                  <div style={{ overflowWrap: "anywhere" }}>{t("PE_BASED")}</div>
-                  <div style={{ fontWeight: 800, textAlign: "end" }}>{fmt2(fair?.fairPE)} {currency}</div>
-
-                  <div style={{ overflowWrap: "anywhere" }}>{t("EQUITY_PER_SHARE")}</div>
-                  <div style={{ fontWeight: 800, textAlign: "end" }}>{fmt2(fair?.equityPerShare)} {currency}</div>
-                </div>
-              </div>
-
-              <div style={{ display: "flex", justifyContent: isMobile ? "flex-start" : "flex-end", minWidth: 0 }}>
-                <CompareBar current={price ?? 0} fair={fairAvg ?? 0} currency={currency} dir={dir} t={t} />
-              </div>
-            </div>
-          )}
-        </Card>
-
-        <Card title={lang === "ar" ? "ملف السهم" : "Stock Profile"}>
+        {/* 2. Stock profile */}
+        <Card title={t("STOCK_PROFILE")}>
           <div style={{ display: "grid", gap: 16, color: "#334155", lineHeight: 1.75, fontSize: 14 }}>
             {stockNarrative.sections.map((sec) => (
               <section key={sec.id}>
@@ -1158,77 +1067,6 @@ export default function Stock() {
           )}
         </Card>
 
-        {/* 7. Company profile */}
-        <Card title={t("COMPANY_PROFILE")}>
-          {prefetchCountdown > 0 ? (
-            <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
-              <span>{t("WAITING_BEFORE_FETCH")} {prefetchCountdown}s</span>
-              <span style={{ fontSize: 13 }}>{t("WAITING_PREFETCH_HINT")}</span>
-            </div>
-          ) : !profile ? (
-            <div style={{ color: "#475569" }}>{t("NO_DATA")}</div>
-          ) : (
-            <div style={{ display: "grid", gap: 12, minWidth: 0, width: "100%" }}>
-              {(() => {
-                const P = lang === "ar" && translatedProfile ? translatedProfile : profile;
-                return (
-                  <>
-                    <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,2fr)", gap: "6px 16px", alignItems: "baseline" }}>
-                      <span style={{ fontWeight: 700, color: "#374151" }}>{t("TICKER")}</span>
-                      <span style={{ overflowWrap: "anywhere" }}>{profile.symbol ?? ticker}</span>
-                      <span style={{ fontWeight: 700, color: "#374151" }}>{t("INDUSTRY")}</span>
-                      <span style={{ overflowWrap: "anywhere" }}>{P.industry || t("NOT_AVAILABLE")}</span>
-                      <span style={{ fontWeight: 700, color: "#374151" }}>{t("SECTOR")}</span>
-                      <span style={{ overflowWrap: "anywhere" }}>{P.sector || t("NOT_AVAILABLE")}</span>
-                    </div>
-                    {(P.description || profile.description) ? (
-                      <>
-                        <div style={{ fontWeight: 700, color: "#374151" }}>{t("DESCRIPTION")}</div>
-                        <p
-                          style={{
-                            margin: 0,
-                            fontSize: 14,
-                            lineHeight: 1.6,
-                            color: "#334155",
-                            width: "100%",
-                            maxWidth: "100%",
-                            boxSizing: "border-box",
-                            textAlign: "justify",
-                            overflowWrap: "break-word",
-                            wordBreak: "break-word",
-                          }}
-                        >
-                          {P.description || profile.description}
-                        </p>
-                      </>
-                    ) : null}
-                    <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,2fr)", gap: "6px 16px", alignItems: "baseline" }}>
-                      <span style={{ fontWeight: 700, color: "#374151" }}>{t("CITY")}</span>
-                      <span style={{ overflowWrap: "anywhere" }}>{P.city || t("NOT_AVAILABLE")}</span>
-                      <span style={{ fontWeight: 700, color: "#374151" }}>{t("COUNTRY")}</span>
-                      <span style={{ overflowWrap: "anywhere" }}>{P.country || t("NOT_AVAILABLE")}</span>
-                      <span style={{ fontWeight: 700, color: "#374151" }}>{t("CEO")}</span>
-                      <span style={{ overflowWrap: "anywhere" }}>{P.CEO || t("NOT_AVAILABLE")}</span>
-                      <span style={{ fontWeight: 700, color: "#374151" }}>{t("WEBSITE")}</span>
-                      <span style={{ overflowWrap: "anywhere" }}>
-                        {profile.website ? (
-                          <a href={profile.website} target="_blank" rel="noopener noreferrer" style={{ color: "#2563eb", textDecoration: "none" }}>
-                            {profile.website}
-                          </a>
-                        ) : (
-                          t("NOT_AVAILABLE")
-                        )}
-                      </span>
-                      <span style={{ fontWeight: 700, color: "#374151" }}>{t("CONTACT")}</span>
-                      <span style={{ overflowWrap: "anywhere" }}>{profile.phone || t("NOT_AVAILABLE")}</span>
-                    </div>
-                  </>
-                );
-              })()}
-            </div>
-          )}
-        </Card>
-
         {/* AI Financial Analyst Report — signed-in users only */}
         <div className="no-print" style={{ marginBottom: 8 }}>
           <Card title={t("AI_REPORT_CARD_TITLE")}>
@@ -1240,52 +1078,6 @@ export default function Stock() {
           <WatchlistManager ticker={ticker} t={t} />
           <StockComments ticker={ticker} t={t} />
         </div>
-
-        {/* Appendix */}
-        <Card title={t("APPENDIX")}>
-          {prefetchCountdown > 0 ? (
-            <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
-              <span>{t("WAITING_BEFORE_FETCH")} {prefetchCountdown}s</span>
-              <span style={{ fontSize: 13 }}>{t("WAITING_PREFETCH_HINT")}</span>
-            </div>
-          ) : fin.loading && !fin.data ? (
-            <div style={{ color: "#64748b" }}>Loading…</div>
-          ) : fin.error ? (
-            <div style={{ color: "#b91c1c" }}>
-              {fin.error}
-              <RetryButton onRetry={loadFinancials} t={t} />
-            </div>
-          ) : !years.length ? (
-            <div style={{ color: "#475569" }}>{t("NO_DATA")}</div>
-          ) : (
-            <div style={{ overflowX: "auto" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
-                <thead>
-                  <tr style={{ background: "#f8fafc" }}>
-                    <th style={{ textAlign: "start", padding: 8, borderBottom: "1px solid #e5e7eb" }}>{t("YEAR")}</th>
-                    <th style={{ textAlign: "end", padding: 8, borderBottom: "1px solid #e5e7eb" }}>{t("REVENUE")}</th>
-                    <th style={{ textAlign: "end", padding: 8, borderBottom: "1px solid #e5e7eb" }}>{t("OP_INCOME")}</th>
-                    <th style={{ textAlign: "end", padding: 8, borderBottom: "1px solid #e5e7eb" }}>{t("NET_INCOME")}</th>
-                    <th style={{ textAlign: "end", padding: 8, borderBottom: "1px solid #e5e7eb" }}>{t("TOTAL_EQUITY")}</th>
-                    <th style={{ textAlign: "end", padding: 8, borderBottom: "1px solid #e5e7eb" }}>{t("FCF")}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {years.map((y) => (
-                    <tr key={y.year}>
-                      <td style={{ padding: 8, borderBottom: "1px solid #f1f5f9", whiteSpace: "nowrap" }}>{y.year}</td>
-                      <td style={{ textAlign: "end", padding: 8, borderBottom: "1px solid #f1f5f9", whiteSpace: "nowrap" }}>{fmtBill(y.revenue)}</td>
-                      <td style={{ textAlign: "end", padding: 8, borderBottom: "1px solid #f1f5f9", whiteSpace: "nowrap" }}>{fmtBill(y.operatingIncome)}</td>
-                      <td style={{ textAlign: "end", padding: 8, borderBottom: "1px solid #f1f5f9", whiteSpace: "nowrap" }}>{fmtBill(y.netIncome)}</td>
-                      <td style={{ textAlign: "end", padding: 8, borderBottom: "1px solid #f1f5f9", whiteSpace: "nowrap" }}>{fmtBill(y.totalEquity)}</td>
-                      <td style={{ textAlign: "end", padding: 8, borderBottom: "1px solid #f1f5f9", whiteSpace: "nowrap" }}>{fmtBill(y.freeCashFlow)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </Card>
         </div>
 
         {market === "us" ? (

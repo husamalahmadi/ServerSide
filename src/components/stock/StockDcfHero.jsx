@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import { CompareBar } from "./StockCharts.jsx";
 import { FairValueChart } from "./FairValueChart.jsx";
 import { GoogleGIcon } from "../GoogleGIcon.jsx";
 import { RetryButton } from "../RetryButton.jsx";
@@ -8,6 +7,13 @@ import { fmt2 } from "../../domain/formatting.js";
 function pctClass(n) {
   if (!Number.isFinite(n) || n === 0) return "";
   return n > 0 ? "tp-dcf-pos" : "tp-dcf-neg";
+}
+
+function vsPricePct(fair, price) {
+  const f = Number(fair);
+  const p = Number(price);
+  if (!Number.isFinite(f) || !Number.isFinite(p) || p <= 0) return null;
+  return ((f - p) / p) * 100;
 }
 
 function parseBeta(value) {
@@ -94,6 +100,63 @@ function DcfWaccChip({ t, wacc, opportunity }) {
   );
 }
 
+function FairValueTile({
+  t,
+  currency,
+  label,
+  value,
+  price,
+  showVsPrice = true,
+  locked = false,
+  loading = false,
+  highlight = false,
+  emptyHint = "—",
+  footer = null,
+}) {
+  const n = Number(value);
+  const hasValue = Number.isFinite(n);
+  const pct = !locked && !loading && showVsPrice ? vsPricePct(n, price) : null;
+  const className = [
+    "tp-fv-tile",
+    highlight ? "tp-fv-tile-dcf" : "",
+    locked ? "tp-fv-tile-locked" : "",
+    !showVsPrice ? "tp-fv-tile-price" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div className={className}>
+      <div className="tp-dcf-unlocked-label">{label}</div>
+      {loading ? (
+        <div className="tp-dcf-skel-value tp-fv-tile-skel" />
+      ) : locked ? (
+        <>
+          <div className="tp-dcf-locked-blur tp-fv-tile-blur" aria-hidden>
+            <span className="tp-dcf-locked-mask">●●●.●●</span>
+          </div>
+          <div className="tp-dcf-teaser-lock">{t("DCF_HERO_HIDDEN")}</div>
+        </>
+      ) : hasValue ? (
+        <>
+          <div className="tp-fv-tile-value">
+            {fmt2(n)} <span className="tp-dcf-unlocked-ccy">{currency}</span>
+          </div>
+          {pct != null ? (
+            <div className={`tp-dcf-unlocked-pct ${pctClass(pct)}`}>
+              {pct > 0 ? "+" : ""}
+              {pct.toFixed(1)}% {t("DCF_VS_PRICE")}
+            </div>
+          ) : null}
+        </>
+      ) : (
+        <div className="tp-fv-tile-empty">{emptyHint}</div>
+      )}
+      {footer}
+    </div>
+  );
+}
+
 export function StockDcfHero({
   t,
   dir,
@@ -103,7 +166,6 @@ export function StockDcfHero({
   error,
   data,
   livePrice,
-  user,
   onSignIn,
   onRetry,
   signInBusy,
@@ -114,6 +176,10 @@ export function StockDcfHero({
   chartWidth = 640,
   beta = null,
   wacc = null,
+  fair = null,
+  fairLoading = false,
+  fairError = "",
+  onRetryFair,
 }) {
   const signInLock = useRef(false);
 
@@ -127,10 +193,6 @@ export function StockDcfHero({
   const dcf = locked ? null : Number(data?.dcf);
   const modelPrice = Number(data?.stockPrice);
   const price = Number.isFinite(Number(livePrice)) ? Number(livePrice) : modelPrice;
-  let discountPct = null;
-  if (!locked && Number.isFinite(dcf) && Number.isFinite(price) && price > 0) {
-    discountPct = ((dcf - price) / price) * 100;
-  }
   const hasDcf = locked ? Boolean(data?.hasDcf) : Number.isFinite(dcf);
   const showChart = chartLoading || chartError || chartData;
   const monthlyPrices = chartData?.monthlyPrices || [];
@@ -152,6 +214,18 @@ export function StockDcfHero({
       <p className="tp-dcf-opportunity-copy">{t("WACC_OPPORTUNITY_COPY")}</p>
     </div>
   ) : null;
+
+  const dcfFooter = !locked && data?.date ? (
+    <div className="tp-dcf-unlocked-date">
+      {t("DCF_MODEL_DATE")}: {data.date}
+    </div>
+  ) : error && onRetry ? (
+    <RetryButton onRetry={onRetry} t={t} />
+  ) : null;
+
+  let dcfEmptyHint = "—";
+  if (error) dcfEmptyHint = error;
+  else if (!loading && !hasDcf) dcfEmptyHint = t("DCF_HERO_UNAVAILABLE");
 
   const chartBlock = showChart ? (
     <div className="tp-dcf-chart-wrap" id="tp-dcf-fair-value-chart">
@@ -235,125 +309,90 @@ export function StockDcfHero({
         <p className="tp-dcf-hero-sub">{t("DCF_HERO_SUB")}</p>
       </header>
 
-      {loading ? (
-        <div className="tp-dcf-hero-body tp-dcf-hero-loading">
-          <div className="tp-dcf-headline">
-            <div>
-              <div className="tp-dcf-skel-value" />
-              <p>{t("DCF_HERO_LOADING")}</p>
-            </div>
-            {metricChips}
-          </div>
-          {opportunityBanner}
-          {chartBlock}
+      <div className="tp-dcf-hero-body">
+        <div className="tp-fv-grid">
+          <FairValueTile
+            t={t}
+            currency={currency}
+            label={t("CUR_PRICE")}
+            value={price}
+            showVsPrice={false}
+          />
+          <FairValueTile
+            t={t}
+            currency={currency}
+            label={t("DCF_FAIR_VALUE")}
+            value={dcf}
+            price={price}
+            locked={locked && hasDcf}
+            loading={loading}
+            highlight
+            emptyHint={dcfEmptyHint}
+            footer={dcfFooter}
+          />
+          <FairValueTile
+            t={t}
+            currency={currency}
+            label={t("EV_FAIR_VALUE")}
+            value={fair?.fairEV}
+            price={price}
+            loading={fairLoading}
+            emptyHint={fairError || "—"}
+          />
+          <FairValueTile
+            t={t}
+            currency={currency}
+            label={t("PS_FAIR_VALUE")}
+            value={fair?.fairPS}
+            price={price}
+            loading={fairLoading}
+            emptyHint={fairError || "—"}
+          />
+          <FairValueTile
+            t={t}
+            currency={currency}
+            label={t("EARNINGS_FAIR_VALUE")}
+            value={fair?.fairPE}
+            price={price}
+            loading={fairLoading}
+            emptyHint={fairError || "—"}
+          />
+          <FairValueTile
+            t={t}
+            currency={currency}
+            label={t("EQUITY_FAIR_VALUE")}
+            value={fair?.equityPerShare}
+            price={price}
+            loading={fairLoading}
+            emptyHint={fairError || "—"}
+          />
         </div>
-      ) : error ? (
-        <div className="tp-dcf-hero-body tp-dcf-hero-error">
-          <div className="tp-dcf-headline">
-            <div>
-              <p>{error}</p>
-              {onRetry ? <RetryButton onRetry={onRetry} t={t} /> : null}
-            </div>
-            {metricChips}
+
+        {locked && hasDcf ? (
+          <div className="tp-fv-signin-row">
+            <p className="tp-dcf-locked-hint">{t("DCF_HERO_LOCKED_HINT")}</p>
+            <button
+              type="button"
+              className="tp-signin-google tp-dcf-signin"
+              onClick={handleSignIn}
+              disabled={signInBusy}
+            >
+              <GoogleGIcon size={14} />
+              {t("DCF_HERO_SIGNIN")}
+            </button>
           </div>
-          {opportunityBanner}
-        </div>
-      ) : !hasDcf ? (
-        <div className="tp-dcf-hero-body tp-dcf-hero-empty">
-          <div className="tp-dcf-headline">
-            <p>{t("DCF_HERO_UNAVAILABLE")}</p>
-            {metricChips}
+        ) : null}
+
+        {fairError && onRetryFair ? (
+          <div className="tp-fv-fair-retry">
+            <RetryButton onRetry={onRetryFair} t={t} />
           </div>
-          {opportunityBanner}
-          {chartBlock}
-        </div>
-      ) : locked ? (
-        <div className="tp-dcf-hero-body tp-dcf-hero-locked">
-          <div className="tp-dcf-locked-grid">
-            <div className="tp-dcf-locked-main">
-              <div className="tp-dcf-headline">
-                <div>
-                  <div className="tp-dcf-locked-label">{t("DCF_FAIR_VALUE")}</div>
-                  <div className="tp-dcf-locked-blur" aria-hidden>
-                    <span className="tp-dcf-locked-mask">●●●.●●</span>
-                  </div>
-                </div>
-                {metricChips}
-              </div>
-              {opportunityBanner}
-              <div className="tp-dcf-locked-hint">{t("DCF_HERO_LOCKED_HINT")}</div>
-              <ul className="tp-dcf-locked-list">
-                <li>{t("DCF_HERO_LOCKED_ITEM1")}</li>
-                <li>{t("DCF_HERO_LOCKED_ITEM2")}</li>
-                <li>{t("DCF_HERO_LOCKED_ITEM3")}</li>
-              </ul>
-              <button
-                type="button"
-                className="tp-signin-google tp-dcf-signin"
-                onClick={handleSignIn}
-                disabled={signInBusy}
-              >
-                <GoogleGIcon size={14} />
-                {t("DCF_HERO_SIGNIN")}
-              </button>
-            </div>
-            <div className="tp-dcf-locked-aside">
-              <div className="tp-dcf-teaser-stat">
-                <span className="tp-dcf-teaser-label">{t("CUR_PRICE")}</span>
-                <span className="tp-dcf-teaser-value">
-                  {Number.isFinite(price) ? `${fmt2(price)} ${currency}` : "—"}
-                </span>
-              </div>
-              <div className="tp-dcf-teaser-stat tp-dcf-teaser-muted">
-                <span className="tp-dcf-teaser-label">{t("DCF_FAIR_VALUE")}</span>
-                <span className="tp-dcf-teaser-lock">{t("DCF_HERO_HIDDEN")}</span>
-              </div>
-              <p className="tp-dcf-teaser-copy">{t("DCF_HERO_TEASER")}</p>
-            </div>
-          </div>
-          {chartBlock}
-        </div>
-      ) : (
-        <div className="tp-dcf-hero-body tp-dcf-hero-unlocked">
-          <div className="tp-dcf-unlocked-grid">
-            <div className="tp-dcf-unlocked-main">
-              <div className="tp-dcf-headline">
-                <div>
-                  <div className="tp-dcf-unlocked-label">{t("DCF_FAIR_VALUE")}</div>
-                  <div className="tp-dcf-unlocked-value">
-                    {fmt2(dcf)} <span className="tp-dcf-unlocked-ccy">{currency}</span>
-                  </div>
-                  {Number.isFinite(discountPct) ? (
-                    <div className={`tp-dcf-unlocked-pct ${pctClass(discountPct)}`}>
-                      {discountPct > 0 ? "+" : ""}
-                      {discountPct.toFixed(1)}% {t("DCF_VS_PRICE")}
-                    </div>
-                  ) : null}
-                  {data?.date ? (
-                    <div className="tp-dcf-unlocked-date">
-                      {t("DCF_MODEL_DATE")}: {data.date}
-                    </div>
-                  ) : null}
-                </div>
-                {metricChips}
-              </div>
-              {opportunityBanner}
-            </div>
-            <div className="tp-dcf-unlocked-aside">
-              <CompareBar
-                current={price ?? 0}
-                fair={dcf}
-                currency={currency}
-                dir={dir}
-                t={t}
-                fairLabel={t("DCF_FAIR_VALUE")}
-              />
-              <p className="tp-dcf-unlocked-note">{t("DCF_HERO_UNLOCKED_NOTE")}</p>
-            </div>
-          </div>
-          {chartBlock}
-        </div>
-      )}
+        ) : null}
+
+        {metricChips}
+        {opportunityBanner}
+        {chartBlock}
+      </div>
     </section>
   );
 }
