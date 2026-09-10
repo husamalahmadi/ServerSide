@@ -194,7 +194,6 @@ export function StockDcfHero({
   const modelPrice = Number(data?.stockPrice);
   const price = Number.isFinite(Number(livePrice)) ? Number(livePrice) : modelPrice;
   const hasDcf = locked ? Boolean(data?.hasDcf) : Number.isFinite(dcf);
-  const showChart = chartLoading || chartError || chartData;
   const monthlyPrices = chartData?.monthlyPrices || [];
   const yearlyFairValue = chartData?.yearlyFairValue || [];
   const parsedBeta = parseBeta(beta);
@@ -227,9 +226,11 @@ export function StockDcfHero({
   if (error) dcfEmptyHint = error;
   else if (!loading && !hasDcf) dcfEmptyHint = t("DCF_HERO_UNAVAILABLE");
 
-  const chartBlock = showChart ? (
-    <div className="tp-dcf-chart-wrap" id="tp-dcf-fair-value-chart">
-      <div className={`tp-dcf-chart-dcf-box ${dir === "rtl" ? "is-rtl" : ""}`}>
+  const chartBlock = (
+    <div className="tp-dcf-chart-section">
+      <h2 className="tp-dcf-chart-title">{t("FV_CHART_SECTION")}</h2>
+      <div className="tp-dcf-chart-wrap" id="tp-dcf-fair-value-chart">
+        <div className={`tp-dcf-chart-dcf-box ${dir === "rtl" ? "is-rtl" : ""}`}>
         {locked ? (
           <>
             <div className="tp-dcf-chart-dcf-lock">{t("DCF_HERO_HIDDEN")}</div>
@@ -246,25 +247,9 @@ export function StockDcfHero({
           </>
         ) : Number.isFinite(dcf) ? (
           <>
-            <div className="tp-dcf-chart-dcf-row">
-              <div>
-                <div className="tp-dcf-chart-dcf-label">{t("DCF_FAIR_VALUE")}</div>
-                <div className="tp-dcf-chart-dcf-value">
-                  {fmt2(dcf)} <span>{currency}</span>
-                </div>
-              </div>
-              {parsedBeta != null ? (
-                <div className="tp-dcf-chart-beta">
-                  <span className="tp-dcf-chart-dcf-label">{t("BETA")}</span>
-                  <span className="tp-dcf-chart-beta-value" dir="ltr">β {formatBeta(parsedBeta)}</span>
-                </div>
-              ) : null}
-              {parsedWacc != null ? (
-                <div className="tp-dcf-chart-beta">
-                  <span className="tp-dcf-chart-dcf-label">{t("WACC")}</span>
-                  <span className="tp-dcf-chart-beta-value" dir="ltr">{formatWacc(parsedWacc)}</span>
-                </div>
-              ) : null}
+            <div className="tp-dcf-chart-dcf-label">{t("DCF_FAIR_VALUE")}</div>
+            <div className="tp-dcf-chart-dcf-value">
+              {fmt2(dcf)} <span>{currency}</span>
             </div>
             <p className="tp-dcf-chart-dcf-hint">{t("DCF_CHART_DIRECTION")}</p>
           </>
@@ -283,7 +268,7 @@ export function StockDcfHero({
           <p>{chartError}</p>
           {onRetryChart ? <RetryButton onRetry={onRetryChart} t={t} /> : null}
         </div>
-      ) : (
+      ) : chartData ? (
         <FairValueChart
           monthlyPrices={monthlyPrices}
           yearlyFairValue={yearlyFairValue}
@@ -293,9 +278,12 @@ export function StockDcfHero({
           t={t}
           w={chartWidth}
         />
+      ) : (
+        <p className="tp-dcf-chart-dcf-hint">{t("FV_CHART_NO_DATA")}</p>
       )}
+      </div>
     </div>
-  ) : null;
+  );
 
   return (
     <section className="tp-dcf-hero" dir={dir} aria-label={t("DCF_HERO_ARIA")}>

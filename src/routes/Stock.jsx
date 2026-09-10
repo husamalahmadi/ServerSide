@@ -522,7 +522,7 @@ export default function Stock() {
   );
 
   const keyMetricsCard = (
-    <Card title={lang === "ar" ? "٣. المؤشرات المالية الرئيسية" : "3. Key Metrics"}>
+    <Card title={t("KEY_METRICS")}>
       {!fmpSymbol ? (
         <div style={{ color: "#64748b" }}>{t("LOADING")}</div>
       ) : keyMetrics.loading && !keyMetrics.data ? (
@@ -731,7 +731,7 @@ export default function Stock() {
           {howWeCalculateLink}
         </div>
 
-        {/* 2. Stock profile */}
+        {/* 3. Stock profile */}
         <Card title={t("STOCK_PROFILE")}>
           <div style={{ display: "grid", gap: 16, color: "#334155", lineHeight: 1.75, fontSize: 14 }}>
             {stockNarrative.sections.map((sec) => (
@@ -758,10 +758,10 @@ export default function Stock() {
           </div>
         </Card>
 
-        {/* 3. Key Metrics (FMP key-metrics) */}
+        {/* 4. Key Metrics (FMP key-metrics) */}
         {keyMetricsCard}
 
-        {/* 4. Revenue & Income */}
+        {/* 5. Revenue & Income */}
         <Card title={`${t("REV_INC_TITLE")} (${currency})`}>
           {prefetchCountdown > 0 ? (
             <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
@@ -784,7 +784,7 @@ export default function Stock() {
           )}
         </Card>
 
-        {/* 5. Equity & FCF */}
+        {/* 6. Equity & FCF */}
         <Card title={`${t("EQUITY_FCF_TITLE")} (${currency})`}>
           {prefetchCountdown > 0 ? (
             <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
@@ -806,7 +806,7 @@ export default function Stock() {
           )}
         </Card>
 
-        {/* 6. Industry peers (EV-based fair value) – button + 8s wait */}
+        {/* 7. Industry peers (EV-based fair value) – button + 8s wait */}
         <Card title={t("INDUSTRY_PEERS_EV")}>
           {!user ? (
             <div style={{ display: "grid", gap: 12 }}>
@@ -993,7 +993,7 @@ export default function Stock() {
           )}
         </Card>
 
-        {/* 6. Investment summary */}
+        {/* 8. Investment summary */}
         <Card title={t("INVESTMENT_SUMMARY")}>
           {prefetchCountdown > 0 ? (
             <div style={{ color: "#64748b", display: "grid", gap: 4 }}>

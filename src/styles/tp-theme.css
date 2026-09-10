@@ -2441,9 +2441,21 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
 }
 
 /* —— DCF hero: price vs EV fair value chart —— */
+.tp-dcf-chart-section {
+  margin-top: 1.15rem;
+}
+
+.tp-dcf-chart-title {
+  margin: 0 0 0.7rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--tp-ink-strong);
+  line-height: 1.25;
+}
+
 .tp-dcf-chart-wrap {
   position: relative;
-  margin-top: 1.25rem;
+  margin-top: 0;
   padding: 0.75rem 0.85rem 0.65rem;
   border-radius: var(--tp-radius-md);
   border: 1px solid #dbeafe;
