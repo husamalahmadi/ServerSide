@@ -5,19 +5,27 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
 const BRAND = { r: 44, g: 123, b: 229 };
+const GOLD = { r: 201, g: 168, b: 76 };
 const MARGIN_MM = 12;
 const HEADER_MM = 16;
 const FOOTER_MM = 10;
 
+function accentColor(meta) {
+  if (meta?.theme === "gold") return GOLD;
+  if (meta?.accent && Number.isFinite(meta.accent.r)) return meta.accent;
+  return BRAND;
+}
+
 function drawPageChrome(pdf, pageNum, totalPages, meta) {
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
+  const accent = accentColor(meta);
 
-  pdf.setDrawColor(BRAND.r, BRAND.g, BRAND.b);
+  pdf.setDrawColor(accent.r, accent.g, accent.b);
   pdf.setLineWidth(0.35);
   pdf.line(MARGIN_MM, HEADER_MM, pageWidth - MARGIN_MM, HEADER_MM);
 
-  pdf.setFillColor(BRAND.r, BRAND.g, BRAND.b);
+  pdf.setFillColor(accent.r, accent.g, accent.b);
   pdf.roundedRect(MARGIN_MM, 7, 8, 8, 1.5, 1.5, "F");
   pdf.setFont("helvetica", "bold");
   pdf.setFontSize(6);
@@ -50,18 +58,19 @@ function drawPageChrome(pdf, pageNum, totalPages, meta) {
   pdf.text(`Page ${pageNum} of ${totalPages}`, pageWidth - MARGIN_MM, pageHeight - 5, { align: "right" });
 }
 
-export async function exportElementAsPdf(element, filename = "report.pdf", meta = {}) {
+export async function exportElementAsPdf(element, filename = "report.pdf", meta = {}, options = {}) {
   if (!element) return;
 
   document.body.classList.add("tp-pdf-export");
   let canvas;
   try {
     canvas = await html2canvas(element, {
-      scale: 2,
+      scale: options.scale ?? 2,
       useCORS: true,
       logging: false,
-      backgroundColor: "#ffffff",
-      windowWidth: element.scrollWidth,
+      backgroundColor: options.backgroundColor ?? "#ffffff",
+      windowWidth: Math.max(element.scrollWidth, element.clientWidth, 800),
+      height: Math.max(element.scrollHeight, element.clientHeight, 1),
     });
   } finally {
     document.body.classList.remove("tp-pdf-export");
@@ -89,4 +98,88 @@ export async function exportElementAsPdf(element, filename = "report.pdf", meta 
   }
 
   pdf.save(filename);
+}
+
+function waitForImages(root) {
+  const imgs = [...(root.querySelectorAll?.("img") || [])];
+  return Promise.all(
+    imgs.map((img) => {
+      if (img.complete) return null;
+      return new Promise((resolve) => {
+        img.onload = resolve;
+        img.onerror = resolve;
+      });
+    }),
+  );
+}
+
+/**
+ * Capture an iframe's rendered report (including Chart.js canvases) as a branded PDF.
+ * Clones into the parent document so html2canvas can read styles and pixels.
+ */
+export async function exportIframeDocumentAsPdf(iframe, filename, meta = {}, options = {}) {
+  const idoc = iframe?.contentDocument;
+  if (!idoc?.body) throw new Error("Report is not ready to export");
+
+  const bg = options.backgroundColor ?? "#0a1628";
+  const sourceWidth = Math.max(idoc.body.scrollWidth, idoc.documentElement.scrollWidth, 800);
+
+  const host = document.createElement("div");
+  host.setAttribute("data-tp-ai-pdf-host", "1");
+  host.style.cssText = [
+    "position:fixed",
+    "left:-12000px",
+    "top:0",
+    `width:${sourceWidth}px`,
+    "z-index:0",
+    "pointer-events:none",
+    `background:${bg}`,
+  ].join(";");
+
+  for (const node of idoc.querySelectorAll("style")) {
+    host.appendChild(node.cloneNode(true));
+  }
+
+  const wrap = document.createElement("div");
+  wrap.setAttribute("dir", idoc.documentElement.getAttribute("dir") || "ltr");
+  wrap.lang = idoc.documentElement.lang || "";
+  wrap.style.cssText = `font-family: Inter, 'Segoe UI', sans-serif; background:${bg}; color:#e8e8e8;`;
+  wrap.innerHTML = idoc.body.innerHTML;
+  wrap.querySelectorAll("script").forEach((s) => s.remove());
+
+  const srcCanvases = [...idoc.querySelectorAll("canvas")];
+  const dstCanvases = [...wrap.querySelectorAll("canvas")];
+  srcCanvases.forEach((src, i) => {
+    const dst = dstCanvases[i];
+    if (!dst) return;
+    let dataUrl = "";
+    try {
+      dataUrl = src.toDataURL("image/png");
+    } catch {
+      return;
+    }
+    const img = document.createElement("img");
+    img.src = dataUrl;
+    img.alt = "";
+    const w = src.clientWidth || src.width;
+    const h = src.clientHeight || src.height;
+    img.width = w;
+    img.height = h;
+    img.style.width = `${w}px`;
+    img.style.height = `${h}px`;
+    img.style.display = "block";
+    img.style.maxWidth = "100%";
+    dst.replaceWith(img);
+  });
+
+  host.appendChild(wrap);
+  document.body.appendChild(host);
+
+  try {
+    await waitForImages(wrap);
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    await exportElementAsPdf(wrap, filename, meta, { ...options, backgroundColor: bg });
+  } finally {
+    host.remove();
+  }
 }

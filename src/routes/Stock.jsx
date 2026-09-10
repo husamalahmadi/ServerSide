@@ -1065,7 +1065,7 @@ export default function Stock() {
           )}
         </Card>
 
-        {/* AI Financial Analyst Report — signed-in users only */}
+        {/* 9. Financial analysis report using AI */}
         <div className="no-print" style={{ marginBottom: 8 }}>
           <Card title={t("AI_REPORT_CARD_TITLE")}>
             <AiReport symbol={fmpSymbol} t={t} />

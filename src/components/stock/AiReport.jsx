@@ -8,6 +8,17 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useI18n } from "../../i18n.jsx";
 import { getApiUrl } from "../../config/env.js";
+import { exportIframeDocumentAsPdf } from "../../utils/exportPdf.js";
+
+function PdfGlyph() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M14 2v6h6" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M8 13h8M8 17h5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 export function AiReport({ symbol, t: tProp }) {
   const { user, login } = useAuth();
@@ -16,6 +27,8 @@ export function AiReport({ symbol, t: tProp }) {
   const [status, setStatus] = useState("idle"); // idle | loading | done | error
   const [errorMsg, setErrorMsg] = useState("");
   const [htmlContent, setHtmlContent] = useState("");
+  const [pdfExporting, setPdfExporting] = useState(false);
+  const [pdfError, setPdfError] = useState("");
   const iframeRef = useRef(null);
   const shownLangRef = useRef(lang);
   const lastSymbolRef = useRef(symbol);
@@ -55,12 +68,42 @@ export function AiReport({ symbol, t: tProp }) {
   }, [symbol, user, lang]);
 
   const onIframeLoad = useCallback(() => {
-    if (!iframeRef.current) return;
-    try {
-      const doc = iframeRef.current.contentDocument;
-      if (doc?.body) iframeRef.current.style.height = doc.body.scrollHeight + 32 + "px";
-    } catch {}
+    const resize = () => {
+      if (!iframeRef.current) return;
+      try {
+        const doc = iframeRef.current.contentDocument;
+        if (doc?.body) iframeRef.current.style.height = `${doc.body.scrollHeight + 32}px`;
+      } catch {}
+    };
+    resize();
+    setTimeout(resize, 700);
   }, []);
+
+  const exportPdf = useCallback(async () => {
+    if (!iframeRef.current || pdfExporting || status !== "done") return;
+    setPdfError("");
+    setPdfExporting(true);
+    try {
+      const safeSymbol = String(symbol || "report").replace(/[^\w.-]/g, "").slice(0, 24);
+      const filename = `${safeSymbol || "report"}-ai-financial-analysis-${new Date().toISOString().slice(0, 10)}.pdf`;
+      await exportIframeDocumentAsPdf(
+        iframeRef.current,
+        filename,
+        {
+          title: `${symbol} · AI financial analysis`,
+          date: new Date().toISOString().slice(0, 10),
+          disclaimer: "For informational purposes only. Not investment advice.",
+          theme: "gold",
+        },
+        { backgroundColor: "#0a1628", scale: 2 },
+      );
+    } catch (err) {
+      console.error("AI report PDF export failed:", err);
+      setPdfError(t("AI_REPORT_EXPORT_FAILED"));
+    } finally {
+      setPdfExporting(false);
+    }
+  }, [pdfExporting, status, symbol, t]);
 
   useEffect(() => {
     if (lastSymbolRef.current === symbol) return;
@@ -118,11 +161,22 @@ export function AiReport({ symbol, t: tProp }) {
           <div style={{ color: "#c9a84c", fontWeight: 700, fontSize: 15, marginBottom: 3 }}>{t("AI_REPORT_TITLE")}</div>
           <div style={{ color: "#a0aec0", fontSize: 12 }}>{t("AI_REPORT_SUBTITLE")}</div>
         </div>
-        <div style={{ display: "flex", gap: 8 }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
           {status === "done" && (
-            <button onClick={() => generate(true)} style={{ background: "transparent", border: "1px solid #c9a84c44", color: "#a0aec0", borderRadius: 6, padding: "6px 14px", fontSize: 12, cursor: "pointer" }}>
-              {t("AI_REPORT_REFRESH")}
-            </button>
+            <>
+              <button
+                type="button"
+                className="tp-ai-pdf-btn"
+                onClick={exportPdf}
+                disabled={pdfExporting}
+              >
+                <PdfGlyph />
+                {pdfExporting ? t("AI_REPORT_EXPORTING") : t("AI_REPORT_EXPORT_PDF")}
+              </button>
+              <button onClick={() => generate(true)} style={{ background: "transparent", border: "1px solid #c9a84c44", color: "#a0aec0", borderRadius: 6, padding: "6px 14px", fontSize: 12, cursor: "pointer" }}>
+                {t("AI_REPORT_REFRESH")}
+              </button>
+            </>
           )}
           {status !== "loading" && status !== "done" && (
             <button onClick={() => generate(false)} style={{ background: "#c9a84c", border: "none", color: "#0a1628", borderRadius: 8, padding: "10px 22px", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
@@ -156,6 +210,12 @@ export function AiReport({ symbol, t: tProp }) {
         </div>
       )}
 
+      {pdfError ? (
+        <div style={{ background: "#1a0000", border: "1px solid #fc8181", borderRadius: 10, padding: "10px 14px", color: "#fc8181", fontSize: 13, marginBottom: 12 }}>
+          {pdfError}
+        </div>
+      ) : null}
+
       {/* Report iframe */}
       {status === "done" && htmlContent && (
         <iframe
@@ -164,7 +224,7 @@ export function AiReport({ symbol, t: tProp }) {
           onLoad={onIframeLoad}
           title={`${t("AI_REPORT_IFRAME_TITLE")} ${symbol}`}
           style={{ width: "100%", minHeight: 600, border: "none", borderRadius: 10, background: "#0a1628" }}
-          sandbox="allow-scripts"
+          sandbox="allow-scripts allow-same-origin"
         />
       )}
     </div>
