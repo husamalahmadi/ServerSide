@@ -4,6 +4,8 @@
  */
 export function initWebVitalsReporting() {
   if (typeof window === "undefined") return;
+  // Five vitals per page were most of the GA4 event volume. Keep a 10% sample.
+  if (Math.random() >= 0.1) return;
 
   import("web-vitals")
     .then(({ onCLS, onINP, onLCP, onFCP, onTTFB }) => {

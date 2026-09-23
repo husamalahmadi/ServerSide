@@ -34,6 +34,7 @@ import { customDcfCandidates, fetchCustomDcfWithFallback } from "./fmpCustomDcf.
 import { fetchFairValueChartData } from "./fmpFairValueChart.js";
 import { buildStocksCatalogPayload } from "./stocksCatalogApi.js";
 import { findStockByTicker, CURRENCY_BY_MARKET, getCatalogPools } from "./stockCatalogLookup.js";
+import { createTasiProgram } from "./tasiProgram.js";
 import {
   migrateWatchlistFairValueColumns,
   runWatchlistFairValueSweepIfIdle,
@@ -51,6 +52,7 @@ import {
   unsubscribeByToken,
 } from "./emailNotifications.js";
 import { renderUnsubscribeConfirmPage, renderUnsubscribePage } from "./emailTemplates.js";
+import { sendDueWeeklyDigests, subscribeDigest, unsubscribeDigest } from "./digestSubscribers.js";
 import { generateAiReport } from "./aiReport.js";
 import { renderAiReport } from "./aiReportRenderer.js";
 import { injectSeoIntoSpaHtml, buildStockStaticFallback } from "./spaHtmlSeo.js";
@@ -572,6 +574,30 @@ app.post("/api/email/unsubscribe", (req, res) => {
   res.status(200).type("html").send(renderUnsubscribePage({ siteUrl: CLIENT_URL }));
 });
 
+app.post("/api/email/digest-subscribe", (req, res) => {
+  const result = subscribeDigest(db, { email: req.body?.email, lang: req.body?.lang });
+  if (!result.ok) return res.status(400).json(result);
+  res.json({ ok: true });
+});
+
+app.get("/api/email/digest-unsubscribe", (req, res) => {
+  res
+    .status(200)
+    .type("html")
+    .send(
+      renderUnsubscribeConfirmPage({
+        siteUrl: CLIENT_URL,
+        token: req.query?.token,
+        actionPath: "/api/email/digest-unsubscribe",
+      })
+    );
+});
+
+app.post("/api/email/digest-unsubscribe", (req, res) => {
+  unsubscribeDigest(db, req.query?.token);
+  res.status(200).type("html").send(renderUnsubscribePage({ siteUrl: CLIENT_URL }));
+});
+
 /**
  * Both daily jobs also run on in-process timers, but Render's free tier sleeps, so those
  * timers can miss days. These routes let one external scheduler (e.g. cron-job.org) drive
@@ -602,6 +628,9 @@ app.post("/api/internal/run-sweep", requireInternalToken, (req, res) => {
 app.post("/api/internal/dispatch-emails", requireInternalToken, (req, res) => {
   if (!emailConfigured()) return res.status(503).json({ error: "email not configured" });
   void runFairValueEmailDispatchIfIdle({ db, siteUrl: CLIENT_URL, apiUrl: SERVER_URL });
+  void sendDueWeeklyDigests({ db, siteUrl: CLIENT_URL, apiUrl: SERVER_URL }).catch((err) => {
+    console.warn("[email] weekly digest failed:", err?.message || err);
+  });
   res.status(202).json({ ok: true, started: true });
 });
 
@@ -1574,6 +1603,12 @@ app.get("/api/analytics/trending", (req, res) => {
 /** Per-route canonical injection so non-JS crawlers don't see the homepage canonical on every page. */
 const CANONICAL_SITE = `https://${CANONICAL_HOST}`;
 configureSeoSiteUrl(CANONICAL_SITE);
+const tasiProgram = createTasiProgram({
+  screenerStore,
+  financialsStore: fmpFinancialsStore,
+  siteUrl: CANONICAL_SITE,
+});
+tasiProgram.register(app, requireInternalToken);
 let _spaIndexTemplate = null;
 let _spaIndexTemplatePath = "";
 
@@ -1747,6 +1782,7 @@ app.get("*", (req, res, next) => {
   if (req.path.startsWith("/assets")) {
     return res.status(404).type("text/plain").send("Not found");
   }
+  if (tasiProgram.maybeRedirect(req, res)) return;
   trySendBlogStatic(req, res, () => {
   trySendTutorialStatic(req, res, () => {
   const knownRoutePatterns = [
@@ -1769,7 +1805,8 @@ app.get("*", (req, res, next) => {
     /^\/us-markets\/?$/,
     /^\/sa-markets\/?$/,
   ];
-  const isKnownSpaRoute = knownRoutePatterns.some((re) => re.test(req.path));
+  const tasiSeo = tasiProgram.seoInject(req);
+  const isKnownSpaRoute = knownRoutePatterns.some((re) => re.test(req.path)) || Boolean(tasiSeo);
   const indexHtml = join(staticPath, "index.html");
   if (!existsSync(indexHtml)) {
     return res.status(503).type("text/plain").send("Client build missing. Run npm run build at repo root.");
@@ -1780,7 +1817,7 @@ app.get("*", (req, res, next) => {
   }
   try {
     const seoInject = isKnownSpaRoute
-      ? tutorialSeoInjectForRequest(req) || stockSeoInjectForRequest(req) || blogsSeoInjectForRequest(req)
+      ? tutorialSeoInjectForRequest(req) || stockSeoInjectForRequest(req) || blogsSeoInjectForRequest(req) || tasiSeo
       : null;
     const canonical = isKnownSpaRoute
       ? canonicalUrlForPath(seoInject?.seo?.pathname || req.path)

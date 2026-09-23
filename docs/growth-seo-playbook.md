@@ -17,9 +17,11 @@ Done in the app:
 
 Operational (manual, not code — owners must execute):
 
-- [ ] Produce the 50 Arabic posts and apply the post template (Sections 2 & 3)
-- [ ] Backlink outreach workflow (Section 4)
-- [ ] Maintain publishing cadence + submit sitemap in Search Console (Section 5)
+- [x] Retire the 50 generic Arabic explainers. Pages below are built from the TASI catalog and the fair-value cache (Section 2).
+- [ ] Search Console: submit `https://trueprice.cash/sitemap.xml` so `sitemap-tasi.xml` is discovered (Section 5)
+- [ ] cron-job.org: `POST /api/internal/publish-earnings` every 2 hours, and `POST /api/internal/daily-gap-post` once a day, header `x-internal-token` (Section 7)
+- [ ] Set `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, and `X_USER_ACCESS_TOKEN` if those posts should leave the server (Section 7)
+- [ ] Backlink outreach with one fresh number, not a pitch for the site (Section 4)
 - [ ] Build/maintain the public Notion traffic dashboard (Section 6)
 
 ## 1) Templated stock profile pages
@@ -37,102 +39,42 @@ Required blocks on every stock page:
 4. A short "Stock Profile" narrative (added)
 5. Structured data JSON-LD (added)
 
-## 2) 50 Arabic posts backlog (ready-to-produce)
+## 2) Programmatic Arabic pages (replaces the 50 generic posts)
 
-Publish cadence: 4 posts/week for 12-13 weeks.
+Clusters A–E (generic explainers such as "ما هي القيمة العادلة للسهم؟") are retired. Argaam, Mubasher, and Sabq already own those queries. These URLs carry the numbers the screener already computes, and they refresh when that cache refreshes:
 
-### Cluster A: Basics of valuation (10)
-1. ما هي القيمة العادلة للسهم؟ دليل مبسط للمبتدئين
-2. متى يكون مضاعف الربحية P/E مضللاً؟
-3. مضاعف القيمة الدفترية P/B: متى يفيد ومتى لا؟
-4. كيف تقرأ التدفق النقدي الحر FCF بسرعة
-5. الفرق بين الأرباح المحاسبية والتدفقات النقدية
-6. لماذا نمو الإيرادات وحده لا يكفي
-7. فهم هامش التشغيل وتأثيره على التقييم
-8. كيف تبني سيناريو متحفظ للقيمة العادلة
-9. أخطاء شائعة في تقييم الأسهم السعودية
-10. متى تعتبر السهم "مبالغاً في تقييمه"؟
+- `/ar/tasi/أسهم-أقل-من-قيمتها-العادلة` — TASI names whose fair value sits above the price
+- `/ar/sa-markets/:sector` — one page per TASI sector in `tasi_grouped_by_industry.json`
+- `/ar/compare/:a-vs-:b` — a name versus the next three tickers in the same sector (canonical order is the lower ticker first)
+- `/ar/tasi/نتائج-الشركات` — every TASI name, with a commentary link after a new period is stored
+- `/ar/tasi/نتائج/:ticker/:period` — commentary from revenue, net income, EPS, and the fair-value gap. Missing figures stay an em dash.
 
-### Cluster B: Reading financial statements (10)
-11. كيف تقرأ قائمة الدخل في دقيقة واحدة
-12. قراءة الميزانية العمومية للمستثمر طويل الأجل
-13. أهم 5 إشارات خطر في القوائم المالية
-14. كيف تربط بين الدخل والتدفق النقدي
-15. تحليل جودة الأرباح: خطوات عملية
-16. أثر الديون على تقييم السهم
-17. ما معنى ارتفاع حقوق المساهمين عبر الزمن؟
-18. كيف تكتشف التوسع غير الصحي في التكاليف
-19. مقارنة قطاعية: أي النسب أهم لكل قطاع؟
-20. Checklist قبل اتخاذ قرار استثماري
+`sitemap-tasi.xml` lists the undervalued page, the calendar, each sector, and the compare pairs.
 
-### Cluster C: TASI-specific practical analysis (10)
-21. كيف تحلل أسهم البنوك السعودية
-22. كيف تحلل أسهم البتروكيماويات في TASI
-23. تحليل شركات التجزئة: مؤشرات مهمة
-24. ما الذي يميز تقييم شركات الاتصالات؟
-25. كيف تقرأ أسهم النمو في السوق السعودي
-26. أسهم التوزيعات: كيف توازن بين العائد والنمو
-27. متى تكون المضاربات خطراً على المستثمر؟
-28. تحليل أثر أسعار النفط على القطاعات السعودية
-29. ما أفضل طريقة لمقارنة سهمين في نفس القطاع؟
-30. كيف تتعامل مع التقلبات الموسمية في الأرباح
+## 3) What a commentary page contains
 
-### Cluster D: Earnings commentary (10)
-31. كيف تقرأ نتائج الربع المالي بشكل احترافي
-32. الفرق بين نمو حقيقي ونمو مؤقت في الأرباح
-33. ماذا تعني "توقعات الإدارة" للمستثمر؟
-34. إشارات إيجابية بعد إعلان النتائج
-35. إشارات سلبية يجب عدم تجاهلها
-36. هل السهم يستحق الشراء بعد قفزة النتائج؟
-37. كيف تقيم استدامة نمو الأرباح
-38. أثر البنود غير المتكررة على التحليل
-39. مقارنة نتائج الشركة مع متوسط القطاع
-40. إطار ثابت لكتابة تعليق نتائج ربع سنوي
+- Company, ticker, period end date
+- Revenue, net income, EPS (only when the source has them)
+- Price, fair value, and gap when the screener cache has both price and fair value
+- Links to the stock page and the sector page
+- The fair-value disclaimer
 
-### Cluster E: Investor behavior and risk (10)
-41. أخطاء نفسية شائعة في الاستثمار بالأسهم
-42. متى يكون الانتظار أفضل من الشراء؟
-43. إدارة المخاطر للمستثمر طويل الأجل
-44. كيف تبني قائمة متابعة فعالة
-45. التنويع: متى يحمي ومتى يضعف العائد؟
-46. الفرق بين الاستثمار والقمار في الأسهم
-47. كيف تتعامل مع الأخبار العاجلة بدون تهور
-48. خطة مراجعة محفظة شهرية للمستثمر الفردي
-49. متى تخرج من سهم استثماري؟
-50. إطار قرار شراء/احتفاظ/بيع عملي
+## 4) Backlink outreach
 
-## 3) Post template (copy for every article)
+Weekly target: 20 messages. Pitch one number from the day's gap post, not the homepage.
 
-- Title (Arabic keyword-focused)
-- 1 paragraph intro (why this matters now)
-- 3-5 practical sections with examples
-- Data table or metric checklist
-- "Key takeaways" bullet list
-- Internal links:
-  - 2-3 stock pages
-  - 2 related blog posts
-- Risk disclaimer line
+Priority:
+- Saudi finance newsletters
+- University investment clubs
+- Arab finance creators, after the card is already public
 
-## 4) Backlink outreach workflow
+Message shape:
 
-Weekly target: 20 outreach messages.
+> اليوم أكبر فجوة قيمة عادلة في تاسي على TruePrice.Cash هي {company} ({ticker}) عند {gap}. البطاقة مرفقة. المصدر: {stockUrl}
 
-Priority channels:
-- Arab finance creators on X/Twitter
-- Saudi investing blogs and newsletters
-- Finance communities and student clubs
+Take `{company}`, `{ticker}`, `{gap}`, and `{stockUrl}` from `POST /api/internal/daily-gap-post`. Do not invent a figure if that route returns `no_priced_tasi_rows`.
 
-Message angle:
-- Share a data-backed insight (not a generic pitch)
-- Offer co-created commentary post with attribution
-- Provide direct link to a relevant stock analysis page
-
-Track outcomes in a sheet:
-- Contact
-- Date reached out
-- Status
-- Link acquired
-- Domain / profile quality
+Track: contact, date, status, link acquired.
 
 ## 5) Google News readiness checklist
 
@@ -153,3 +95,12 @@ Use Notion (public page) and update weekly:
 
 Optional placement in app:
 - Set `VITE_PUBLIC_TRAFFIC_DASHBOARD_URL` to show an investor-facing link in About page.
+
+## 7) Distribution
+
+`POST /api/internal/daily-gap-post` picks the largest positive TASI fair-value gap and returns the Arabic caption plus the OG image URL from `/og/ar/stock/:ticker.png`.
+
+- X: set `X_USER_ACCESS_TOKEN`. The tweet is the caption plus the stock URL, so the card is the page's `og:image`.
+- Telegram: set `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID`. The bot sends the image, not a bare link.
+- WhatsApp groups have no post API. Send `groupCard.imageUrl` into the group by hand.
+- Earnings: `POST /api/internal/publish-earnings` every 2 hours. It publishes when Financial Modeling Prep has a new period for a `.SR` symbol. FMP often lags Tadawul, so this is not a guarantee of two hours after the filing.

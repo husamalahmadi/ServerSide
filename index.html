@@ -101,7 +101,30 @@
       .tp-static-subhead { font-size: 1.1rem; margin: 16px 0 8px; font-weight: 600; }
       .tp-static-shell nav { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; font-size: 14px; }
       .tp-static-shell a { color: #1a3a2a; font-weight: 600; }
-      html.js #tp-static-fallback { display: none; }
+      html.js #tp-static-fallback {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        border: 0;
+        opacity: 1;
+      }
+      html.js.tp-boot-failed #tp-static-fallback {
+        position: static;
+        width: auto;
+        height: auto;
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 24px 16px;
+        overflow: visible;
+        clip: auto;
+        white-space: normal;
+        opacity: 1;
+      }
       .tp-boot-warn {
         margin-top: 16px;
         padding: 12px 14px;
@@ -146,6 +169,7 @@
         if (document.documentElement.classList.contains("tp-app-ready")) return;
         var el = document.getElementById("tp-static-fallback");
         if (!el || el.querySelector(".tp-boot-warn")) return;
+        document.documentElement.classList.add("tp-boot-failed");
         var p = document.createElement("p");
         p.className = "tp-boot-warn";
         p.textContent =
@@ -158,14 +182,6 @@
         JavaScript is required for live quotes and financial analysis. Use the links above to browse stock pages.
       </p>
     </noscript>
-    <!-- Google tag: deferred so it does not block first paint (see src/analytics.js) -->
-    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-K34F3YG5TV"></script>
-    <script defer>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag("js", new Date());
-      gtag("config", "G-K34F3YG5TV", { send_page_view: false });
-    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

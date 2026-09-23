@@ -2,7 +2,7 @@
  * Writes a sitemap index at public/sitemap.xml plus child sitemaps:
  * sitemap-core.xml, sitemap-stocks-sa.xml, sitemap-stocks-us.xml,
  * sitemap-stocks-jp.xml, sitemap-stocks-uk.xml, sitemap-tutorials.xml,
- * sitemap-blogs.xml (when public/data/blog-posts.json has posts).
+ * sitemap-tasi.xml, sitemap-blogs.xml (when public/data/blog-posts.json has posts).
  *
  * Stock universes match src/data/stocksCatalog.js. lastmod is the UTC date of
  * the last git commit for that URL's source (route, tutorial HTML, or catalog),
@@ -13,6 +13,14 @@ import { existsSync, readdirSync, readFileSync, statSync, unlinkSync, writeFileS
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { TUTORIAL_ARTICLES } from "../src/data/tutorials/articles.js";
+import {
+  EARNINGS_CALENDAR_PATH,
+  UNDERVALUED_PATH,
+  catalogFromGrouped,
+  comparePairs,
+  earningsNotePath,
+  sectorPath,
+} from "../shared/tasiProgrammatic.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -267,6 +275,57 @@ function main() {
       });
     }
   }
+  const saGrouped = readJsonSafe(catalogs.sa);
+  const tasiCompanies = catalogFromGrouped(saGrouped);
+  const tasiCatalogLastmod = newestLastmod([catalogs.sa]);
+  const tasiToday = todayUtc();
+  const seenSectors = new Set();
+  const tasiEntries = [
+    {
+      loc: `${SITE}${encodeURI(UNDERVALUED_PATH)}`,
+      lastmod: tasiToday,
+      changefreq: "daily",
+      priority: "0.8",
+    },
+    {
+      loc: `${SITE}${encodeURI(EARNINGS_CALENDAR_PATH)}`,
+      lastmod: tasiToday,
+      changefreq: "daily",
+      priority: "0.8",
+    },
+  ];
+  for (const company of tasiCompanies) {
+    if (seenSectors.has(company.sectorSlug)) continue;
+    seenSectors.add(company.sectorSlug);
+    tasiEntries.push({
+      loc: `${SITE}${encodeURI(sectorPath(company.sectorSlug))}`,
+      lastmod: tasiCatalogLastmod,
+      changefreq: "daily",
+      priority: "0.7",
+    });
+  }
+  for (const pair of comparePairs(tasiCompanies)) {
+    tasiEntries.push({
+      loc: `${SITE}/ar/compare/${pair.slug}`,
+      lastmod: tasiCatalogLastmod,
+      changefreq: "weekly",
+      priority: "0.5",
+    });
+  }
+  const earningsFile = join(ROOT, "server", "data", "earnings-commentary.json");
+  if (existsSync(earningsFile)) {
+    const saved = readJsonSafe(earningsFile);
+    for (const note of Object.values(saved.notes || {})) {
+      if (!note?.ticker || !note?.period) continue;
+      tasiEntries.push({
+        loc: `${SITE}${earningsNotePath(note.ticker, note.period)}`,
+        lastmod: String(note.publishedAt || tasiToday).slice(0, 10),
+        changefreq: "weekly",
+        priority: "0.6",
+      });
+    }
+  }
+
   const blogsSitemap = join(PUBLIC, "sitemap-blogs.xml");
   if (!blogEntries.length && existsSync(blogsSitemap)) unlinkSync(blogsSitemap);
 
@@ -278,6 +337,7 @@ function main() {
     ...(blogEntries.length ? [writeUrlset("sitemap-blogs.xml", blogEntries)] : []),
     writeUrlset("sitemap-stocks-jp.xml", stockEntries(claimed.jp, newestLastmod([catalogs.jp]))),
     writeUrlset("sitemap-stocks-uk.xml", stockEntries(claimed.uk, newestLastmod([catalogs.uk]))),
+    writeUrlset("sitemap-tasi.xml", tasiEntries),
   ].filter((child) => child.count > 0);
 
   writeIndex(children);

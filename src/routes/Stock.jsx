@@ -34,6 +34,8 @@ import { fmpImageStockUrl } from "../../shared/fmpLogoUrl.js";
 import { isUndervalued } from "../../shared/fairValueVerdict.js";
 import { stockPath } from "../../shared/seo/stockPaths.js";
 import { AiReport } from "../components/stock/AiReport.jsx";
+import { trackEvent } from "../analytics.js";
+import { EmailDigestForm } from "../components/EmailDigestForm.jsx";
 
 /* Page */
 export default function Stock() {
@@ -449,6 +451,22 @@ export default function Stock() {
     [ticker, companyDisplayName, lang, fairAvg, price, currency, market]
   );
   usePageMeta(seo);
+
+  useEffect(() => {
+    if (!ticker || !market) return;
+    trackEvent("stock_viewed", { ticker, market, lang });
+  }, [ticker, market, lang]);
+
+  const fairValueSeenFor = useRef("");
+  useEffect(() => {
+    const px = Number(price);
+    const fv = Number(fairAvg);
+    if (!ticker || fairValueSeenFor.current === ticker) return;
+    if (!Number.isFinite(px) || px <= 0 || !Number.isFinite(fv) || fv <= 0) return;
+    fairValueSeenFor.current = ticker;
+    const gapPct = Math.round(((fv - px) / px) * 1000) / 10;
+    trackEvent("fair_value_seen", { ticker, gap_pct: gapPct });
+  }, [ticker, price, fairAvg]);
 
   const stockNarrative = useMemo(() => {
     const prof = lang === "ar" && translatedProfile ? translatedProfile : profile;
@@ -1075,6 +1093,7 @@ export default function Stock() {
 
         <div className="no-print">
           <WatchlistManager ticker={ticker} t={t} />
+          <EmailDigestForm />
           <StockComments ticker={ticker} t={t} />
         </div>
         </div>

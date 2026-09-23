@@ -3,10 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { SiteFooter } from "../components/SiteFooter.jsx";
+import { EmailDigestForm } from "../components/EmailDigestForm.jsx";
 import { SaMoversTable } from "../components/market/SaMoversTable.jsx";
 import { fmtPrice } from "../components/market/SaMoversTable.jsx";
 import { fetchSaMarketDashboard } from "../services/saMarketService.js";
 import { stockPath } from "../../shared/seo/stockPaths.js";
+import { EARNINGS_CALENDAR_PATH, UNDERVALUED_PATH } from "../../shared/tasiProgrammatic.js";
 import { fetchSaMarketUniverse } from "../services/marketUniverseService.js";
 import { MarketUniversePanel } from "../components/market/MarketUniversePanel.jsx";
 
@@ -169,6 +171,12 @@ export default function SaMarketPerformance() {
         onRefresh={() => setUniverseNonce((n) => n + 1)}
       />
 
+      <p className="tp-us-footnote">
+        <Link to={UNDERVALUED_PATH}>{t("TASI_BELOW_FAIR_VALUE")}</Link>
+        {" · "}
+        <Link to={EARNINGS_CALENDAR_PATH}>{t("TASI_EARNINGS_CALENDAR")}</Link>
+      </p>
+      <EmailDigestForm />
       <SiteFooter t={t} />
     </div>
   );

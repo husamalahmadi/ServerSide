@@ -118,3 +118,12 @@ CREATE INDEX IF NOT EXISTS idx_comments_ticker ON comments(ticker);
 CREATE INDEX IF NOT EXISTS idx_comments_parent ON comments(parent_id);
 CREATE INDEX IF NOT EXISTS idx_watchlist_items_watchlist ON watchlist_items(watchlist_id);
 CREATE INDEX IF NOT EXISTS idx_portfolio_holdings_portfolio ON portfolio_holdings(portfolio_id);
+
+CREATE TABLE IF NOT EXISTS email_digest_subscribers (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT NOT NULL UNIQUE,
+  lang TEXT NOT NULL DEFAULT 'en',
+  unsubscribe_token TEXT NOT NULL,
+  created_at TEXT DEFAULT (datetime('now')),
+  last_sent_at TEXT
+);

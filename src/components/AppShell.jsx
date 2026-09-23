@@ -6,6 +6,7 @@ import { useI18n } from "../i18n.jsx";
 import { tutorialIndexPath } from "../hooks/useTutorialLocale.js";
 import { UserBar } from "./UserBar.jsx";
 import { LangToggle } from "./LangToggle.jsx";
+import { trackEvent } from "../analytics.js";
 function NavIcon({ name }) {
   const paths = {
     home: (
@@ -62,6 +63,7 @@ export function AppShell() {
 
   const toggleLang = () => {
     const next = lang === "ar" ? "en" : "ar";
+    trackEvent("lang_toggled", { from: lang, to: next });
     setLang(next);
     const prefixed = location.pathname.match(/^\/(en|ar)(?=\/|$)/i);
     if (!prefixed) return;

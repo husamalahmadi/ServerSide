@@ -23,11 +23,16 @@ const ProfileSetup = React.lazy(() => import("./ProfileSetup.jsx"));
 const AuthSignInHelp = React.lazy(() => import("./AuthSignInHelp.jsx"));
 const UsMarketPerformance = React.lazy(() => import("./UsMarketPerformance.jsx"));
 const SaMarketPerformance = React.lazy(() => import("./SaMarketPerformance.jsx"));
+const TasiDataPages = React.lazy(() => import("./TasiDataPages.jsx"));
 
 function StaticSeoFallbackCleanup() {
   useEffect(() => {
-    document.getElementById("tp-static-fallback")?.remove();
+    const el = document.getElementById("tp-static-fallback");
     document.documentElement.classList.add("tp-app-ready");
+    if (!el) return;
+    el.style.transition = "opacity 180ms ease";
+    el.style.opacity = "0";
+    el.setAttribute("aria-hidden", "true");
   }, []);
   return null;
 }
@@ -235,6 +240,46 @@ export default function App() {
                   element={
                     <Lazy>
                       <SaMarketPerformance />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/ar/tasi/أسهم-أقل-من-قيمتها-العادلة"
+                  element={
+                    <Lazy>
+                      <TasiDataPages />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/ar/tasi/نتائج-الشركات"
+                  element={
+                    <Lazy>
+                      <TasiDataPages />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/ar/tasi/نتائج/:ticker/:period"
+                  element={
+                    <Lazy>
+                      <TasiDataPages />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/ar/sa-markets/:sector"
+                  element={
+                    <Lazy>
+                      <TasiDataPages />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/ar/compare/:pair"
+                  element={
+                    <Lazy>
+                      <TasiDataPages />
                     </Lazy>
                   }
                 />

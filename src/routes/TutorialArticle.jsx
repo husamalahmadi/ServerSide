@@ -1,4 +1,5 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
+import { trackEvent } from "../analytics.js";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { TUTORIAL_ARTICLES, TUTORIAL_BY_SLUG } from "../data/tutorials/articles.js";
 import { resolveTutorialArticle } from "../data/tutorials/resolve.js";
@@ -36,6 +37,25 @@ export default function TutorialArticle() {
     [article, locale]
   );
   usePageMeta(seo || {});
+
+  useEffect(() => {
+    if (!slug) return;
+    const marks = new Set();
+    const onScroll = () => {
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - window.innerHeight;
+      const pct = max <= 0 ? 100 : Math.min(100, Math.round((window.scrollY / max) * 100));
+      for (const step of [25, 50, 75, 100]) {
+        if (pct >= step && !marks.has(step)) {
+          marks.add(step);
+          trackEvent("tutorial_read", { slug, scroll_pct: step });
+        }
+      }
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [slug]);
 
   if (!article) {
     return <Navigate to={tutorialIndexPath(locale)} replace />;

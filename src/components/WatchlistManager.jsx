@@ -3,6 +3,14 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { getApiUrl } from "../config/env.js";
 import { Card } from "./Card.jsx";
 import { WatchlistFvMeta } from "./WatchlistFvMeta.jsx";
+import { trackEvent } from "../analytics.js";
+import {
+  addAnonWatchlist,
+  anonWatchlistHas,
+  clearAnonWatchlist,
+  readAnonWatchlist,
+  removeAnonWatchlist,
+} from "../services/anonWatchlist.js";
 
 function normalizeWatchlists(raw) {
   return (raw || []).map((list) => ({
@@ -12,12 +20,14 @@ function normalizeWatchlists(raw) {
 }
 
 export function WatchlistManager({ ticker, t }) {
-  const { user } = useAuth();
+  const { user, login } = useAuth();
   const [watchlists, setWatchlists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newName, setNewName] = useState("");
   const [creating, setCreating] = useState(false);
   const [saveError, setSaveError] = useState("");
+  const [savedLocally, setSavedLocally] = useState(() => (ticker ? anonWatchlistHas(ticker) : false));
+  const [pendingSync, setPendingSync] = useState(() => readAnonWatchlist().length);
   const apiUrl = getApiUrl();
   const trans = (key) => (t ? t(key) : key);
 
@@ -36,6 +46,10 @@ export function WatchlistManager({ ticker, t }) {
   }, [user, apiUrl]);
 
   useEffect(() => loadWatchlists(), [loadWatchlists]);
+  useEffect(() => {
+    setSavedLocally(ticker ? anonWatchlistHas(ticker) : false);
+    setPendingSync(readAnonWatchlist().length);
+  }, [ticker]);
 
   const normSym = (s) => String(s ?? "").trim().toUpperCase();
   const tickerNorm = normSym(ticker);
@@ -56,6 +70,7 @@ export function WatchlistManager({ ticker, t }) {
         setSaveError(data.error || trans("WATCHLIST_SAVE_FAILED"));
         return;
       }
+      trackEvent("watchlist_add", { ticker: normSym(ticker) });
       loadWatchlists();
     } catch (e) {
       console.error("Add to watchlist failed:", e);
@@ -106,11 +121,72 @@ export function WatchlistManager({ ticker, t }) {
     }
   };
 
+  const saveOnDevice = () => {
+    if (!ticker) return;
+    if (savedLocally) {
+      removeAnonWatchlist(ticker);
+      setSavedLocally(false);
+    } else {
+      addAnonWatchlist(ticker);
+      setSavedLocally(true);
+      trackEvent("watchlist_add", { ticker: normSym(ticker) });
+    }
+    setPendingSync(readAnonWatchlist().length);
+  };
+
+  const syncSaved = async () => {
+    const symbols = readAnonWatchlist();
+    if (!user || !symbols.length) return;
+    setSaveError("");
+    try {
+      let lists = watchlists;
+      if (!lists.length) {
+        const created = await fetch(`${apiUrl}/api/watchlists`, {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: "Saved stocks", isPublic: false }),
+        });
+        if (!created.ok) {
+          setSaveError(trans("WATCHLIST_SAVE_FAILED"));
+          return;
+        }
+        const refreshed = await fetch(`${apiUrl}/api/watchlists/me`, { credentials: "include" }).then((r) => r.json());
+        lists = normalizeWatchlists(refreshed.watchlists);
+      }
+      const listId = lists[0]?.id;
+      if (!listId) return;
+      for (const symbol of symbols) {
+        await fetch(`${apiUrl}/api/watchlists/${listId}/items`, {
+          method: "PUT",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ticker: symbol, action: "add" }),
+        });
+      }
+      clearAnonWatchlist();
+      setPendingSync(0);
+      setSavedLocally(false);
+      loadWatchlists();
+    } catch (e) {
+      console.error("Sync watchlist failed:", e);
+      setSaveError(trans("WATCHLIST_SAVE_FAILED"));
+    }
+  };
+
   if (!user) {
     return (
       <Card title={trans("WATCHLISTS") || "Watchlists"}>
-        <div style={{ color: "#64748b", fontSize: 14 }}>
-          {trans("SIGN_IN_TO_WATCHLIST") || "Sign in to manage watchlists"}
+        <div style={{ display: "grid", gap: 10 }}>
+          {ticker ? (
+            <button type="button" onClick={saveOnDevice} className="tp-signin-google" style={{ justifySelf: "start", cursor: "pointer" }}>
+              {savedLocally ? trans("WATCHLIST_SAVED_DEVICE") : `${trans("WATCHLIST_SAVE_DEVICE")} · ${ticker}`}
+            </button>
+          ) : null}
+          <p style={{ margin: 0, color: "#64748b", fontSize: 14 }}>{trans("WATCHLIST_SYNC_PROMPT")}</p>
+          <button type="button" onClick={() => login()} className="tp-signin-google" style={{ justifySelf: "start", cursor: "pointer" }}>
+            {trans("SIGN_IN_TO_WATCHLIST")}
+          </button>
         </div>
       </Card>
     );
@@ -127,6 +203,11 @@ export function WatchlistManager({ ticker, t }) {
   return (
     <Card title={trans("WATCHLISTS") || "Watchlists"}>
       <div style={{ display: "grid", gap: 12 }}>
+        {pendingSync > 0 ? (
+          <button type="button" onClick={() => void syncSaved()} className="tp-signin-google" style={{ justifySelf: "start", cursor: "pointer" }}>
+            {trans("WATCHLIST_SYNC_NOW")} ({pendingSync})
+          </button>
+        ) : null}
         {ticker ? (
           <div
             style={{

@@ -6,6 +6,7 @@ import {
   stashOAuthReturn,
   takeOAuthReturn,
 } from "../utils/oauthReturn.js";
+import { trackEvent } from "../analytics.js";
 
 const AuthContext = createContext(null);
 
@@ -79,7 +80,10 @@ export function AuthProvider({ children }) {
             setUser(data.user);
             setLoading(false);
             stripTpSessionParam();
-            if (isFreshOAuth) applyOAuthReturnIfNeeded();
+            if (isFreshOAuth) {
+              trackEvent("sign_in_complete", { method: "google" });
+              applyOAuthReturnIfNeeded();
+            }
             return;
           }
         } catch {
@@ -128,6 +132,7 @@ export function AuthProvider({ children }) {
     (returnTo) => {
       const path = sanitizeOAuthReturnPath(returnTo ?? currentReturnPath());
       stashOAuthReturn(path);
+      trackEvent("sign_in_start", { method: "google" });
       const q = new URLSearchParams({ returnTo: path });
       window.location.href = `${getApiUrl()}/auth/google?${q}`;
     },

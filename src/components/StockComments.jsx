@@ -4,6 +4,7 @@ import { getApiUrl } from "../config/env.js";
 import { validateComment } from "../utils/commentFilter.js";
 import { Card } from "./Card.jsx";
 import { AvatarImg } from "./AvatarImg.jsx";
+import { trackEvent } from "../analytics.js";
 
 export function StockComments({ ticker, t }) {
   const { user } = useAuth();
@@ -54,6 +55,7 @@ export function StockComments({ ticker, t }) {
       setBody("");
       setReplyBody("");
       setReplyingTo(null);
+      trackEvent("comment_posted", { ticker: String(ticker || "").toUpperCase() });
       loadComments();
     } catch (e) {
       console.error("Post comment failed:", e);

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { trackEvent } from "../analytics.js";
 import { sortScreenerItems } from "../domain/screener.js";
 
 export function useScreener(items) {
@@ -36,6 +37,7 @@ export function useScreener(items) {
     setActivePreset(presetId);
     setSortBy("discountPct");
     setSortDir("desc");
+    trackEvent("screener_filter_applied", { filter: presetId, preset: presetId });
   }
 
   return {

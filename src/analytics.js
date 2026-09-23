@@ -109,3 +109,19 @@ export function initAnalytics() {
 export function trackPageView() {
   sendGaPageView();
 }
+
+/**
+ * Product events. Mark watchlist_add, sign_in_complete, and search_performed
+ * as conversions in GA4 Admin → Events (that switch is not in this repo).
+ */
+export const GA4_CONVERSION_EVENTS = ["watchlist_add", "sign_in_complete", "search_performed"];
+
+export function trackEvent(name, params = {}) {
+  if (!name || typeof window === "undefined" || typeof window.gtag !== "function") return;
+  const payload = {};
+  for (const [key, value] of Object.entries(params || {})) {
+    if (value == null || value === "") continue;
+    payload[key] = value;
+  }
+  window.gtag("event", name, payload);
+}

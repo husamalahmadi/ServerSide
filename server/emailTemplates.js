@@ -293,9 +293,9 @@ ${blocksHtml}
  * scanners prefetch those, so the GET must not change anything — this page does, via a
  * POST the reader has to click.
  */
-export function renderUnsubscribeConfirmPage({ siteUrl, token }) {
+export function renderUnsubscribeConfirmPage({ siteUrl, token, actionPath = "/api/email/unsubscribe" }) {
   const site = String(siteUrl || "").replace(/\/+$/, "");
-  const action = `/api/email/unsubscribe?token=${encodeURIComponent(String(token || ""))}`;
+  const action = `${actionPath}?token=${encodeURIComponent(String(token || ""))}`;
   const block = (lang) => {
     const copy = UNSUBSCRIBE_CONFIRM_COPY[lang];
     return `

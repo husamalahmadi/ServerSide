@@ -4,6 +4,7 @@ import { useI18n } from "../i18n.jsx";
 import { getAllStocks } from "../data/stocksCatalog.js";
 import { filterStocksByQuery } from "../domain/stockSearch.js";
 import { stockPath } from "../../shared/seo/stockPaths.js";
+import { trackEvent } from "../analytics.js";
 
 function marketBadge(market) {
   if (market === "sa") return "TASI";
@@ -98,6 +99,11 @@ export function StockSearchBox({
   }
 
   function goToStock(ticker) {
+    trackEvent("search_performed", {
+      query: searchQuery || ticker,
+      market: marketFilter,
+      results_count: suggestions.length,
+    });
     setSuggestionsOpen(false);
     setQ("");
     navigate(stockPath(lang, ticker));
