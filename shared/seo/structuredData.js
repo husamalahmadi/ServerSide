@@ -1,6 +1,9 @@
 import { DEFAULT_META_DESCRIPTION, formatMetaDescription } from "./pageDescriptions.js";
 import { DEFAULT_DOCUMENT_TITLE, formatDocumentTitle } from "./pageTitles.js";
 import { getSeoSiteUrl } from "./siteUrl.js";
+import { stockPath } from "./stockPaths.js";
+import { DEFAULT_OG_IMAGE_PATH, stockOgImagePath } from "./ogPaths.js";
+import { blogIndexPath, blogPostPath } from "./blogPaths.js";
 
 function toAbs(pathname = "/") {
   const siteUrl = getSeoSiteUrl();
@@ -23,6 +26,8 @@ export function buildHomeSeo(lang = "en") {
     title: "",
     description: metaDescription,
     pathname: "/",
+    ogImage: toAbs(DEFAULT_OG_IMAGE_PATH),
+    ogImageAlt: DEFAULT_DOCUMENT_TITLE,
     jsonLd: {
       "@context": "https://schema.org",
       "@graph": [
@@ -38,7 +43,7 @@ export function buildHomeSeo(lang = "en") {
             "@type": "SearchAction",
             target: {
               "@type": "EntryPoint",
-              urlTemplate: `${homeUrl}stock/{search_term_string}`,
+              urlTemplate: `${homeUrl}en/stock/{search_term_string}`,
             },
             "query-input": "required name=search_term_string",
           },
@@ -58,8 +63,13 @@ export function buildStockSeo({ ticker, companyName, lang, fairValue, price, cur
   const displayTicker = String(ticker || "").trim();
   const symbol = displayTicker.toUpperCase();
   const name = companyName || displayTicker || symbol;
-  const pagePath = `/stock/${encodeURIComponent(displayTicker)}`;
+  const pagePath = stockPath(lang, displayTicker);
   const pageUrl = toAbs(pagePath);
+  const ogImage = toAbs(stockOgImagePath(lang, displayTicker));
+  const ogImageAlt =
+    lang === "ar"
+      ? `${name} (${displayTicker}) — السعر والقيمة العادلة`
+      : `${name} (${displayTicker}) — price and fair value`;
   const inLanguage = lang === "ar" ? "ar" : "en";
   const heading =
     lang === "ar"
@@ -68,7 +78,8 @@ export function buildStockSeo({ ticker, companyName, lang, fairValue, price, cur
   const documentTitle = formatDocumentTitle(
     lang === "ar"
       ? `${displayTicker} – ${name} القيمة العادلة والبيانات المالية`
-      : `${displayTicker} – ${name} Fair Value & Financial Statements`
+      : `${displayTicker} – ${name} Fair Value & Financial Statements`,
+    lang
   );
   const description = formatMetaDescription(
     lang === "ar"
@@ -82,10 +93,12 @@ export function buildStockSeo({ ticker, companyName, lang, fairValue, price, cur
     metaDescription: description,
     description,
     pathname: pagePath,
+    ogImage,
+    ogImageAlt,
     alternates: {
-      en: `${pagePath}?lang=en`,
-      ar: `${pagePath}?lang=ar`,
-      "x-default": pagePath,
+      en: stockPath("en", displayTicker),
+      ar: stockPath("ar", displayTicker),
+      "x-default": stockPath("en", displayTicker),
     },
     jsonLd: {
       "@context": "https://schema.org",
@@ -96,6 +109,7 @@ export function buildStockSeo({ ticker, companyName, lang, fairValue, price, cur
           url: pageUrl,
           name: heading,
           description,
+          image: ogImage,
           inLanguage,
           isPartOf: {
             "@type": "WebSite",
@@ -175,20 +189,23 @@ export function buildBlogsSeo({ lang, posts = [], postsCount }) {
   const documentTitle = formatDocumentTitle(
     lang === "ar"
       ? "مدونة TruePrice.Cash – رؤى أسهم تداول وأمريكا واليابان"
-      : "TruePrice.Cash Blog – US, TASI & Tokyo Stock Insights"
+      : "TruePrice.Cash Blog – US, TASI & Tokyo Stock Insights",
+    lang
   );
 
-  const blogId = `${toAbs("/blogs")}#blog`;
-  const safePosts = Array.isArray(posts) ? posts.filter((p) => p && (p.title || p.url)) : [];
+  const pagePath = lang === "ar" ? "/ar/blogs" : "/en/blogs";
+  const blogId = `${toAbs(pagePath)}#blog`;
+  const safePosts = Array.isArray(posts) ? posts.filter((p) => p && (p.title || p.path || p.slug)) : [];
 
   const postingNodes = safePosts.map((post, i) => {
-    const headline = String(post.title || "").trim().slice(0, 110) || `${heading} #${i + 1}`;
-    const url = post.url || toAbs("/blogs");
+    const headline = String(post.title || "").replace(/<[^>]+>/g, " ").trim().slice(0, 110) || `${heading} #${i + 1}`;
+    const ownPath = post.path || (post.slug ? blogPostPath(inLanguage, post.slug) : pagePath);
+    const url = /^https?:\/\//i.test(ownPath) ? ownPath : toAbs(ownPath);
     const datePublished = toIsoDate(post.published);
     const dateModified = toIsoDate(post.updated) || datePublished;
     const node = {
       "@type": "BlogPosting",
-      "@id": `${toAbs("/blogs")}#post-${post.id || i + 1}`,
+      "@id": `${url}#post`,
       headline,
       url,
       mainEntityOfPage: url,
@@ -219,11 +236,11 @@ export function buildBlogsSeo({ lang, posts = [], postsCount }) {
     documentTitle,
     metaDescription: description,
     description,
-    pathname: "/blogs",
+    pathname: pagePath,
     alternates: {
-      en: "/blogs?lang=en",
-      ar: "/blogs?lang=ar",
-      "x-default": "/blogs",
+      en: "/en/blogs",
+      ar: "/ar/blogs",
+      "x-default": "/en/blogs",
     },
     jsonLd: {
       "@context": "https://schema.org",
@@ -231,7 +248,7 @@ export function buildBlogsSeo({ lang, posts = [], postsCount }) {
         {
           "@type": "Blog",
           "@id": blogId,
-          url: toAbs("/blogs"),
+          url: toAbs(pagePath),
           name: heading,
           description,
           inLanguage,
@@ -243,8 +260,8 @@ export function buildBlogsSeo({ lang, posts = [], postsCount }) {
         },
         {
           "@type": "CollectionPage",
-          "@id": `${toAbs("/blogs")}#collection`,
-          url: toAbs("/blogs"),
+          "@id": `${toAbs(pagePath)}#collection`,
+          url: toAbs(pagePath),
           name: heading,
           isPartOf: {
             "@type": "WebSite",
@@ -260,6 +277,65 @@ export function buildBlogsSeo({ lang, posts = [], postsCount }) {
           },
         },
         ...postingNodes,
+      ],
+    },
+  };
+}
+
+export function buildBlogPostSeo({ post, lang = "en" }) {
+  const isAr = lang === "ar";
+  const pathname = post.path || blogPostPath(lang, post.slug);
+  const headline = String(post.title || "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  const description = formatMetaDescription(post.excerpt || headline);
+  const documentTitle = formatDocumentTitle(
+    isAr ? `${headline} – مدونة TruePrice.Cash` : `${headline} – TruePrice.Cash Blog`,
+    lang
+  );
+  const pageUrl = toAbs(pathname);
+  const indexPath = blogIndexPath(lang);
+  const published = post.published ? String(post.published).slice(0, 10) : undefined;
+  const modified = post.updated ? String(post.updated).slice(0, 10) : published;
+
+  return {
+    title: headline,
+    documentTitle,
+    metaDescription: description,
+    description,
+    pathname,
+    alternates: {
+      [isAr ? "ar" : "en"]: pathname,
+      "x-default": pathname,
+    },
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BlogPosting",
+          "@id": `${pageUrl}#post`,
+          headline,
+          description,
+          url: pageUrl,
+          mainEntityOfPage: pageUrl,
+          inLanguage: isAr ? "ar" : "en",
+          ...(published ? { datePublished: published } : {}),
+          ...(modified ? { dateModified: modified } : {}),
+          isPartOf: {
+            "@type": "Blog",
+            url: toAbs(indexPath),
+            name: isAr ? "مدونة TruePrice.Cash" : "TruePrice.Cash Blog",
+          },
+          publisher: {
+            "@type": "Organization",
+            name: "TruePrice.Cash",
+            url: toAbs("/"),
+          },
+          author: post.author
+            ? { "@type": "Person", name: post.author }
+            : { "@type": "Organization", name: "TruePrice.Cash", url: toAbs("/") },
+        },
       ],
     },
   };
@@ -282,7 +358,8 @@ export function buildTutorialsIndexSeo({ articles = [], lang = "en" }) {
       : "Free step-by-step guides on fundamental analysis: income statements, balance sheets, cash flow, ratios, DCF valuation, moats, and red flags for US, TASI, Tokyo, and London investors."
   );
   const documentTitle = formatDocumentTitle(
-    isAr ? "دروس التحليل الأساسي – TruePrice.Cash" : "Fundamental Analysis Tutorials – TruePrice.Cash"
+    isAr ? "دروس التحليل الأساسي – TruePrice.Cash" : "Fundamental Analysis Tutorials – TruePrice.Cash",
+    isAr ? "ar" : "en"
   );
 
   const indexPath = isAr ? "/ar/tutorials" : "/en/tutorials";
@@ -360,7 +437,8 @@ export function buildTutorialArticleSeo({ article, lang = "en" }) {
   const documentTitle =
     article.documentTitle ||
     formatDocumentTitle(
-      isAr ? `${headline} – دروس TruePrice.Cash` : `${headline} – TruePrice.Cash Tutorials`
+      isAr ? `${headline} – دروس TruePrice.Cash` : `${headline} – TruePrice.Cash Tutorials`,
+      isAr ? "ar" : "en"
     );
 
   const tutorialsLabel = isAr ? "الدروس" : "Tutorials";

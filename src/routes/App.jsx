@@ -3,7 +3,7 @@ import React, { Suspense, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from "react-router-dom";
 import { trackPageView } from "../analytics.js";
 import { AuthProvider } from "../context/AuthContext.jsx";
-import { I18nProvider } from "../i18n.jsx";
+import { I18nProvider, useI18n } from "../i18n.jsx";
 import { ErrorBoundary } from "../components/ErrorBoundary.jsx";
 import { RouteFallback } from "../components/RouteFallback.jsx";
 
@@ -15,6 +15,7 @@ const Contact = React.lazy(() => import("./Contact.jsx"));
 const AboutUs = React.lazy(() => import("./AboutUs.jsx"));
 const Methodology = React.lazy(() => import("./Methodology.jsx"));
 const Blogs = React.lazy(() => import("./Blogs.jsx"));
+const BlogPost = React.lazy(() => import("./BlogPost.jsx"));
 const Tutorials = React.lazy(() => import("./Tutorials.jsx"));
 const TutorialArticle = React.lazy(() => import("./TutorialArticle.jsx"));
 const Profile = React.lazy(() => import("./Profile.jsx"));
@@ -44,6 +45,16 @@ function AnalyticsRouteSync() {
   return null;
 }
 
+function LocalePathSync() {
+  const { pathname } = useLocation();
+  const { setLang } = useI18n();
+  useEffect(() => {
+    const match = pathname.match(/^\/(en|ar)(?=\/|$)/i);
+    if (match) setLang(match[1].toLowerCase());
+  }, [pathname, setLang]);
+  return null;
+}
+
 function Lazy({ children }) {
   return <Suspense fallback={<RouteFallback />}>{children}</Suspense>;
 }
@@ -61,11 +72,28 @@ export default function App() {
           <AuthProvider>
             <StaticSeoFallbackCleanup />
             <AnalyticsRouteSync />
+            <LocalePathSync />
             <Routes>
               <Route element={<AppShell />}>
                 <Route path="/" element={<Home />} />
                 <Route
                   path="/stock/:ticker"
+                  element={
+                    <Lazy>
+                      <Stock />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/en/stock/:ticker"
+                  element={
+                    <Lazy>
+                      <Stock />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/ar/stock/:ticker"
                   element={
                     <Lazy>
                       <Stock />
@@ -125,6 +153,38 @@ export default function App() {
                   element={
                     <Lazy>
                       <Blogs />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/en/blogs"
+                  element={
+                    <Lazy>
+                      <Blogs />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/ar/blogs"
+                  element={
+                    <Lazy>
+                      <Blogs />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/en/blog/:slug"
+                  element={
+                    <Lazy>
+                      <BlogPost />
+                    </Lazy>
+                  }
+                />
+                <Route
+                  path="/ar/blog/:slug"
+                  element={
+                    <Lazy>
+                      <BlogPost />
                     </Lazy>
                   }
                 />

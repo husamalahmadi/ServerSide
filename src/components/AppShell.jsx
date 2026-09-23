@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, NavLink, Outlet, useMatch } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
 import { StockSearchBox } from "./StockSearchBox.jsx";
 import { MarketIndexStrip } from "./MarketIndexStrip.jsx";
 import { useI18n } from "../i18n.jsx";
@@ -50,9 +50,24 @@ function NavIcon({ name }) {
 }
 
 export function AppShell() {
-  const { t, lang, dir, toggleLang } = useI18n();
+  const { t, lang, dir, setLang } = useI18n();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const onStockPage = Boolean(useMatch({ path: "/stock/:ticker", end: true }));
+  const onBareStock = Boolean(useMatch({ path: "/stock/:ticker", end: true }));
+  const onEnStock = Boolean(useMatch({ path: "/en/stock/:ticker", end: true }));
+  const onArStock = Boolean(useMatch({ path: "/ar/stock/:ticker", end: true }));
+  const onStockPage = onBareStock || onEnStock || onArStock;
+  const onBlogPost = Boolean(useMatch({ path: "/:locale/blog/:slug", end: true }));
+
+  const toggleLang = () => {
+    const next = lang === "ar" ? "en" : "ar";
+    setLang(next);
+    const prefixed = location.pathname.match(/^\/(en|ar)(?=\/|$)/i);
+    if (!prefixed) return;
+    const rest = location.pathname.replace(/^\/(en|ar)(?=\/|$)/i, "");
+    navigate(`/${next}${rest}${location.search}${location.hash}`);
+  };
 
   const closeSidebar = () => setSidebarOpen(false);
 
@@ -90,7 +105,11 @@ export function AppShell() {
             <NavIcon name="trending" />
             {t("SA_MARKET_NAV")}
           </NavLink>
-          <NavLink to="/blogs" className="tp-nav-link" onClick={closeSidebar}>
+          <NavLink
+            to={lang === "ar" ? "/ar/blogs" : "/en/blogs"}
+            className={({ isActive }) => `tp-nav-link${isActive || onBlogPost ? " active" : ""}`}
+            onClick={closeSidebar}
+          >
             <NavIcon name="blog" />
             {t("BLOGS")}
           </NavLink>

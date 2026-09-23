@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /
 
+# Sitemap index: sitemap-core, sitemap-stocks-sa, sitemap-stocks-us,
+# sitemap-tutorials, sitemap-blogs, sitemap-stocks-jp, sitemap-stocks-uk
 Sitemap: https://trueprice.cash/sitemap.xml
 
 # LLM site index (https://llmstxt.org/)

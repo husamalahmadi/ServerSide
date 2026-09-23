@@ -1,4 +1,6 @@
 import { buildStockNarrative, stockNarrativeToStaticHtml } from "../shared/seo/stockNarrative.js";
+import { DEFAULT_OG_IMAGE_PATH, OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from "../shared/seo/ogPaths.js";
+import { stockPath } from "../shared/seo/stockPaths.js";
 
 function escapeHtml(text) {
   return String(text ?? "")
@@ -18,6 +20,13 @@ function absUrl(siteOrigin, pathOrUrl) {
   if (/^https?:\/\//i.test(raw)) return raw;
   const path = raw.startsWith("/") ? raw : `/${raw}`;
   return `${siteOrigin.replace(/\/+$/, "")}${path}`;
+}
+
+function upsertMeta(html, attr, key, content) {
+  const re = new RegExp(`(<meta\\s+${attr}="${key}"\\s+content=")[^"]*(")`, "i");
+  if (re.test(html)) return html.replace(re, `$1${escapeAttr(content)}$2`);
+  const tag = `<meta ${attr}="${key}" content="${escapeAttr(content)}" />`;
+  return html.replace(/<\/head>/i, `    ${tag}\n  </head>`);
 }
 
 function buildHreflangBlock(siteOrigin, alternates) {
@@ -69,6 +78,19 @@ export function injectSeoIntoSpaHtml(html, seo, siteOrigin, canonical, opts = {}
     /(<meta\s+property="og:url"\s+content=")[^"]*(")/i,
     `$1${escapeAttr(canonical)}$2`
   );
+
+  const ogImage = absUrl(siteOrigin, seo.ogImage || DEFAULT_OG_IMAGE_PATH);
+  const ogAlt = seo.ogImageAlt || seo.documentTitle;
+  out = upsertMeta(out, "property", "og:image", ogImage);
+  out = upsertMeta(out, "property", "og:image:secure_url", ogImage);
+  out = upsertMeta(out, "property", "og:image:width", String(OG_IMAGE_WIDTH));
+  out = upsertMeta(out, "property", "og:image:height", String(OG_IMAGE_HEIGHT));
+  out = upsertMeta(out, "property", "og:image:type", "image/png");
+  out = upsertMeta(out, "property", "og:image:alt", ogAlt);
+  out = upsertMeta(out, "name", "twitter:card", "summary_large_image");
+  out = upsertMeta(out, "name", "twitter:image", ogImage);
+  out = upsertMeta(out, "name", "twitter:title", seo.documentTitle);
+  out = upsertMeta(out, "name", "twitter:description", seo.metaDescription);
 
   out = out.replace(/<link\s+rel="alternate"\s+hreflang="[^"]*"[^>]*>\s*/gi, "");
 
@@ -136,15 +158,15 @@ export function buildStockStaticFallback({ hit, market, lang, seo, currency }) {
       ${narrativeHtml}
       <nav aria-label="Site">
         <a href="/">${isAr ? "الرئيسية" : "Home"}</a>
-        <a href="/blogs">${isAr ? "المدونة" : "Blogs"}</a>
+        <a href="${isAr ? "/ar/blogs" : "/en/blogs"}">${isAr ? "المدونة" : "Blogs"}</a>
         <a href="/methodology">${isAr ? "المنهجية" : "Methodology"}</a>
         <a href="/about">${isAr ? "من نحن" : "About"}</a>
         <a href="/contact">${isAr ? "اتصل بنا" : "Contact"}</a>
         <a href="/sitemap.xml">Sitemap</a>
-        <a href="/stock/AAPL">Apple (AAPL)</a>
-        <a href="/stock/2222">Saudi Aramco (2222)</a>
-        <a href="/stock/7203.T">Toyota (7203.T)</a>
-        <a href="/stock/GLEN.L">Glencore (GLEN.L)</a>
+        <a href="${stockPath(isAr ? "ar" : "en", "AAPL")}">Apple (AAPL)</a>
+        <a href="${stockPath(isAr ? "ar" : "en", "2222")}">Saudi Aramco (2222)</a>
+        <a href="${stockPath(isAr ? "ar" : "en", "7203.T")}">Toyota (7203.T)</a>
+        <a href="${stockPath(isAr ? "ar" : "en", "GLEN.L")}">Glencore (GLEN.L)</a>
       </nav>
     </main>`;
 }

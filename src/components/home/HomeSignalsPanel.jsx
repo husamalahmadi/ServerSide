@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchHomeSignals } from "../../services/homeSignalsService.js";
+import { stockPath } from "../../../shared/seo/stockPaths.js";
 
 function fmtPrice(n, market) {
   if (!Number.isFinite(n)) return "—";
@@ -30,7 +31,7 @@ function formatUpdated(iso, lang) {
   });
 }
 
-function SignalCard({ title, tag, tagClass, rows, market, t, emptyLabel, renderMeta }) {
+function SignalCard({ title, tag, tagClass, rows, market, lang, t, emptyLabel, renderMeta }) {
   return (
     <article className="tp-signal-card">
       <header className="tp-signal-card-head">
@@ -44,7 +45,7 @@ function SignalCard({ title, tag, tagClass, rows, market, t, emptyLabel, renderM
           {rows.map((row) => (
             <li key={`${market}-${row.symbol}`}>
               <Link
-                to={`/stock/${encodeURIComponent(row.symbol)}`}
+                to={stockPath(lang, row.symbol)}
                 className="tp-signal-row"
               >
                 <span className="tp-signal-ticker">{row.symbol}</span>
@@ -163,6 +164,7 @@ export function HomeSignalsPanel({ t, lang, dir }) {
               tagClass="tp-signal-tag-live"
               rows={block?.gainers}
               market={marketTab}
+              lang={lang}
               t={t}
               emptyLabel={t("HOME_SIGNALS_EMPTY")}
               renderMeta={(row) => (
@@ -180,6 +182,7 @@ export function HomeSignalsPanel({ t, lang, dir }) {
               tagClass="tp-signal-tag-value"
               rows={block?.nearFair}
               market={marketTab}
+              lang={lang}
               t={t}
               emptyLabel={t("HOME_SIGNALS_NEAR_FAIR_EMPTY")}
               renderMeta={(row) => (

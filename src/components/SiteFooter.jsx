@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useI18n } from "../i18n.jsx";
+import { stockPath } from "../../shared/seo/stockPaths.js";
 
 /** Deep internal stock links — varied anchor text (ticker + company), not domain-only. */
 export const FOOTER_STOCK_LINKS = [
@@ -15,7 +17,7 @@ export const FOOTER_STOCK_LINKS = [
 
 const SITE_LINKS = [
   { to: "/", labelKey: "FOOTER_HOME" },
-  { to: "/blogs", labelKey: "BLOGS" },
+  { to: "/blogs", labelKey: "BLOGS", localized: true },
   { to: "/methodology", labelKey: "METHODOLOGY_NAV" },
   { to: "/about", labelKey: "ABOUT_US" },
   { to: "/contact", labelKey: "CONTACT_US" },
@@ -49,6 +51,7 @@ const footerDisclaimerStyle = {
  * references, and the CMA disclaimer shown on every route.
  */
 export function SiteFooter({ t }) {
+  const { lang } = useI18n();
   return (
     <footer className="tp-site-footer no-print">
       <div
@@ -64,13 +67,16 @@ export function SiteFooter({ t }) {
         <nav aria-label={t("FOOTER_NAV_SITE")}>
           <div style={footerHeadingStyle}>{t("FOOTER_NAV_SITE")}</div>
           <ul className="tp-footer-nav-list" style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 6 }}>
-            {SITE_LINKS.map(({ to, labelKey }) => (
-              <li key={to}>
-                <Link to={to} className="tp-footer-link" style={{ fontWeight: 600 }}>
+            {SITE_LINKS.map(({ to, labelKey, localized }) => {
+              const href = localized ? (lang === "ar" ? "/ar/blogs" : "/en/blogs") : to;
+              return (
+              <li key={labelKey}>
+                <Link to={href} className="tp-footer-link" style={{ fontWeight: 600 }}>
                   {t(labelKey)}
                 </Link>
               </li>
-            ))}
+              );
+            })}
             <li>
               <a href="/sitemap.xml" className="tp-footer-link" style={{ fontWeight: 600 }}>
                 {t("FOOTER_SITEMAP")}
@@ -84,7 +90,7 @@ export function SiteFooter({ t }) {
           <ul className="tp-footer-nav-list" style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 6 }}>
             {FOOTER_STOCK_LINKS.map(({ ticker, labelKey }) => (
               <li key={ticker}>
-                <Link to={`/stock/${encodeURIComponent(ticker)}`} className="tp-footer-link" style={{ fontWeight: 600 }}>
+                <Link to={stockPath(lang, ticker)} className="tp-footer-link" style={{ fontWeight: 600 }}>
                   {t(labelKey)}
                 </Link>
               </li>

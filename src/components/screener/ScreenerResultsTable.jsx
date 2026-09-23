@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { fmt2, fmtBill } from "../../domain/formatting.js";
+import { useI18n } from "../../i18n.jsx";
+import { stockPath } from "../../../shared/seo/stockPaths.js";
 
 function SortTh({ id, label, sortBy, sortDir, onSort }) {
   const active = sortBy === id;
@@ -16,6 +18,7 @@ function SortTh({ id, label, sortBy, sortDir, onSort }) {
 }
 
 export function ScreenerResultsTable({ t, items, sortBy, sortDir, onSort, onOpenTicker }) {
+  const { lang } = useI18n();
   return (
     <div className="tp-scr-table-wrap">
       <table className="tp-scr-table">
@@ -35,7 +38,7 @@ export function ScreenerResultsTable({ t, items, sortBy, sortDir, onSort, onOpen
             <tr key={`${it.market}-${it.ticker}`}>
               <td className="tp-scr-ticker-cell">
                 <Link
-                  to={`/stock/${encodeURIComponent(it.ticker)}`}
+                  to={stockPath(lang, it.ticker)}
                   className="tp-scr-link"
                   onClick={() => onOpenTicker?.(it.ticker)}
                 >
@@ -44,7 +47,7 @@ export function ScreenerResultsTable({ t, items, sortBy, sortDir, onSort, onOpen
               </td>
               <td className="tp-scr-company-cell">
                 <Link
-                  to={`/stock/${encodeURIComponent(it.ticker)}`}
+                  to={stockPath(lang, it.ticker)}
                   className="tp-scr-link"
                   onClick={() => onOpenTicker?.(it.ticker)}
                 >

@@ -10,6 +10,7 @@
  */
 import EN from "../src/locales/en.js";
 import AR from "../src/locales/ar.js";
+import { stockPath } from "../shared/seo/stockPaths.js";
 
 const NAVY = "#0f2233";
 const GOLD = "#c9a84c";
@@ -150,8 +151,8 @@ function detailFor(change, copy) {
   return parts.join(" · ");
 }
 
-function changeRowHtml(change, copy, siteUrl) {
-  const stockUrl = `${siteUrl}/stock/${encodeURIComponent(change.ticker)}`;
+function changeRowHtml(change, copy, siteUrl, lang) {
+  const stockUrl = `${siteUrl}${stockPath(lang, change.ticker)}`;
   return `
         <tr>
           <td style="padding:14px 0;border-bottom:1px solid ${LINE};" dir="${copy.dir}" align="${copy.align}">
@@ -176,7 +177,7 @@ function languageBlockHtml(lang, changes, siteUrl) {
       <tr>
         <td style="padding:8px 28px 20px 28px;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${changes
-            .map((c) => changeRowHtml(c, copy, siteUrl))
+            .map((c) => changeRowHtml(c, copy, siteUrl, lang))
             .join("")}
           </table>
           <div style="margin-top:16px;" dir="${copy.dir}" align="${copy.align}">
@@ -203,7 +204,7 @@ function languageBlockText(lang, changes, siteUrl, unsubscribeUrl) {
     lines.push(`- ${headlineFor(change, copy)}`);
     const detail = detailFor(change, copy);
     if (detail) lines.push(`  ${detail}`);
-    lines.push(`  ${siteUrl}/stock/${encodeURIComponent(change.ticker)}`);
+    lines.push(`  ${siteUrl}${stockPath(lang, change.ticker)}`);
   }
   lines.push("", `${copy.METHODOLOGY}: ${siteUrl}/methodology`, copy.ESTIMATE_NOTE, "", copy.DISCLAIMER, "", `${copy.UNSUBSCRIBE}: ${unsubscribeUrl}`);
   return lines.join("\n");

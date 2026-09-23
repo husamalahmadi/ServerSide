@@ -6,6 +6,7 @@ import { SiteFooter } from "../components/SiteFooter.jsx";
 import { SaMoversTable } from "../components/market/SaMoversTable.jsx";
 import { fmtPrice } from "../components/market/SaMoversTable.jsx";
 import { fetchSaMarketDashboard } from "../services/saMarketService.js";
+import { stockPath } from "../../shared/seo/stockPaths.js";
 import { fetchSaMarketUniverse } from "../services/marketUniverseService.js";
 import { MarketUniversePanel } from "../components/market/MarketUniversePanel.jsx";
 
@@ -94,7 +95,7 @@ export default function SaMarketPerformance() {
 
   const openTicker = (symbol) => {
     if (!symbol) return;
-    navigate(`/stock/${encodeURIComponent(symbol)}`);
+    navigate(stockPath(lang, symbol));
   };
 
   return (

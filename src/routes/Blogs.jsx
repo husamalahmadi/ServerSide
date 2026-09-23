@@ -1,13 +1,13 @@
 // FILE: src/routes/Blogs.jsx
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
-import { getBlogPosts } from "../services/bloggerService.js";
+import { loadBlogPosts } from "../services/blogCatalog.js";
+import { blogIndexPath } from "../../shared/seo/blogPaths.js";
 import { PageHeader } from "../components/PageHeader.jsx";
-import { PillLink } from "../components/PillLink.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { stripHtmlToText } from "../utils/sanitizeHtml.js";
-import { SafeHtml } from "../components/SafeHtml.jsx";
 import { buildBlogsSeo } from "../seo/structuredData.js";
 
 function formatDate(date, lang) {
@@ -81,7 +81,8 @@ export default function Blogs() {
     return state.posts.map((p) => ({
       id: p.id,
       title: stripHtmlToText(p.title || ""),
-      url: p.url || "",
+      path: p.path || "",
+      slug: p.slug || "",
       published: iso(p.published),
       updated: iso(p.updated),
       author: p.author || "",
@@ -93,7 +94,8 @@ export default function Blogs() {
   const loadBlogs = useCallback(async () => {
     try {
       setState((s) => ({ ...s, loading: true, error: "" }));
-      const posts = await getBlogPosts({ lang, maxResults: 50 });
+      const locale = lang === "ar" ? "ar" : "en";
+      const posts = (await loadBlogPosts()).filter((post) => post.locale === locale);
       const sortedPosts = [...posts].sort((a, b) => {
         const dateA = a.published ? new Date(a.published).getTime() : 0;
         const dateB = b.published ? new Date(b.published).getTime() : 0;
@@ -322,19 +324,15 @@ export default function Blogs() {
                         <div key={month} className="tp-tree-month">
                           <div className="tp-tree-month-header">{getMonthName(month, lang)}</div>
                           {groupedPosts[year][month].map((post) => (
-                            <a
+                            <Link
                               key={post.id}
-                              href={`#post-${post.id}`}
+                              to={post.path || blogIndexPath(lang)}
                               className={`tp-tree-post-link ${selectedPostId === post.id ? "active" : ""}`}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setSelectedPostId(post.id);
-                                document.getElementById(`post-${post.id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
-                              }}
+                              onMouseEnter={() => setSelectedPostId(post.id)}
                               title={post.title}
                             >
                               {truncateText(post.title, 40)}
-                            </a>
+                            </Link>
                           ))}
                         </div>
                       ))}
@@ -373,40 +371,27 @@ export default function Blogs() {
               </button>
             </div>
           ) : state.posts.length === 0 ? (
-            <div className="tp-muted">
-              {t("NO_DATA")}
-              <div style={{ marginTop: 8, fontSize: 12 }}>
-                <div>Possible reasons:</div>
-                <ul style={{ marginTop: 4, paddingInlineStart: 20 }}>
-                  <li>No posts with label "{lang === "ar" ? "arabic" : "english"}"</li>
-                  <li>Blog has no published posts</li>
-                  <li>Check browser console (F12) for API errors</li>
-                </ul>
-              </div>
-            </div>
+            <div className="tp-muted">{t("NO_DATA")}</div>
           ) : (
             <div>
               {state.posts.map((post) => (
-                <div key={post.id} id={`post-${post.id}`}>
-                  <a
-                    href={post.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="tp-blog-item"
-                    onMouseEnter={() => setSelectedPostId(post.id)}
-                    onMouseLeave={() => setSelectedPostId(null)}
-                  >
-                    <SafeHtml html={post.title} tagName="div" className="tp-blog-title" />
-                    <div className="tp-blog-meta">
-                      {t("PUBLISHED")}: {formatDate(post.published, lang)}
-                      {post.author ? ` · ${post.author}` : ""}
-                    </div>
-                    {post.content ? (
-                      <div className="tp-blog-excerpt">{truncateText(post.content)}</div>
-                    ) : null}
-                    <div className="tp-blog-link">{t("READ_MORE")} →</div>
-                  </a>
-                </div>
+                <Link
+                  key={post.id}
+                  to={post.path || blogIndexPath(lang)}
+                  className="tp-blog-item"
+                  onMouseEnter={() => setSelectedPostId(post.id)}
+                  onMouseLeave={() => setSelectedPostId(null)}
+                >
+                  <div className="tp-blog-title">{stripHtmlToText(post.title)}</div>
+                  <div className="tp-blog-meta">
+                    {t("PUBLISHED")}: {formatDate(post.published, lang)}
+                    {post.author ? ` · ${post.author}` : ""}
+                  </div>
+                  {post.excerpt || post.content ? (
+                    <div className="tp-blog-excerpt">{truncateText(post.excerpt || post.content)}</div>
+                  ) : null}
+                  <div className="tp-blog-link">{t("READ_MORE")} →</div>
+                </Link>
               ))}
             </div>
           )}

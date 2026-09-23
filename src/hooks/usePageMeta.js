@@ -72,17 +72,31 @@ export function usePageMeta({
   pathname = "/",
   alternates = null,
   jsonLd = null,
+  ogImage = "",
+  ogImageAlt = "",
 } = {}) {
   useEffect(() => {
     const newTitle = documentTitle || formatDocumentTitle(title);
     const newDesc = metaDescription || formatMetaDescription(description);
     const canonical = absUrl(pathname);
+    const image = ogImage || `${SITE_URL}/og/default.png`;
+    const imageAlt = ogImageAlt || newTitle;
 
     document.title = newTitle;
     setMeta("description", newDesc);
     setMeta("og:title", newTitle, true);
     setMeta("og:description", newDesc, true);
     setMeta("og:url", canonical, true);
+    setMeta("og:image", image, true);
+    setMeta("og:image:secure_url", image, true);
+    setMeta("og:image:type", "image/png", true);
+    setMeta("og:image:width", "1200", true);
+    setMeta("og:image:height", "630", true);
+    setMeta("og:image:alt", imageAlt, true);
+    setMeta("twitter:card", "summary_large_image");
+    setMeta("twitter:image", image);
+    setMeta("twitter:title", newTitle);
+    setMeta("twitter:description", newDesc);
     setLink("canonical", canonical);
 
     if (alternates && typeof alternates === "object") {
@@ -103,8 +117,11 @@ export function usePageMeta({
       setMeta("og:title", DEFAULT_DOCUMENT_TITLE, true);
       setMeta("og:description", DEFAULT_META_DESCRIPTION, true);
       setMeta("og:url", absUrl("/"), true);
+      setMeta("og:image", `${SITE_URL}/og/default.png`, true);
+      setMeta("og:image:secure_url", `${SITE_URL}/og/default.png`, true);
+      setMeta("twitter:image", `${SITE_URL}/og/default.png`);
       setLink("canonical", absUrl("/"));
       removeJsonLd("page-seo");
     };
-  }, [title, documentTitle, description, metaDescription, pathname, alternates, jsonLd]);
+  }, [title, documentTitle, description, metaDescription, pathname, alternates, jsonLd, ogImage, ogImageAlt]);
 }

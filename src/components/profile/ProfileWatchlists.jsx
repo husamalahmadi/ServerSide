@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { CURRENCY_BY_MARKET, getAllStocks } from "../../data/stocksCatalog.js";
 import { getLivePrice } from "../../services/priceService.js";
 import { fairValueMove, fairValueVerdict } from "../../../shared/fairValueVerdict.js";
+import { stockPath } from "../../../shared/seo/stockPaths.js";
+import { useI18n } from "../../i18n.jsx";
 import { fmt2 } from "../../domain/formatting.js";
 
 const MARKET_ORDER = ["us", "sa", "jp", "uk", "other"];
@@ -100,6 +102,7 @@ async function fetchQuotes(tickers) {
 }
 
 function WatchlistRow({ row, t }) {
+  const { lang } = useI18n();
   const { ticker, name, industry, market, currency, price, fairValue, quoteLoading } = row;
   const disc = discountPct(price, fairValue);
   const verdict = fairValueVerdict(price, fairValue);
@@ -109,7 +112,7 @@ function WatchlistRow({ row, t }) {
   const marketKey = MARKET_ORDER.includes(market) ? market : "other";
 
   return (
-    <Link to={`/stock/${encodeURIComponent(ticker)}`} className={`tp-wl-row ${marketKey}`}>
+    <Link to={stockPath(lang, ticker)} className={`tp-wl-row ${marketKey}`}>
       <div className="tp-wl-row-identity">
         <span className="tp-wl-ticker">{ticker}</span>
         <span className="tp-wl-name" title={name || ticker}>

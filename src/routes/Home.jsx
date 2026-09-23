@@ -15,6 +15,7 @@ import { ScreenerResultsTable } from "../components/screener/ScreenerResultsTabl
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { HomeMarketNews } from "../components/HomeMarketNews.jsx";
 import { HomeSignalsPanel } from "../components/home/HomeSignalsPanel.jsx";
+import { stockPath } from "../../shared/seo/stockPaths.js";
 
 export default function Home() {
   const { t, lang, dir } = useI18n();
@@ -183,7 +184,7 @@ export default function Home() {
   );
   function goToStock(ticker) {
     setQ("");
-    navigate(`/stock/${encodeURIComponent(ticker)}`);
+    navigate(stockPath(lang, ticker));
   }
 
   return (

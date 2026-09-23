@@ -6,6 +6,7 @@ import { StatCard } from "../components/dashboard/StatCard.jsx";
 import { Sparkline } from "../components/charts/Sparkline.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { defaultSnapshotDate, fetchUsMarketDashboard } from "../services/usMarketService.js";
+import { stockPath } from "../../shared/seo/stockPaths.js";
 import { fetchUsMarketUniverse } from "../services/marketUniverseService.js";
 import { MarketUniversePanel } from "../components/market/MarketUniversePanel.jsx";
 
@@ -268,7 +269,7 @@ export default function UsMarketPerformance() {
 
   const openTicker = (symbol) => {
     if (!symbol) return;
-    navigate(`/stock/${encodeURIComponent(symbol)}`);
+    navigate(stockPath(lang, symbol));
   };
 
   return (

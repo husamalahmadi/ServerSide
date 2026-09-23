@@ -6,6 +6,7 @@ import { getApiUrl } from "../config/env.js";
 import { Card } from "../components/Card.jsx";
 import { AvatarImg } from "../components/AvatarImg.jsx";
 import { ProfileWatchlists } from "../components/profile/ProfileWatchlists.jsx";
+import { stockPath } from "../../shared/seo/stockPaths.js";
 
 export default function Profile() {
   const { handle: urlHandle } = useParams();
@@ -416,7 +417,7 @@ export default function Profile() {
                   >
                     {t("PROFILE_BADGE_STOCK_COMMENT")}
                   </span>
-                  <Link to={`/stock/${row.ticker}`} style={{ color: "#2563eb", fontWeight: 600 }}>
+                  <Link to={stockPath(lang, row.ticker)} style={{ color: "#2563eb", fontWeight: 600 }}>
                     {row.ticker}
                   </Link>
                   {row.created_at ? (

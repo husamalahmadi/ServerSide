@@ -54,8 +54,11 @@ import { renderUnsubscribeConfirmPage, renderUnsubscribePage } from "./emailTemp
 import { generateAiReport } from "./aiReport.js";
 import { renderAiReport } from "./aiReportRenderer.js";
 import { injectSeoIntoSpaHtml, buildStockStaticFallback } from "./spaHtmlSeo.js";
+import { handleDefaultOg, handleStockOg, ogRuntime } from "./ogCard.js";
 import { configureSeoSiteUrl } from "../shared/seo/siteUrl.js";
-import { buildStockSeo, buildTutorialArticleSeo, buildTutorialsIndexSeo } from "../shared/seo/structuredData.js";
+import { buildBlogPostSeo, buildBlogsSeo, buildStockSeo, buildTutorialArticleSeo, buildTutorialsIndexSeo } from "../shared/seo/structuredData.js";
+import { parseBlogPath } from "../shared/seo/blogPaths.js";
+import { legacyArabicStockRedirect, parseStockPath } from "../shared/seo/stockPaths.js";
 import { buildTutorialSpaStaticFallback } from "../shared/seo/tutorialStatic.js";
 import { parseTutorialPath } from "../shared/seo/tutorialPaths.js";
 import { TUTORIAL_ARTICLES, TUTORIAL_BY_SLUG } from "../src/data/tutorials/articles.js";
@@ -390,6 +393,10 @@ app.post("/auth/logout", (req, res) => {
     });
   });
 });
+
+// Share-card images. Registered before static so /og/*.png is never a hashed asset.
+app.get("/og/default.png", handleDefaultOg);
+app.get("/og/:locale/stock/:ticker.png", handleStockOg);
 
 // Static assets after OAuth. Hashed chunks do not need session (minor overhead on /assets/* is acceptable).
 if (existsSync(staticPath)) {
@@ -761,6 +768,7 @@ console.log(`[fmp] Per-ticker financials cache directory: ${FMP_FINANCIALS_DIR}`
 
 const SCREENER_DIR = resolveScreenerDir();
 const screenerStore = createScreenerStore(SCREENER_DIR);
+ogRuntime.screenerStore = screenerStore;
 console.log(`[screener] Data directory: ${SCREENER_DIR}`);
 
 let screenerRebuildPromise = null;
@@ -1581,6 +1589,9 @@ function canonicalUrlForPath(reqPath) {
   let path = String(reqPath || "/").split("?")[0];
   if (path.length > 1) path = path.replace(/\/+$/, "");
   if (!path) path = "/";
+  const stock = parseStockPath(path);
+  if (stock && !stock.locale) path = `/en/stock/${encodeURIComponent(stock.ticker)}`;
+  if (path === "/blogs") path = "/en/blogs";
   return path === "/" ? `${CANONICAL_SITE}/` : `${CANONICAL_SITE}${path}`;
 }
 
@@ -1597,11 +1608,11 @@ function renderSpaIndexHtml(indexHtmlPath, canonical, seoInject = null) {
 }
 
 function stockSeoInjectForRequest(req) {
-  const stockMatch = String(req.path || "").match(/^\/stock\/([^/]+)\/?$/);
-  if (!stockMatch) return null;
+  const parsed = parseStockPath(req.path);
+  if (!parsed) return null;
   try {
-    const rawTicker = decodeURIComponent(stockMatch[1]);
-    const lang = req.query.lang === "ar" ? "ar" : "en";
+    const rawTicker = parsed.ticker;
+    const lang = parsed.locale === "ar" || req.query.lang === "ar" ? "ar" : "en";
     const found = findStockByTicker(rawTicker);
     if (!found) return null;
     const seo = buildStockSeo({
@@ -1655,6 +1666,55 @@ function tutorialSeoInjectForRequest(req) {
   }
 }
 
+function readBlogPosts() {
+  const files = [
+    join(staticPath, "data", "blog-posts.json"),
+    join(__dirname, "..", "public", "data", "blog-posts.json"),
+  ];
+  for (const file of files) {
+    try {
+      if (!existsSync(file)) continue;
+      const data = JSON.parse(readFileSync(file, "utf8"));
+      if (Array.isArray(data.posts)) return data.posts;
+    } catch {
+      /* try the next snapshot */
+    }
+  }
+  return [];
+}
+
+function blogsSeoInjectForRequest(req) {
+  const parsed = parseBlogPath(req.path);
+  if (!parsed) return null;
+  try {
+    const posts = readBlogPosts().filter((post) => post.locale === parsed.locale);
+    if (parsed.slug) {
+      const post = posts.find((item) => item.slug === parsed.slug);
+      if (!post) return null;
+      return { seo: buildBlogPostSeo({ post, lang: parsed.locale }) };
+    }
+    return { seo: buildBlogsSeo({ lang: parsed.locale, posts, postsCount: posts.length }) };
+  } catch (err) {
+    console.warn("[static] blogs SEO lookup failed:", err?.message || err);
+    return null;
+  }
+}
+
+function trySendBlogStatic(req, res, next) {
+  if (req.method !== "GET" && req.method !== "HEAD") return next();
+  const parsed = parseBlogPath(req.path);
+  if (!parsed) return next();
+  const rel = parsed.slug
+    ? join(parsed.locale, "blog", `${parsed.slug}.html`)
+    : join(parsed.locale, "blogs", "index.html");
+  const file = [join(staticPath, rel), join(__dirname, "..", "public", rel)].find((candidate) => existsSync(candidate));
+  if (!file) return next();
+  res.setHeader("Cache-Control", "public, max-age=3600");
+  return res.sendFile(file, (err) => {
+    if (err) next(err);
+  });
+}
+
 function trySendTutorialStatic(req, res, next) {
   if (req.method !== "GET" && req.method !== "HEAD") return next();
   const parsed = parseTutorialPath(req.path);
@@ -1669,18 +1729,33 @@ function trySendTutorialStatic(req, res, next) {
   });
 }
 
+app.use((req, res, next) => {
+  if (req.method !== "GET" && req.method !== "HEAD") return next();
+  const path = String(req.path || "").replace(/\/+$/, "") || "/";
+  const stockTarget = legacyArabicStockRedirect(path, req.query.lang);
+  if (stockTarget) return res.redirect(301, stockTarget);
+  if (path === "/blogs") {
+    const lang = String(req.query.lang || "").toLowerCase();
+    return res.redirect(301, lang === "ar" ? "/ar/blogs" : "/en/blogs");
+  }
+  return next();
+});
+
 app.get("*", (req, res, next) => {
   if (req.path.startsWith("/api") || req.path.startsWith("/auth")) return next();
   // Missing hashed files must not fall through to SPA HTML (wrong MIME / confusing errors).
   if (req.path.startsWith("/assets")) {
     return res.status(404).type("text/plain").send("Not found");
   }
+  trySendBlogStatic(req, res, () => {
   trySendTutorialStatic(req, res, () => {
   const knownRoutePatterns = [
     /^\/$/,
     /^\/about\/?$/,
     /^\/methodology\/?$/,
     /^\/blogs\/?$/,
+    /^\/(en|ar)\/blogs\/?$/,
+    /^\/(en|ar)\/blog\/[^/]+\/?$/,
     /^\/(en|ar)\/tutorials\/?$/,
     /^\/(en|ar)\/tutorials\/[^/]+\/?$/,
     /^\/tutorials\/?$/,
@@ -1690,6 +1765,7 @@ app.get("*", (req, res, next) => {
     /^\/profile\/setup\/?$/,
     /^\/profile\/[^/]+\/?$/,
     /^\/stock\/[^/]+\/?$/,
+    /^\/(en|ar)\/stock\/[^/]+\/?$/,
     /^\/us-markets\/?$/,
     /^\/sa-markets\/?$/,
   ];
@@ -1703,10 +1779,12 @@ app.get("*", (req, res, next) => {
     res.status(404);
   }
   try {
-    const canonical = isKnownSpaRoute ? canonicalUrlForPath(req.path) : `${CANONICAL_SITE}/`;
     const seoInject = isKnownSpaRoute
-      ? tutorialSeoInjectForRequest(req) || stockSeoInjectForRequest(req)
+      ? tutorialSeoInjectForRequest(req) || stockSeoInjectForRequest(req) || blogsSeoInjectForRequest(req)
       : null;
+    const canonical = isKnownSpaRoute
+      ? canonicalUrlForPath(seoInject?.seo?.pathname || req.path)
+      : `${CANONICAL_SITE}/`;
     const html = renderSpaIndexHtml(indexHtml, canonical, seoInject);
     res.type("html").send(html);
   } catch (err) {
@@ -1718,6 +1796,7 @@ app.get("*", (req, res, next) => {
       }
     });
   }
+  });
   });
 });
 

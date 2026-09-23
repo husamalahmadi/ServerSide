@@ -6,8 +6,15 @@ const I18nContext = createContext(null);
 
 const STORAGE_KEY = "lang";
 
+function localeFromPathname(pathname) {
+  const match = String(pathname || "").match(/^\/(en|ar)(?=\/|$)/i);
+  return match ? match[1].toLowerCase() : null;
+}
+
 function getInitialLang() {
   if (typeof window === "undefined") return "en";
+  const pathLang = localeFromPathname(window.location.pathname);
+  if (pathLang) return pathLang;
   try {
     const urlLang = new URLSearchParams(window.location.search).get("lang");
     if (urlLang === "ar" || urlLang === "en") return urlLang;

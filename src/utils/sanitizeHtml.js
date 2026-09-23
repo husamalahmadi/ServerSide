@@ -10,6 +10,17 @@ const defaultConfig = {
   ALLOWED_ATTR: ["href", "target", "rel"],
 };
 
+/** Hosted Blogger post HTML (images and basic layout, no scripts). */
+export const blogHtmlConfig = {
+  ALLOWED_TAGS: [
+    "p", "br", "strong", "em", "u", "a", "ul", "ol", "li",
+    "h1", "h2", "h3", "h4", "blockquote", "code", "pre",
+    "div", "span", "img", "figure", "figcaption",
+    "table", "thead", "tbody", "tr", "th", "td",
+  ],
+  ALLOWED_ATTR: ["href", "target", "rel", "src", "alt", "title", "width", "height", "class"],
+};
+
 /** Rich HTML for synced tutorial articles (tables, callouts, TOC, etc.). */
 export const tutorialHtmlConfig = {
   ALLOWED_TAGS: [

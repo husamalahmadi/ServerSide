@@ -32,6 +32,7 @@ import { buildStockSeo } from "../seo/structuredData.js";
 import { buildStockNarrative } from "../seo/stockNarrative.js";
 import { fmpImageStockUrl } from "../../shared/fmpLogoUrl.js";
 import { isUndervalued } from "../../shared/fairValueVerdict.js";
+import { stockPath } from "../../shared/seo/stockPaths.js";
 import { AiReport } from "../components/stock/AiReport.jsx";
 
 /* Page */
@@ -595,7 +596,7 @@ export default function Stock() {
           fairAvg={fairAvg}
           currency={currency}
           logoUrl={logoUrl && !logoLoadError ? logoUrl : null}
-          reportUrl={typeof window !== "undefined" ? window.location.href : `https://trueprice.cash/stock/${ticker}`}
+          reportUrl={typeof window !== "undefined" ? window.location.href : `https://trueprice.cash${stockPath(lang, ticker)}`}
         />
 
         {/* Banner */}
@@ -937,7 +938,7 @@ export default function Stock() {
                             >
                               <td style={{ padding: 10, fontWeight: row.isCurrent ? 700 : 400 }}>
                                 {row.isCurrent ? t("THIS_STOCK") : (
-                                  <Link to={`/stock/${row.ticker}`} style={{ color: "#2563eb", textDecoration: "none", fontWeight: 600 }}>
+                                  <Link to={stockPath(lang, row.ticker)} style={{ color: "#2563eb", textDecoration: "none", fontWeight: 600 }}>
                                     {row.ticker}
                                   </Link>
                                 )}

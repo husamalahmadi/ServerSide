@@ -75,6 +75,13 @@ function pageShell({ locale, seo, bodyHtml, dir }) {
   <meta property="og:description" content="${escapeAttr(seo.metaDescription)}" />
   <meta property="og:url" content="${escapeAttr(canonical)}" />
   <meta property="og:type" content="article" />
+  <meta property="og:image" content="${SITE}/og/default.png" />
+  <meta property="og:image:secure_url" content="${SITE}/og/default.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="${SITE}/og/default.png" />
   <script type="application/ld+json">${JSON.stringify(seo.jsonLd).replace(/</g, "\\u003c")}</script>
   <style>
     :root { --tp-primary: #2c7be5; --tp-ink: #1a2b42; --tp-muted: #5a6b85; --tp-border: #d4e6fb; }

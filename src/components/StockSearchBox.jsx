@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
 import { getAllStocks } from "../data/stocksCatalog.js";
 import { filterStocksByQuery } from "../domain/stockSearch.js";
+import { stockPath } from "../../shared/seo/stockPaths.js";
 
 function marketBadge(market) {
   if (market === "sa") return "TASI";
@@ -99,7 +100,7 @@ export function StockSearchBox({
   function goToStock(ticker) {
     setSuggestionsOpen(false);
     setQ("");
-    navigate(`/stock/${encodeURIComponent(ticker)}`);
+    navigate(stockPath(lang, ticker));
   }
 
   function pickSuggestion(it) {
