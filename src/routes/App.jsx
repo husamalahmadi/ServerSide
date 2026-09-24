@@ -24,6 +24,7 @@ const AuthSignInHelp = React.lazy(() => import("./AuthSignInHelp.jsx"));
 const UsMarketPerformance = React.lazy(() => import("./UsMarketPerformance.jsx"));
 const SaMarketPerformance = React.lazy(() => import("./SaMarketPerformance.jsx"));
 const TasiDataPages = React.lazy(() => import("./TasiDataPages.jsx"));
+const NotFound = React.lazy(() => import("./NotFound.jsx"));
 
 function StaticSeoFallbackCleanup() {
   useEffect(() => {
@@ -291,7 +292,14 @@ export default function App() {
                     </Lazy>
                   }
                 />
-                <Route path="*" element={<Navigate to="/" replace />} />
+                <Route
+                  path="*"
+                  element={
+                    <Lazy>
+                      <NotFound />
+                    </Lazy>
+                  }
+                />
               </Route>
             </Routes>
           </AuthProvider>

@@ -356,6 +356,8 @@ export default {
   SCREENER_AVG_DISCOUNT: "Avg Discount",
   SCREENER_TOP_SECTOR: "Top Sector",
   FOOTER_HOME: "Home",
+  NOT_FOUND_TITLE: "Page not found",
+  NOT_FOUND_BODY: "This page is not on TruePrice.Cash. Check the address or go back to the homepage.",
   FOOTER_SITEMAP: "XML Sitemap",
   FOOTER_NAV_SITE: "Site",
   FOOTER_NAV_STOCKS: "Stock analysis",

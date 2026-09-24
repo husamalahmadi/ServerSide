@@ -36,6 +36,7 @@ import { stockPath } from "../../shared/seo/stockPaths.js";
 import { AiReport } from "../components/stock/AiReport.jsx";
 import { trackEvent } from "../analytics.js";
 import { EmailDigestForm } from "../components/EmailDigestForm.jsx";
+import NotFound from "./NotFound.jsx";
 
 /* Page */
 export default function Stock() {
@@ -87,6 +88,7 @@ export default function Stock() {
   const [market, setMarket] = useState(null);
   const [currency, setCurrency] = useState("USD");
   const [catalogReady, setCatalogReady] = useState(false);
+  const [missingTicker, setMissingTicker] = useState(false);
   const [price, setPrice] = useState(null);
   const [headerError, setHeaderError] = useState("");
 
@@ -113,6 +115,7 @@ export default function Stock() {
   useEffect(() => {
     let alive = true;
     setCatalogReady(false);
+    setMissingTicker(false);
     setCompany("");
     setMarket(null);
     setPrice(null);
@@ -130,7 +133,9 @@ export default function Stock() {
         setCatalogReady(true);
       } catch (e) {
         if (!alive) return;
-        setHeaderError(String(e?.message || e));
+        const message = String(e?.message || e);
+        if (message.includes("Ticker not found")) setMissingTicker(true);
+        else setHeaderError(message);
         setCatalogReady(false);
       }
     })();
@@ -593,6 +598,8 @@ export default function Stock() {
       )}
     </Card>
   );
+
+  if (missingTicker) return <NotFound />;
 
   return (
     <div className="tp-page tp-stock-page" dir={dir} lang={lang}>

@@ -1806,7 +1806,9 @@ app.get("*", (req, res, next) => {
     /^\/sa-markets\/?$/,
   ];
   const tasiSeo = tasiProgram.seoInject(req);
-  const isKnownSpaRoute = knownRoutePatterns.some((re) => re.test(req.path)) || Boolean(tasiSeo);
+  const stockParsed = parseStockPath(req.path);
+  const unknownStock = Boolean(stockParsed && !findStockByTicker(stockParsed.ticker));
+  const isKnownSpaRoute = !unknownStock && (knownRoutePatterns.some((re) => re.test(req.path)) || Boolean(tasiSeo));
   const indexHtml = join(staticPath, "index.html");
   if (!existsSync(indexHtml)) {
     return res.status(503).type("text/plain").send("Client build missing. Run npm run build at repo root.");

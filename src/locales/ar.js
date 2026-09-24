@@ -356,6 +356,8 @@ export default {
   SCREENER_AVG_DISCOUNT: "متوسط الخصم",
   SCREENER_TOP_SECTOR: "أعلى قطاع",
   FOOTER_HOME: "الرئيسية",
+  NOT_FOUND_TITLE: "الصفحة غير موجودة",
+  NOT_FOUND_BODY: "هذه الصفحة غير موجودة على TruePrice.Cash. تحقق من العنوان أو ارجع إلى الرئيسية.",
   FOOTER_SITEMAP: "خريطة الموقع XML",
   FOOTER_NAV_SITE: "الموقع",
   FOOTER_NAV_STOCKS: "تحليل الأسهم",
