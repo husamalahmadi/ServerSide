@@ -17,6 +17,7 @@ import {
   INCOMPLETE_USER_MESSAGE,
 } from "./fmpFinancialsStore.js";
 import { fetchFmpFinancialsBundle, fmpApiKey, FMP_STABLE_BASE } from "./fmpFetch.js";
+import { getInsiderSignal, InsiderSignalError } from "./insiderSignal.js";
 import { resolveFmpLogoUrl } from "../shared/fmpLogoUrl.js";
 import { createScreenerStore, resolveScreenerDir, SCREENER_MARKETS } from "./screenerStore.js";
 import { buildAllScreeners } from "./buildScreenerFromFmp.js";
@@ -877,6 +878,20 @@ app.get(["/api/fmp/profile", "/api/fmp/profile/:symbol"], async (req, res) => {
   } catch (err) {
     console.error("[fmp/profile]", symbol, err.message);
     res.status(502).json({ error: err.message });
+  }
+});
+
+app.get("/api/fmp/insider-signal", async (req, res) => {
+  const symbol = fmpSymbolFromRequest(req);
+  if (!symbol) return res.status(400).json({ error: "symbol query parameter required" });
+  try {
+    const data = await getInsiderSignal(symbol);
+    res.setHeader("X-Insider-Cache", data.cached ? "HIT" : "MISS");
+    res.json(data);
+  } catch (err) {
+    const status = err instanceof InsiderSignalError ? err.status : 502;
+    console.error("[fmp/insider-signal]", symbol, err.message);
+    res.status(status).json({ error: err.message || "Insider signal failed" });
   }
 });
 

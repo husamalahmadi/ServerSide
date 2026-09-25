@@ -15,6 +15,7 @@
     "build:screener": "node scripts/build-screener-from-fmp.mjs",
     "build": "node scripts/generate-blog-static-pages.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-tutorial-static-pages.mjs && vite build",
     "preview": "vite preview",
+    "test": "node --test shared/insiderSignal.test.js",
     "server": "cd server && npm run dev",
     "server:start": "cd server && node server.js",
     "render:start": "npm install --include=dev && npm run build && cd server && npm start"

@@ -34,6 +34,7 @@ import { fmpImageStockUrl } from "../../shared/fmpLogoUrl.js";
 import { isUndervalued } from "../../shared/fairValueVerdict.js";
 import { stockPath } from "../../shared/seo/stockPaths.js";
 import { AiReport } from "../components/stock/AiReport.jsx";
+import { InsiderSignalSection } from "../components/insider/InsiderSignalSection.jsx";
 import { trackEvent } from "../analytics.js";
 import { EmailDigestForm } from "../components/EmailDigestForm.jsx";
 import NotFound from "./NotFound.jsx";
@@ -1097,6 +1098,14 @@ export default function Stock() {
             <AiReport symbol={fmpSymbol} t={t} />
           </Card>
         </div>
+
+        {catalogReady ? (
+          <div className="no-print" style={{ marginBottom: 8 }}>
+            <Card title={t("INSIDER_CARD_TITLE")}>
+              <InsiderSignalSection symbol={fmpSymbol || ticker} market={market} />
+            </Card>
+          </div>
+        ) : null}
 
         <div className="no-print">
           <WatchlistManager ticker={ticker} t={t} />
