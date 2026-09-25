@@ -262,14 +262,21 @@ function main() {
   const blogEntries = [];
   if (existsSync(blogDataFile)) {
     const data = readJsonSafe(blogDataFile);
-    const fileLastmod = newestLastmod([blogDataFile]);
+    const postDate = (post) => {
+      const dated = String(post?.updated || post?.published || "").slice(0, 10);
+      return /^\d{4}-\d{2}-\d{2}$/.test(dated) ? dated : null;
+    };
+    let newestPostDate = null;
+    for (const post of data.posts || []) {
+      const dated = postDate(post);
+      if (dated && (!newestPostDate || dated > newestPostDate)) newestPostDate = dated;
+    }
     for (const post of data.posts || []) {
       const path = String(post?.path || "");
       if (!/^\/(en|ar)\/blog\/[^/]+$/.test(path)) continue;
-      const dated = String(post.updated || post.published || "").slice(0, 10);
       blogEntries.push({
         loc: `${SITE}${path}`,
-        lastmod: /^\d{4}-\d{2}-\d{2}$/.test(dated) ? dated : fileLastmod,
+        lastmod: postDate(post) || newestPostDate || todayUtc(),
         changefreq: "monthly",
         priority: "0.75",
       });
