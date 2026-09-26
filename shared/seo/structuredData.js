@@ -304,9 +304,8 @@ export function buildBlogPostSeo({ post, lang = "en" }) {
     description,
     pathname,
     alternates: {
-      en: blogPostPath("en", post.slug),
-      ar: blogPostPath("ar", post.slug),
-      "x-default": blogPostPath("en", post.slug),
+      [isAr ? "ar" : "en"]: pathname,
+      "x-default": pathname,
     },
     jsonLd: {
       "@context": "https://schema.org",

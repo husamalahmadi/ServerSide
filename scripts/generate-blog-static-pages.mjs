@@ -171,7 +171,7 @@ function writePostPage(post) {
   const dir = safePost.locale === "ar" ? "rtl" : "ltr";
   const tutorialHref = safePost.relatedTutorial
     ? tutorialArticlePath(safePost.locale, safePost.relatedTutorial)
-    : tutorialIndexPath(safePost.locale);
+    : "";
   const tutorialLabel =
     safePost.locale === "ar" ? "تابع في سلسلة الدروس" : "Continue in the tutorial series";
   const meta = [safePost.published ? String(safePost.published).slice(0, 10) : "", safePost.readingTime, safePost.level]
@@ -185,7 +185,7 @@ function writePostPage(post) {
     </div>
     <article>
       ${safePost.content}
-      <p style="margin-top:1.5rem;font-size:13px;"><a href="${escapeAttr(tutorialHref)}">${escapeHtml(tutorialLabel)}</a></p>
+      ${tutorialHref ? `<p style="margin-top:1.5rem;font-size:13px;"><a href="${escapeAttr(tutorialHref)}">${escapeHtml(tutorialLabel)}</a></p>` : ""}
     </article>`;
   const outDir = join(PUBLIC, post.locale, "blog");
   mkdirSync(outDir, { recursive: true });

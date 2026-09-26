@@ -15,10 +15,10 @@ export const tutorialHtmlConfig = {
   ALLOWED_TAGS: [
     "p", "br", "strong", "em", "u", "a", "ul", "ol", "li",
     "h1", "h2", "h3", "h4", "blockquote", "code", "pre",
-    "div", "section", "nav", "span",
+    "div", "section", "nav", "span", "img",
     "table", "thead", "tbody", "tr", "th", "td",
   ],
-  ALLOWED_ATTR: ["href", "target", "rel", "class", "id", "aria-label", "style"],
+  ALLOWED_ATTR: ["href", "target", "rel", "class", "id", "aria-label", "src", "alt"],
 };
 
 /**
