@@ -216,6 +216,15 @@ export default function Stock() {
         setLogoUrl(primary || stockLogo);
         setLogoFallbackUrl(primary && stockLogo && primary !== stockLogo ? stockLogo : null);
         setProfile(profileRes && typeof profileRes === "object" ? profileRes : null);
+        const profileName = String(profileRes?.name || "").trim();
+        if (profileName) {
+          const symbol = String(ticker || "").trim().toUpperCase();
+          setCompany((prev) => {
+            const prevName = String(prev || "").trim();
+            if (!prevName || prevName.toUpperCase() === symbol) return profileName;
+            return prev;
+          });
+        }
       } catch {
         if (!alive) return;
         setLogoUrl(null);
@@ -442,7 +451,8 @@ export default function Stock() {
   const chartW = isMobile ? 320 : 380;
   const bigChartW = isMobile ? 320 : 480;
 
-  const companyDisplayName = (lang === "ar" && translatedProfile?.name) || profile?.name || company || "";
+  const companyDisplayName =
+    (lang === "ar" && translatedProfile?.name) || profile?.name || company || ticker || "";
   const seo = useMemo(
     () =>
       buildStockSeo({
@@ -660,9 +670,9 @@ export default function Stock() {
                   WebkitLineClamp: 2,
                   WebkitBoxOrient: "vertical",
                 }}
-                title={(lang === "ar" && translatedProfile?.name) || profile?.name || company || ""}
+                title={companyDisplayName}
               >
-                {company || (lang === "ar" && translatedProfile?.name) || profile?.name || t("NOT_AVAILABLE")}
+                {companyDisplayName || t("NOT_AVAILABLE")}
                 {((lang === "ar" && translatedProfile?.industry) || profile?.industry) ? (
                   <span style={{ fontWeight: 600, opacity: 0.9 }}> – {(lang === "ar" && translatedProfile?.industry) || profile?.industry}</span>
                 ) : null}

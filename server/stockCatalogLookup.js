@@ -1,5 +1,6 @@
 import { loadGroupedCatalog } from "./buildScreenerFromFmp.js";
 import { SCREENER_MARKETS } from "./screenerStore.js";
+import { classShareAliases, inferUnlistedListing } from "../shared/unlistedTicker.js";
 
 export const CURRENCY_BY_MARKET = { us: "USD", sa: "SAR", jp: "JPY", uk: "GBP" };
 
@@ -33,14 +34,23 @@ export function getCatalogPools() {
   return catalogPools;
 }
 
-function findInPools(cat, rawTicker) {
-  const up = String(rawTicker || "").trim().toUpperCase();
+function hitInPools(cat, up) {
   if (!up) return null;
-
   if (cat.us.byUpperTicker.has(up)) return { market: "us", hit: cat.us.byUpperTicker.get(up) };
   if (cat.sa.byUpperTicker.has(up)) return { market: "sa", hit: cat.sa.byUpperTicker.get(up) };
   if (cat.jp.byUpperTicker.has(up)) return { market: "jp", hit: cat.jp.byUpperTicker.get(up) };
   if (cat.uk.byUpperTicker.has(up)) return { market: "uk", hit: cat.uk.byUpperTicker.get(up) };
+  return null;
+}
+
+function findInPools(cat, rawTicker) {
+  const up = String(rawTicker || "").trim().toUpperCase();
+  if (!up) return null;
+
+  for (const key of classShareAliases(up)) {
+    const hit = hitInPools(cat, key);
+    if (hit) return hit;
+  }
 
   const upDotT = `${up}.T`;
   if (cat.jp.byUpperTicker.has(upDotT)) return { market: "jp", hit: cat.jp.byUpperTicker.get(upDotT) };
@@ -71,5 +81,14 @@ export function findStockByTicker(rawTicker) {
     if (found) return found;
   }
 
-  return null;
+  const external = inferUnlistedListing(decoded);
+  if (!external) return null;
+  return {
+    market: external.market,
+    hit: {
+      ticker: external.ticker,
+      name: external.name,
+      industry: "",
+    },
+  };
 }

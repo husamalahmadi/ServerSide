@@ -2,6 +2,7 @@
 import { publicUrl } from "../utils/publicUrl.js";
 import { getApiUrl } from "../config/env.js";
 import { fetchWithRetry, readJsonResponse } from "../utils/apiFetch.js";
+import { classShareAliases, inferUnlistedListing } from "../../shared/unlistedTicker.js";
 
 const DATA_FILES = {
   us: publicUrl("data/sp500_grouped_by_industry.json"),
@@ -158,13 +159,27 @@ export async function getAllStocks() {
   return { items: combined, industries };
 }
 
-function findInCatalog(cat, rawTicker) {
-  const up = String(rawTicker || "").toUpperCase().trim();
+function hitInPools(cat, up) {
   if (!up) return null;
   if (cat.us.byUpperTicker.has(up)) return { market: "us", hit: cat.us.byUpperTicker.get(up) };
   if (cat.sa.byUpperTicker.has(up)) return { market: "sa", hit: cat.sa.byUpperTicker.get(up) };
   if (cat.jp.byUpperTicker.has(up)) return { market: "jp", hit: cat.jp.byUpperTicker.get(up) };
   if (cat.uk.byUpperTicker.has(up)) return { market: "uk", hit: cat.uk.byUpperTicker.get(up) };
+  return null;
+}
+
+function findInCatalog(cat, rawTicker) {
+  const up = String(rawTicker || "").toUpperCase().trim();
+  if (!up) return null;
+  for (const key of classShareAliases(up)) {
+    const hit = hitInPools(cat, key);
+    if (hit) return hit;
+  }
+  const bareSa = up.endsWith(".SR") ? up.slice(0, -3) : "";
+  if (bareSa) {
+    const hit = hitInPools(cat, bareSa);
+    if (hit) return hit;
+  }
   // Tokyo: user might type bare "3823" without ".T"
   const upDotT = `${up}.T`;
   if (cat.jp.byUpperTicker.has(upDotT)) return { market: "jp", hit: cat.jp.byUpperTicker.get(upDotT) };
@@ -179,12 +194,22 @@ function findInCatalog(cat, rawTicker) {
 export async function getCompany(rawTicker) {
   const cat = await ensureCatalog();
   const found = findInCatalog(cat, rawTicker);
-  if (!found) throw new Error("Ticker not found in US/SA/JP/UK lists.");
+  if (found) {
+    return {
+      ticker: found.hit.ticker,
+      name: found.hit.name,
+      market: found.market,
+      currency: CURRENCY_BY_MARKET[found.market],
+    };
+  }
+  // Gainers, losers, and screener rows can be outside the saved index files.
+  const external = inferUnlistedListing(rawTicker);
+  if (!external) throw new Error("Ticker not found in US/SA/JP/UK lists.");
   return {
-    ticker: found.hit.ticker,
-    name: found.hit.name,
-    market: found.market,
-    currency: CURRENCY_BY_MARKET[found.market],
+    ticker: external.ticker,
+    name: external.name,
+    market: external.market,
+    currency: external.currency,
   };
 }
 
@@ -228,18 +253,28 @@ export async function resolveMarketAndSymbol(rawTicker, requestedMarket) {
     }
   }
 
-  if (!market) return { ok: false };
+  if (!market) {
+    const external = inferUnlistedListing(rawTicker);
+    if (!external) return { ok: false };
+    market = external.market;
+    resolvedUpper = String(external.ticker).toUpperCase();
+  }
 
   const tickerUS = upper;
-  const tickerSA = String(rawTicker || "").trim();
+  const tickerSARaw = String(rawTicker || "").trim();
+  const tickerSA = tickerSARaw.toUpperCase().endsWith(".SR") ? tickerSARaw.slice(0, -3) : tickerSARaw;
   const tickerJP = market === "jp" ? resolvedUpper : upper;
   const tickerUK = market === "uk" ? resolvedUpper : upper;
   const tickerDisplay =
     market === "us" ? tickerUS : market === "jp" ? tickerJP : market === "uk" ? tickerUK : tickerSA;
 
   let fmpSymbol;
-  if (market === "us") fmpSymbol = tickerUS;
-  else if (market === "sa") fmpSymbol = `${tickerSA}.SR`;
+  if (market === "us") {
+    fmpSymbol =
+      found?.market === "us"
+        ? String(found.hit.ticker).toUpperCase()
+        : inferUnlistedListing(upper)?.fmpSymbol || tickerUS;
+  } else if (market === "sa") fmpSymbol = `${tickerSA}.SR`;
   else fmpSymbol = resolvedUpper;
 
   return {
