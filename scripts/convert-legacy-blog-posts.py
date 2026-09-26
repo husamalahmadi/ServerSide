@@ -45,7 +45,14 @@ def inline_html(node):
         elif name == "a":
             href = (child.get("href") or "").strip()
             inner = inline_html(child) or html.escape(plain(child))
-            if href.startswith(("http://", "https://", "/")) and inner:
+            low = href.lower()
+            if "3227679430479094157" in href:
+                href = "/ar/blog/4280-14-8-2024-10"
+            elif "blogger.com" in low or "blogspot.com" in low or "nevermind.blog" in low:
+                href = ""
+            if href.startswith("/") and inner:
+                parts.append(f'<a href="{html.escape(href, quote=True)}">{inner}</a>')
+            elif href.startswith(("http://", "https://")) and inner:
                 parts.append(
                     f'<a href="{html.escape(href, quote=True)}" target="_blank" rel="noopener">{inner}</a>'
                 )

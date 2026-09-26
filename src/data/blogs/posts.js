@@ -1,6 +1,6 @@
 /**
- * Hardcoded copies of the original Blogger articles.
- * The wording is the archived posts. The HTML is the tutorial layout.
+ * Blog posts stored in this site.
+ * The wording is the archived articles. The HTML is the tutorial layout.
  */
 import { blogPostPath } from "../../../shared/seo/blogPaths.js";
 import { ARCHIVE_POSTS } from "./archive.js";

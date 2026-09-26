@@ -2,7 +2,7 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>https://trueprice.cash/sitemap-core.xml</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-09-26</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://trueprice.cash/sitemap-stocks-sa.xml</loc>
@@ -15,6 +15,10 @@
   <sitemap>
     <loc>https://trueprice.cash/sitemap-tutorials.xml</loc>
     <lastmod>2026-09-26</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://trueprice.cash/sitemap-blogs.xml</loc>
+    <lastmod>2026-06-06</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://trueprice.cash/sitemap-stocks-jp.xml</loc>
