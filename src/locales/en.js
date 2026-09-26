@@ -231,7 +231,7 @@ export default {
   TUTORIALS: "Tutorials",
   TUTORIALS_SERIES_LABEL: "Fundamental Analysis Series",
   TUTORIALS_HERO_LEAD:
-    "Ten step-by-step guides — from reading financial statements to spotting red flags — written for serious long-term investors on US, TASI, Tokyo, and London markets.",
+    "Twenty step-by-step guides — from reading financial statements to writing an investment thesis — written for serious long-term investors on US, TASI, Tokyo, and London markets.",
   TUTORIALS_COUNT_LABEL: "tutorials",
   TUTORIALS_LEVEL_RANGE: "Beginner to advanced",
   TUTORIALS_READ_SUFFIX: "read",

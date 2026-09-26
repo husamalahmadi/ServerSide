@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>How to Write an Investment Thesis: Turning Analysis into a Decision | TruePrice.Cash</title>
+<meta name="description" content="Learn how to turn fundamental analysis into a written investment thesis — variant perception, valuation, catalysts, risks, and exit conditions."/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--ink:#0f1117;--ink-soft:#3a3d4a;--ink-muted:#767b8a;--gold:#c9a84c;--gold-light:#f0d98a;--gold-faint:#fdf7e8;--white:#fff;--surface:#f9f8f6;--border:#e8e4dc;--link:#1a5c9e;--link-hover:#c9a84c;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--white);line-height:1.7;}
+a{color:var(--link);text-decoration:none;}a:hover{color:var(--link-hover);text-decoration:underline;}
+nav{background:var(--ink);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;}
+.nav-brand{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.15rem;font-weight:700;letter-spacing:.01em;}
+.nav-links{display:flex;gap:1.5rem;}.nav-links a{color:#c8ccd8;font-size:.875rem;font-weight:500;}.nav-links a:hover{color:var(--gold);text-decoration:none;}
+.progress-bar{height:3px;background:var(--gold);width:0;position:sticky;top:56px;z-index:99;transition:width .1s linear;}
+.hero{background:var(--ink);color:var(--white);padding:4rem 2rem 3rem;}
+.hero-inner{max-width:800px;margin:0 auto;}
+.series-label{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--gold-light);letter-spacing:.08em;text-transform:uppercase;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,2.75rem);font-weight:900;margin:.75rem 0 1rem;line-height:1.2;}
+.hero h1 em{color:var(--gold);font-style:normal;}
+.hero-sub{font-size:1.05rem;color:#c8ccd8;max-width:640px;line-height:1.65;}
+.hero-meta{display:flex;gap:2rem;margin-top:1.75rem;flex-wrap:wrap;}
+.meta-item{display:flex;flex-direction:column;gap:.2rem;}
+.meta-label{font-size:.7rem;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em;color:#767b8a;}
+.meta-value{font-size:.9rem;font-weight:600;color:var(--gold-light);}
+.container{max-width:800px;margin:0 auto;padding:2.5rem 2rem;}
+.toc{background:var(--gold-faint);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:1.5rem 1.75rem;margin-bottom:2.5rem;}
+.toc h2{font-family:'Playfair Display',serif;font-size:1rem;margin-bottom:.9rem;color:var(--ink);}
+.toc ol{padding-left:1.25rem;display:flex;flex-direction:column;gap:.4rem;}
+.toc li a{font-size:.9rem;color:var(--link);}.toc li a:hover{color:var(--link-hover);}
+h2{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin:2.5rem 0 1rem;padding-top:1.5rem;border-top:2px solid var(--border);color:var(--ink);}
+h3{font-size:1.1rem;font-weight:600;margin:1.5rem 0 .6rem;color:var(--ink-soft);}
+p{margin-bottom:1rem;color:var(--ink-soft);font-size:.975rem;}
+ul,ol{padding-left:1.4rem;margin-bottom:1rem;}
+li{margin-bottom:.45rem;font-size:.975rem;color:var(--ink-soft);}
+.callout{background:var(--gold-faint);border-left:4px solid var(--gold);padding:1.1rem 1.4rem;border-radius:0 6px 6px 0;margin:1.5rem 0;}
+.callout p{margin:0;font-size:.94rem;}
+.step-list{list-style:none;padding:0;counter-reset:step;}
+.step-list li{counter-increment:step;padding:.9rem 1rem .9rem 3.5rem;position:relative;border-bottom:1px solid var(--border);font-size:.975rem;color:var(--ink-soft);}
+.step-list li::before{content:counter(step);position:absolute;left:.75rem;top:.85rem;width:1.75rem;height:1.75rem;background:var(--gold);color:var(--ink);font-weight:700;font-size:.8rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;}
+.step-list li strong{color:var(--ink);}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.5rem 0;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem 1.4rem;}
+.card h4{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:.5rem;color:var(--ink);}
+.card p{font-size:.875rem;margin:0;color:var(--ink-muted);}
+.thesis-template{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.75rem;margin:1.5rem 0;}
+.thesis-template h3{margin-top:0;border-bottom:1px solid var(--border);padding-bottom:.75rem;margin-bottom:1rem;}
+.thesis-section{margin-bottom:1.2rem;}
+.thesis-label{font-family:'JetBrains Mono',monospace;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);display:block;margin-bottom:.25rem;}
+.thesis-placeholder{color:var(--ink-muted);font-size:.875rem;font-style:italic;}
+.sources{background:var(--ink);color:#c8ccd8;padding:2rem;border-radius:10px;margin-top:3rem;}
+.sources h3{font-family:'Playfair Display',serif;color:var(--gold);margin-bottom:1rem;}
+.sources ul{list-style:none;padding:0;display:flex;flex-direction:column;gap:.5rem;}
+.sources li::before{content:"→ ";}
+.sources a{color:var(--gold-light);font-size:.875rem;}.sources a:hover{color:var(--gold);}
+.article-nav{display:flex;gap:1rem;margin-top:3rem;flex-wrap:wrap;}
+.nav-pill{flex:1;min-width:200px;border:2px solid var(--border);border-radius:10px;padding:1rem 1.25rem;transition:.2s;}
+.nav-pill:hover{border-color:var(--gold);text-decoration:none;background:var(--gold-faint);}
+.nav-pill-label{font-size:.7rem;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-muted);display:block;margin-bottom:.3rem;}
+.nav-pill-title{font-size:.9rem;font-weight:600;color:var(--ink);}
+.series-complete{background:linear-gradient(135deg,var(--ink) 0%,#1a2040 100%);color:var(--white);border-radius:12px;padding:2.5rem;text-align:center;margin-top:3rem;}
+.series-complete h3{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.5rem;margin-bottom:.75rem;}
+.series-complete p{color:#c8ccd8;margin-bottom:1.25rem;}
+.series-complete a{display:inline-block;background:var(--gold);color:var(--ink);padding:.65rem 1.5rem;border-radius:6px;font-weight:600;font-size:.9rem;}.series-complete a:hover{background:var(--gold-light);text-decoration:none;}
+@media(max-width:600px){.hero{padding:2.5rem 1.25rem 2rem;}.container{padding:2rem 1.25rem;}.article-nav{flex-direction:column;}}
+</style>
+</head>
+<body>
+<nav>
+<a class="nav-brand" href="https://trueprice.cash">TruePrice.Cash</a>
+<div class="nav-links">
+<a href="https://trueprice.cash">Home</a>
+<a href="https://trueprice.cash/screener">Screener</a>
+<a href="#">Tutorials</a>
+</div>
+</nav>
+<div class="progress-bar" id="pb"></div>
+<header class="hero">
+<div class="hero-inner">
+<span class="series-label">Tutorial 20 of 20 · Fundamental Analysis Series</span>
+<h1>How to Write an <em>Investment Thesis</em></h1>
+<p class="hero-sub">You have learned the tools. Now learn how to assemble them into a decision. An investment thesis is the document that transforms scattered analysis into a clear, testable argument for buying, holding, or selling a stock.</p>
+<div class="hero-meta">
+<div class="meta-item"><span class="meta-label">Reading time</span><span class="meta-value">14 min</span></div>
+<div class="meta-item"><span class="meta-label">Level</span><span class="meta-value">All Levels</span></div>
+<div class="meta-item"><span class="meta-label">Topic</span><span class="meta-value">Decision-Making Framework</span></div>
+</div>
+</div>
+</header>
+
+<div class="container">
+<div class="toc">
+<h2>In This Tutorial</h2>
+<ol>
+<li><a href="#what-thesis">What an Investment Thesis Is (and Is Not)</a></li>
+<li><a href="#components">The Six Components of a Strong Thesis</a></li>
+<li><a href="#template">A Practical Thesis Template</a></li>
+<li><a href="#process">The Research-to-Thesis Process</a></li>
+<li><a href="#maintaining">Maintaining and Updating Your Thesis</a></li>
+<li><a href="#bias">Guarding Against Confirmation Bias</a></li>
+<li><a href="#tasi-context">Writing Theses for Saudi Market Investments</a></li>
+</ol>
+</div>
+
+<h2 id="what-thesis">What an Investment Thesis Is (and Is Not)</h2>
+<p>An investment thesis is a written argument explaining why a particular stock is likely to produce superior returns over a specific time horizon, and what would have to be true — or false — for that argument to stand or fall. It is neither a list of positive facts about a company nor a collection of financial ratios. It is a coherent narrative connecting a fundamental insight about the business to an expectation about the stock's future price.</p>
+<p>The most important word in that definition is "written." Unwritten theses are incomplete theses. When you force yourself to write an argument in full sentences, gaps in your reasoning become visible in a way they do not when the thesis lives only in your head. Writing also creates a record against which you can check your reasoning after the fact — which is the only way to actually improve as an investor over time.</p>
+
+<div class="callout">
+<p><strong>The test of a good thesis:</strong> If you handed it to an intelligent stranger with no position in the company, could they read it and understand precisely why you expect this investment to work, and what would change your mind? If yes, it is a real thesis. If not, it is still a note-taking exercise.</p>
+</div>
+
+<h3>What a thesis is not</h3>
+<p>A thesis is not a stock pitch designed to convince others to buy. It is not a list of reasons you like the company. It is not a summary of the bull case without engaging the bear case. And critically, it is not a fixed document — it should be updated as new information arrives. <a href="https://www.cfainstitute.org/en/membership/professional-development/refresher-readings/active-equity-investing-portfolio-construction" target="_blank" rel="noopener">CFA Institute research</a> on active equity investing emphasizes that the maintenance of a thesis over time is as important as its initial construction.</p>
+
+<h2 id="components">The Six Components of a Strong Thesis</h2>
+
+<ul class="step-list">
+<li><strong>The Business Summary:</strong> A crisp, two-to-three sentence description of what the company does, how it makes money, and who its customers are. This forces clarity on the fundamentals before you move to opinion. If you cannot describe the business clearly, you do not yet understand it well enough to invest.</li>
+<li><strong>The Variant Perception:</strong> Why do you believe the market is wrong about this stock, and in what direction? A thesis without a variant perception is just agreement with the market, which cannot generate excess returns. Your perception might be about near-term earnings trajectory, long-term competitive position, industry dynamics, or management quality — but it must be specific and different from consensus.</li>
+<li><strong>The Valuation Argument:</strong> At what intrinsic value do you estimate the business, and what is the margin of safety at the current price? See our <a href="06-dcf-valuation.html">Tutorial 6 on DCF Valuation</a> and <a href="05-financial-ratios.html">Tutorial 5 on Financial Ratios</a> for the analytical tools. The valuation section must state not just "it is cheap" but why, by how much, and under what assumptions.</li>
+<li><strong>The Catalysts:</strong> What specific event, announcement, or trend do you expect to close the gap between current price and intrinsic value? Time matters in investing — capital tied up in a thesis that takes ten years to resolve has a very different return profile than one with near-term catalysts. Name two or three specific things you expect to happen that will cause the market to recognize the value you have identified.</li>
+<li><strong>The Risks and Bear Case:</strong> This is the most commonly underdeveloped section in amateur investment writing. Name the two or three things that could make your thesis completely wrong. Assign rough probabilities. Estimate how much the stock would likely fall in the bear case. Then ask: given the upside in your bull case and the downside in your bear case, is the expected return positive? If you cannot honestly articulate the bear case, you have not finished your research.</li>
+<li><strong>The Exit Conditions:</strong> Under what conditions would you sell? This includes both positive conditions (stock reaches your intrinsic value estimate, a better opportunity emerges) and negative ones (thesis is invalidated by new information, management makes a value-destroying decision). Pre-committing to exit conditions protects against the psychological trap of holding a broken thesis because of loss aversion.</li>
+</ul>
+
+<h2 id="template">A Practical Thesis Template</h2>
+<p>Below is a template you can use for any stock you are analyzing. The bracketed placeholders indicate what each section should contain.</p>
+
+<div class="thesis-template">
+<h3>Investment Thesis Template</h3>
+
+<div class="thesis-section">
+<span class="thesis-label">Company Name &amp; Ticker</span>
+<p class="thesis-placeholder">[Company name, exchange, ticker symbol, current price, date written]</p>
+</div>
+
+<div class="thesis-section">
+<span class="thesis-label">Business Summary (2–3 sentences)</span>
+<p class="thesis-placeholder">[What does the company do? Who pays them and why? What is the core economic engine?]</p>
+</div>
+
+<div class="thesis-section">
+<span class="thesis-label">Variant Perception</span>
+<p class="thesis-placeholder">[What does the market believe about this company that I believe is wrong? What do I know or see that consensus is missing?]</p>
+</div>
+
+<div class="thesis-section">
+<span class="thesis-label">Intrinsic Value Estimate</span>
+<p class="thesis-placeholder">[Price target and methodology. Key assumptions. Margin of safety at current price. Bull / base / bear valuation range.]</p>
+</div>
+
+<div class="thesis-section">
+<span class="thesis-label">Expected Catalysts (next 12–24 months)</span>
+<p class="thesis-placeholder">[List 2–3 specific events expected to close the gap between price and value. Timing estimate for each.]</p>
+</div>
+
+<div class="thesis-section">
+<span class="thesis-label">Primary Risks &amp; Bear Case</span>
+<p class="thesis-placeholder">[List 2–3 things that could prove this thesis wrong. Estimate the stock's downside in the bear case. Assess whether the expected value of the position is positive.]</p>
+</div>
+
+<div class="thesis-section">
+<span class="thesis-label">Exit Conditions</span>
+<p class="thesis-placeholder">[Sell when: (a) stock reaches [price], (b) [thesis invalidation event], (c) better opportunity with [return profile] emerges, (d) hold period exceeds [timeframe] without catalyst materializing.]</p>
+</div>
+
+<div class="thesis-section">
+<span class="thesis-label">Monitoring Metrics</span>
+<p class="thesis-placeholder">[The 3–5 specific financial or operational metrics you will track each quarter to determine whether the thesis is on track.]</p>
+</div>
+</div>
+
+<h2 id="process">The Research-to-Thesis Process</h2>
+<p>A thesis is the output of a research process, not the starting point. The research process works best when you follow a consistent sequence:</p>
+
+<div class="card-grid">
+<div class="card"><h4>1. Industry First</h4><p>Understand the industry structure, competitive dynamics, and key value drivers before studying any individual company. See <a href="12-sector-analysis.html">Tutorial 12</a>.</p></div>
+<div class="card"><h4>2. Business Model</h4><p>Map how the company makes money, who its customers are, and what creates switching costs or pricing power. See <a href="07-competitive-moat.html">Tutorial 7</a>.</p></div>
+<div class="card"><h4>3. Financial History</h4><p>Analyze 5–10 years of income statements, balance sheets, and cash flow statements to understand the company's financial character. Tutorials <a href="02-income-statement.html">2</a>, <a href="03-balance-sheet.html">3</a>, <a href="04-cash-flow-statement.html">4</a>.</p></div>
+<div class="card"><h4>4. Valuation</h4><p>Build a base, bull, and bear case valuation using DCF, comparable multiples, and asset-based approaches. See <a href="06-dcf-valuation.html">Tutorial 6</a>.</p></div>
+<div class="card"><h4>5. Management Assessment</h4><p>Evaluate the leadership team's track record and capital allocation discipline. See <a href="17-reading-management.html">Tutorial 17</a>.</p></div>
+<div class="card"><h4>6. Write the Thesis</h4><p>Only after completing the above steps. The writing process will reveal the remaining gaps that require additional research.</p></div>
+</div>
+
+<h2 id="maintaining">Maintaining and Updating Your Thesis</h2>
+<p>The investment thesis is a living document. Every quarterly earnings report, annual filing, industry development, and macroeconomic shift is potential new evidence for or against your thesis. Build a habit of reviewing your thesis against each piece of new information:</p>
+<ul>
+<li>Does this new information confirm, contradict, or leave unchanged my variant perception?</li>
+<li>Does it change my intrinsic value estimate? By how much?</li>
+<li>Does it affect any of my catalysts — their timing, probability, or magnitude?</li>
+<li>Does it activate any of my exit conditions?</li>
+</ul>
+<p>Investors who maintain this discipline over years develop an increasingly accurate mental model of how their thesis-building process works — which assumptions they tend to get right, which categories of risk they tend to underestimate, and which types of businesses reward their style of analysis. This self-knowledge is among the most valuable assets a long-term investor can accumulate.</p>
+
+<h2 id="bias">Guarding Against Confirmation Bias</h2>
+<p>Confirmation bias — the tendency to seek out and overweight information that supports an existing belief — is the single most dangerous cognitive error in investing. Once you own a stock, your brain begins selectively processing information in ways that protect your thesis. This is not a character flaw; it is a feature of human cognition documented extensively in behavioral finance research, most notably by <a href="https://www.amazon.com/Thinking-Fast-Slow-Daniel-Kahneman/dp/0374533555" target="_blank" rel="noopener">Daniel Kahneman in Thinking, Fast and Slow</a>.</p>
+
+<p>Several techniques help counter it:</p>
+<ul>
+<li><strong>Write the bear case before you buy:</strong> Force yourself to write the most compelling argument against your thesis — and then decide whether you have genuinely addressed it rather than dismissed it.</li>
+<li><strong>Assign a probability to the bear case:</strong> Not just "the bear case exists" but "I believe there is a 25% probability this thesis is wrong, and in that scenario the stock falls 40%." Quantification forces honest assessment.</li>
+<li><strong>Seek out disconfirming views:</strong> Read short reports. Read negative analyst ratings. Read the most articulate arguments from your most intelligent opponents. Understand their logic before you dismiss it. See our <a href="18-short-selling-analysis.html">Tutorial 18 on Short Selling</a>.</li>
+<li><strong>Review your losers with the same rigor as your winners:</strong> Post-mortems on wrong decisions are among the highest-return activities available to investors, and they are almost universally avoided because they are psychologically uncomfortable.</li>
+</ul>
+
+<div class="callout">
+<p><strong>The pre-mortem technique:</strong> Before buying a position, imagine it is two years from now and the stock has lost 50%. Write a paragraph explaining what went wrong. This mental exercise surfaces the risks you are most likely to be dismissing in the excitement of a new idea. The technique was formalized by psychologist Gary Klein and is widely used in decision-making across disciplines.</p>
+</div>
+
+<h2 id="tasi-context">Writing Theses for Saudi Market Investments</h2>
+<p>The investment thesis framework applies universally, but several factors are particularly important to address explicitly when writing theses for TASI-listed companies.</p>
+
+<h3>Ownership structure and its implications</h3>
+<p>Many Saudi listed companies are majority-owned by founding families, the Public Investment Fund (PIF), or other government entities. Your thesis must explicitly address whether minority shareholders have sufficient protection and alignment — and what recourse exists if they do not. Review CMA governance standards and the company's shareholder agreement disclosures from the <a href="https://disclosure.tadawul.com.sa/wps/portal/tadawul/home" target="_blank" rel="noopener">Tadawul disclosure portal</a>.</p>
+
+<h3>Vision 2030 dependency</h3>
+<p>Be explicit about whether your thesis depends on Vision 2030 initiative spending, regulatory changes, or government contracts. This creates concentration risk — a single policy change can significantly affect thesis validity. If your thesis is primarily a government spending play, the variant perception must be about the magnitude, timing, or beneficiary selection, not simply that the government will spend.</p>
+
+<h3>Oil price sensitivity</h3>
+<p>For companies with direct or indirect oil price exposure — which includes much of the TASI given the hydrocarbon nature of government revenues — state explicitly what oil price assumption underlies your thesis, and how a 30–40% oil price decline would affect the thesis's validity. The <a href="https://www.sama.gov.sa/" target="_blank" rel="noopener">Saudi Central Bank (SAMA)</a> publishes economic data useful for stress testing these assumptions.</p>
+
+<h3>Liquidity considerations</h3>
+<p>Mid-cap and small-cap TASI stocks can have limited daily trading volumes. Include in your thesis the number of trading days required to build and exit your position without significantly moving the price. This affects position sizing and time horizon assumptions for catalyst realization.</p>
+
+<p>For research tools to build your Saudi market thesis, <a href="https://www.argaam.com/" target="_blank" rel="noopener">Argaam</a> and <a href="https://www.mubasher.info/" target="_blank" rel="noopener">Mubasher</a> provide company data, consensus estimates, and news in Arabic and English. The <a href="https://www.saudiexchange.sa/" target="_blank" rel="noopener">Saudi Exchange</a> provides direct access to filings and market statistics.</p>
+
+<div class="sources">
+<h3>Sources &amp; Further Reading</h3>
+<ul>
+<li><a href="https://www.cfainstitute.org/en/membership/professional-development/refresher-readings/active-equity-investing-portfolio-construction" target="_blank" rel="noopener">CFA Institute — Active Equity Investing: Portfolio Construction</a></li>
+<li><a href="https://www.berkshirehathaway.com/letters/letters.html" target="_blank" rel="noopener">Berkshire Hathaway — Annual Letters (investment thesis examples throughout)</a></li>
+<li><a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/lectures/inv.html" target="_blank" rel="noopener">Damodaran Online — Investment Valuation Course Materials</a></li>
+<li><a href="https://www.argaam.com/" target="_blank" rel="noopener">Argaam — Saudi Market Data and Analysis</a></li>
+<li><a href="https://disclosure.tadawul.com.sa/wps/portal/tadawul/home" target="_blank" rel="noopener">Tadawul Disclosure Portal — Saudi Listed Company Filings</a></li>
+<li><a href="https://www.sama.gov.sa/" target="_blank" rel="noopener">SAMA — Saudi Macroeconomic Data and Publications</a></li>
+<li><a href="https://www.cfainstitute.org/en/research/foundation/2012/the-psychology-of-investing" target="_blank" rel="noopener">CFA Institute — The Psychology of Investing</a></li>
+</ul>
+</div>
+
+<nav class="article-nav">
+<a class="nav-pill" href="19-esg-investing.html">
+<span class="nav-pill-label">← Previous</span>
+<span class="nav-pill-title">ESG Investing Explained</span>
+</a>
+<a class="nav-pill" href="01-what-is-fundamental-analysis.html">
+<span class="nav-pill-label">Start Over →</span>
+<span class="nav-pill-title">What is Fundamental Analysis?</span>
+</a>
+</nav>
+
+<div class="series-complete">
+<h3>🎓 Series Complete</h3>
+<p>You have completed all 20 tutorials in the Fundamental Analysis Series. You now have a comprehensive toolkit for evaluating any publicly listed company — from reading its financial statements to writing a disciplined investment thesis.</p>
+<a href="https://trueprice.cash/screener">Try the TruePrice Screener →</a>
+</div>
+
+</div>
+
+<script>
+const pb=document.getElementById('pb');
+window.addEventListener('scroll',()=>{
+const s=document.documentElement;
+const p=(s.scrollTop/(s.scrollHeight-s.clientHeight))*100;
+pb.style.width=p+'%';
+});
+</script>
+</body>
+</html>

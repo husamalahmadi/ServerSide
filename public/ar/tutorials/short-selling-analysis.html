@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>فهم البيع على المكشوف وما يكشفه البائعون على المكشوف | TruePrice.Cash</title>
+  <meta name="description" content="افهم آليات البيع على المكشوف، وكيف تقرأ الفائدة القصيرة، وكيف يستخدم المستثمر طويل الأجل أبحاث البائعين على المكشوف كإشارة مخاطر." />
+  <link rel="canonical" href="https://trueprice.cash/ar/tutorials/short-selling-analysis" />
+  <link rel="alternate" hreflang="en" href="https://trueprice.cash/en/tutorials/short-selling-analysis" />
+  <link rel="alternate" hreflang="ar" href="https://trueprice.cash/ar/tutorials/short-selling-analysis" />
+  <link rel="alternate" hreflang="x-default" href="https://trueprice.cash/en/tutorials/short-selling-analysis" />
+  <meta property="og:title" content="فهم البيع على المكشوف وما يكشفه البائعون على المكشوف | TruePrice.Cash" />
+  <meta property="og:description" content="افهم آليات البيع على المكشوف، وكيف تقرأ الفائدة القصيرة، وكيف يستخدم المستثمر طويل الأجل أبحاث البائعين على المكشوف كإشارة مخاطر." />
+  <meta property="og:url" content="https://trueprice.cash/ar/tutorials/short-selling-analysis" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://trueprice.cash/og/default.png" />
+  <meta property="og:image:secure_url" content="https://trueprice.cash/og/default.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://trueprice.cash/og/default.png" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","@id":"https://trueprice.cash/ar/tutorials/short-selling-analysis#article","headline":"فهم البيع على المكشوف وما يكشفه البائعون على المكشوف","description":"افهم آليات البيع على المكشوف، وكيف تقرأ الفائدة القصيرة، وكيف يستخدم المستثمر طويل الأجل أبحاث البائعين على المكشوف كإشارة مخاطر.","url":"https://trueprice.cash/ar/tutorials/short-selling-analysis","inLanguage":"ar","isPartOf":{"@type":"CollectionPage","url":"https://trueprice.cash/ar/tutorials","name":"دروس التحليل الأساسي"},"publisher":{"@type":"Organization","name":"TruePrice.Cash","url":"https://trueprice.cash/"},"author":{"@type":"Organization","name":"TruePrice.Cash","url":"https://trueprice.cash/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"الرئيسية","item":"https://trueprice.cash/"},{"@type":"ListItem","position":2,"name":"الدروس","item":"https://trueprice.cash/ar/tutorials"},{"@type":"ListItem","position":3,"name":"فهم البيع على المكشوف وما يكشفه البائعون على المكشوف","item":"https://trueprice.cash/ar/tutorials/short-selling-analysis"}]}]}</script>
+  <style>
+    :root { --tp-primary: #2c7be5; --tp-ink: #1a2b42; --tp-muted: #5a6b85; --tp-border: #d4e6fb; }
+    body { font-family: system-ui,Segoe UI,Roboto,sans-serif; margin: 0; color: var(--tp-ink); line-height: 1.65; background: #f6faff; }
+    .wrap { max-width: 820px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+    header.site { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--tp-border); }
+    header.site a { color: var(--tp-primary); text-decoration: none; font-weight: 600; font-size: 14px; }
+    .brand { font-weight: 800; font-size: 1.1rem; color: var(--tp-ink); }
+    .hero { background: linear-gradient(140deg,#fff,#eef5ff); border: 1px solid var(--tp-border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
+    .hero h1 { margin: 0 0 0.5rem; font-size: 1.75rem; line-height: 1.25; }
+    .hero h1 em { font-style: normal; color: var(--tp-primary); }
+    .hero p { margin: 0; color: var(--tp-muted); font-size: 15px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; font-size: 13px; color: var(--tp-muted); }
+    article { background: #fff; border: 1px solid var(--tp-border); border-radius: 12px; padding: 1.25rem 1.35rem; }
+    article a { color: var(--tp-primary); }
+    article h2 { margin: 1.5rem 0 0.75rem; font-size: 1.25rem; }
+    article h3 { margin: 1rem 0 0.5rem; font-size: 1.05rem; }
+    article p { margin: 0 0 0.85rem; font-size: 15px; }
+    article table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 1rem 0; }
+    article th, article td { border: 1px solid var(--tp-border); padding: 0.5rem 0.65rem; text-align: start; }
+    article th { background: #f0f6ff; }
+    .catalog { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.65rem; }
+    .catalog a { display: block; padding: 0.85rem 1rem; background: #fff; border: 1px solid var(--tp-border); border-radius: 10px; color: var(--tp-ink); text-decoration: none; font-weight: 600; }
+    .catalog a:hover { border-color: var(--tp-primary); }
+    .series-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1.25rem; }
+    .series-nav a { display: block; padding: 0.75rem 1rem; background: #fff; border: 1px solid var(--tp-border); border-radius: 10px; text-decoration: none; color: var(--tp-primary); font-weight: 600; font-size: 14px; }
+    footer { margin-top: 2rem; text-align: center; font-size: 12px; color: var(--tp-muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="site">
+      <a class="brand" href="/">TruePrice.Cash</a>
+      <div>
+        <a href="/en/tutorials">English</a>
+        ·
+        <a href="/ar/tutorials">العربية</a>
+        ·
+        <a href="/">الرئيسية</a>
+      </div>
+    </header>
+    <div class="hero">
+      <p style="font-size:11px;font-weight:700;color:var(--tp-primary);text-transform:uppercase;letter-spacing:.06em;">الدرس 18 من 20 · سلسلة التحليل الأساسي</p>
+      <h1>فهم <em>البيع على المكشوف</em> وما يكشفه البائعون على المكشوف</h1>
+      <p>يجري البائعون على المكشوف بحثاً عميقاً وخصمياً عن الشركات التي يراهنون ضدها. تعلّم قراءة إشاراتهم قد يحمي محفظتك من أخطاء مكلفة.</p>
+      <div class="meta">
+        <span>13 دقيقة</span>
+        <span>متوسط–متقدم</span>
+      </div>
+    </div>
+    <article><div class="toc">
+<h2>في هذا الدرس</h2>
+<ol>
+<li><a href="#mechanics">كيف يعمل البيع على المكشوف</a></li>
+<li><a href="#short-interest">قراءة بيانات الفائدة القصيرة</a></li>
+<li><a href="#short-reports">تقارير أبحاث البائعين على المكشوف</a></li>
+<li><a href="#squeeze">ضغط الشراء القصير: حين تنقلب الصفقة</a></li>
+<li><a href="#signals">استخدام بيانات البيع على المكشوف كمستثمر أساسي</a></li>
+<li><a href="#limitations">حدود البيع على المكشوف كإشارة</a></li>
+<li><a href="#tasi-context">البيع على المكشوف في السوق السعودي</a></li>
+</ol>
+</div>
+
+<h2 id="mechanics">كيف يعمل البيع على المكشوف</h2>
+<p>البيع على المكشوف هو بيع أسهم لا تملكها، مع توقع إعادة شرائها بسعر أقل. الآلية كالتالي: يقترض البائع أسهماً من وسيط (ويدفع رسوم اقتراض)، ويبيعها فوراً في السوق، ثم يأمل أن ينخفض السعر ليعيد الشراء بسعر أقل، ويرد الأسهم المقترضة، ويحتفظ بالفرق.</p>
+<p>المخاطر نظرياً غير محدودة. المستثمر الطويل لا يخسر أكثر من 100% من استثماره. البائع على المكشوف قد يخسر أضعاف حصته إذا ارتفع السهم — لذلك يكون المحترفون عادة منضبطين جداً، وبحثهم عميق، وحجم مراكزهم متحفظ.</p>
+
+<div class="callout">
+<p><strong>الفكرة الأساسية:</strong> لدى البائعين على المكشوف حافز مالي قوي ليكونوا على صواب. يدفعون رسوم اقتراض كل يوم يحتفظون فيه بالمركز. هذه التكلفة تخلق انضباطاً طبيعياً: المراكز المضاربية أو الكسولة تخسر مالاً قبل أن تُختبر الأطروحة أصلاً.</p>
+</div>
+
+<h3>عملية الاقتراض والتسوية</h3>
+<p>لبيع سهم على المكشوف يجب أن تكون الأسهم «قابلة للتحديد» — متاحة للاقتراض من حائزين مؤسسيين أو صناديق مؤشرات أو مشاركين آخرين يقرضونها مقابل رسم. هذا الرسم، المسمّى «تكلفة الاقتراض»، يعكس العرض والطلب. سهم بفائدة قصيرة مرتفعة جداً ومعروض قابل للاقتراض محدود يصبح غالي البيع على المكشوف — أحياناً يتجاوز 50–100% سنوياً للأسماء الأكثر جدلاً. يشرح <a href="https://www.investopedia.com/terms/s/shortselling.asp" target="_blank" rel="noopener">شرح Investopedia للبيع على المكشوف</a> الآلية كاملة.</p>
+
+<h2 id="short-interest">قراءة بيانات الفائدة القصيرة</h2>
+<p>تخبرك بيانات الفائدة القصيرة كم سهماً من الشركة محتفَظ به على المكشوف كنسبة من الأسهم الحرة (المتاحة للتداول العام). تُنشر كل أسبوعين في أمريكا ومتاحة عبر <a href="https://finance.yahoo.com/" target="_blank" rel="noopener">Yahoo Finance</a> وFINRA ومعظم منصات البيانات.</p>
+
+<table>
+<thead><tr><th>مستوى الفائدة القصيرة</th><th>ما قد يشير إليه</th><th>تنبيه</th></tr></thead>
+<tbody>
+<tr><td>أقل من 2% من الأسهم الحرة</td><td>معنويات سلبية ضئيلة</td><td>غير مهم بذاته</td></tr>
+<tr><td>2–5% من الأسهم الحرة</td><td>تموضع هبوطي متواضع</td><td>شائع لمعظم الأسهم</td></tr>
+<tr><td>5–15% من الأسهم الحرة</td><td>تشكك مرتفع؛ غالباً توجد أطروحة</td><td>ابحث عن السبب</td></tr>
+<tr><td>أعلى من 15% من الأسهم الحرة</td><td>رهانات سلبية عالية القناعة</td><td>قد يشير إلى مخاوف جدية أو تهيئة لضغط شراء</td></tr>
+<tr><td>أعلى من 30% من الأسهم الحرة</td><td>جدل شديد أو مخاوف احتيال معروفة</td><td>عامله كعلامة فحص نافي للجهالة مهمة</td></tr>
+</tbody>
+</table>
+
+<h3>أيام التغطية (نسبة البيع على المكشوف)</h3>
+<p>يقسم هذا المؤشر إجمالي الأسهم المباعة على المكشوف على متوسط حجم التداول اليومي. يخبرك كم يوماً من التداول المتوسط يلزم لتغطية كل المراكز القصيرة. قراءة «أيام التغطية» فوق 10 تعني أن البائعين يحتاجون وقتاً أطول للخروج — فيرتفع احتمال ضغط شراء عنيف إذا بدأ السهم بالارتفاع.</p>
+
+<h2 id="short-reports">تقارير أبحاث البائعين على المكشوف</h2>
+<p>البائعون الناشطون على المكشوف — شركات تأخذ مراكز قصيرة ثم تنشر تقارير بحث مفصّلة تشرح لماذا السهم مبالغ في تقييمه أو احتيالي أو معيب هيكلياً — أنتجوا بعض أهم أبحاث المساءلة المؤسسية في الأسواق الحديثة.</p>
+<p>كشفت شركات مثل Muddy Waters Research وHindenburg Research وCitron Research وGotham City Research احتيالات محاسبية وحشو قنوات توزيع وتعاملات أطراف ذات علاقة غير مفصح عنها وتوجيهات مضللة عبر شركات عديدة خلال العقدين الماضيين. هذه التقارير منشورة مجاناً وتستحق القراءة كدراسات حالة في التحليل المالي الجنائي، سواء كنت تفكر في بيع السهم المذكور على المكشوف أم لا.</p>
+
+<h3>ماذا تفحص التقارير القصيرة الجيدة</h3>
+<ul>
+<li><strong>شذوذات محاسبية:</strong> توقيت الاعتراف بالإيراد، ونمو غير عادي في الذمم، وتراكم مخزون مريب، ورسملة عدوانية للمصروفات</li>
+<li><strong>علامات تحذير إدارية:</strong> أنماط بيع المطلعين، وتضارب مصالح غير مفصح عنه، وتاريخ الإدارة في شركات سابقة</li>
+<li><strong>استدامة نموذج العمل:</strong> تسرّب عملاء مخفي في بيانات الأفواج، واقتصاد وحدة لا يتوسع، ومخاطر تركز العملاء</li>
+<li><strong>فجوات التحقق من طرف ثالث:</strong> إيراد لا يمكن تأكيده عبر فحص المورّدين أو مقابلات العملاء أو صور الأقمار الصناعية</li>
+<li><strong>التعرض التنظيمي:</strong> تحقيقات قائمة، أو تغيّرات تنظيمية تلغي نموذج العمل، أو التزام بيئي غير مفصح عنه</li>
+</ul>
+
+<div class="callout">
+<p><strong>للمستثمر الطويل:</strong> قراءة تقارير البيع على المكشوف عن شركات تملكها مزعجة لكنها قيّمة. إذا لم تتناول أطروحة التقرير نقاط ضعف حقيقية كنت قد رصدتها ثم استبعدتها، فهذه إشارة أن فحصك النافي للجهالة كان ناقصاً. وإذا تناولتها وبقيت أسبابك لاستبعاد الخطر قوية، فينبغي أن تزداد قناعتك.</p>
+</div>
+
+<h3>دراسات حالة تاريخية تستحق الدراسة</h3>
+<p>إنرون وورلدكوم ولاكن كوفي ووايركارد ونيكولا كلها كان لديها بائعون على المكشوف يثيرون المخاوف قبل أن يصبح الانهيار مرئياً للسوق الأوسع. في كل حالة رُفضت مخاوفهم من محللي جانب البيع والمستثمرين الأفراد وأحياناً الجهات التنظيمية حتى فات الأوان. تُدرس هذه الحالات بالتفصيل في أدبيات التمويل الأكاديمية وفي كتب مثل <em>The Big Short</em> و<em>Fooling Some of the People All of the Time</em>.</p>
+
+<h2 id="squeeze">ضغط الشراء القصير: حين تنقلب الصفقة</h2>
+<p>يحدث ضغط الشراء القصير حين يبدأ سهم مُباع بكثافة على المكشوف بالارتفاع بحدة، فيُجبر البائعون على شراء أسهم لتغطية مراكزهم (للحد من الخسائر)، فيرتفع السعر أكثر، فيطلق تغطية إضافية، في حلقة تعزز نفسها. جلبت حلقة GameStop في يناير 2021 هذه الآلية إلى الوعي العام، لكن ضغوط الشراء حدثت عبر تاريخ الأسواق.</p>
+
+<h3>شروط تخلق احتمال الضغط</h3>
+<ul>
+<li>فائدة قصيرة أعلى من 20–30% من الأسهم الحرة</li>
+<li>أيام تغطية منخفضة (لا يستطيع البائعون الخروج بسرعة)</li>
+<li>تكلفة اقتراض مرتفعة (البائعون تحت ضغط أصلاً)</li>
+<li>محفّز: مفاجأة أرباح إيجابية، أو حكم تنظيمي، أو إشاعة استحواذ، أو شراء تجزئة منسّق</li>
+</ul>
+
+<p>من منظور المستثمر الطويل، نسبة فائدة قصيرة مرتفعة مع محفّز إيجابي موثوق قد تخلق وضعاً غير متماثل — ضغط الشراء يضخّم المكاسب بما يتجاوز ما يبرره التحسن الأساسي وحده. لكن مطاردة إعدادات الضغط بلا أطروحة أساسية مضاربة لا استثمار.</p>
+
+<h2 id="signals">استخدام بيانات البيع على المكشوف كمستثمر أساسي</h2>
+<p>لا تحتاج أن تكون بائعاً على المكشوف لتستفيد من هذه المعلومات. كمستثمر طويل، تعمل هذه البيانات كمدخل إضافي في عملية بحثك.</p>
+
+<div class="card-grid">
+<div class="card"><h4>فائدة قصيرة مرتفعة → محفّز للفحص</h4><p>حين ترتفع الفائدة القصيرة على سهم تفكر فيه بشكل ملحوظ، عاملها دافعاً للتحقيق في المخاوف المحددة وراءها — لا سبباً للتجنب تلقائياً.</p></div>
+<div class="card"><h4>فائدة قصيرة صاعدة → راقب عن كثب</h4><p>إذا كنت تملك السهم وبدأت الفائدة القصيرة بالارتفاع، اقرأ أحدث التقارير القصيرة وأعد فحص أطروحتك. قد ظهرت معلومات جديدة.</p></div>
+<div class="card"><h4>فائدة قصيرة عالية + أساسيات قوية</h4><p>أسهم مُباعة بكثافة على المكشوف لكن أساسياتها صلبة قد تقدم عوائد ممتازة معدّلة للمخاطر حين تفشل الأطروحة القصيرة ويُجبر البائعون على التغطية.</p></div>
+<div class="card"><h4>فائدة قصيرة متراجعة</h4><p>تغطية البائعين وخروجهم من مركز عادة إشارة إيجابية — قد تعني تحسن الأساسيات أو تراجع المخاطر الهبوطية.</p></div>
+</div>
+
+<h3>أين تجد بيانات البيع على المكشوف</h3>
+<p>ينشر <a href="https://finra-markets.morningstar.com/MarketData/EquityOptions/default.jsp" target="_blank" rel="noopener">بيانات البيع على المكشوف لدى FINRA</a> الفائدة القصيرة الأمريكية مرتين شهرياً. يعرض <a href="https://finance.yahoo.com/" target="_blank" rel="noopener">Yahoo Finance</a> الفائدة القصيرة في تبويب الإحصاءات لأي رمز. يوفّر <a href="https://www.macrotrends.net/" target="_blank" rel="noopener">Macrotrends</a> سياقاً تاريخياً لمعظم المؤشرات. وللتقارير الفردية، بحث بسيط باسم الشركة مع «short report» أو «short thesis» يُظهر أي بحث ناشط منشور.</p>
+
+<h2 id="limitations">حدود البيع على المكشوف كإشارة</h2>
+<p>الفائدة القصيرة المرتفعة ليست إشارة بيع موثوقة بمفردها. البائعون على المكشوف يخطئون بما يكفي ليجعل التعامل مع تموضعهم كحقيقة نهائية خطأ. تنطبق عدة حدود:</p>
+
+<ul>
+<li><strong>المراكز المزدحمة قد تبقى مخطئة لسنوات:</strong> البيع على المكشوف المبني على التقييم ضد أسهم نمو عالية المضاعف أهلك محللين ممتازين كانوا على صواب في الأساسيات ومخطئين في التوقيت. بيعت أمازون بكثافة على المكشوف لسنوات بينما كانت تُراكم بمعدلات استثنائية.</li>
+<li><strong>التقارير قد يحركها الربح لا الحقيقة:</strong> بائع ينشر تقريراً سلبياً عن سهم يبيعه على المكشوف له مصلحة مالية في أن يهبط السهم بسبب التقرير. هذا ليس غير قانوني في معظم الأسواق، لكنه يعني أن التقارير القصيرة تستحق الشك نفسه الذي تطبقه على أبحاث الوسطاء الصعودية.</li>
+<li><strong>فروقات تنظيمية:</strong> تختلف لوائح البيع على المكشوف كثيراً بين الأسواق. ما هو مسموح ومُفصح عنه في أمريكا يختلف عن ولايات قضائية أخرى.</li>
+</ul>
+
+<h2 id="tasi-context">البيع على المكشوف في السوق السعودي</h2>
+<p>يعمل البيع على المكشوف في سوق الأسهم السعودي ضمن إطار تنظيمي تديره <a href="https://www.cma.org.sa/en/Pages/default.aspx" target="_blank" rel="noopener">هيئة السوق المالية</a>. أدخلت الهيئة لوائح البيع المغطى على المكشوف عام 2017، بما يسمح للمستثمرين المؤهلين ببيع أسهم تاسi المؤهلة بشروط محددة، منها اقتراض الأسهم قبل البيع (ما يلغي البيع المكشوف العاري).</p>
+<p>قائمة الأسهم المؤهلة ومتطلبات الاقتراض والتزامات الإبلاغ منشورة على <a href="https://www.saudiexchange.sa/" target="_blank" rel="noopener">موقع تداول السعودية</a>. مقارنة بالأسواق الأمريكية، منظومة البيع على المكشوف في السعودية أقل تطوراً — عدد أقل من البائعين الناشطين ينشرون بحثاً علنياً عن الشركات المدرجة، وتوافر الاقتراض أكثر محدودية.</p>
+<p>لكن الدرس الأساسي يبقى: إذا صادفت بحثاً سلبياً عن سهم في تاسi، أو سمعت أن مستثمرين محترفين يبيعونه على المكشوف، فهذه إشارة للتحقيق جدياً في المخاوف الكامنة — عبر <a href="https://disclosure.tadawul.com.sa/wps/portal/tadawul/home" target="_blank" rel="noopener">إفصاحات تداول</a>، وعبر منصات مثل <a href="https://www.argaam.com/" target="_blank" rel="noopener">أرقام</a>، وعبر عملية تحليلك الأساسي.</p>
+
+<div class="sources">
+<h3>المصادر وقراءات إضافية</h3>
+<ul>
+<li><a href="https://www.investopedia.com/terms/s/shortselling.asp" target="_blank" rel="noopener">Investopedia — البيع على المكشوف: الآلية والاستراتيجية</a></li>
+<li><a href="https://finra-markets.morningstar.com/MarketData/EquityOptions/default.jsp" target="_blank" rel="noopener">FINRA — بيانات الفائدة القصيرة (الأسواق الأمريكية)</a></li>
+<li><a href="https://www.cma.org.sa/en/Pages/default.aspx" target="_blank" rel="noopener">هيئة السوق المالية — لوائح البيع على المكشوف</a></li>
+<li><a href="https://www.saudiexchange.sa/" target="_blank" rel="noopener">تداول السعودية — الأوراق المؤهلة للبيع على المكشوف</a></li>
+<li><a href="https://www.sec.gov/investor/pubs/regsho.htm" target="_blank" rel="noopener">SEC — نظرة على اللائحة SHO</a></li>
+<li><a href="https://finance.yahoo.com/" target="_blank" rel="noopener">Yahoo Finance — إحصاءات الفائدة القصيرة</a></li>
+<li><a href="https://www.macrotrends.net/" target="_blank" rel="noopener">Macrotrends — بيانات السوق التاريخية</a></li>
+</ul>
+</div></article>
+    <nav class="series-nav" aria-label="Series"><a href="/ar/tutorials/reading-management">← كيف تقيّم جودة الإدارة قبل الاستثمار</a><a href="/ar/tutorials/esg-investing">الاستثمار وفق ESG: كيف تؤثر عوامل البيئة والمجتمع والحوكمة على قيمة السهم →</a></nav>
+    <footer>© TruePrice.Cash</footer>
+  </div>
+</body>
+</html>

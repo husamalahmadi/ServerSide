@@ -29,11 +29,16 @@ const SLUG_BY_FILE = {
   "13-reading-annual-report": "reading-annual-report",
   "14-macro-investing": "macro-investing",
   "15-portfolio-construction": "portfolio-construction",
+  "16-value-vs-growth-investing": "value-vs-growth-investing",
+  "17-reading-management": "reading-management",
+  "18-short-selling-analysis": "short-selling-analysis",
+  "19-esg-investing": "esg-investing",
+  "20-building-investment-thesis": "building-investment-thesis",
 };
 
 const META_LABELS = {
-  en: { readingTime: "Reading time", level: "Level", series: "Series" },
-  ar: { readingTime: "وقت القراءة", level: "المستوى", series: "السلسلة" },
+  en: { readingTime: "Reading time", level: "Level", series: "Series", topic: "Topic" },
+  ar: { readingTime: "وقت القراءة", level: "المستوى", series: "السلسلة", topic: "الموضوع" },
 };
 
 function extract(tag, html, attr) {
@@ -86,8 +91,9 @@ function parseFile(filename, sourceDir, lang) {
   const raw = readFileSync(join(sourceDir, filename), "utf8");
   const body = stripOuterNav(raw);
   const heroBlock = extract("header", body, 'class="hero"') || extract("div", body, 'class="hero"');
-  const contentMatch = body.match(/<main class="content-wrap">([\s\S]*?)<\/main>/i);
-  let contentHtml = contentMatch?.[1]?.trim() || "";
+  const mainMatch = body.match(/<main class="content-wrap">([\s\S]*?)<\/main>/i);
+  const containerMatch = body.match(/<div class="container">([\s\S]*?)<\/div>\s*(?:<script|<\/body>)/i);
+  let contentHtml = (mainMatch?.[1] || containerMatch?.[1] || "").trim();
 
   contentHtml = contentHtml.replace(/<nav class="article-nav"[\s\S]*?<\/nav>/i, "").trim();
   contentHtml = rewriteTutorialLinks(contentHtml);
@@ -106,7 +112,9 @@ function parseFile(filename, sourceDir, lang) {
       extract("p", heroBlock, 'class="hero-sub"'),
     readingTime: parseMetaItem(heroBlock, { readingTime: labels.readingTime }),
     level: parseMetaItem(heroBlock, { level: labels.level }),
-    series: parseMetaItem(heroBlock, { series: labels.series }),
+    series:
+      parseMetaItem(heroBlock, { series: labels.series }) ||
+      parseMetaItem(heroBlock, { topic: labels.topic }),
     bodyHtml: contentHtml,
     order,
     slug,
@@ -117,6 +125,12 @@ function stripTags(s) {
   return String(s || "")
     .replace(/<br\s*\/?>/gi, " ")
     .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
     .replace(/\s+/g, " ")
     .trim();
 }
