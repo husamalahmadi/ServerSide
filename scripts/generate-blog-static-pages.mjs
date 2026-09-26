@@ -1,9 +1,8 @@
 /**
- * Fetches Blogger posts at build time and writes crawlable HTML:
+ * Writes crawlable blog HTML from the hardcoded posts in src/data/blogs/posts.js:
  *   public/{locale}/blogs/index.html
  *   public/{locale}/blog/{slug}.html
- * Also writes public/data/blog-posts.json for the SPA.
- * Each page's rel=canonical points at trueprice.cash, not the Blogger URL.
+ * Also writes public/data/blog-posts.json for sitemap consumers.
  *
  * Run: node scripts/generate-blog-static-pages.mjs
  */
@@ -11,8 +10,10 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, unlinkSync, writeFile
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { blogIndexPath, blogPostPath } from "../shared/seo/blogPaths.js";
+import { tutorialArticlePath, tutorialIndexPath } from "../shared/seo/tutorialPaths.js";
 import { buildBlogPostSeo, buildBlogsSeo } from "../shared/seo/structuredData.js";
 import { configureSeoSiteUrl } from "../shared/seo/siteUrl.js";
+import { flattenBlogPosts } from "../src/data/blogs/posts.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -58,71 +59,12 @@ function escapeAttr(text) {
   return escapeHtml(text);
 }
 
-function stripTags(html) {
-  return String(html || "")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
 function sanitizePostHtml(html) {
   return String(html || "")
     .replace(/<script[\s\S]*?<\/script>/gi, "")
     .replace(/<style[\s\S]*?<\/style>/gi, "")
     .replace(/<iframe[\s\S]*?<\/iframe>/gi, "")
-    .replace(/<link\b[^>]*rel=["']?canonical["']?[^>]*>/gi, "")
     .replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, "");
-}
-
-function excerptFrom(html, locale) {
-  let text = stripTags(html);
-  const filler =
-    locale === "ar"
-      ? " مقال من مدونة TruePrice.Cash عن الاستثمار والقيمة العادلة لأسهم تداول والأسواق العالمية."
-      : " An article from the TruePrice.Cash blog on fair value, fundamentals, and investing.";
-  while (text.length < 140) text = `${text}${filler}`.replace(/\s+/g, " ").trim();
-  if (text.length > 160) text = text.slice(0, 160).replace(/\s+\S*$/, "").trim();
-  return text || filler.trim();
-}
-
-function slugify(input) {
-  const raw = String(input || "")
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/&/g, " and ")
-    .replace(/\.html$/i, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80);
-  return raw;
-}
-
-function slugFromPost(post, used) {
-  let base = "";
-  try {
-    const last = new URL(post.url).pathname.split("/").filter(Boolean).pop() || "";
-    base = slugify(last);
-  } catch {
-    base = "";
-  }
-  if (!base) base = slugify(stripTags(post.title));
-  if (!base) base = `post-${String(post.id || "item").replace(/[^a-z0-9]+/gi, "").slice(0, 24) || "item"}`;
-  let slug = base;
-  let n = 2;
-  while (used.has(slug)) slug = `${base}-${n++}`;
-  used.add(slug);
-  return slug;
-}
-
-function localesForPost(post) {
-  const labels = (post.labels || []).map((label) => String(label).toLowerCase());
-  const locales = [];
-  if (labels.includes("arabic")) locales.push("ar");
-  if (labels.includes("english")) locales.push("en");
-  if (locales.length) return locales;
-  const hasArabic = /[\u0600-\u06FF]/.test(`${post.title || ""} ${post.content || ""}`);
-  return [hasArabic ? "ar" : "en"];
 }
 
 function hreflangLinks(alternates) {
@@ -167,11 +109,24 @@ function pageShell({ locale, seo, bodyHtml, dir }) {
     .brand { font-weight: 800; font-size: 1.1rem; color: var(--tp-ink); }
     .hero { background: linear-gradient(140deg,#fff,#eef5ff); border: 1px solid var(--tp-border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
     .hero h1 { margin: 0 0 0.5rem; font-size: 1.75rem; line-height: 1.25; }
-    .hero p { margin: 0; color: var(--tp-muted); font-size: 15px; }
+    .hero h1 em { font-style: normal; color: var(--tp-primary); }
+    .hero p { margin: 0.35rem 0 0; color: var(--tp-muted); font-size: 15px; }
     article { background: #fff; border: 1px solid var(--tp-border); border-radius: 12px; padding: 1.25rem 1.35rem; }
     article a { color: var(--tp-primary); }
     article h2 { margin: 1.5rem 0 0.75rem; font-size: 1.25rem; }
-    article p { margin: 0 0 0.85rem; font-size: 15px; }
+    article h3 { margin: 1.25rem 0 0.5rem; font-size: 1.05rem; }
+    article p, article li { margin: 0 0 0.85rem; font-size: 15px; }
+    .toc { background: #eef5ff; border: 1px solid var(--tp-border); border-radius: 10px; padding: 1rem 1.1rem; margin-bottom: 1.25rem; }
+    .toc-title { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #5a7aa8; margin: 0 0 0.5rem; }
+    .toc ol { margin: 0; padding-inline-start: 1.25rem; }
+    .toc li { margin: 0.25rem 0; font-size: 13px; }
+    .callout { margin: 1rem 0; padding: 0.9rem 1rem; border-inline-start: 3px solid var(--tp-primary); background: #eef5ff; border-radius: 10px; }
+    .callout-label { font-size: 10px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--tp-primary); margin-bottom: 0.35rem; }
+    .callout p:last-child { margin-bottom: 0; }
+    .table-wrap { overflow-x: auto; margin: 1rem 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border-bottom: 1px solid var(--tp-border); padding: 0.45rem 0.5rem; text-align: start; vertical-align: top; }
+    .sources { margin-top: 1.5rem; font-size: 14px; }
     .catalog { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.65rem; }
     .catalog a { display: block; padding: 0.85rem 1rem; background: #fff; border: 1px solid var(--tp-border); border-radius: 10px; color: var(--tp-ink); text-decoration: none; }
     .catalog a strong { display: block; font-size: 1.05rem; }
@@ -188,6 +143,8 @@ function pageShell({ locale, seo, bodyHtml, dir }) {
         ·
         <a href="${blogIndexPath("ar")}">العربية</a>
         ·
+        <a href="${tutorialIndexPath(locale)}">${locale === "ar" ? "الدروس" : "Tutorials"}</a>
+        ·
         <a href="/">${locale === "ar" ? "الرئيسية" : "Home"}</a>
       </div>
     </header>
@@ -196,76 +153,6 @@ function pageShell({ locale, seo, bodyHtml, dir }) {
   </div>
 </body>
 </html>`;
-}
-
-async function fetchAllBloggerPosts(blogId, apiKey) {
-  const items = [];
-  let pageToken = "";
-  for (let page = 0; page < 20; page += 1) {
-    const url = new URL(`https://www.googleapis.com/blogger/v3/blogs/${encodeURIComponent(blogId)}/posts`);
-    url.searchParams.set("key", apiKey);
-    url.searchParams.set("fetchBodies", "true");
-    url.searchParams.set("fetchImages", "true");
-    url.searchParams.set("maxResults", "50");
-    url.searchParams.set("status", "live");
-    if (pageToken) url.searchParams.set("pageToken", pageToken);
-    const res = await fetch(url);
-    const json = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      const message = json?.error?.message || `HTTP ${res.status}`;
-      throw new Error(message);
-    }
-    items.push(...(json.items || []));
-    pageToken = json.nextPageToken || "";
-    if (!pageToken) break;
-  }
-  return items.map((post) => ({
-    id: post.id,
-    title: post.title || "",
-    content: post.content || "",
-    published: post.published || null,
-    updated: post.updated || null,
-    url: post.url || "",
-    labels: post.labels || [],
-    author: post.author?.displayName || "",
-  }));
-}
-
-function readSnapshot() {
-  if (!existsSync(DATA_FILE)) return null;
-  try {
-    const data = JSON.parse(readFileSync(DATA_FILE, "utf8"));
-    return Array.isArray(data.posts) ? data.posts : null;
-  } catch {
-    return null;
-  }
-}
-
-function normalizeFetched(rawPosts) {
-  const used = { en: new Set(), ar: new Set() };
-  const posts = [];
-  for (const post of rawPosts) {
-    for (const locale of localesForPost(post)) {
-      const slug = slugFromPost(post, used[locale]);
-      const content = sanitizePostHtml(post.content);
-      const title = stripTags(post.title) || slug;
-      posts.push({
-        id: String(post.id || slug),
-        slug,
-        locale,
-        title,
-        content,
-        excerpt: excerptFrom(content || title, locale),
-        published: post.published,
-        updated: post.updated || post.published,
-        author: post.author || "",
-        bloggerUrl: post.url || "",
-        path: blogPostPath(locale, slug),
-      });
-    }
-  }
-  posts.sort((a, b) => String(b.published || "").localeCompare(String(a.published || "")));
-  return posts;
 }
 
 function clearStalePostFiles(locale, slugs) {
@@ -282,15 +169,23 @@ function writePostPage(post) {
   const safePost = { ...post, content: sanitizePostHtml(post.content) };
   const seo = buildBlogPostSeo({ post: safePost, lang: safePost.locale });
   const dir = safePost.locale === "ar" ? "rtl" : "ltr";
-  const canonical = `${SITE}${safePost.path}`;
+  const tutorialHref = safePost.relatedTutorial
+    ? tutorialArticlePath(safePost.locale, safePost.relatedTutorial)
+    : tutorialIndexPath(safePost.locale);
+  const tutorialLabel =
+    safePost.locale === "ar" ? "تابع في سلسلة الدروس" : "Continue in the tutorial series";
+  const meta = [safePost.published ? String(safePost.published).slice(0, 10) : "", safePost.readingTime, safePost.level]
+    .filter(Boolean)
+    .join(" · ");
   const inner = `<div class="hero">
       <p style="font-size:13px;margin:0 0 0.5rem;"><a href="${blogIndexPath(safePost.locale)}">${safePost.locale === "ar" ? "المدونة" : "Blog"}</a></p>
-      <h1>${escapeHtml(safePost.title)}</h1>
-      <p>${escapeHtml([safePost.published ? String(safePost.published).slice(0, 10) : "", safePost.author].filter(Boolean).join(" · "))}</p>
+      <h1>${safePost.titleHtml || escapeHtml(safePost.title)}</h1>
+      <p>${escapeHtml(meta)}</p>
+      ${safePost.subtitle ? `<p>${escapeHtml(safePost.subtitle)}</p>` : ""}
     </div>
     <article>
-      ${safePost.content || `<p>${escapeHtml(safePost.excerpt || "")}</p>`}
-      <p style="margin-top:1.5rem;font-size:13px;color:var(--tp-muted);">${safePost.locale === "ar" ? "النسخة الأصلية على هذا الموقع:" : "Canonical copy on this site:"} <a href="${escapeAttr(canonical)}">${escapeHtml(canonical)}</a>${safePost.bloggerUrl ? ` · <a href="${escapeAttr(safePost.bloggerUrl)}" rel="nofollow noopener">Blogger</a>` : ""}</p>
+      ${safePost.content}
+      <p style="margin-top:1.5rem;font-size:13px;"><a href="${escapeAttr(tutorialHref)}">${escapeHtml(tutorialLabel)}</a></p>
     </article>`;
   const outDir = join(PUBLIC, post.locale, "blog");
   mkdirSync(outDir, { recursive: true });
@@ -331,53 +226,46 @@ function writeIndexPage(locale, posts) {
   writeFileSync(join(outDir, "index.html"), pageShell({ locale, seo, bodyHtml: inner, dir }), "utf8");
 }
 
-async function main() {
+function main() {
   loadEnvFile(join(ROOT, ".env"));
   loadEnvFile(join(ROOT, "server", ".env"));
-  const blogId = (process.env.VITE_BLOGGER_BLOG_ID || process.env.BLOGGER_BLOG_ID || "").trim();
-  const apiKey = (process.env.VITE_BLOGGER_API_KEY || process.env.BLOGGER_API_KEY || "").trim();
+  configureSeoSiteUrl(SITE);
 
-  let posts = [];
-  if (blogId && apiKey) {
-    try {
-      const raw = await fetchAllBloggerPosts(blogId, apiKey);
-      posts = normalizeFetched(raw);
-      console.log(`[blog-static] Fetched ${raw.length} Blogger posts → ${posts.length} locale pages`);
-    } catch (err) {
-      const snapshot = readSnapshot();
-      console.warn(`[blog-static] Blogger fetch failed (${err.message}). ${snapshot ? "Using previous snapshot." : "Writing empty indexes."}`);
-      posts = snapshot || [];
-    }
-  } else {
-    const snapshot = readSnapshot();
-    if (snapshot?.length) {
-      posts = snapshot;
-      console.warn(`[blog-static] No Blogger API credentials. Reused ${posts.length} posts from public/data/blog-posts.json`);
-    } else {
-      console.warn("[blog-static] No Blogger API credentials. Wrote index pages with the site title and no posts.");
-    }
-  }
-
-  posts = posts.map((post) => ({ ...post, content: sanitizePostHtml(post.content) }));
+  const posts = flattenBlogPosts().map((post) => ({
+    ...post,
+    content: sanitizePostHtml(post.content),
+  }));
 
   mkdirSync(dirname(DATA_FILE), { recursive: true });
   writeFileSync(
     DATA_FILE,
-    JSON.stringify({ generatedAt: new Date().toISOString(), posts }, null, 2),
+    JSON.stringify(
+      {
+        generatedAt: new Date().toISOString(),
+        source: "src/data/blogs/posts.js",
+        posts,
+      },
+      null,
+      2
+    ),
     "utf8"
   );
 
   for (const locale of ["en", "ar"]) {
-    const localePosts = posts.filter((post) => post.locale === locale);
+    const localePosts = posts
+      .filter((post) => post.locale === locale)
+      .sort((a, b) => String(b.published || "").localeCompare(String(a.published || "")));
     writeIndexPage(locale, localePosts);
     clearStalePostFiles(locale, new Set(localePosts.map((post) => post.slug)));
     for (const post of localePosts) writePostPage(post);
   }
 
-  console.log(`[blog-static] Wrote ${posts.length} post pages plus en/ar indexes. Canonical host: ${SITE}`);
+  console.log(`[blog-static] Wrote ${posts.length} hardcoded post pages plus en/ar indexes. Canonical host: ${SITE}`);
 }
 
-main().catch((err) => {
+try {
+  main();
+} catch (err) {
   console.error("[blog-static]", err);
   process.exit(1);
-});
+}

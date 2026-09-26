@@ -216,9 +216,7 @@ export function buildBlogsSeo({ lang, posts = [], postsCount }) {
         name: "TruePrice.Cash",
         url: toAbs("/"),
       },
-      author: post.author
-        ? { "@type": "Person", name: post.author }
-        : { "@type": "Organization", name: "TruePrice.Cash", url: toAbs("/") },
+      author: { "@type": "Organization", name: "TruePrice.Cash", url: toAbs("/") },
     };
     if (datePublished) node.datePublished = datePublished;
     if (dateModified) node.dateModified = dateModified;
@@ -306,8 +304,9 @@ export function buildBlogPostSeo({ post, lang = "en" }) {
     description,
     pathname,
     alternates: {
-      [isAr ? "ar" : "en"]: pathname,
-      "x-default": pathname,
+      en: blogPostPath("en", post.slug),
+      ar: blogPostPath("ar", post.slug),
+      "x-default": blogPostPath("en", post.slug),
     },
     jsonLd: {
       "@context": "https://schema.org",
@@ -332,9 +331,7 @@ export function buildBlogPostSeo({ post, lang = "en" }) {
             name: "TruePrice.Cash",
             url: toAbs("/"),
           },
-          author: post.author
-            ? { "@type": "Person", name: post.author }
-            : { "@type": "Organization", name: "TruePrice.Cash", url: toAbs("/") },
+          author: { "@type": "Organization", name: "TruePrice.Cash", url: toAbs("/") },
         },
       ],
     },

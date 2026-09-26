@@ -8,18 +8,6 @@ function get(key, defaultValue = "") {
   return v;
 }
 
-export function getBloggerBlogId() {
-  const id = get("VITE_BLOGGER_BLOG_ID");
-  if (!id) throw new Error("Missing VITE_BLOGGER_BLOG_ID in .env");
-  return id;
-}
-
-export function getBloggerApiKey() {
-  const key = get("VITE_BLOGGER_API_KEY");
-  if (!key) throw new Error("Missing VITE_BLOGGER_API_KEY in .env");
-  return key;
-}
-
 export function getWeb3FormsKey() {
   return get("VITE_WEB3FORMS_KEY");
 }

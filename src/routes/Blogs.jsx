@@ -1,5 +1,5 @@
 // FILE: src/routes/Blogs.jsx
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "../i18n.jsx";
 import { loadBlogPosts } from "../services/blogCatalog.js";
@@ -66,19 +66,24 @@ function getMonthName(monthIndex, lang) {
 
 export default function Blogs() {
   const { t, lang, dir } = useI18n();
-  const [state, setState] = useState({
-    loading: true,
-    error: "",
-    posts: [],
-  });
   const [selectedPostId, setSelectedPostId] = useState(null);
+  const posts = useMemo(() => {
+    const locale = lang === "ar" ? "ar" : "en";
+    return loadBlogPosts()
+      .filter((post) => post.locale === locale)
+      .sort((a, b) => {
+        const dateA = a.published ? new Date(a.published).getTime() : 0;
+        const dateB = b.published ? new Date(b.published).getTime() : 0;
+        return dateB - dateA;
+      });
+  }, [lang]);
   const postsForSeo = useMemo(() => {
     const iso = (v) => {
       if (!v) return null;
       const d = v instanceof Date ? v : new Date(v);
       return Number.isNaN(d.getTime()) ? null : d.toISOString();
     };
-    return state.posts.map((p) => ({
+    return posts.map((p) => ({
       id: p.id,
       title: stripHtmlToText(p.title || ""),
       path: p.path || "",
@@ -87,36 +92,11 @@ export default function Blogs() {
       updated: iso(p.updated),
       author: p.author || "",
     }));
-  }, [state.posts]);
+  }, [posts]);
   const seo = useMemo(() => buildBlogsSeo({ lang, posts: postsForSeo }), [lang, postsForSeo]);
   usePageMeta(seo);
 
-  const loadBlogs = useCallback(async () => {
-    try {
-      setState((s) => ({ ...s, loading: true, error: "" }));
-      const locale = lang === "ar" ? "ar" : "en";
-      const posts = (await loadBlogPosts()).filter((post) => post.locale === locale);
-      const sortedPosts = [...posts].sort((a, b) => {
-        const dateA = a.published ? new Date(a.published).getTime() : 0;
-        const dateB = b.published ? new Date(b.published).getTime() : 0;
-        return dateB - dateA;
-      });
-      setState({ loading: false, error: "", posts: sortedPosts });
-    } catch (e) {
-      const errorMsg = e?.message || String(e) || t("ERR_LOAD_BLOGS");
-      setState({
-        loading: false,
-        error: `${t("ERR_LOAD_BLOGS")} (${errorMsg})`,
-        posts: [],
-      });
-    }
-  }, [lang, t]);
-
-  useEffect(() => {
-    loadBlogs();
-  }, [loadBlogs]);
-
-  const groupedPosts = groupPostsByDate(state.posts);
+  const groupedPosts = groupPostsByDate(posts);
   const years = Object.keys(groupedPosts).map(Number).sort((a, b) => b - a); // Newest year first
 
   return (
@@ -310,7 +290,7 @@ export default function Blogs() {
         {/* Content Area with Tree View and Blog List */}
         <div className="tp-content-wrap">
           {/* Tree View Sidebar */}
-          {state.posts.length > 0 && (
+          {posts.length > 0 && (
             <div className="tp-tree-sidebar">
               <div className="tp-tree-card">
                 <div className="tp-tree-title">{lang === "ar" ? "التاريخ" : "History"}</div>
@@ -348,33 +328,11 @@ export default function Blogs() {
             <div className="tp-card tp-blog-list">
               <div className="tp-title">{t("BLOGS")}</div>
 
-          {state.loading ? (
-            <div style={{ color: "#64748b" }}>Loading…</div>
-          ) : state.error ? (
-            <div className="tp-danger">
-              {state.error}
-              <button
-                type="button"
-                onClick={() => loadBlogs()}
-                style={{
-                  marginTop: 12,
-                  padding: "8px 14px",
-                  borderRadius: 8,
-                  border: "1px solid #b91c1c",
-                  background: "#fef2f2",
-                  color: "#991b1b",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                }}
-              >
-                {t("RETRY_MSG")}
-              </button>
-            </div>
-          ) : state.posts.length === 0 ? (
+          {posts.length === 0 ? (
             <div className="tp-muted">{t("NO_DATA")}</div>
           ) : (
             <div>
-              {state.posts.map((post) => (
+              {posts.map((post) => (
                 <Link
                   key={post.id}
                   to={post.path || blogIndexPath(lang)}

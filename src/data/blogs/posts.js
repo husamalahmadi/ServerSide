@@ -1,0 +1,726 @@
+/**
+ * Hardcoded blog posts. English and Arabic share a slug.
+ * Static HTML and the sitemap are generated from this module.
+ */
+import { blogPostPath } from "../../../shared/seo/blogPaths.js";
+
+export const BLOG_AUTHOR = "TruePrice.Cash";
+
+export const BLOG_POSTS = [
+  {
+    slug: "price-is-not-fair-value",
+    published: "2026-01-15T08:00:00.000Z",
+    updated: "2026-01-15T08:00:00.000Z",
+    relatedTutorial: "what-is-fundamental-analysis",
+    locales: {
+      en: {
+        title: "A Stock Price Is Not a Fair Value",
+        titleHtml: "A Stock Price Is Not a <em>Fair Value</em>",
+        subtitle:
+          "The quote on the screen is a trade. Fair value is a judgment about the business. Mixing the two is how investors buy stories instead of cash flows.",
+        excerpt:
+          "A market price is what someone paid today. Fair value is what the business is worth. Here is how to keep those two numbers apart.",
+        readingTime: "7 min",
+        level: "Beginner",
+        seriesLabel: "Blog · Fundamental analysis",
+        content: `<nav class="toc" aria-label="Table of contents">
+  <div class="toc-title">In this article</div>
+  <ol>
+    <li><a href="#the-quote">The number on the screen</a></li>
+    <li><a href="#intrinsic">What fair value is trying to estimate</a></li>
+    <li><a href="#margin">Leave a margin of safety</a></li>
+    <li><a href="#gap">Why price and value can stay apart</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="the-quote">
+  <h2>The number on the screen</h2>
+  <p>A stock price is the last price at which a buyer and a seller agreed to trade. It is useful. It is also narrow. It does not tell you what the company earns, how much cash it keeps, or how much debt sits against those assets. On TASI, in the S&amp;P 500, in Tokyo, or in London, the quote is still only a transaction.</p>
+  <p>Fair value is a different question: what is this business worth if you look through the financial statements instead of the tape? <a href="https://www.cfainstitute.org/en/membership/professional-development/refresher-readings/introduction-security-valuation" target="_blank" rel="noopener">CFA Institute's introduction to security valuation</a> treats that estimate as the starting point of equity research, not the ticker itself.</p>
+</section>
+
+<section class="section" id="intrinsic">
+  <h2>What fair value is trying to estimate</h2>
+  <p>Investors usually arrive at a range, not a single precise number. One path discounts the cash the business can pay its owners. Another compares the company with peers on earnings, book value, or cash flow, then asks whether the gap is justified. Both paths start in the statements.</p>
+  <p>TruePrice.Cash follows a balance-sheet route you can inspect: enterprise value, plus cash, minus debt, divided by shares outstanding. That figure is an estimate with limits. It is not a promise that the market will trade there next week. The point of publishing the method is so you can see the inputs instead of trusting a headline target.</p>
+  <div class="callout">
+    <div class="callout-label">Core idea</div>
+    <p>Price is what the market cleared. Fair value is what you think the business is worth after reading the numbers. You need both, and you should label them separately.</p>
+  </div>
+</section>
+
+<section class="section" id="margin">
+  <h2>Leave a margin of safety</h2>
+  <p><a href="https://en.wikipedia.org/wiki/Benjamin_Graham" target="_blank" rel="noopener">Benjamin Graham</a> argued that you should buy only when price sits meaningfully below your estimate of value. He called the gap a <a href="https://www.investopedia.com/terms/m/marginofsafety.asp" target="_blank" rel="noopener">margin of safety</a>. The discount is there because forecasts are wrong, accounting can be aggressive, and a cheap stock can stay cheap.</p>
+  <p>A 20–30% discount to a carefully built range is a common hurdle for conservative investors. It is a rule of thumb, not a law. If your estimate of value is sloppy, a discount to that estimate does not protect you.</p>
+</section>
+
+<section class="section" id="gap">
+  <h2>Why price and value can stay apart</h2>
+  <p>Flows, headlines, index inclusion, and thin trading can move a price for months without changing the business. In markets where fewer analysts cover mid-sized names, including parts of the Saudi market, that gap can last longer. The work is to decide whether you are looking at a mispricing or at a business that deserves the lower price.</p>
+  <p>The tutorial series walks through that work from the first statement to a written investment thesis. Start with <a href="/en/tutorials/what-is-fundamental-analysis">what fundamental analysis is</a>, then use the screener as a list of candidates, not as a verdict.</p>
+</section>
+
+<div class="sources">
+  <h3>Sources &amp; further reading</h3>
+  <ul>
+    <li><a href="https://www.cfainstitute.org/en/membership/professional-development/refresher-readings/introduction-security-valuation" target="_blank" rel="noopener">CFA Institute — Introduction to Security Valuation</a></li>
+    <li><a href="https://www.investopedia.com/terms/m/marginofsafety.asp" target="_blank" rel="noopener">Investopedia — Margin of Safety</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Security_Analysis_(book)" target="_blank" rel="noopener">Graham &amp; Dodd — Security Analysis</a></li>
+    <li><a href="/en/tutorials/what-is-fundamental-analysis">TruePrice.Cash tutorial — What is fundamental analysis?</a></li>
+  </ul>
+</div>`,
+      },
+      ar: {
+        title: "سعر السهم ليس القيمة العادلة",
+        titleHtml: "سعر السهم ليس <em>القيمة العادلة</em>",
+        subtitle:
+          "السعر على الشاشة صفقة. القيمة العادلة حكم على النشاط. الخلط بينهما يجعل المستثمر يشتري قصة بدل التدفقات النقدية.",
+        excerpt:
+          "سعر السوق هو ما دفعه أحدهم اليوم. القيمة العادلة تقدير لما تستحقه الشركة بعد قراءة قوائمها. افصل بين الرقمين قبل الشراء.",
+        readingTime: "7 دقائق",
+        level: "مبتدئ",
+        seriesLabel: "المدونة · التحليل الأساسي",
+        content: `<nav class="toc" aria-label="جدول المحتويات">
+  <div class="toc-title">في هذا المقال</div>
+  <ol>
+    <li><a href="#the-quote">الرقم الظاهر على الشاشة</a></li>
+    <li><a href="#intrinsic">ماذا تحاول القيمة العادلة أن تقدّر</a></li>
+    <li><a href="#margin">اترك هامش أمان</a></li>
+    <li><a href="#gap">لماذا يبتعد السعر عن القيمة</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="the-quote">
+  <h2>الرقم الظاهر على الشاشة</h2>
+  <p>سعر السهم هو آخر سعر اتفق عليه مشترٍ وبائع. هو رقم مفيد، لكنه ضيق. لا يخبرك بما تكسبه الشركة، ولا بالنقد الذي تحتفظ به، ولا بالدين المقابل لتلك الأصول. في تاسي، وفي S&amp;P 500، وفي طوكيو أو لندن، يبقى السعر صفقة لا تقييماً.</p>
+  <p>القيمة العادلة سؤال مختلف: كم تستحق هذه الشركة إذا نظرت إلى قوائمها بدل شريط الأسعار؟ يعامل <a href="https://www.cfainstitute.org/en/membership/professional-development/refresher-readings/introduction-security-valuation" target="_blank" rel="noopener">مدخل معهد CFA إلى تقييم الأوراق المالية</a> هذا التقدير كنقطة بداية لبحث الأسهم، لا كرمز السهم نفسه.</p>
+</section>
+
+<section class="section" id="intrinsic">
+  <h2>ماذا تحاول القيمة العادلة أن تقدّر</h2>
+  <p>يصل المستثمر عادة إلى نطاق، لا إلى رقم واحد دقيق. مسار يخصم النقد الذي يستطيع النشاط دفعه لملاكه. ومسار آخر يقارن الشركة بنظيراتها على الأرباح أو القيمة الدفترية أو التدفق النقدي، ثم يسأل إن كان الفارق مبرراً. كلا المسارين يبدأ من القوائم.</p>
+  <p>تتبع TruePrice.Cash مساراً من الميزانية يمكنك فحصه: قيمة المنشأة، زائد النقد، ناقص الدين، مقسوماً على عدد الأسهم. الناتج تقدير وله حدود. ليس وعداً بأن السوق سيتداول عنده الأسبوع المقبل. نشر الطريقة مقصود حتى ترى المدخلات بدل أن تثق بهدف عنواني.</p>
+  <div class="callout">
+    <div class="callout-label">الفكرة الجوهرية</div>
+    <p>السعر هو ما أقفله السوق. القيمة العادلة هي ما تظن أن النشاط يستحقه بعد قراءة الأرقام. تحتاج الاثنين، ويجب أن تسمّيهما منفصلين.</p>
+  </div>
+</section>
+
+<section class="section" id="margin">
+  <h2>اترك هامش أمان</h2>
+  <p>حاجّ <a href="https://en.wikipedia.org/wiki/Benjamin_Graham" target="_blank" rel="noopener">Benjamin Graham</a> بأن الشراء يكون فقط عندما يكون السعر أقل بفارق ملموس من تقديرك للقيمة. سمّى هذا الفارق <a href="https://www.investopedia.com/terms/m/marginofsafety.asp" target="_blank" rel="noopener">هامش الأمان</a>. الخصم موجود لأن التوقعات تخطئ، ولأن المحاسبة قد تكون عدوانية، ولأن السهم الرخيص قد يبقى رخيصاً.</p>
+  <p>خصم 20–30% عن نطاق مبني بعناية عتبة شائعة للمستثمر المحافظ. هي قاعدة عملية لا قانون. إذا كان تقديرك للقيمة ضعيفاً، فالخصم عن ذلك التقدير لا يحميك.</p>
+</section>
+
+<section class="section" id="gap">
+  <h2>لماذا يبتعد السعر عن القيمة</h2>
+  <p>التدفقات والعناوين والانضمام إلى مؤشر وضعف السيولة قد تحرّك السعر أشهراً من دون أن يتغيّر النشاط. في أسواق تقل فيها تغطية المحللين للأسماء المتوسطة، ومنها أجزاء من السوق السعودي، قد يطول هذا البعد. العمل هو أن تقرر: هل أمامك تسعير خاطئ، أم نشاط يستحق السعر الأدنى؟</p>
+  <p>سلسلة الدروس تمشي في هذا العمل من أول قائمة حتى أطروحة مكتوبة. ابدأ من <a href="/ar/tutorials/what-is-fundamental-analysis">ما هو التحليل الأساسي</a>، ثم استخدم الفرز كقائمة مرشحين لا كحكم نهائي.</p>
+</section>
+
+<div class="sources">
+  <h3>المصادر وقراءات إضافية</h3>
+  <ul>
+    <li><a href="https://www.cfainstitute.org/en/membership/professional-development/refresher-readings/introduction-security-valuation" target="_blank" rel="noopener">CFA Institute — مدخل إلى تقييم الأوراق المالية</a></li>
+    <li><a href="https://www.investopedia.com/terms/m/marginofsafety.asp" target="_blank" rel="noopener">Investopedia — هامش الأمان</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Security_Analysis_(book)" target="_blank" rel="noopener">Graham &amp; Dodd — Security Analysis</a></li>
+    <li><a href="/ar/tutorials/what-is-fundamental-analysis">درس TruePrice.Cash — ما هو التحليل الأساسي؟</a></li>
+  </ul>
+</div>`,
+      },
+    },
+  },
+  {
+    slug: "three-statements-one-story",
+    published: "2026-03-04T08:00:00.000Z",
+    updated: "2026-03-04T08:00:00.000Z",
+    relatedTutorial: "income-statement",
+    locales: {
+      en: {
+        title: "The Three Statements Tell One Story",
+        titleHtml: "The Three Statements Tell <em>One Story</em>",
+        subtitle:
+          "Profit, the balance sheet, and cash are three cameras on the same business. A stock only makes sense when the three pictures agree.",
+        excerpt:
+          "The income statement, balance sheet, and cash flow describe one company. Read them together before you trust any single ratio.",
+        readingTime: "8 min",
+        level: "Beginner",
+        seriesLabel: "Blog · Financial statements",
+        content: `<nav class="toc" aria-label="Table of contents">
+  <div class="toc-title">In this article</div>
+  <ol>
+    <li><a href="#one-business">One business, three views</a></li>
+    <li><a href="#each">What each statement answers</a></li>
+    <li><a href="#cross-check">A cross-check before you buy</a></li>
+    <li><a href="#where">Where to read a real filing</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="one-business">
+  <h2>One business, three views</h2>
+  <p>Public companies do not publish a single “health score.” Under <a href="https://www.ifrs.org/issued-standards/list-of-standards/ias-1-presentation-of-financial-statements/" target="_blank" rel="noopener">IAS 1</a> they present a set of statements. TASI-listed companies report under <a href="https://www.socpa.org.sa/Home/Standards" target="_blank" rel="noopener">SOCPA</a> standards aligned with IFRS. U.S. companies file with the SEC. The labels differ. The questions do not.</p>
+  <p>Read one statement alone and you will miss the trick. Profit can rise while cash falls. Assets can grow because debt grew. Cash can look strong because the company stopped investing. The story is the combination.</p>
+</section>
+
+<section class="section" id="each">
+  <h2>What each statement answers</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Statement</th><th>Question</th><th>Watch for</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Income statement</td><td>Did the business earn a profit this period?</td><td>Revenue quality, margins, one-time gains</td></tr>
+        <tr><td>Balance sheet</td><td>What does it own, and what does it owe, at this date?</td><td>Debt, receivables, equity that is being diluted</td></tr>
+        <tr><td>Cash flow</td><td>Did cash actually move?</td><td>Operating cash versus net income, capital spending</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Net income is an accounting result. <a href="https://www.investopedia.com/terms/f/freecashflow.asp" target="_blank" rel="noopener">Free cash flow</a> is what remains after the spending required to keep the assets working. When those two diverge for several years, believe the cash until you understand the gap.</p>
+</section>
+
+<section class="section" id="cross-check">
+  <h2>A cross-check before you buy</h2>
+  <p>Before a ratio or a fair-value figure, ask four plain questions:</p>
+  <ol>
+    <li>Are sales growing, and are operating margins stable or widening?</li>
+    <li>Is the balance sheet funding that growth with debt the earnings can carry?</li>
+    <li>Does operating cash track profit, or is profit sitting in receivables and inventory?</li>
+    <li>Is capital spending maintaining the business, or is management starving it to show cash?</li>
+  </ol>
+  <div class="callout">
+    <div class="callout-label">Rule of thumb</div>
+    <p>If you cannot explain the difference between profit and operating cash in one sentence, you do not yet know the stock well enough to buy it.</p>
+  </div>
+</section>
+
+<section class="section" id="where">
+  <h2>Where to read a real filing</h2>
+  <p>For a Saudi listing, open the company on the <a href="https://www.saudiexchange.sa/" target="_blank" rel="noopener">Saudi Exchange</a> and read the financial statements, not only the price page. For a U.S. listing, use <a href="https://www.sec.gov/cgi-bin/browse-edgar" target="_blank" rel="noopener">SEC EDGAR</a>. The tutorials take each statement apart: start with the <a href="/en/tutorials/income-statement">income statement</a>, then the <a href="/en/tutorials/balance-sheet">balance sheet</a>, then <a href="/en/tutorials/cash-flow-statement">why cash is the stricter test</a>.</p>
+</section>
+
+<div class="sources">
+  <h3>Sources &amp; further reading</h3>
+  <ul>
+    <li><a href="https://www.ifrs.org/issued-standards/list-of-standards/ias-1-presentation-of-financial-statements/" target="_blank" rel="noopener">IASB — IAS 1, Presentation of Financial Statements</a></li>
+    <li><a href="https://www.investopedia.com/terms/f/freecashflow.asp" target="_blank" rel="noopener">Investopedia — Free Cash Flow</a></li>
+    <li><a href="https://www.saudiexchange.sa/" target="_blank" rel="noopener">Saudi Exchange — Company disclosures</a></li>
+    <li><a href="/en/tutorials/income-statement">Tutorial — How to read an income statement</a></li>
+  </ul>
+</div>`,
+      },
+      ar: {
+        title: "القوائم الثلاث تروي قصة واحدة",
+        titleHtml: "القوائم الثلاث تروي <em>قصة واحدة</em>",
+        subtitle:
+          "الربح والميزانية والنقد ثلاث عدسات على النشاط نفسه. السهم لا يُفهم إلا إذا اتفقت الصور الثلاث.",
+        excerpt:
+          "قائمة الدخل والميزانية والتدفقات النقدية تصف شركة واحدة. اقرأها معاً قبل أن تثق بأي نسبة أو بهدف سعري، في تاسي وغيرها من الأسواق.",
+        readingTime: "8 دقائق",
+        level: "مبتدئ",
+        seriesLabel: "المدونة · القوائم المالية",
+        content: `<nav class="toc" aria-label="جدول المحتويات">
+  <div class="toc-title">في هذا المقال</div>
+  <ol>
+    <li><a href="#one-business">نشاط واحد وثلاث زوايا</a></li>
+    <li><a href="#each">ماذا تجيب كل قائمة</a></li>
+    <li><a href="#cross-check">فحص متقاطع قبل الشراء</a></li>
+    <li><a href="#where">أين تقرأ إفصاحاً حقيقياً</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="one-business">
+  <h2>نشاط واحد وثلاث زوايا</h2>
+  <p>لا تنشر الشركات المدرجة «درجة صحة» واحدة. بموجب <a href="https://www.ifrs.org/issued-standards/list-of-standards/ias-1-presentation-of-financial-statements/" target="_blank" rel="noopener">IAS 1</a> تعرض مجموعة قوائم. شركات تاسي تفصح وفق معايير <a href="https://www.socpa.org.sa/Home/Standards" target="_blank" rel="noopener">الهيئة السعودية للمراجعين والمحاسبين</a> المتوافقة مع IFRS. الشركات الأمريكية تقدّم ملفاتها إلى SEC. المسميات تختلف. الأسئلة لا تختلف.</p>
+  <p>قراءة قائمة واحدة وحدها تُفوتك الحيلة. قد يرتفع الربح بينما ينخفض النقد. قد تنمو الأصول لأن الدين نما. قد يبدو النقد قوياً لأن الشركة توقفت عن الاستثمار. القصة هي الجمع بينها.</p>
+</section>
+
+<section class="section" id="each">
+  <h2>ماذا تجيب كل قائمة</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>القائمة</th><th>السؤال</th><th>ما الذي تراقبه</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>قائمة الدخل</td><td>هل حقق النشاط ربحاً في هذه الفترة؟</td><td>جودة الإيرادات، الهوامش، المكاسب لمرة واحدة</td></tr>
+        <tr><td>الميزانية</td><td>ماذا يملك، وماذا عليه، في هذا التاريخ؟</td><td>الدين، المدينون، وحقوق ملكية تتعرض للتخفيف</td></tr>
+        <tr><td>التدفقات النقدية</td><td>هل تحرّك النقد فعلاً؟</td><td>النقد التشغيلي مقابل صافي الدخل، والإنفاق الرأسمالي</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>صافي الدخل نتيجة محاسبية. <a href="https://www.investopedia.com/terms/f/freecashflow.asp" target="_blank" rel="noopener">التدفق النقدي الحر</a> هو ما يبقى بعد الإنفاق اللازم لإبقاء الأصول تعمل. إذا افترقا لعدة سنوات، صدّق النقد إلى أن تفهم الفجوة.</p>
+</section>
+
+<section class="section" id="cross-check">
+  <h2>فحص متقاطع قبل الشراء</h2>
+  <p>قبل أي نسبة أو رقم قيمة عادلة، اسأل أربعة أسئلة مباشرة:</p>
+  <ol>
+    <li>هل تنمو المبيعات، وهل هوامش التشغيل مستقرة أو تتسع؟</li>
+    <li>هل تموّل الميزانية هذا النمو بدين تستطيع الأرباح حمله؟</li>
+    <li>هل يواكب النقد التشغيلي الربح، أم أن الربح عالق في المدينين والمخزون؟</li>
+    <li>هل الإنفاق الرأسمالي يحافظ على النشاط، أم أن الإدارة تجوّعه لتُظهر نقداً؟</li>
+  </ol>
+  <div class="callout">
+    <div class="callout-label">قاعدة عملية</div>
+    <p>إذا لم تستطع شرح الفرق بين الربح والنقد التشغيلي في جملة واحدة، فأنت لا تعرف السهم بعد بما يكفي لتشتريه.</p>
+  </div>
+</section>
+
+<section class="section" id="where">
+  <h2>أين تقرأ إفصاحاً حقيقياً</h2>
+  <p>للشركة السعودية، افتح صفحتها في <a href="https://www.saudiexchange.sa/" target="_blank" rel="noopener">السوق المالية السعودية</a> واقرأ القوائم، لا صفحة السعر وحدها. للشركة الأمريكية استخدم <a href="https://www.sec.gov/cgi-bin/browse-edgar" target="_blank" rel="noopener">SEC EDGAR</a>. الدروس تفكك كل قائمة: ابدأ من <a href="/ar/tutorials/income-statement">قائمة الدخل</a>، ثم <a href="/ar/tutorials/balance-sheet">الميزانية</a>، ثم <a href="/ar/tutorials/cash-flow-statement">لماذا النقد اختبار أقسى</a>.</p>
+</section>
+
+<div class="sources">
+  <h3>المصادر وقراءات إضافية</h3>
+  <ul>
+    <li><a href="https://www.ifrs.org/issued-standards/list-of-standards/ias-1-presentation-of-financial-statements/" target="_blank" rel="noopener">IASB — IAS 1، عرض القوائم المالية</a></li>
+    <li><a href="https://www.investopedia.com/terms/f/freecashflow.asp" target="_blank" rel="noopener">Investopedia — التدفق النقدي الحر</a></li>
+    <li><a href="https://www.saudiexchange.sa/" target="_blank" rel="noopener">السوق المالية السعودية — إفصاحات الشركات</a></li>
+    <li><a href="/ar/tutorials/income-statement">الدرس — كيفية قراءة قائمة الدخل</a></li>
+  </ul>
+</div>`,
+      },
+    },
+  },
+  {
+    slug: "low-pe-is-not-a-bargain",
+    published: "2026-05-07T08:00:00.000Z",
+    updated: "2026-05-07T08:00:00.000Z",
+    relatedTutorial: "financial-ratios",
+    locales: {
+      en: {
+        title: "A Low P/E Is Not Automatically a Bargain",
+        titleHtml: "A Low P/E Is Not Automatically a <em>Bargain</em>",
+        subtitle:
+          "Price-to-earnings is a starting comparison, not a buy signal. A low multiple can mean a cheap stock — or a business the market expects to earn less.",
+        excerpt:
+          "A low price-to-earnings ratio is a clue, not a buy signal. Check cash, debt, and the industry before you call a stock cheap.",
+        readingTime: "8 min",
+        level: "Beginner–Intermediate",
+        seriesLabel: "Blog · Valuation",
+        content: `<nav class="toc" aria-label="Table of contents">
+  <div class="toc-title">In this article</div>
+  <ol>
+    <li><a href="#what-pe">What the P/E ratio actually says</a></li>
+    <li><a href="#warning">When a low multiple is a warning</a></li>
+    <li><a href="#peers">Compare inside the industry</a></li>
+    <li><a href="#pair">Pair it with cash and debt</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="what-pe">
+  <h2>What the P/E ratio actually says</h2>
+  <p>Price-to-earnings divides the share price by earnings per share. It answers a narrow question: how many riyals or dollars are investors paying for one unit of recent or expected profit? <a href="https://www.investopedia.com/terms/p/price-earningsratio.asp" target="_blank" rel="noopener">Investopedia's P/E note</a> is a clear definition. It is not a complete valuation.</p>
+  <p>Earnings can be inflated by a one-time gain, depressed by a write-down, or simply about to fall because the cycle turned. A low P/E on peak earnings is a common way to buy a stock that only looks cheap.</p>
+</section>
+
+<section class="section" id="warning">
+  <h2>When a low multiple is a warning</h2>
+  <p>Markets are not always wrong, but they are often early. A low multiple can price in problems you have not read yet:</p>
+  <ul>
+    <li>Earnings that are not turning into cash.</li>
+    <li>Debt that will consume those earnings.</li>
+    <li>A product cycle, a commodity price, or a contract that will not repeat.</li>
+    <li>Accounting that pulls revenue forward. The red-flag tutorial covers how to spot that pattern.</li>
+  </ul>
+  <div class="callout">
+    <div class="callout-label">Core idea</div>
+    <p>Cheap against last year's earnings is not the same as cheap against the cash the business can keep producing.</p>
+  </div>
+</section>
+
+<section class="section" id="peers">
+  <h2>Compare inside the industry</h2>
+  <p>A bank, a retailer, and a software firm do not deserve the same multiple. <a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/pedata.html" target="_blank" rel="noopener">Professor Damodaran's industry P/E data</a> is the reference for that comparison, updated as a dataset rather than a slogan. Use it to ask whether your stock is inexpensive versus its own peers, not versus an arbitrary cutoff such as “under 10.”</p>
+  <p>On TASI, sector matters just as much. A materials company at a low multiple in a strong commodity year is not the same case as a defensive name with steady cash and a modest ratio.</p>
+</section>
+
+<section class="section" id="pair">
+  <h2>Pair it with cash and debt</h2>
+  <p>After the P/E, look at three companions: operating cash flow versus net income, debt relative to equity or to earnings, and whether the multiple is on trailing results or on a forecast you can challenge. If those companions look sound and the price is still below a reasoned range, you may have a candidate. If they do not, the low P/E is the market's way of telling you the earnings are fragile.</p>
+  <p>The ratio tutorial goes through P/E, P/B, ROE, and leverage in one place: <a href="/en/tutorials/financial-ratios">key financial ratios</a>. When you want a cash-flow range instead of a multiple, continue to <a href="/en/tutorials/dcf-valuation">how a DCF is built</a>, and treat the output as a range.</p>
+</section>
+
+<div class="sources">
+  <h3>Sources &amp; further reading</h3>
+  <ul>
+    <li><a href="https://www.investopedia.com/terms/p/price-earningsratio.asp" target="_blank" rel="noopener">Investopedia — Price-to-Earnings Ratio</a></li>
+    <li><a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/pedata.html" target="_blank" rel="noopener">Damodaran Online — PE ratios by industry</a></li>
+    <li><a href="/en/tutorials/financial-ratios">Tutorial — Key financial ratios</a></li>
+    <li><a href="/en/tutorials/financial-red-flags">Tutorial — Red flags in financial statements</a></li>
+  </ul>
+</div>`,
+      },
+      ar: {
+        title: "مضاعف ربحية منخفض ليس صفقة تلقائياً",
+        titleHtml: "مضاعف ربحية منخفض ليس <em>صفقة تلقائياً</em>",
+        subtitle:
+          "نسبة السعر إلى الربح مقارنة للبداية لا إشارة شراء. المضاعف المنخفض قد يعني سهماً رخيصاً — أو نشاطاً يتوقع السوق أن تنخفض أرباحه.",
+        excerpt:
+          "مضاعف الربحية المنخفض إشارة لا أمر شراء. افحص النقد والدين والقطاع وقارن السهم بنظرائه في تاسي قبل أن تصفه بأنه رخيص حقاً.",
+        readingTime: "8 دقائق",
+        level: "مبتدئ–متوسط",
+        seriesLabel: "المدونة · التقييم",
+        content: `<nav class="toc" aria-label="جدول المحتويات">
+  <div class="toc-title">في هذا المقال</div>
+  <ol>
+    <li><a href="#what-pe">ماذا تقول نسبة السعر إلى الربح فعلاً</a></li>
+    <li><a href="#warning">متى يكون المضاعف المنخفض تحذيراً</a></li>
+    <li><a href="#peers">قارن داخل القطاع</a></li>
+    <li><a href="#pair">اقرنه بالنقد والدين</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="what-pe">
+  <h2>ماذا تقول نسبة السعر إلى الربح فعلاً</h2>
+  <p>تقسم نسبة السعر إلى الربح سعر السهم على ربحية السهم. وتجيب عن سؤال ضيق: كم ريالاً أو دولاراً يدفع المستثمرون مقابل وحدة من الربح الأخير أو المتوقع؟ تعريف <a href="https://www.investopedia.com/terms/p/price-earningsratio.asp" target="_blank" rel="noopener">Investopedia لنسبة P/E</a> واضح. وهو ليس تقييماً كاملاً.</p>
+  <p>قد تتضخم الأرباح بمكسب لمرة واحدة، أو تنخفض بسبب تخفيض قيمة، أو تكون على وشك الهبوط لأن الدورة انقلبت. مضاعف منخفض على أرباح الذروة طريقة شائعة لشراء سهم يبدو رخيصاً فقط.</p>
+</section>
+
+<section class="section" id="warning">
+  <h2>متى يكون المضاعف المنخفض تحذيراً</h2>
+  <p>السوق لا يخطئ دائماً، لكنه غالباً يسبقك. المضاعف المنخفض قد يسعّر مشكلات لم تقرأها بعد:</p>
+  <ul>
+    <li>أرباح لا تتحول إلى نقد.</li>
+    <li>دين سيستهلك تلك الأرباح.</li>
+    <li>دورة منتج أو سعر سلعة أو عقد لن يتكرر.</li>
+    <li>محاسبة تسحب الإيراد إلى الأمام. درس العلامات التحذيرية يشرح كيف ترصد هذا النمط.</li>
+  </ul>
+  <div class="callout">
+    <div class="callout-label">الفكرة الجوهرية</div>
+    <p>الرخص مقابل أرباح العام الماضي ليس هو الرخص مقابل النقد الذي يستطيع النشاط الاستمرار في توليده.</p>
+  </div>
+</section>
+
+<section class="section" id="peers">
+  <h2>قارن داخل القطاع</h2>
+  <p>البنك ومتجر التجزئة وشركة البرمجيات لا تستحق المضاعف نفسه. <a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/pedata.html" target="_blank" rel="noopener">بيانات مضاعف الربحية القطاعية للأستاذ Damodaran</a> هي المرجع لهذه المقارنة، وتُحدَّث كمجموعة بيانات لا كشعار. استخدمها لتسأل إن كان سهمك رخيصاً مقابل نظرائه، لا مقابل حد اعتباطي مثل «أقل من 10».</p>
+  <p>في تاسي يهم القطاع بالقدر نفسه. شركة مواد بمضاعف منخفض في سنة سلع قوية ليست الحالة نفسها لاسم دفاعي بنقد مستقر ونسبة متواضعة.</p>
+</section>
+
+<section class="section" id="pair">
+  <h2>اقرنه بالنقد والدين</h2>
+  <p>بعد مضاعف الربحية انظر إلى ثلاثة رفاق: التدفق النقدي التشغيلي مقابل صافي الدخل، والدين نسبة إلى حقوق الملكية أو إلى الأرباح، وهل المضاعف على نتائج سابقة أم على توقع تستطيع تحدّيه. إذا بدت هذه الرفاق سليمة والسعر ما زال دون نطاق معلّل، فقد يكون أمامك مرشح. إن لم تبدُ كذلك، فالمضاعف المنخفض طريقة السوق ليقول إن الأرباح هشّة.</p>
+  <p>درس النسب يجمع P/E وP/B وROE والرافعة في مكان واحد: <a href="/ar/tutorials/financial-ratios">النسب المالية الرئيسية</a>. وإذا أردت نطاقاً من التدفق النقدي بدل المضاعف، تابع إلى <a href="/ar/tutorials/dcf-valuation">كيف يُبنى نموذج DCF</a>، وعامل الناتج كنطاق.</p>
+</section>
+
+<div class="sources">
+  <h3>المصادر وقراءات إضافية</h3>
+  <ul>
+    <li><a href="https://www.investopedia.com/terms/p/price-earningsratio.asp" target="_blank" rel="noopener">Investopedia — نسبة السعر إلى الربح</a></li>
+    <li><a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/pedata.html" target="_blank" rel="noopener">Damodaran Online — مضاعفات الربحية حسب القطاع</a></li>
+    <li><a href="/ar/tutorials/financial-ratios">الدرس — النسب المالية الرئيسية</a></li>
+    <li><a href="/ar/tutorials/financial-red-flags">الدرس — علامات تحذيرية في القوائم المالية</a></li>
+  </ul>
+</div>`,
+      },
+    },
+  },
+  {
+    slug: "reading-a-quarter",
+    published: "2026-07-16T08:00:00.000Z",
+    updated: "2026-07-16T08:00:00.000Z",
+    relatedTutorial: "earnings-reports",
+    locales: {
+      en: {
+        title: "How to Read One Quarter Without the Noise",
+        titleHtml: "How to Read One Quarter <em>Without the Noise</em>",
+        subtitle:
+          "A results headline is written to be shared. The filing is written to be checked. Start with the filing.",
+        excerpt:
+          "Skip the beat-or-miss headline. Read revenue quality, margins, and cash in the filing before you react to a single quarter.",
+        readingTime: "7 min",
+        level: "Intermediate",
+        seriesLabel: "Blog · Earnings",
+        content: `<nav class="toc" aria-label="Table of contents">
+  <div class="toc-title">In this article</div>
+  <ol>
+    <li><a href="#headline">Ignore the headline first</a></li>
+    <li><a href="#three">Three lines that matter</a></li>
+    <li><a href="#once">Separate what will not repeat</a></li>
+    <li><a href="#language">Read what management emphasizes</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="headline">
+  <h2>Ignore the headline first</h2>
+  <p>“Beat estimates” compares the company with a consensus forecast, not with the economics of the business. A firm can beat a lowered bar and still be deteriorating. Another can miss because of a timing item and be stronger than the quote suggests. The <a href="https://www.sec.gov/cgi-bin/browse-edgar" target="_blank" rel="noopener">quarterly filing</a> — or the Saudi interim statements on the exchange — is the document. The headline is an advertisement for it.</p>
+</section>
+
+<section class="section" id="three">
+  <h2>Three lines that matter</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Line</th><th>Compare with</th><th>A useful question</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Revenue</td><td>The same quarter last year, not only the prior quarter</td><td>Is growth coming from volume, price, or a one-off contract?</td></tr>
+        <tr><td>Operating margin</td><td>The last several quarters</td><td>Is the core business more or less profitable?</td></tr>
+        <tr><td>Operating cash flow</td><td>Net income for the same period</td><td>Did the profit arrive as cash?</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Seasonal businesses, including many retailers and some Saudi consumer names, should be compared with the year-ago quarter. A weak quarter after a festival peak is not automatically a broken company.</p>
+</section>
+
+<section class="section" id="once">
+  <h2>Separate what will not repeat</h2>
+  <p>Asset sales, legal settlements, tax items, and inventory write-downs move net income without describing the next year. Note them, then look at operating profit. If the entire “surprise” is a non-recurring line, you do not have new information about the franchise.</p>
+  <div class="callout">
+    <div class="callout-label">Rule of thumb</div>
+    <p>One quarter changes a thesis only when it changes the cash the business can produce, the debt it must carry, or the reason customers stay.</p>
+  </div>
+</section>
+
+<section class="section" id="language">
+  <h2>Read what management emphasizes</h2>
+  <p>Commentary that leads with adjusted figures, new jargon, and no mention of cash deserves skepticism. Commentary that explains a margin change in plain language, and shows the cash, deserves your time. The longer tutorial on <a href="/en/tutorials/earnings-reports">what to look for each quarter</a> goes line by line. Pair it with <a href="/en/tutorials/financial-red-flags">red flags in the statements</a> when the quarter looks better than the cash.</p>
+</section>
+
+<div class="sources">
+  <h3>Sources &amp; further reading</h3>
+  <ul>
+    <li><a href="https://www.sec.gov/cgi-bin/browse-edgar" target="_blank" rel="noopener">SEC EDGAR — Company filings</a></li>
+    <li><a href="https://www.saudiexchange.sa/" target="_blank" rel="noopener">Saudi Exchange — Issuer disclosures</a></li>
+    <li><a href="/en/tutorials/earnings-reports">Tutorial — Understanding earnings reports</a></li>
+    <li><a href="/en/tutorials/financial-red-flags">Tutorial — Red flags in financial statements</a></li>
+  </ul>
+</div>`,
+      },
+      ar: {
+        title: "كيف تقرأ ربعاً مالياً بعيداً عن الضجيج",
+        titleHtml: "كيف تقرأ ربعاً مالياً <em>بعيداً عن الضجيج</em>",
+        subtitle:
+          "عنوان النتائج مكتوب ليُشارَك. الإفصاح مكتوب ليُراجَع. ابدأ من الإفصاح.",
+        excerpt:
+          "تجاوز عنوان التفوق أو الإخفاق. اقرأ جودة الإيرادات والهوامش والنقد في الإفصاح قبل أن تتفاعل مع نتيجة ربع مالي واحد في تاسي.",
+        readingTime: "7 دقائق",
+        level: "متوسط",
+        seriesLabel: "المدونة · الأرباح",
+        content: `<nav class="toc" aria-label="جدول المحتويات">
+  <div class="toc-title">في هذا المقال</div>
+  <ol>
+    <li><a href="#headline">اترك العنوان أولاً</a></li>
+    <li><a href="#three">ثلاثة بنود تهم</a></li>
+    <li><a href="#once">افصل ما لن يتكرر</a></li>
+    <li><a href="#language">اقرأ ما تؤكد عليه الإدارة</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="headline">
+  <h2>اترك العنوان أولاً</h2>
+  <p>«تجاوز التوقعات» يقارن الشركة بإجماع المحللين، لا باقتصاد النشاط. قد تتجاوز شركة سقفاً خُفّض مسبقاً بينما نشاطها يتدهور. وقد تخفق أخرى بسبب بند توقيت وتكون أقوى مما يوحي السعر. <a href="https://www.sec.gov/cgi-bin/browse-edgar" target="_blank" rel="noopener">الإفصاح الربعي</a> — أو القوائم الأولية السعودية على السوق — هو الوثيقة. العنوان إعلان عنها.</p>
+</section>
+
+<section class="section" id="three">
+  <h2>ثلاثة بنود تهم</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>البند</th><th>قارنه مع</th><th>سؤال مفيد</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>الإيرادات</td><td>الربع المماثل من العام الماضي، لا الربع السابق وحده</td><td>هل النمو من الكمية أم السعر أم عقد لن يتكرر؟</td></tr>
+        <tr><td>هامش التشغيل</td><td>عدة أرباع سابقة</td><td>هل النشاط الأساسي أكثر ربحية أم أقل؟</td></tr>
+        <tr><td>التدفق النقدي التشغيلي</td><td>صافي الدخل للفترة نفسها</td><td>هل وصل الربح نقداً؟</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>الأنشطة الموسمية، ومنها كثير من متاجر التجزئة وبعض الأسماء الاستهلاكية السعودية، تُقارن بربع العام الماضي. ربع ضعيف بعد ذروة موسم ليس شركة مكسورة تلقائياً.</p>
+</section>
+
+<section class="section" id="once">
+  <h2>افصل ما لن يتكرر</h2>
+  <p>بيع الأصول والتسويات القانونية والبنود الضريبية وتخفيض المخزون تحرّك صافي الدخل من دون أن تصف السنة القادمة. دوّنها، ثم انظر إلى الربح التشغيلي. إذا كانت «المفاجأة» كلها في بند غير متكرر، فليس لديك معلومة جديدة عن النشاط.</p>
+  <div class="callout">
+    <div class="callout-label">قاعدة عملية</div>
+    <p>الربع الواحد يغيّر الأطروحة فقط إذا غيّر النقد الذي ينتجه النشاط، أو الدين الذي يجب أن يحمله، أو سبب بقاء العملاء.</p>
+  </div>
+</section>
+
+<section class="section" id="language">
+  <h2>اقرأ ما تؤكد عليه الإدارة</h2>
+  <p>التعليق الذي يبدأ بأرقام معدّلة ومصطلحات جديدة ولا يذكر النقد يستحق الشك. والتعليق الذي يشرح تغيّر الهامش بلغة واضحة ويُظهر النقد يستحق وقتك. الدرس الأطول عن <a href="/ar/tutorials/earnings-reports">ما تبحث عنه كل ربع</a> يمشي بنداً بنداً. اقرنه بـ<a href="/ar/tutorials/financial-red-flags">العلامات التحذيرية في القوائم</a> عندما يبدو الربع أفضل من النقد.</p>
+</section>
+
+<div class="sources">
+  <h3>المصادر وقراءات إضافية</h3>
+  <ul>
+    <li><a href="https://www.sec.gov/cgi-bin/browse-edgar" target="_blank" rel="noopener">SEC EDGAR — إفصاحات الشركات</a></li>
+    <li><a href="https://www.saudiexchange.sa/" target="_blank" rel="noopener">السوق المالية السعودية — إفصاحات المُصدِرين</a></li>
+    <li><a href="/ar/tutorials/earnings-reports">الدرس — فهم تقارير الأرباح</a></li>
+    <li><a href="/ar/tutorials/financial-red-flags">الدرس — علامات تحذيرية في القوائم المالية</a></li>
+  </ul>
+</div>`,
+      },
+    },
+  },
+  {
+    slug: "checklist-before-you-buy",
+    published: "2026-09-02T08:00:00.000Z",
+    updated: "2026-09-02T08:00:00.000Z",
+    relatedTutorial: "stock-picking-process",
+    locales: {
+      en: {
+        title: "A Checklist Before You Buy a Share",
+        titleHtml: "A Checklist Before You <em>Buy a Share</em>",
+        subtitle:
+          "A screener can find candidates. It cannot decide for you. These six checks are the minimum between a ticker and an order.",
+        excerpt:
+          "Six checks before you buy: the business, the statements, the price versus value, the debt, the position size, and a written reason.",
+        readingTime: "8 min",
+        level: "Beginner–Intermediate",
+        seriesLabel: "Blog · Process",
+        content: `<nav class="toc" aria-label="Table of contents">
+  <div class="toc-title">In this article</div>
+  <ol>
+    <li><a href="#business">Can you explain the business?</a></li>
+    <li><a href="#numbers">Do the statements agree?</a></li>
+    <li><a href="#price">Is the price below a range, not a wish?</a></li>
+    <li><a href="#size">How much of the portfolio is this?</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="business">
+  <h2>Can you explain the business?</h2>
+  <p>If you cannot say how the company gets paid, who the customer is, and what would make that customer leave, you are trading a symbol. Read the annual report's description of the business before the ratios. On the Saudi Exchange that narrative sits with the financials. The same is true of a U.S. 10-K.</p>
+  <p>A durable advantage — a brand, a cost position, a network, a regulated franchise — is what lets good numbers last. The <a href="/en/tutorials/competitive-moat">moat tutorial</a> is the longer version of that question.</p>
+</section>
+
+<section class="section" id="numbers">
+  <h2>Do the statements agree?</h2>
+  <p>Use the three-statement check from the earlier note in this blog, then add two filters:</p>
+  <ul>
+    <li>Debt the company can service from operating earnings, not from new borrowing.</li>
+    <li>No red flag you cannot explain: receivables racing ahead of sales, repeated “one-time” charges, or cash that never appears.</li>
+  </ul>
+  <div class="callout">
+    <div class="callout-label">Core idea</div>
+    <p>A fair-value figure on TruePrice.Cash is an input to this checklist. It is not a substitute for reading why the number looks high or low.</p>
+  </div>
+</section>
+
+<section class="section" id="price">
+  <h2>Is the price below a range, not a wish?</h2>
+  <p>Write down what you think the business is worth and why. A single target with no range hides how sensitive you are to one assumption. If the market price is not below the low end of a range you would still defend after a bad quarter, you do not have a margin of safety. You have a hope that the quote goes up.</p>
+  <p>The <a href="/en/tutorials/dcf-valuation">DCF tutorial</a> shows why small changes in growth or the discount rate move the result. The <a href="/en/tutorials/stock-picking-process">screening tutorial</a> shows how to narrow a market before you do this work by hand.</p>
+</section>
+
+<section class="section" id="size">
+  <h2>How much of the portfolio is this?</h2>
+  <p>Even a sound idea can be the wrong size. Decide the position before the order, and decide what evidence would make you sell or add. That evidence belongs in a short written thesis: the reason you own it, the numbers that would prove you wrong, and the date you will reread it. The closing tutorial in the series is <a href="/en/tutorials/building-investment-thesis">how to write that thesis</a>.</p>
+  <p>Then stop. More articles will not replace the filing of the company you are about to own.</p>
+</section>
+
+<div class="sources">
+  <h3>Sources &amp; further reading</h3>
+  <ul>
+    <li><a href="/en/tutorials/stock-picking-process">Tutorial — How to pick stocks</a></li>
+    <li><a href="/en/tutorials/competitive-moat">Tutorial — Competitive moat</a></li>
+    <li><a href="/en/tutorials/building-investment-thesis">Tutorial — How to write an investment thesis</a></li>
+    <li><a href="https://www.investopedia.com/terms/m/marginofsafety.asp" target="_blank" rel="noopener">Investopedia — Margin of Safety</a></li>
+  </ul>
+</div>`,
+      },
+      ar: {
+        title: "قائمة تحقق قبل أن تشتري سهماً",
+        titleHtml: "قائمة تحقق قبل أن <em>تشتري سهماً</em>",
+        subtitle:
+          "الفرز يجد مرشحين. هو لا يقرر عنك. هذه ستة فحوص هي الحد الأدنى بين رمز السهم وأمر الشراء.",
+        excerpt:
+          "ستة فحوص قبل شراء سهم في تاسي أو غيرها: النشاط، والقوائم، والسعر مقابل القيمة، والدين، وحجم الصفقة، وسبب مكتوب يبرر التملك.",
+        readingTime: "8 دقائق",
+        level: "مبتدئ–متوسط",
+        seriesLabel: "المدونة · المنهج",
+        content: `<nav class="toc" aria-label="جدول المحتويات">
+  <div class="toc-title">في هذا المقال</div>
+  <ol>
+    <li><a href="#business">هل تستطيع شرح النشاط؟</a></li>
+    <li><a href="#numbers">هل تتفق القوائم؟</a></li>
+    <li><a href="#price">هل السعر دون نطاق لا أمنية؟</a></li>
+    <li><a href="#size">كم من المحفظة هذا السهم؟</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="business">
+  <h2>هل تستطيع شرح النشاط؟</h2>
+  <p>إذا لم تستطع أن تقول كيف تُدفع للشركة، ومن العميل، وما الذي يجعله يغادر، فأنت تتداول رمزاً. اقرأ وصف النشاط في التقرير السنوي قبل النسب. في السوق السعودية يجلس هذا السرد مع القوائم. والأمر نفسه في تقرير 10-K الأمريكي.</p>
+  <p>الميزة التي تدوم — علامة، أو تكلفة، أو شبكة، أو امتياز منظم — هي ما يُبقي الأرقام الجيدة. <a href="/ar/tutorials/competitive-moat">درس الخندق التنافسي</a> هو النسخة الأطول من هذا السؤال.</p>
+</section>
+
+<section class="section" id="numbers">
+  <h2>هل تتفق القوائم؟</h2>
+  <p>استخدم فحص القوائم الثلاث من المقال السابق في هذه المدونة، ثم أضف مرشحين:</p>
+  <ul>
+    <li>دين تستطيع الشركة خدمته من الأرباح التشغيلية، لا من اقتراض جديد.</li>
+    <li>لا علامة تحذيرية تعجز عن شرحها: مدينون يسبقون المبيعات، أو مصروفات «لمرة واحدة» تتكرر، أو نقد لا يظهر.</li>
+  </ul>
+  <div class="callout">
+    <div class="callout-label">الفكرة الجوهرية</div>
+    <p>رقم القيمة العادلة في TruePrice.Cash مدخل في هذه القائمة. هو ليس بديلاً عن قراءة سبب ظهور الرقم مرتفعاً أو منخفضاً.</p>
+  </div>
+</section>
+
+<section class="section" id="price">
+  <h2>هل السعر دون نطاق لا أمنية؟</h2>
+  <p>اكتب ما تظن أن النشاط يستحقه ولماذا. هدف واحد بلا نطاق يخفي حساسيتك لافتراض واحد. إذا لم يكن سعر السوق دون الطرف الأدنى لنطاق ما زلت تدافع عنه بعد ربع سيئ، فليس لديك هامش أمان. لديك أمل أن يرتفع السعر.</p>
+  <p>يُظهر <a href="/ar/tutorials/dcf-valuation">درس DCF</a> لماذا تحرّك تغييرات صغيرة في النمو أو معدل الخصم النتيجة. ويُظهر <a href="/ar/tutorials/stock-picking-process">درس فرز الأسهم</a> كيف تضيّق السوق قبل أن تقوم بهذا العمل يدوياً.</p>
+</section>
+
+<section class="section" id="size">
+  <h2>كم من المحفظة هذا السهم؟</h2>
+  <p>حتى الفكرة السليمة قد تكون بالحجم الخطأ. حدّد حجم الصفقة قبل الأمر، وحدّد الدليل الذي يجعلك تبيع أو تزيد. هذا الدليل مكانه أطروحة قصيرة مكتوبة: سبب التملك، والأرقام التي تثبت أنك مخطئ، والتاريخ الذي ستعيد فيه القراءة. الدرس الختامي في السلسلة هو <a href="/ar/tutorials/building-investment-thesis">كيف تكتب هذه الأطروحة</a>.</p>
+  <p>ثم توقّف. مزيد من المقالات لن يحل محل إفصاح الشركة التي أنت على وشك امتلاكها.</p>
+</section>
+
+<div class="sources">
+  <h3>المصادر وقراءات إضافية</h3>
+  <ul>
+    <li><a href="/ar/tutorials/stock-picking-process">الدرس — كيفية اختيار الأسهم</a></li>
+    <li><a href="/ar/tutorials/competitive-moat">الدرس — الخندق التنافسي</a></li>
+    <li><a href="/ar/tutorials/building-investment-thesis">الدرس — كيف تكتب أطروحة استثمارية</a></li>
+    <li><a href="https://www.investopedia.com/terms/m/marginofsafety.asp" target="_blank" rel="noopener">Investopedia — هامش الأمان</a></li>
+  </ul>
+</div>`,
+      },
+    },
+  },
+];
+
+export function flattenBlogPosts() {
+  const posts = [];
+  for (const post of BLOG_POSTS) {
+    for (const locale of ["en", "ar"]) {
+      const loc = post.locales[locale];
+      if (!loc) continue;
+      posts.push({
+        id: `${locale}-${post.slug}`,
+        slug: post.slug,
+        locale,
+        title: loc.title,
+        titleHtml: loc.titleHtml || loc.title,
+        subtitle: loc.subtitle || "",
+        content: loc.content,
+        excerpt: loc.excerpt,
+        published: post.published,
+        updated: post.updated || post.published,
+        author: BLOG_AUTHOR,
+        path: blogPostPath(locale, post.slug),
+        readingTime: loc.readingTime || "",
+        level: loc.level || "",
+        seriesLabel: loc.seriesLabel || "",
+        relatedTutorial: post.relatedTutorial || "",
+      });
+    }
+  }
+  return posts;
+}
+
+export function blogPostBySlug(slug, locale) {
+  const loc = locale === "ar" ? "ar" : "en";
+  return flattenBlogPosts().find((post) => post.slug === slug && post.locale === loc) || null;
+}

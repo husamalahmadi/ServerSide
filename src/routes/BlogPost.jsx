@@ -1,14 +1,14 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { blogIndexPath, blogPostPath } from "../../shared/seo/blogPaths.js";
-import { PageHeader } from "../components/PageHeader.jsx";
+import React, { useMemo } from "react";
+import { Link, Navigate, useParams } from "react-router-dom";
+import { blogIndexPath } from "../../shared/seo/blogPaths.js";
+import { tutorialArticlePath } from "../../shared/seo/tutorialPaths.js";
 import { SafeHtml } from "../components/SafeHtml.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { useI18n } from "../i18n.jsx";
-import { loadBlogPosts } from "../services/blogCatalog.js";
+import { findBlogPost } from "../services/blogCatalog.js";
 import { buildBlogPostSeo } from "../seo/structuredData.js";
-import { blogHtmlConfig } from "../utils/sanitizeHtml.js";
+import { tutorialHtmlConfig } from "../utils/sanitizeHtml.js";
 
 function formatDate(date, lang) {
   if (!date) return "";
@@ -27,68 +27,65 @@ export default function BlogPost() {
   const { t, lang, dir } = useI18n();
   const { slug } = useParams();
   const locale = lang === "ar" ? "ar" : "en";
-  const [state, setState] = useState({ loading: true, error: "", post: null });
+  const post = useMemo(() => findBlogPost(slug, locale), [slug, locale]);
 
-  useEffect(() => {
-    let cancelled = false;
-    setState({ loading: true, error: "", post: null });
-    loadBlogPosts()
-      .then((posts) => {
-        if (cancelled) return;
-        const post = posts.find((item) => item.locale === locale && item.slug === slug) || null;
-        setState({ loading: false, error: "", post });
-      })
-      .catch((err) => {
-        if (cancelled) return;
-        setState({ loading: false, error: err?.message || t("ERR_LOAD_BLOGS"), post: null });
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [locale, slug, t]);
-
-  const seo = useMemo(
-    () => (state.post ? buildBlogPostSeo({ post: state.post, lang: locale }) : null),
-    [state.post, locale]
-  );
+  const seo = useMemo(() => (post ? buildBlogPostSeo({ post, lang: locale }) : null), [post, locale]);
   usePageMeta(
     seo || {
-      pathname: blogPostPath(locale, slug),
+      pathname: blogIndexPath(locale),
       title: locale === "ar" ? "مدونة TruePrice.Cash" : "TruePrice.Cash Blog",
     }
   );
 
+  if (!post) {
+    return <Navigate to={blogIndexPath(locale)} replace />;
+  }
+
   const indexPath = blogIndexPath(locale);
+  const tutorialHref = post.relatedTutorial
+    ? tutorialArticlePath(locale, post.relatedTutorial)
+    : `/${locale}/tutorials`;
 
   return (
-    <div className="tp-page" dir={dir} lang={lang} style={{ maxWidth: 900 }}>
-      <div className="tp-container" style={{ padding: 16 }}>
-        <PageHeader
-          title={state.post?.title || t("BLOGS")}
-          subtitle={
-            state.post
-              ? [formatDate(state.post.published, lang), state.post.author].filter(Boolean).join(" · ")
-              : lang === "ar"
-                ? "مدونات استثمارية"
-                : "Investing insights & market notes"
-          }
-        />
-        <p style={{ marginTop: 0 }}>
-          <Link to={indexPath}>{lang === "ar" ? "كل المقالات" : "All posts"}</Link>
+    <article className="tp-page tp-tutorial-article-page" dir={dir} lang={lang}>
+      <nav className="tp-tutorial-breadcrumb" aria-label="Breadcrumb">
+        <Link to={indexPath}>{t("BLOGS")}</Link>
+        <span aria-hidden>/</span>
+        <span>{post.title}</span>
+      </nav>
+
+      <header className="tp-tutorial-hero">
+        {post.seriesLabel ? <p className="tp-tutorial-series-label">{post.seriesLabel}</p> : null}
+        <SafeHtml html={post.titleHtml || post.title} tagName="h1" className="tp-tutorial-hero-title" />
+        {post.subtitle ? <p className="tp-tutorial-hero-sub">{post.subtitle}</p> : null}
+        <div className="tp-tutorial-hero-meta">
+          <span>
+            <span className="tp-tutorial-meta-label">{t("PUBLISHED")}</span>
+            <span className="tp-tutorial-meta-value">{formatDate(post.published, lang)}</span>
+          </span>
+          {post.readingTime ? (
+            <span>
+              <span className="tp-tutorial-meta-label">{t("TUTORIALS_META_READING")}</span>
+              <span className="tp-tutorial-meta-value">{post.readingTime}</span>
+            </span>
+          ) : null}
+          {post.level ? (
+            <span>
+              <span className="tp-tutorial-meta-label">{t("TUTORIALS_META_LEVEL")}</span>
+              <span className="tp-tutorial-meta-value">{post.level}</span>
+            </span>
+          ) : null}
+        </div>
+      </header>
+
+      <div className="tp-card tp-tutorial-body-card">
+        <SafeHtml html={post.content} className="tp-tutorial-content" sanitizeConfig={tutorialHtmlConfig} />
+        <p style={{ marginTop: "1.25rem" }}>
+          <Link to={tutorialHref}>{lang === "ar" ? "تابع في سلسلة الدروس" : "Continue in the tutorial series"}</Link>
         </p>
-        {state.loading ? (
-          <div style={{ color: "#64748b" }}>Loading…</div>
-        ) : state.error ? (
-          <div style={{ color: "#8b1a1a" }}>{state.error}</div>
-        ) : !state.post ? (
-          <div style={{ color: "#8a8578" }}>{t("NO_DATA")}</div>
-        ) : (
-          <article className="tp-card" style={{ background: "#fff", borderRadius: 16, padding: 16 }}>
-            <SafeHtml html={state.post.content} sanitizeConfig={blogHtmlConfig} />
-          </article>
-        )}
-        <SiteFooter t={t} />
       </div>
-    </div>
+
+      <SiteFooter t={t} />
+    </article>
   );
 }

@@ -64,6 +64,7 @@ import { parseBlogPath } from "../shared/seo/blogPaths.js";
 import { legacyArabicStockRedirect, parseStockPath } from "../shared/seo/stockPaths.js";
 import { buildTutorialSpaStaticFallback } from "../shared/seo/tutorialStatic.js";
 import { parseTutorialPath } from "../shared/seo/tutorialPaths.js";
+import { flattenBlogPosts } from "../src/data/blogs/posts.js";
 import { TUTORIAL_ARTICLES, TUTORIAL_BY_SLUG } from "../src/data/tutorials/articles.js";
 import { resolveTutorialArticle, resolveTutorialArticles } from "../src/data/tutorials/resolve.js";
 import { isUsableScreenerRow, screenerMarketUsable } from "../src/domain/screenerMetrics.js";
@@ -1717,20 +1718,7 @@ function tutorialSeoInjectForRequest(req) {
 }
 
 function readBlogPosts() {
-  const files = [
-    join(staticPath, "data", "blog-posts.json"),
-    join(__dirname, "..", "public", "data", "blog-posts.json"),
-  ];
-  for (const file of files) {
-    try {
-      if (!existsSync(file)) continue;
-      const data = JSON.parse(readFileSync(file, "utf8"));
-      if (Array.isArray(data.posts)) return data.posts;
-    } catch {
-      /* try the next snapshot */
-    }
-  }
-  return [];
+  return flattenBlogPosts();
 }
 
 function blogsSeoInjectForRequest(req) {

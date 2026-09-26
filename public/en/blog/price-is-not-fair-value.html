@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Stock Price Is Not a Fair Value – TruePrice.Cash Blog</title>
+  <meta name="description" content="A market price is what someone paid today. Fair value is what the business is worth. Here is how to keep those two numbers apart." />
+  <link rel="canonical" href="https://trueprice.cash/en/blog/price-is-not-fair-value" />
+  <link rel="alternate" hreflang="en" href="https://trueprice.cash/en/blog/price-is-not-fair-value" />
+  <link rel="alternate" hreflang="ar" href="https://trueprice.cash/ar/blog/price-is-not-fair-value" />
+  <link rel="alternate" hreflang="x-default" href="https://trueprice.cash/en/blog/price-is-not-fair-value" />
+  <meta property="og:title" content="A Stock Price Is Not a Fair Value – TruePrice.Cash Blog" />
+  <meta property="og:description" content="A market price is what someone paid today. Fair value is what the business is worth. Here is how to keep those two numbers apart." />
+  <meta property="og:url" content="https://trueprice.cash/en/blog/price-is-not-fair-value" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://trueprice.cash/og/default.png" />
+  <meta property="og:image:secure_url" content="https://trueprice.cash/og/default.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://trueprice.cash/og/default.png" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BlogPosting","@id":"https://trueprice.cash/en/blog/price-is-not-fair-value#post","headline":"A Stock Price Is Not a Fair Value","description":"A market price is what someone paid today. Fair value is what the business is worth. Here is how to keep those two numbers apart.","url":"https://trueprice.cash/en/blog/price-is-not-fair-value","mainEntityOfPage":"https://trueprice.cash/en/blog/price-is-not-fair-value","inLanguage":"en","datePublished":"2026-01-15","dateModified":"2026-01-15","isPartOf":{"@type":"Blog","url":"https://trueprice.cash/en/blogs","name":"TruePrice.Cash Blog"},"publisher":{"@type":"Organization","name":"TruePrice.Cash","url":"https://trueprice.cash/"},"author":{"@type":"Organization","name":"TruePrice.Cash","url":"https://trueprice.cash/"}}]}</script>
+  <style>
+    :root { --tp-primary: #2c7be5; --tp-ink: #1a2b42; --tp-muted: #5a6b85; --tp-border: #d4e6fb; }
+    body { font-family: system-ui,Segoe UI,Roboto,sans-serif; margin: 0; color: var(--tp-ink); line-height: 1.65; background: #f6faff; }
+    .wrap { max-width: 820px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+    header.site { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--tp-border); }
+    header.site a { color: var(--tp-primary); text-decoration: none; font-weight: 600; font-size: 14px; }
+    .brand { font-weight: 800; font-size: 1.1rem; color: var(--tp-ink); }
+    .hero { background: linear-gradient(140deg,#fff,#eef5ff); border: 1px solid var(--tp-border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
+    .hero h1 { margin: 0 0 0.5rem; font-size: 1.75rem; line-height: 1.25; }
+    .hero h1 em { font-style: normal; color: var(--tp-primary); }
+    .hero p { margin: 0.35rem 0 0; color: var(--tp-muted); font-size: 15px; }
+    article { background: #fff; border: 1px solid var(--tp-border); border-radius: 12px; padding: 1.25rem 1.35rem; }
+    article a { color: var(--tp-primary); }
+    article h2 { margin: 1.5rem 0 0.75rem; font-size: 1.25rem; }
+    article h3 { margin: 1.25rem 0 0.5rem; font-size: 1.05rem; }
+    article p, article li { margin: 0 0 0.85rem; font-size: 15px; }
+    .toc { background: #eef5ff; border: 1px solid var(--tp-border); border-radius: 10px; padding: 1rem 1.1rem; margin-bottom: 1.25rem; }
+    .toc-title { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #5a7aa8; margin: 0 0 0.5rem; }
+    .toc ol { margin: 0; padding-inline-start: 1.25rem; }
+    .toc li { margin: 0.25rem 0; font-size: 13px; }
+    .callout { margin: 1rem 0; padding: 0.9rem 1rem; border-inline-start: 3px solid var(--tp-primary); background: #eef5ff; border-radius: 10px; }
+    .callout-label { font-size: 10px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--tp-primary); margin-bottom: 0.35rem; }
+    .callout p:last-child { margin-bottom: 0; }
+    .table-wrap { overflow-x: auto; margin: 1rem 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border-bottom: 1px solid var(--tp-border); padding: 0.45rem 0.5rem; text-align: start; vertical-align: top; }
+    .sources { margin-top: 1.5rem; font-size: 14px; }
+    .catalog { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.65rem; }
+    .catalog a { display: block; padding: 0.85rem 1rem; background: #fff; border: 1px solid var(--tp-border); border-radius: 10px; color: var(--tp-ink); text-decoration: none; }
+    .catalog a strong { display: block; font-size: 1.05rem; }
+    .catalog a span { display: block; margin-top: 0.35rem; color: var(--tp-muted); font-size: 14px; font-weight: 400; }
+    footer { margin-top: 2rem; text-align: center; font-size: 12px; color: var(--tp-muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="site">
+      <a class="brand" href="/">TruePrice.Cash</a>
+      <div>
+        <a href="/en/blogs">English</a>
+        ·
+        <a href="/ar/blogs">العربية</a>
+        ·
+        <a href="/en/tutorials">Tutorials</a>
+        ·
+        <a href="/">Home</a>
+      </div>
+    </header>
+    <div class="hero">
+      <p style="font-size:13px;margin:0 0 0.5rem;"><a href="/en/blogs">Blog</a></p>
+      <h1>A Stock Price Is Not a <em>Fair Value</em></h1>
+      <p>2026-01-15 · 7 min · Beginner</p>
+      <p>The quote on the screen is a trade. Fair value is a judgment about the business. Mixing the two is how investors buy stories instead of cash flows.</p>
+    </div>
+    <article>
+      <nav class="toc" aria-label="Table of contents">
+  <div class="toc-title">In this article</div>
+  <ol>
+    <li><a href="#the-quote">The number on the screen</a></li>
+    <li><a href="#intrinsic">What fair value is trying to estimate</a></li>
+    <li><a href="#margin">Leave a margin of safety</a></li>
+    <li><a href="#gap">Why price and value can stay apart</a></li>
+  </ol>
+</nav>
+
+<section class="section" id="the-quote">
+  <h2>The number on the screen</h2>
+  <p>A stock price is the last price at which a buyer and a seller agreed to trade. It is useful. It is also narrow. It does not tell you what the company earns, how much cash it keeps, or how much debt sits against those assets. On TASI, in the S&amp;P 500, in Tokyo, or in London, the quote is still only a transaction.</p>
+  <p>Fair value is a different question: what is this business worth if you look through the financial statements instead of the tape? <a href="https://www.cfainstitute.org/en/membership/professional-development/refresher-readings/introduction-security-valuation" target="_blank" rel="noopener">CFA Institute's introduction to security valuation</a> treats that estimate as the starting point of equity research, not the ticker itself.</p>
+</section>
+
+<section class="section" id="intrinsic">
+  <h2>What fair value is trying to estimate</h2>
+  <p>Investors usually arrive at a range, not a single precise number. One path discounts the cash the business can pay its owners. Another compares the company with peers on earnings, book value, or cash flow, then asks whether the gap is justified. Both paths start in the statements.</p>
+  <p>TruePrice.Cash follows a balance-sheet route you can inspect: enterprise value, plus cash, minus debt, divided by shares outstanding. That figure is an estimate with limits. It is not a promise that the market will trade there next week. The point of publishing the method is so you can see the inputs instead of trusting a headline target.</p>
+  <div class="callout">
+    <div class="callout-label">Core idea</div>
+    <p>Price is what the market cleared. Fair value is what you think the business is worth after reading the numbers. You need both, and you should label them separately.</p>
+  </div>
+</section>
+
+<section class="section" id="margin">
+  <h2>Leave a margin of safety</h2>
+  <p><a href="https://en.wikipedia.org/wiki/Benjamin_Graham" target="_blank" rel="noopener">Benjamin Graham</a> argued that you should buy only when price sits meaningfully below your estimate of value. He called the gap a <a href="https://www.investopedia.com/terms/m/marginofsafety.asp" target="_blank" rel="noopener">margin of safety</a>. The discount is there because forecasts are wrong, accounting can be aggressive, and a cheap stock can stay cheap.</p>
+  <p>A 20–30% discount to a carefully built range is a common hurdle for conservative investors. It is a rule of thumb, not a law. If your estimate of value is sloppy, a discount to that estimate does not protect you.</p>
+</section>
+
+<section class="section" id="gap">
+  <h2>Why price and value can stay apart</h2>
+  <p>Flows, headlines, index inclusion, and thin trading can move a price for months without changing the business. In markets where fewer analysts cover mid-sized names, including parts of the Saudi market, that gap can last longer. The work is to decide whether you are looking at a mispricing or at a business that deserves the lower price.</p>
+  <p>The tutorial series walks through that work from the first statement to a written investment thesis. Start with <a href="/en/tutorials/what-is-fundamental-analysis">what fundamental analysis is</a>, then use the screener as a list of candidates, not as a verdict.</p>
+</section>
+
+<div class="sources">
+  <h3>Sources &amp; further reading</h3>
+  <ul>
+    <li><a href="https://www.cfainstitute.org/en/membership/professional-development/refresher-readings/introduction-security-valuation" target="_blank" rel="noopener">CFA Institute — Introduction to Security Valuation</a></li>
+    <li><a href="https://www.investopedia.com/terms/m/marginofsafety.asp" target="_blank" rel="noopener">Investopedia — Margin of Safety</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Security_Analysis_(book)" target="_blank" rel="noopener">Graham &amp; Dodd — Security Analysis</a></li>
+    <li><a href="/en/tutorials/what-is-fundamental-analysis">TruePrice.Cash tutorial — What is fundamental analysis?</a></li>
+  </ul>
+</div>
+      <p style="margin-top:1.5rem;font-size:13px;"><a href="/en/tutorials/what-is-fundamental-analysis">Continue in the tutorial series</a></p>
+    </article>
+    <footer>© TruePrice.Cash</footer>
+  </div>
+</body>
+</html>

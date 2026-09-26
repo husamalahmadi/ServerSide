@@ -1,6 +1,6 @@
 /**
  * Sanitize HTML before rendering to prevent XSS.
- * Use for any user or API content (e.g. blog posts) that may be rendered as HTML.
+ * Use for any user or third-party HTML that may be rendered.
  */
 
 import DOMPurify from "dompurify";
@@ -10,18 +10,7 @@ const defaultConfig = {
   ALLOWED_ATTR: ["href", "target", "rel"],
 };
 
-/** Hosted Blogger post HTML (images and basic layout, no scripts). */
-export const blogHtmlConfig = {
-  ALLOWED_TAGS: [
-    "p", "br", "strong", "em", "u", "a", "ul", "ol", "li",
-    "h1", "h2", "h3", "h4", "blockquote", "code", "pre",
-    "div", "span", "img", "figure", "figcaption",
-    "table", "thead", "tbody", "tr", "th", "td",
-  ],
-  ALLOWED_ATTR: ["href", "target", "rel", "src", "alt", "title", "width", "height", "class"],
-};
-
-/** Rich HTML for synced tutorial articles (tables, callouts, TOC, etc.). */
+/** Rich HTML for tutorials and hardcoded blog articles (tables, callouts, TOC, etc.). */
 export const tutorialHtmlConfig = {
   ALLOWED_TAGS: [
     "p", "br", "strong", "em", "u", "a", "ul", "ol", "li",

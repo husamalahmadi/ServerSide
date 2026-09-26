@@ -2,7 +2,7 @@
  * Writes a sitemap index at public/sitemap.xml plus child sitemaps:
  * sitemap-core.xml, sitemap-stocks-sa.xml, sitemap-stocks-us.xml,
  * sitemap-stocks-jp.xml, sitemap-stocks-uk.xml, sitemap-tutorials.xml,
- * sitemap-tasi.xml, sitemap-blogs.xml (when public/data/blog-posts.json has posts).
+ * sitemap-tasi.xml, sitemap-blogs.xml (from src/data/blogs/posts.js).
  *
  * Stock universes match src/data/stocksCatalog.js. lastmod is the UTC date of
  * the last git commit for that URL's source (route, tutorial HTML, or catalog),
@@ -12,6 +12,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, statSync, unlinkSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { flattenBlogPosts } from "../src/data/blogs/posts.js";
 import { TUTORIAL_ARTICLES } from "../src/data/tutorials/articles.js";
 import {
   EARNINGS_CALENDAR_PATH,
@@ -258,29 +259,26 @@ function main() {
     })
   );
 
-  const blogDataFile = join(PUBLIC, "data", "blog-posts.json");
+  const blogPosts = flattenBlogPosts();
   const blogEntries = [];
-  if (existsSync(blogDataFile)) {
-    const data = readJsonSafe(blogDataFile);
-    const postDate = (post) => {
-      const dated = String(post?.updated || post?.published || "").slice(0, 10);
-      return /^\d{4}-\d{2}-\d{2}$/.test(dated) ? dated : null;
-    };
-    let newestPostDate = null;
-    for (const post of data.posts || []) {
-      const dated = postDate(post);
-      if (dated && (!newestPostDate || dated > newestPostDate)) newestPostDate = dated;
-    }
-    for (const post of data.posts || []) {
-      const path = String(post?.path || "");
-      if (!/^\/(en|ar)\/blog\/[^/]+$/.test(path)) continue;
-      blogEntries.push({
-        loc: `${SITE}${path}`,
-        lastmod: postDate(post) || newestPostDate || todayUtc(),
-        changefreq: "monthly",
-        priority: "0.75",
-      });
-    }
+  const postDate = (post) => {
+    const dated = String(post?.updated || post?.published || "").slice(0, 10);
+    return /^\d{4}-\d{2}-\d{2}$/.test(dated) ? dated : null;
+  };
+  let newestPostDate = null;
+  for (const post of blogPosts) {
+    const dated = postDate(post);
+    if (dated && (!newestPostDate || dated > newestPostDate)) newestPostDate = dated;
+  }
+  for (const post of blogPosts) {
+    const path = String(post?.path || "");
+    if (!/^\/(en|ar)\/blog\/[^/]+$/.test(path)) continue;
+    blogEntries.push({
+      loc: `${SITE}${path}`,
+      lastmod: postDate(post) || newestPostDate || todayUtc(),
+      changefreq: "monthly",
+      priority: "0.75",
+    });
   }
   const saGrouped = readJsonSafe(catalogs.sa);
   const tasiCompanies = catalogFromGrouped(saGrouped);
