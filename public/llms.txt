@@ -2,23 +2,27 @@
 
 > TruePrice.Cash is a stock research dashboard for US (S&P 500), Saudi TASI, Tokyo, and London (LSE) markets. It offers fair value estimates, a multi-market screener, live market signals, fundamentals, and stock news sourced from Financial Modeling Prep.
 
-The site compares market price to estimated fair value using enterprise value, balance sheet, and income data where available. Markets use codes `us` (United States), `sa` (Saudi TASI), `jp` (Tokyo), and `uk` (London). English and Arabic UI are supported.
+The site compares market price to estimated fair value using enterprise value, balance sheet, and income data where available. Markets use codes `us` (United States), `sa` (Saudi TASI), `jp` (Tokyo), and `uk` (London). English and Arabic UI are supported. Stock, blog, and tutorial URLs are locale-prefixed (`/en/` and `/ar/`).
 
 ## Core pages
 
 - [Home](https://trueprice.cash/): Stock search, live US/TASI signals (top gainers, near fair value), market news, and the stock screener with market-focus presets.
-- [Stock analysis](https://trueprice.cash/stock/AAPL): Per-ticker fair value, charts, fundamentals, and news. Use `/stock/{ticker}` — US symbols like `AAPL`, TASI numeric tickers like `2222`, Tokyo tickers like `7203.T`, London tickers like `GLEN.L`.
+- [Stock analysis](https://trueprice.cash/en/stock/AAPL): Per-ticker fair value, charts, fundamentals, and news. English: `/en/stock/{ticker}`. Arabic: `/ar/stock/{ticker}`. US symbols like `AAPL`, TASI numeric tickers like `2222`, Tokyo tickers like `7203.T`, London tickers like `GLEN.L`.
 - [US market performance](https://trueprice.cash/us-markets): US sector/industry snapshots, movers, and S&P 500 universe with live prices.
 - [TASI market performance](https://trueprice.cash/sa-markets): Saudi market movers and full TASI listing with prices.
-- [Blogs](https://trueprice.cash/blogs): Articles and market commentary.
+- [Undervalued TASI stocks](https://trueprice.cash/ar/tasi/أسهم-أقل-من-قيمتها-العادلة): Arabic list of TASI names trading below estimated fair value. Path: `/ar/tasi/أسهم-أقل-من-قيمتها-العادلة`.
+- [TASI earnings](https://trueprice.cash/ar/tasi/نتائج-الشركات): Arabic earnings calendar. Path: `/ar/tasi/نتائج-الشركات`.
+- [TASI sector](https://trueprice.cash/ar/sa-markets/البنوك): One Saudi sector. Path: `/ar/sa-markets/{sector}`.
+- [TASI comparison](https://trueprice.cash/ar/compare/4020-vs-4090): Side-by-side fair value for two TASI tickers. Path: `/ar/compare/{pair}` (for example `4020-vs-4090`).
+- [Blogs](https://trueprice.cash/en/blogs): English index `/en/blogs`, Arabic index `/ar/blogs`. Posts: `/en/blog/{slug}` and `/ar/blog/{slug}`.
 - [Methodology](https://trueprice.cash/methodology): How fair value is calculated (enterprise value plus cash minus debt, divided by shares outstanding), data sources, limits, and independence statement.
 - [About](https://trueprice.cash/about): About TruePrice.Cash.
 - [Contact](https://trueprice.cash/contact): Contact page.
 
 ## Discovery
 
-- [XML sitemap](https://trueprice.cash/sitemap.xml): Index of public stock and site URLs for crawlers.
-- [robots.txt](https://trueprice.cash/robots.txt): Crawler rules; all public HTML paths are allowed.
+- [XML sitemap](https://trueprice.cash/sitemap.xml): Start here. This is the full public URL list (stocks, blogs, tutorials, and TASI pages) for crawlers.
+- [robots.txt](https://trueprice.cash/robots.txt): Crawler rules; all public HTML paths are allowed. The sitemap directive points at `https://trueprice.cash/sitemap.xml`.
 
 ## Optional
 
