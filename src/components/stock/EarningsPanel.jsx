@@ -415,18 +415,6 @@ export function EarningsPanel({ rows, loading, error, onRetry, currency, lang, d
 
       <div className="tp-earn-charts" dir="ltr">
         <DualBarChart
-          title={t("EARNINGS_EPS")}
-          points={view.series}
-          actualKey="epsActual"
-          estimateKey="epsEstimated"
-          formatValue={formatEps}
-          activeIndex={active}
-          onSelect={setActive}
-          lang={lang}
-          t={t}
-          badge={epsBadge && epsBadge.tone !== "none" ? epsBadge : null}
-        />
-        <DualBarChart
           title={`${t("EARNINGS_REVENUE")}${currency ? ` (${currency})` : ""}`}
           points={view.series}
           actualKey="revenueActual"
@@ -437,6 +425,18 @@ export function EarningsPanel({ rows, loading, error, onRetry, currency, lang, d
           lang={lang}
           t={t}
           badge={revBadge && revBadge.tone !== "none" ? revBadge : null}
+        />
+        <DualBarChart
+          title={t("EARNINGS_EPS")}
+          points={view.series}
+          actualKey="epsActual"
+          estimateKey="epsEstimated"
+          formatValue={formatEps}
+          activeIndex={active}
+          onSelect={setActive}
+          lang={lang}
+          t={t}
+          badge={epsBadge && epsBadge.tone !== "none" ? epsBadge : null}
         />
       </div>
 
@@ -474,20 +474,20 @@ export function EarningsPanel({ rows, loading, error, onRetry, currency, lang, d
               </span>
             ) : null}
           </div>
-          <div className="tp-earn-detail-grid">
-            <MetricReadout
-              label={t("EARNINGS_EPS")}
-              actual={point.epsActual}
-              estimate={point.epsEstimated}
-              format={formatEps}
-              currency={currency}
-              t={t}
-            />
+          <div className="tp-earn-detail-grid" dir="ltr">
             <MetricReadout
               label={t("EARNINGS_REVENUE")}
               actual={point.revenueActual}
               estimate={point.revenueEstimated}
               format={fmtBill}
+              currency={currency}
+              t={t}
+            />
+            <MetricReadout
+              label={t("EARNINGS_EPS")}
+              actual={point.epsActual}
+              estimate={point.epsEstimated}
+              format={formatEps}
               currency={currency}
               t={t}
             />

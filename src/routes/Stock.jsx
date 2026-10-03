@@ -782,7 +782,20 @@ export default function Stock() {
           {howWeCalculateLink}
         </div>
 
-        {/* 3. Stock profile */}
+        <Card title={t("EARNINGS_TITLE")}>
+          <EarningsPanel
+            rows={earnings.data?.rows}
+            loading={!fmpSymbol || (earnings.loading && !earnings.data)}
+            error={earnings.error}
+            onRetry={() => setEarningsRetry((n) => n + 1)}
+            currency={currency}
+            lang={lang}
+            dir={dir}
+            t={t}
+          />
+        </Card>
+
+        {/* 4. Stock profile */}
         <Card title={t("STOCK_PROFILE")}>
           <div style={{ display: "grid", gap: 16, color: "#334155", lineHeight: 1.75, fontSize: 14 }}>
             {stockNarrative.sections.map((sec) => (
@@ -809,23 +822,10 @@ export default function Stock() {
           </div>
         </Card>
 
-        {/* 4. Key Metrics (FMP key-metrics) */}
+        {/* 5. Key Metrics (FMP key-metrics) */}
         {keyMetricsCard}
 
-        <Card title={t("EARNINGS_TITLE")}>
-          <EarningsPanel
-            rows={earnings.data?.rows}
-            loading={!fmpSymbol || (earnings.loading && !earnings.data)}
-            error={earnings.error}
-            onRetry={() => setEarningsRetry((n) => n + 1)}
-            currency={currency}
-            lang={lang}
-            dir={dir}
-            t={t}
-          />
-        </Card>
-
-        {/* 7. Industry peers (EV-based fair value) – button + 8s wait */}
+        {/* 6. Industry peers (EV-based fair value) – button + 8s wait */}
         <Card title={t("INDUSTRY_PEERS_EV")}>
           {!user ? (
             <div style={{ display: "grid", gap: 12 }}>
@@ -1012,7 +1012,7 @@ export default function Stock() {
           )}
         </Card>
 
-        {/* 8. Investment summary */}
+        {/* 7. Investment summary */}
         <Card title={t("INVESTMENT_SUMMARY")}>
           {prefetchCountdown > 0 ? (
             <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
@@ -1086,7 +1086,7 @@ export default function Stock() {
           )}
         </Card>
 
-        {/* 9. Financial analysis report using AI */}
+        {/* 8. Financial analysis report using AI */}
         <div className="no-print" style={{ marginBottom: 8 }}>
           <Card title={t("AI_REPORT_CARD_TITLE")}>
             <AiReport symbol={fmpSymbol} t={t} />
