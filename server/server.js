@@ -1039,6 +1039,40 @@ app.get(["/api/fmp/key-metrics", "/api/fmp/key-metrics/:symbol"], async (req, re
   }
 });
 
+/** Quarterly reported vs expected earnings — FMP stable earnings. */
+app.get(["/api/fmp/earnings", "/api/fmp/earnings/:symbol"], async (req, res) => {
+  const key = fmpApiKey();
+  if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  const symbol = fmpSymbolFromRequest(req);
+  if (!symbol) return res.status(400).json({ error: "symbol query parameter required" });
+  const toNum = (v) => {
+    if (v == null || v === "") return null;
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  };
+  try {
+    const data = await cachedFmp(`fmp:earnings:v1:${symbol}`, 6 * 3600_000, async () => {
+      const rows = await fetchFmpStableArray("earnings", { symbol, limit: "24" }, "earnings");
+      const mapped = rows
+        .map((row) => ({
+          date: row?.date ? String(row.date).slice(0, 10) : null,
+          epsActual: toNum(row?.epsActual),
+          epsEstimated: toNum(row?.epsEstimated),
+          revenueActual: toNum(row?.revenueActual),
+          revenueEstimated: toNum(row?.revenueEstimated),
+        }))
+        .filter((row) => row.date)
+        .sort((a, b) => b.date.localeCompare(a.date))
+        .slice(0, 24);
+      return { symbol, rows: mapped };
+    });
+    res.json(data);
+  } catch (err) {
+    console.error("[fmp/earnings]", symbol, err.message);
+    res.status(502).json({ error: err.message });
+  }
+});
+
 /** DCF fair value — public (FMP stable discounted-cash-flow). */
 app.get(["/api/fmp/dcf", "/api/fmp/dcf/:symbol"], async (req, res) => {
   const key = fmpApiKey();

@@ -13,12 +13,14 @@ import { Card } from "../components/Card.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { RetryButton } from "../components/RetryButton.jsx";
 import { ChartBlock } from "../components/stock/StockCharts.jsx";
+import { EarningsPanel } from "../components/stock/EarningsPanel.jsx";
 import { StockNewsSidebar } from "../components/StockNewsSidebar.jsx";
 import { StockDcfHero } from "../components/stock/StockDcfHero.jsx";
 import { fetchStockDcf } from "../services/dcfService.js";
 import { fetchCustomDcf } from "../services/customDcfService.js";
 import { fetchFairValueChart } from "../services/fairValueChartService.js";
 import { fetchKeyMetrics } from "../services/keyMetricsService.js";
+import { fetchEarnings } from "../services/earningsService.js";
 import { fmt2, fmtBill, calcTrend } from "../domain/formatting.js";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -108,6 +110,8 @@ export default function Stock() {
   const [customDcf, setCustomDcf] = useState(null);
   const [fvChart, setFvChart] = useState({ loading: false, error: "", data: null });
   const [keyMetrics, setKeyMetrics] = useState({ loading: false, error: "", data: null });
+  const [earnings, setEarnings] = useState({ loading: false, error: "", data: null });
+  const [earningsRetry, setEarningsRetry] = useState(0);
   const [fmpSymbol, setFmpSymbol] = useState("");
 
   const reportDate = useMemo(() => new Date().toLocaleDateString(), []);
@@ -297,6 +301,22 @@ export default function Stock() {
     if (!catalogReady || !fmpSymbol) return;
     loadKeyMetrics();
   }, [catalogReady, fmpSymbol, loadKeyMetrics]);
+
+  useEffect(() => {
+    if (!catalogReady || !fmpSymbol) return;
+    let alive = true;
+    setEarnings({ loading: true, error: "", data: null });
+    fetchEarnings(fmpSymbol)
+      .then((data) => {
+        if (alive) setEarnings({ loading: false, error: "", data });
+      })
+      .catch((e) => {
+        if (alive) setEarnings({ loading: false, error: String(e?.message || e), data: null });
+      });
+    return () => {
+      alive = false;
+    };
+  }, [catalogReady, fmpSymbol, earningsRetry]);
 
   // Translate profile to Arabic when lang is ar
   useEffect(() => {
@@ -817,6 +837,19 @@ export default function Stock() {
               <ChartBlock title={t("NET_INCOME")} series={serNet} w={chartW} dir={dir} t={t} />
             </div>
           )}
+        </Card>
+
+        <Card title={t("EARNINGS_TITLE")}>
+          <EarningsPanel
+            rows={earnings.data?.rows}
+            loading={!fmpSymbol || (earnings.loading && !earnings.data)}
+            error={earnings.error}
+            onRetry={() => setEarningsRetry((n) => n + 1)}
+            currency={currency}
+            lang={lang}
+            dir={dir}
+            t={t}
+          />
         </Card>
 
         {/* 6. Equity & FCF */}
