@@ -12,7 +12,6 @@ import { translateToArabic } from "../services/translateService.js";
 import { Card } from "../components/Card.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { RetryButton } from "../components/RetryButton.jsx";
-import { ChartBlock } from "../components/stock/StockCharts.jsx";
 import { EarningsPanel } from "../components/stock/EarningsPanel.jsx";
 import { StockNewsSidebar } from "../components/StockNewsSidebar.jsx";
 import { StockDcfHero } from "../components/stock/StockDcfHero.jsx";
@@ -468,9 +467,6 @@ export default function Stock() {
     return zeroPrice || zeroFairValue || noFinancials;
   }, [prefetchCountdown, fin.loading, val.loading, fin?.data, val?.data, price, fairAvg, years.length, serRevenue.length, serOp.length, serNet.length, serEquity.length, serFCF.length]);
 
-  const chartW = isMobile ? 320 : 380;
-  const bigChartW = isMobile ? 320 : 480;
-
   const companyDisplayName =
     (lang === "ar" && translatedProfile?.name) || profile?.name || company || ticker || "";
   const seo = useMemo(
@@ -816,29 +812,6 @@ export default function Stock() {
         {/* 4. Key Metrics (FMP key-metrics) */}
         {keyMetricsCard}
 
-        {/* 5. Revenue & Income */}
-        <Card title={`${t("REV_INC_TITLE")} (${currency})`}>
-          {prefetchCountdown > 0 ? (
-            <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
-              <span>{t("WAITING_BEFORE_FETCH")} {prefetchCountdown}s</span>
-              <span style={{ fontSize: 13 }}>{t("WAITING_PREFETCH_HINT")}</span>
-            </div>
-          ) : (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(280px, 1fr))",
-                gap: 12,
-                minWidth: 0,
-              }}
-            >
-              <ChartBlock title={t("REVENUE")} series={serRevenue} w={chartW} dir={dir} t={t} />
-              <ChartBlock title={t("OP_INCOME")} series={serOp} w={chartW} dir={dir} t={t} />
-              <ChartBlock title={t("NET_INCOME")} series={serNet} w={chartW} dir={dir} t={t} />
-            </div>
-          )}
-        </Card>
-
         <Card title={t("EARNINGS_TITLE")}>
           <EarningsPanel
             rows={earnings.data?.rows}
@@ -850,28 +823,6 @@ export default function Stock() {
             dir={dir}
             t={t}
           />
-        </Card>
-
-        {/* 6. Equity & FCF */}
-        <Card title={`${t("EQUITY_FCF_TITLE")} (${currency})`}>
-          {prefetchCountdown > 0 ? (
-            <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
-              <span>{t("WAITING_BEFORE_FETCH")} {prefetchCountdown}s</span>
-              <span style={{ fontSize: 13 }}>{t("WAITING_PREFETCH_HINT")}</span>
-            </div>
-          ) : (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(360px, 1fr))",
-                gap: 12,
-                minWidth: 0,
-              }}
-            >
-              <ChartBlock title={t("TOTAL_EQUITY")} series={serEquity} w={bigChartW} dir={dir} t={t} />
-              <ChartBlock title={t("FCF")} series={serFCF} w={bigChartW} dir={dir} t={t} />
-            </div>
-          )}
         </Card>
 
         {/* 7. Industry peers (EV-based fair value) – button + 8s wait */}
