@@ -693,25 +693,13 @@ export default function Stock() {
                   <span style={{ fontWeight: 600, opacity: 0.9 }}> – {(lang === "ar" && translatedProfile?.industry) || profile?.industry}</span>
                 ) : null}
               </div>
-              <div className="tp-stock-banner-meta" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              <div className="tp-stock-banner-meta" style={{ overflowWrap: "anywhere" }}>
                 <b>{t("TICKER")}:</b> {ticker} · <b>{t("REPORT_DATE")}:</b> {reportDate}
               </div>
             </div>
           </div>
 
-          <div
-            className="no-print"
-            style={{
-              marginInlineStart: "auto",
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              flexWrap: "wrap",
-              justifyContent: isMobile ? "space-between" : "flex-end",
-              width: isMobile ? "100%" : "auto",
-              minWidth: 0,
-            }}
-          >
+          <div className="no-print tp-stock-banner-actions">
             <div style={{ fontWeight: 800, overflowWrap: "anywhere" }}>
               {t("PRICE")}:{" "}
               {headerError ? (
@@ -930,7 +918,7 @@ export default function Stock() {
               if (rows.length === 0) return <div style={{ color: "#475569" }}>{t("PEERS_NO_PEERS")}</div>;
               return (
                 <div style={{ display: "grid", gap: 12 }}>
-                  <div style={{ overflowX: "auto" }}>
+                  <div className="tp-hscroll">
                     <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
                       <thead>
                         <tr style={{ background: "#f8fafc" }}>

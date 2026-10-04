@@ -269,8 +269,10 @@ export function WatchlistManager({ ticker, t }) {
               padding: "8px 12px",
               borderRadius: 8,
               border: "1px solid #e5e7eb",
-              fontSize: 14,
-              minWidth: 160,
+              fontSize: 16,
+              flex: "1 1 12rem",
+              minWidth: 0,
+              maxWidth: "100%",
             }}
           />
           <button

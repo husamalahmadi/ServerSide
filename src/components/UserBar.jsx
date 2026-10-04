@@ -34,7 +34,8 @@ export function UserBar() {
         className="tp-signin-google"
       >
         <GoogleGIcon size={13} />
-        Sign in with Google
+        <span className="tp-signin-full">Sign in with Google</span>
+        <span className="tp-signin-short">Sign in</span>
       </button>
     );
   }
@@ -47,7 +48,7 @@ export function UserBar() {
         onClick={() => setOpen((o) => !o)}
       >
         <AvatarImg src={user.picture} size={28} />
-        <span style={{ fontWeight: 600, color: "#374151" }}>
+        <span className="tp-user-menu-name">
           {user.handle ? `@${user.handle}` : user.name || "User"}
         </span>
       </button>

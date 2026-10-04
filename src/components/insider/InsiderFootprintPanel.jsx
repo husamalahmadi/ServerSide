@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const CITATIONS = [
   {
@@ -82,13 +82,29 @@ function ScoreRing({ score }) {
 }
 
 function FootprintChart({ prices, buys, sells }) {
+  const wrapRef = useRef(null);
+  const [width, setWidth] = useState(640);
+
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return undefined;
+    const apply = () => {
+      const next = Math.max(280, Math.round(el.clientWidth));
+      setWidth((prev) => (prev === next ? prev : next));
+    };
+    apply();
+    const observer = new ResizeObserver(apply);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   const model = useMemo(() => {
     const cutoff = new Date(Date.now() - 365 * 86400000).toISOString().slice(0, 10);
     const series = prices.filter((p) => p.date >= cutoff);
     if (series.length < 2) return null;
-    const w = 720;
-    const h = 280;
-    const pad = { l: 48, r: 16, t: 18, b: 28 };
+    const w = width;
+    const h = width < 480 ? 220 : 280;
+    const pad = { l: width < 480 ? 42 : 48, r: 12, t: 16, b: 26 };
     const min = Math.min(...series.map((p) => p.price));
     const max = Math.max(...series.map((p) => p.price));
     const span = max - min || 1;
@@ -124,13 +140,13 @@ function FootprintChart({ prices, buys, sells }) {
     }));
     const ticks = [min, (min + max) / 2, max];
     return { w, h, pad, line, area, buyMarks, saleMarks, ticks, yOf, series };
-  }, [prices, buys, sells]);
-
-  if (!model) {
-    return <p className="tp-ifp-empty">Not enough price history to draw the last 12 months.</p>;
-  }
+  }, [prices, buys, sells, width]);
 
   return (
+    <div ref={wrapRef} className="tp-ifp-chart-wrap">
+      {!model ? (
+        <p className="tp-ifp-empty">Not enough price history to draw the last 12 months.</p>
+      ) : (
     <svg className="tp-ifp-chart" viewBox={`0 0 ${model.w} ${model.h}`} role="img" aria-label="Twelve month price with insider buys and sales">
       {model.ticks.map((tick) => (
         <g key={tick}>
@@ -159,6 +175,8 @@ function FootprintChart({ prices, buys, sells }) {
         </path>
       ))}
     </svg>
+      )}
+    </div>
   );
 }
 

@@ -58,7 +58,7 @@ export function SiteFooter({ t }) {
         className="tp-footer-grid"
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 160px), 1fr))",
           gap: 20,
           marginBottom: 20,
           textAlign: "start",

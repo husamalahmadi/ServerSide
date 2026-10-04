@@ -393,10 +393,20 @@ body { font-family: Inter, 'Segoe UI', sans-serif; background: #0a1628; color: #
 .tp-ai-lang-divider { border: none; border-top: 2px solid #c9a84c44; margin: 48px 0 32px; }
 .tp-ai-lang-label { text-align: center; color: #c9a84c; font-size: 13px; margin-bottom: 32px; }
 .tp-ai-disclaimer { background: #071428; border: 1px solid #c9a84c33; border-radius: 8px; padding: 16px 20px; font-size: 12px; color: #718096; margin-top: 32px; line-height: 1.7; }
+img, svg, canvas, table { max-width: 100%; }
+.tp-ai-table { min-width: 520px; }
 @media (max-width: 600px) {
+  .tp-ai-wrap { padding: 16px 12px; }
+  .report-header { padding: 16px; }
+  .report-title { font-size: 18px; overflow-wrap: anywhere; }
   .tp-ai-charts-grid { grid-template-columns: 1fr; }
   .tp-ai-chart-full { grid-column: 1; }
-  .tp-ai-section { padding: 16px; }
+  .tp-ai-section { padding: 14px; }
+  .tp-ai-verdict { padding: 14px 12px; }
+  .tp-ai-verdict-label { font-size: 18px; overflow-wrap: anywhere; }
+  .tp-ai-disclaimer { padding: 12px; }
+  .tp-ai-chart-box { padding: 10px; min-width: 0; }
+  .tp-ai-chart-box canvas { max-width: 100% !important; }
 }
 </style>
 </head>

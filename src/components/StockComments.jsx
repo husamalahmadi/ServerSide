@@ -153,7 +153,7 @@ export function StockComments({ ticker, t }) {
                     border: "1px solid #e5e7eb",
                   }}
                 >
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
                     <AvatarImg src={c.author_picture} size={24} />
                     <span style={{ fontWeight: 600, fontSize: 14 }}>
                       {c.author_handle ? `@${c.author_handle}` : c.author_name || "User"}
@@ -181,7 +181,7 @@ export function StockComments({ ticker, t }) {
                   <p style={{ margin: 0, fontSize: 14, color: "#334155", whiteSpace: "pre-wrap" }}>
                     {c.body}
                   </p>
-                  <div style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 12 }}>
+                  <div style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
                     <button
                       type="button"
                       onClick={() => toggleLike(c.id)}
@@ -229,7 +229,7 @@ export function StockComments({ ticker, t }) {
                           fontSize: 13,
                         }}
                       />
-                      <div style={{ marginTop: 4, display: "flex", gap: 8 }}>
+                      <div style={{ marginTop: 4, display: "flex", gap: 8, flexWrap: "wrap" }}>
                         <button
                           type="button"
                           onClick={() => postComment(replyBody, c.id)}
@@ -270,7 +270,7 @@ export function StockComments({ ticker, t }) {
                     <div style={{ marginTop: 12, marginLeft: 16, borderLeft: "2px solid #e5e7eb", paddingLeft: 12 }}>
                       {c.replies.map((r) => (
                         <div key={r.id} style={{ marginBottom: 8 }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, flexWrap: "wrap" }}>
                             <span style={{ fontWeight: 600, fontSize: 13 }}>
                               {r.author_handle ? `@${r.author_handle}` : r.author_name}
                             </span>

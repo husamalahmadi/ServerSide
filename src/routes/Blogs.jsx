@@ -274,10 +274,11 @@ export default function Blogs() {
             position: static;
             max-height: 400px;
           }
+          .tp-container { padding: 0; }
         }
 
         @media (max-width: 520px) {
-          .tp-container { padding: 12px; }
+          .tp-container { padding: 0; }
           .tp-header { align-items: stretch; }
           .tp-actions { width: 100%; justify-content: space-between; }
           .tp-pill { flex: 1; }

@@ -186,7 +186,7 @@ export default function Profile() {
   const u = profile.user;
 
   return (
-    <div className="tp-profile" style={{ maxWidth: 900, margin: "0 auto", padding: 24 }} dir={dir} lang={lang}>
+    <div className="tp-profile" dir={dir} lang={lang}>
       <Card>
         <div style={{ display: "flex", gap: 20, flexWrap: "wrap", alignItems: "flex-start" }}>
           <div>
