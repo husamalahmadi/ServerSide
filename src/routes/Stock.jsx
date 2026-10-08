@@ -783,37 +783,10 @@ export default function Stock() {
           />
         </Card>
 
-        {/* 4. Stock profile */}
-        <Card title={t("STOCK_PROFILE")}>
-          <div style={{ display: "grid", gap: 16, color: "#334155", lineHeight: 1.75, fontSize: 14 }}>
-            {stockNarrative.sections.map((sec) => (
-              <section key={sec.id}>
-                <h3
-                  style={{
-                    margin: "0 0 8px",
-                    fontSize: 15,
-                    fontWeight: 800,
-                    color: "#1e293b",
-                  }}
-                >
-                  {sec.heading}
-                </h3>
-                <div style={{ display: "grid", gap: 8 }}>
-                  {sec.paragraphs.map((line) => (
-                    <p key={line.slice(0, 48)} style={{ margin: 0 }}>
-                      {line}
-                    </p>
-                  ))}
-                </div>
-              </section>
-            ))}
-          </div>
-        </Card>
-
-        {/* 5. Key Metrics (FMP key-metrics) */}
+        {/* 4. Key Metrics (FMP key-metrics) */}
         {keyMetricsCard}
 
-        {/* 6. Industry peers (EV-based fair value) – button + 8s wait */}
+        {/* 5. Industry peers (EV-based fair value) – button + 8s wait */}
         <Card title={t("INDUSTRY_PEERS_EV")}>
           {!user ? (
             <div style={{ display: "grid", gap: 12 }}>
@@ -1000,7 +973,7 @@ export default function Stock() {
           )}
         </Card>
 
-        {/* 7. Investment summary */}
+        {/* 6. Investment summary */}
         <Card title={t("INVESTMENT_SUMMARY")}>
           {prefetchCountdown > 0 ? (
             <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
@@ -1074,13 +1047,14 @@ export default function Stock() {
           )}
         </Card>
 
-        {/* 8. Financial analysis report using AI */}
+        {/* 7. Financial analysis report using AI */}
         <div className="no-print" style={{ marginBottom: 8 }}>
           <Card title={t("AI_REPORT_CARD_TITLE")}>
             <AiReport symbol={fmpSymbol} t={t} />
           </Card>
         </div>
 
+        {/* 8. Insider footprint */}
         {catalogReady ? (
           <div className="no-print" style={{ marginBottom: 8 }}>
             <Card title={t("INSIDER_CARD_TITLE")}>
@@ -1088,6 +1062,33 @@ export default function Stock() {
             </Card>
           </div>
         ) : null}
+
+        {/* 9. Stock profile */}
+        <Card title={t("STOCK_PROFILE")}>
+          <div style={{ display: "grid", gap: 16, color: "#334155", lineHeight: 1.75, fontSize: 14 }}>
+            {stockNarrative.sections.map((sec) => (
+              <section key={sec.id}>
+                <h3
+                  style={{
+                    margin: "0 0 8px",
+                    fontSize: 15,
+                    fontWeight: 800,
+                    color: "#1e293b",
+                  }}
+                >
+                  {sec.heading}
+                </h3>
+                <div style={{ display: "grid", gap: 8 }}>
+                  {sec.paragraphs.map((line) => (
+                    <p key={line.slice(0, 48)} style={{ margin: 0 }}>
+                      {line}
+                    </p>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        </Card>
 
         <div className="no-print">
           <WatchlistManager ticker={ticker} t={t} />
