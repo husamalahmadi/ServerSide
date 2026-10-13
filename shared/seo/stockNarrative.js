@@ -1,12 +1,12 @@
 const MARKET_LABEL = {
   en: {
-    us: "the US market (S&P 500)",
+    us: "the US market",
     sa: "TASI on the Saudi Exchange (Tadawul)",
     jp: "the Tokyo Stock Exchange",
     uk: "the London Stock Exchange (LSE)",
   },
   ar: {
-    us: "السوق الأمريكي (S&P 500)",
+    us: "السوق الأمريكي",
     sa: "مؤشر تاسي في السوق السعودي (تداول)",
     jp: "بورصة طوكيو",
     uk: "بورصة لندن (LSE)",

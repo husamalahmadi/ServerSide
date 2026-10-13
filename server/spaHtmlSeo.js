@@ -114,13 +114,13 @@ export function injectSeoIntoSpaHtml(html, seo, siteOrigin, canonical, opts = {}
 
 const MARKET_LABEL = {
   en: {
-    us: "US market (S&P 500)",
+    us: "US market",
     sa: "TASI — Saudi Arabia",
     jp: "Tokyo Stock Exchange",
     uk: "London Stock Exchange",
   },
   ar: {
-    us: "السوق الأمريكي (S&P 500)",
+    us: "السوق الأمريكي",
     sa: "تداول — السعودية",
     jp: "بورصة طوكيو",
     uk: "بورصة لندن",
