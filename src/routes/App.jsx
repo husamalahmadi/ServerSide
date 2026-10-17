@@ -30,7 +30,7 @@ function StaticSeoFallbackCleanup() {
   useEffect(() => {
     const el = document.getElementById("tp-static-fallback");
     document.documentElement.classList.add("tp-app-ready");
-    if (!el) return;
+    if (!el || el.classList.contains("tp-indexable")) return;
     el.style.transition = "opacity 180ms ease";
     el.style.opacity = "0";
     el.setAttribute("aria-hidden", "true");

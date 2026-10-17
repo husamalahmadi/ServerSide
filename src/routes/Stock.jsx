@@ -40,6 +40,26 @@ import { trackEvent } from "../analytics.js";
 import { EmailDigestForm } from "../components/EmailDigestForm.jsx";
 import NotFound from "./NotFound.jsx";
 
+function readStockSeed(ticker) {
+  if (typeof document === "undefined") return null;
+  try {
+    const el = document.getElementById("tp-stock-seed");
+    if (!el?.textContent) return null;
+    const data = JSON.parse(el.textContent);
+    const want = String(ticker || "").trim().toUpperCase();
+    const got = String(data?.ticker || "").trim().toUpperCase();
+    if (!want || got !== want) return null;
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function seedNumber(value) {
+  const n = Number(value);
+  return Number.isFinite(n) && n > 0 ? n : null;
+}
+
 /* Page */
 export default function Stock() {
   const { ticker } = useParams();
@@ -86,12 +106,13 @@ export default function Stock() {
     }
   };
 
-  const [company, setCompany] = useState("");
-  const [market, setMarket] = useState(null);
-  const [currency, setCurrency] = useState("USD");
-  const [catalogReady, setCatalogReady] = useState(false);
+  const stockSeed = useMemo(() => readStockSeed(ticker), [ticker]);
+  const [company, setCompany] = useState(() => readStockSeed(ticker)?.name || "");
+  const [market, setMarket] = useState(() => readStockSeed(ticker)?.market || null);
+  const [currency, setCurrency] = useState(() => readStockSeed(ticker)?.currency || "USD");
+  const [catalogReady, setCatalogReady] = useState(() => Boolean(readStockSeed(ticker)?.market));
   const [missingTicker, setMissingTicker] = useState(false);
-  const [price, setPrice] = useState(null);
+  const [price, setPrice] = useState(() => seedNumber(readStockSeed(ticker)?.price));
   const [headerError, setHeaderError] = useState("");
 
   const [fin, setFin] = useState({ loading: false, error: "", data: null });
@@ -115,18 +136,34 @@ export default function Stock() {
 
   const reportDate = useMemo(() => new Date().toLocaleDateString(), []);
 
+  useEffect(() => {
+    document.documentElement.classList.add("tp-stock-hydrated");
+    const el = document.getElementById("tp-static-fallback");
+    if (!el) return;
+    el.setAttribute("aria-hidden", "true");
+  }, []);
+
   // Resolve catalog market first (jp/us/sa) before any FMP calls — avoids wrong-market requests for 7203.T etc.
   useEffect(() => {
     let alive = true;
-    setCatalogReady(false);
+    const seeded = readStockSeed(ticker);
     setMissingTicker(false);
-    setCompany("");
-    setMarket(null);
-    setPrice(null);
     setHeaderError("");
     setFmpSymbol("");
     setProfile(null);
     setCustomDcf(null);
+    if (seeded?.market) {
+      setCompany(seeded.name || "");
+      setMarket(seeded.market);
+      setCurrency(seeded.currency || "USD");
+      setPrice(seedNumber(seeded.price));
+      setCatalogReady(true);
+    } else {
+      setCatalogReady(false);
+      setCompany("");
+      setMarket(null);
+      setPrice(null);
+    }
     (async () => {
       try {
         const cj = await getCompany(ticker);
@@ -475,12 +512,12 @@ export default function Stock() {
         ticker,
         companyName: companyDisplayName,
         lang,
-        fairValue: fairAvg,
+        fairValue: fairAvg ?? seedNumber(stockSeed?.fairValue),
         price,
         currency,
-        market,
+        market: market || stockSeed?.market,
       }),
-    [ticker, companyDisplayName, lang, fairAvg, price, currency, market]
+    [ticker, companyDisplayName, lang, fairAvg, price, currency, market, stockSeed]
   );
   usePageMeta(seo);
 
@@ -506,12 +543,12 @@ export default function Stock() {
       lang,
       ticker,
       companyName: companyDisplayName,
-      market,
-      industry: prof?.industry || "",
+      market: market || stockSeed?.market,
+      industry: prof?.industry || stockSeed?.industry || "",
       sector: prof?.sector || "",
       currency,
       price,
-      fairValue: fairAvg,
+      fairValue: fairAvg ?? seedNumber(stockSeed?.fairValue),
       companyDescription: prof?.description || "",
     });
   }, [
@@ -524,6 +561,7 @@ export default function Stock() {
     market,
     profile,
     translatedProfile,
+    stockSeed,
   ]);
 
   // Key Metrics as a table: metrics are rows, fiscal years are columns (newest → oldest).
@@ -676,10 +714,11 @@ export default function Stock() {
               />
             ) : null}
             <div style={{ display: "grid", gap: 2, minWidth: 0, overflow: "hidden" }}>
-              <div
+              <h1
                 style={{
                   fontSize: 18,
                   fontWeight: 900,
+                  margin: 0,
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
@@ -692,7 +731,7 @@ export default function Stock() {
                 {((lang === "ar" && translatedProfile?.industry) || profile?.industry) ? (
                   <span style={{ fontWeight: 600, opacity: 0.9 }}> – {(lang === "ar" && translatedProfile?.industry) || profile?.industry}</span>
                 ) : null}
-              </div>
+              </h1>
               <div className="tp-stock-banner-meta" style={{ overflowWrap: "anywhere" }}>
                 <b>{t("TICKER")}:</b> {ticker} · <b>{t("REPORT_DATE")}:</b> {reportDate}
               </div>

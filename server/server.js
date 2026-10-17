@@ -8,7 +8,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { RedisStore } from "connect-redis";
 import { createClient } from "redis";
 import Database from "better-sqlite3";
-import { existsSync, mkdirSync, readFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, statSync } from "fs";
 import {
   createFinancialsStore,
   resolveFmpFinancialsDir,
@@ -61,7 +61,7 @@ import { handleDefaultOg, handleStockOg, ogRuntime } from "./ogCard.js";
 import { configureSeoSiteUrl } from "../shared/seo/siteUrl.js";
 import { buildBlogPostSeo, buildBlogsSeo, buildStockSeo, buildTutorialArticleSeo, buildTutorialsIndexSeo } from "../shared/seo/structuredData.js";
 import { parseBlogPath } from "../shared/seo/blogPaths.js";
-import { legacyArabicStockRedirect, parseStockPath } from "../shared/seo/stockPaths.js";
+import { canonicalStockRedirect, parseStockPath } from "../shared/seo/stockPaths.js";
 import { buildTutorialSpaStaticFallback } from "../shared/seo/tutorialStatic.js";
 import { parseTutorialPath } from "../shared/seo/tutorialPaths.js";
 import { flattenBlogPosts } from "../src/data/blogs/posts.js";
@@ -155,7 +155,7 @@ const CANONICAL_ALIASES = new Set(
     .map((s) => s.trim().toLowerCase())
     .filter((s) => Boolean(s) && s !== CANONICAL_HOST)
 );
-const FORCE_CANONICAL_HOST = process.env.FORCE_CANONICAL_HOST === "true";
+const CANONICALIZE_HOST = IS_PROD && process.env.FORCE_CANONICAL_HOST !== "false";
 const SINGLE_SESSION_PER_USER = process.env.SINGLE_SESSION_PER_USER === "true";
 
 if (IS_PROD && (!process.env.SESSION_SECRET || SESSION_SECRET === "dev-secret-change-in-production")) {
@@ -270,10 +270,8 @@ app.use(compression());
 if (IS_PROD) {
   app.set("trust proxy", 1);
 }
-if (IS_PROD && FORCE_CANONICAL_HOST) {
+if (CANONICALIZE_HOST) {
   app.use((req, res, next) => {
-    // Cloudflare usually handles host/protocol redirects; skip app-level redirect to avoid ping-pong loops.
-    if (req.headers["cf-visitor"]) return next();
     const hostHeader = (req.headers.host || "").toString().toLowerCase();
     const host = hostHeader.split(":")[0];
     if (!host || host === CANONICAL_HOST) return next();
@@ -1685,11 +1683,41 @@ function renderSpaIndexHtml(indexHtmlPath, canonical, seoInject = null) {
   if (seoInject?.seo) {
     return injectSeoIntoSpaHtml(html, seoInject.seo, CANONICAL_SITE, canonical, {
       staticFallbackHtml: seoInject.staticFallbackHtml,
+      stockSeed: seoInject.stockSeed,
     });
   }
   return html
     .replace(/(<link\s+rel="canonical"\s+href=")[^"]*("\s*\/?>)/i, `$1${canonical}$2`)
     .replace(/(<meta\s+property="og:url"\s+content=")[^"]*("\s*\/?>)/i, `$1${canonical}$2`);
+}
+
+const screenerRowCache = new Map();
+
+function lookupScreenerValuation(market, ticker) {
+  try {
+    const file = screenerStore.filePath(market);
+    const mtime = existsSync(file) ? statSync(file).mtimeMs : 0;
+    let cached = screenerRowCache.get(market);
+    if (!cached || cached.mtime !== mtime) {
+      const items = screenerStore.read(market)?.record?.items || [];
+      const byTicker = new Map();
+      for (const item of items) {
+        const key = String(item?.ticker || "").toUpperCase();
+        if (key) byTicker.set(key, item);
+      }
+      cached = { mtime, byTicker };
+      screenerRowCache.set(market, cached);
+    }
+    const row = cached.byTicker.get(String(ticker || "").toUpperCase());
+    const price = Number(row?.priceApprox);
+    const fairValue = Number(row?.fairValue);
+    return {
+      price: Number.isFinite(price) && price > 0 ? price : null,
+      fairValue: Number.isFinite(fairValue) && fairValue > 0 ? fairValue : null,
+    };
+  } catch {
+    return { price: null, fairValue: null };
+  }
 }
 
 function stockSeoInjectForRequest(req) {
@@ -1700,21 +1728,38 @@ function stockSeoInjectForRequest(req) {
     const lang = parsed.locale === "ar" || req.query.lang === "ar" ? "ar" : "en";
     const found = findStockByTicker(rawTicker);
     if (!found) return null;
+    const currency = CURRENCY_BY_MARKET[found.market] || "USD";
+    const valuation = lookupScreenerValuation(found.market, found.hit.ticker);
     const seo = buildStockSeo({
       ticker: found.hit.ticker,
       companyName: found.hit.name,
       lang,
       market: found.market,
-      currency: CURRENCY_BY_MARKET[found.market],
+      currency,
+      price: valuation.price,
+      fairValue: valuation.fairValue,
     });
+    const stockSeed = {
+      ticker: found.hit.ticker,
+      name: found.hit.name,
+      market: found.market,
+      industry: found.hit.industry || "",
+      currency,
+      price: valuation.price,
+      fairValue: valuation.fairValue,
+      lang,
+    };
     return {
       seo,
+      stockSeed,
       staticFallbackHtml: buildStockStaticFallback({
         hit: found.hit,
         market: found.market,
         lang,
         seo,
-        currency: CURRENCY_BY_MARKET[found.market],
+        currency,
+        price: valuation.price,
+        fairValue: valuation.fairValue,
       }),
     };
   } catch (err) {
@@ -1804,7 +1849,7 @@ function trySendTutorialStatic(req, res, next) {
 app.use((req, res, next) => {
   if (req.method !== "GET" && req.method !== "HEAD") return next();
   const path = String(req.path || "").replace(/\/+$/, "") || "/";
-  const stockTarget = legacyArabicStockRedirect(path, req.query.lang);
+  const stockTarget = canonicalStockRedirect(path, req.query.lang);
   if (stockTarget) return res.redirect(301, stockTarget);
   if (path === "/blogs") {
     const lang = String(req.query.lang || "").toLowerCase();

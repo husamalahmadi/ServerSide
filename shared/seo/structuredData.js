@@ -5,6 +5,21 @@ import { stockPath } from "./stockPaths.js";
 import { DEFAULT_OG_IMAGE_PATH, stockOgImagePath } from "./ogPaths.js";
 import { blogIndexPath, blogPostPath } from "./blogPaths.js";
 
+function moneyBit(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n) || n <= 0) return "";
+  return n.toLocaleString("en-US", { maximumFractionDigits: 2 });
+}
+
+function valuationSnippet(lang, price, fairValue, currency) {
+  const p = moneyBit(price);
+  const f = moneyBit(fairValue);
+  if (!p || !f) return "";
+  const ccy = currency ? ` ${currency}` : "";
+  if (lang === "ar") return `السعر ${p}${ccy} والقيمة العادلة ${f}${ccy}. `;
+  return `Price ${p}${ccy}, fair value ${f}${ccy}. `;
+}
+
 function toAbs(pathname = "/") {
   const siteUrl = getSeoSiteUrl();
   const p = pathname.startsWith("/") ? pathname : `/${pathname}`;
@@ -82,9 +97,11 @@ export function buildStockSeo({ ticker, companyName, lang, fairValue, price, cur
     lang
   );
   const description = formatMetaDescription(
-    lang === "ar"
-      ? `تحليل ${name} (${displayTicker}) على TruePrice.Cash: السعر، القيمة العادلة، القوائم المالية والمؤشرات الأساسية للمستثمرين في السوق السعودي والعالمي.`
-      : `Analyze ${name} (${displayTicker}) on TruePrice.Cash with live price, fair value estimate, financial statements, and key metrics for investors.`
+    `${valuationSnippet(lang, price, fairValue, currency)}${
+      lang === "ar"
+        ? `تحليل ${name} (${displayTicker}) على TruePrice.Cash: السعر، القيمة العادلة، القوائم المالية والمؤشرات الأساسية للمستثمرين في السوق السعودي والعالمي.`
+        : `Analyze ${name} (${displayTicker}) on TruePrice.Cash with live price, fair value estimate, financial statements, and key metrics for investors.`
+    }`
   );
 
   return {

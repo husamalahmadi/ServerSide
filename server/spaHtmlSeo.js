@@ -109,6 +109,14 @@ export function injectSeoIntoSpaHtml(html, seo, siteOrigin, canonical, opts = {}
     out = out.replace(/<main id="tp-static-fallback"[\s\S]*?<\/main>/i, opts.staticFallbackHtml);
   }
 
+  if (opts.stockSeed) {
+    const json = JSON.stringify(opts.stockSeed).replace(/</g, "\\u003c");
+    out = out.replace(
+      /<\/body>/i,
+      `    <script type="application/json" id="tp-stock-seed">${json}</script>\n  </body>`
+    );
+  }
+
   return out;
 }
 
@@ -130,7 +138,7 @@ const MARKET_LABEL = {
 /**
  * Noscript / crawler-visible main block for /stock/:ticker requests.
  */
-export function buildStockStaticFallback({ hit, market, lang, seo, currency }) {
+export function buildStockStaticFallback({ hit, market, lang, seo, currency, price, fairValue }) {
   const isAr = lang === "ar";
   const ticker = escapeHtml(hit.ticker);
   const name = escapeHtml(hit.name);
@@ -149,10 +157,12 @@ export function buildStockStaticFallback({ hit, market, lang, seo, currency }) {
     market,
     industry: hit.industry || "",
     currency: currency || "USD",
+    price,
+    fairValue,
   });
   const narrativeHtml = stockNarrativeToStaticHtml(narrative, escapeHtml);
 
-  return `<main id="tp-static-fallback" class="tp-static-shell" aria-hidden="true">
+  return `<main id="tp-static-fallback" class="tp-static-shell tp-indexable">
       <h1 class="tp-static-hero">${name} (${ticker})</h1>
       <p class="tp-static-subhead">${subhead}</p>
       ${narrativeHtml}

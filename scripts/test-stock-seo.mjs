@@ -6,7 +6,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { configureSeoSiteUrl } from "../shared/seo/siteUrl.js";
 import { buildStockSeo } from "../shared/seo/structuredData.js";
-import { legacyArabicStockRedirect, stockPath } from "../shared/seo/stockPaths.js";
+import { canonicalStockRedirect, stockPath } from "../shared/seo/stockPaths.js";
 import { findStockByTicker, CURRENCY_BY_MARKET } from "../server/stockCatalogLookup.js";
 import { injectSeoIntoSpaHtml, buildStockStaticFallback } from "../server/spaHtmlSeo.js";
 
@@ -74,14 +74,29 @@ for (const [ticker, lang] of [
   }
 }
 
-if (legacyArabicStockRedirect("/stock/2222", "ar") !== "/ar/stock/2222") {
+if (canonicalStockRedirect("/stock/2222", "ar") !== "/ar/stock/2222") {
   throw new Error("Expected 301 target /ar/stock/2222");
 }
-if (legacyArabicStockRedirect("/stock/2222", "en") !== null) {
-  throw new Error("English query must not redirect");
+if (canonicalStockRedirect("/stock/2222", "en") !== "/en/stock/2222") {
+  throw new Error("Bare English stock URL must redirect to /en/stock");
 }
-if (legacyArabicStockRedirect("/en/stock/2222", "ar") !== null) {
-  throw new Error("Prefixed stock URL must not redirect");
+if (canonicalStockRedirect("/stock/2222", "") !== "/en/stock/2222") {
+  throw new Error("Bare stock URL must redirect to /en/stock");
+}
+if (canonicalStockRedirect("/en/stock/2222", "ar") !== "/ar/stock/2222") {
+  throw new Error("lang=ar on an English stock URL must redirect to Arabic");
+}
+if (canonicalStockRedirect("/ar/stock/2222", "ar") !== "/ar/stock/2222") {
+  throw new Error("lang query on an Arabic stock URL must be stripped");
+}
+if (canonicalStockRedirect("/en/stock/2222", "") !== null) {
+  throw new Error("Canonical English stock URL must not redirect");
+}
+if (!renderStock("AAPL", "en").includes('class="tp-static-shell tp-indexable"')) {
+  throw new Error("Stock fallback must stay visible to crawlers until hydration");
+}
+if (renderStock("AAPL", "en").includes('id="tp-static-fallback" class="tp-static-shell tp-indexable" aria-hidden')) {
+  throw new Error("Stock fallback must not be aria-hidden in the initial HTML");
 }
 
 console.log("\n[ok] stock SEO injection smoke test passed");

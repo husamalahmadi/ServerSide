@@ -114,6 +114,28 @@
         border: 0;
         opacity: 1;
       }
+      /* Stock pages keep the server article visible until React paints the same facts. */
+      html.js #tp-static-fallback.tp-indexable {
+        position: static;
+        width: auto;
+        height: auto;
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 24px 16px;
+        overflow: visible;
+        clip: auto;
+        white-space: normal;
+      }
+      html.tp-stock-hydrated #tp-static-fallback.tp-indexable {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
       html.js.tp-boot-failed #tp-static-fallback {
         position: static;
         width: auto;
