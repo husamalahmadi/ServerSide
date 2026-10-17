@@ -18,7 +18,7 @@ Done in the app:
 Operational (manual, not code — owners must execute):
 
 - [x] Retire the 50 generic Arabic explainers. Pages below are built from the TASI catalog and the fair-value cache (Section 2).
-- [ ] Search Console: submit `https://trueprice.cash/sitemap.xml` so `sitemap-tasi.xml` is discovered (Section 5)
+- [ ] Search Console: submit `https://www.trueprice.cash/sitemap.xml` so `sitemap-tasi.xml` is discovered (Section 5)
 - [ ] cron-job.org: `POST /api/internal/publish-earnings` every 2 hours, and `POST /api/internal/daily-gap-post` once a day, header `x-internal-token` (Section 7)
 - [ ] Set `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, and `X_USER_ACCESS_TOKEN` if those posts should leave the server (Section 7)
 - [ ] Backlink outreach with one fresh number, not a pitch for the site (Section 4)

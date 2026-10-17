@@ -43,7 +43,7 @@ function buildHreflangBlock(siteOrigin, alternates) {
  * Inject per-page SEO into the SPA index.html template (initial HTML for crawlers).
  * @param {string} html
  * @param {object} seo from buildStockSeo / buildHomeSeo
- * @param {string} siteOrigin e.g. https://trueprice.cash
+ * @param {string} siteOrigin e.g. https://www.trueprice.cash
  * @param {string} canonical absolute canonical URL
  * @param {{ staticFallbackHtml?: string }} opts
  */

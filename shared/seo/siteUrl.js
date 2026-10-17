@@ -1,4 +1,4 @@
-const DEFAULT_SITE_URL = "https://trueprice.cash";
+const DEFAULT_SITE_URL = "https://www.trueprice.cash";
 
 let configuredSiteUrl = null;
 
@@ -16,7 +16,7 @@ function readEnvSiteUrl() {
   return "";
 }
 
-/** Server may set canonical origin once at boot (e.g. https://trueprice.cash). */
+/** Server may set canonical origin once at boot (e.g. https://www.trueprice.cash). */
 export function configureSeoSiteUrl(url) {
   const clean = String(url || "").trim().replace(/\/+$/, "");
   configuredSiteUrl = clean || null;

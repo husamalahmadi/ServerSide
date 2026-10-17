@@ -149,9 +149,9 @@ const SERVER_URL = normalizePublicUrl(process.env.SERVER_URL || "http://localhos
 const SESSION_SECRET = process.env.SESSION_SECRET || "dev-secret-change-in-production";
 const IS_PROD = process.env.NODE_ENV === "production";
 const REDIS_URL = (process.env.REDIS_URL || "").trim();
-const CANONICAL_HOST = (process.env.CANONICAL_HOST || "trueprice.cash").trim().toLowerCase();
+const CANONICAL_HOST = (process.env.CANONICAL_HOST || "www.trueprice.cash").trim().toLowerCase();
 const CANONICAL_ALIASES = new Set(
-  [`www.${CANONICAL_HOST}`, ...(process.env.CANONICAL_ALIASES || "").split(",")]
+  [CANONICAL_HOST.replace(/^www\./, ""), ...(process.env.CANONICAL_ALIASES || "").split(",")]
     .map((s) => s.trim().toLowerCase())
     .filter((s) => Boolean(s) && s !== CANONICAL_HOST)
 );

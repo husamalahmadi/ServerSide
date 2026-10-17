@@ -11,7 +11,7 @@ import { findStockByTicker, CURRENCY_BY_MARKET } from "../server/stockCatalogLoo
 import { injectSeoIntoSpaHtml, buildStockStaticFallback } from "../server/spaHtmlSeo.js";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");const indexHtml = readFileSync(join(root, "server/static/index.html"), "utf8");
-configureSeoSiteUrl("https://trueprice.cash");
+configureSeoSiteUrl("https://www.trueprice.cash");
 
 function renderStock(ticker, lang = "en") {
   const found = findStockByTicker(ticker);
@@ -23,8 +23,8 @@ function renderStock(ticker, lang = "en") {
     market: found.market,
     currency: CURRENCY_BY_MARKET[found.market],
   });
-  const canonical = `https://trueprice.cash${stockPath(lang, found.hit.ticker)}`;
-  return injectSeoIntoSpaHtml(indexHtml, seo, "https://trueprice.cash", canonical, {
+  const canonical = `https://www.trueprice.cash${stockPath(lang, found.hit.ticker)}`;
+  return injectSeoIntoSpaHtml(indexHtml, seo, "https://www.trueprice.cash", canonical, {
     staticFallbackHtml: buildStockStaticFallback({
       hit: found.hit,
       market: found.market,
@@ -42,7 +42,7 @@ for (const [ticker, lang] of [
 ]) {
   const html = renderStock(ticker, lang);
   const found = findStockByTicker(ticker);
-  const canonical = `https://trueprice.cash${stockPath(lang, found.hit.ticker)}`;
+  const canonical = `https://www.trueprice.cash${stockPath(lang, found.hit.ticker)}`;
   const title = html.match(/<title>([^<]*)<\/title>/i)?.[1] || "";
   const desc = html.match(/<meta\s+name="description"\s+content="([^"]*)"/i)?.[1] || "";
   const hasLd = html.includes('"@type":"WebPage"') || html.includes('"@type": "WebPage"');
@@ -67,7 +67,7 @@ for (const [ticker, lang] of [
     throw new Error(`Generic title for ${ticker}`);
   }
   const ogImage = html.match(/property="og:image" content="([^"]+)"/i)?.[1] || "";
-  const expectedOg = `https://trueprice.cash/og/${lang}/stock/${encodeURIComponent(found.hit.ticker)}.png`;
+  const expectedOg = `https://www.trueprice.cash/og/${lang}/stock/${encodeURIComponent(found.hit.ticker)}.png`;
   if (ogImage !== expectedOg) throw new Error(`og:image mismatch for ${ticker}: ${ogImage}`);
   if (!html.includes('name="twitter:card" content="summary_large_image"')) {
     throw new Error(`Missing Twitter large card for ${ticker}`);

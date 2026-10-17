@@ -25,7 +25,7 @@ const PUBLIC = join(ROOT, "public");
 const SITE = (
   process.env.VITE_SITE_URL ||
   process.env.SITEMAP_SITE_URL ||
-  "https://trueprice.cash"
+  "https://www.trueprice.cash"
 )
   .trim()
   .replace(/\/+$/, "");

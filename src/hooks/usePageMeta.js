@@ -7,7 +7,7 @@ import {
   DEFAULT_DOCUMENT_TITLE,
   formatDocumentTitle,
 } from "../seo/pageTitles.js";
-const SITE_URL = (import.meta.env.VITE_SITE_URL || "https://trueprice.cash").replace(/\/+$/, "");
+const SITE_URL = (import.meta.env.VITE_SITE_URL || "https://www.trueprice.cash").replace(/\/+$/, "");
 
 function setMeta(name, content, isProperty = false) {
   const attr = isProperty ? "property" : "name";

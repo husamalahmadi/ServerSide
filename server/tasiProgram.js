@@ -315,7 +315,7 @@ export function createTasiProgram({ screenerStore, financialsStore, siteUrl }) {
   }
 
   function dailyGapPost() {
-    const origin = String(siteUrl || "https://trueprice.cash").replace(/\/+$/, "");
+    const origin = String(siteUrl || "https://www.trueprice.cash").replace(/\/+$/, "");
     const ranked = rows()
       .filter((row) => row.gapPct != null && row.price != null && row.fairValue != null)
       .sort((a, b) => b.gapPct - a.gapPct || (b.marketCap || 0) - (a.marketCap || 0));

@@ -686,7 +686,7 @@ export default function Stock() {
           fairAvg={fairAvg}
           currency={currency}
           logoUrl={logoUrl && !logoLoadError ? logoUrl : null}
-          reportUrl={typeof window !== "undefined" ? window.location.href : `https://trueprice.cash${stockPath(lang, ticker)}`}
+          reportUrl={typeof window !== "undefined" ? window.location.href : `https://www.trueprice.cash${stockPath(lang, ticker)}`}
         />
 
         {/* Banner */}
