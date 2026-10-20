@@ -75,26 +75,91 @@ function formatWacc(pct) {
   return `${pct.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
 }
 
-function isWaccOpportunity(price, waccPct) {
-  const p = Number(price);
-  const w = Number(waccPct);
-  return Number.isFinite(p) && p > 0 && Number.isFinite(w) && w > 0 && p < w;
+/** FMP key-metrics ROIC is a ratio (0.18 = 18%). Values already in percent pass through. */
+function parseRoicPct(value) {
+  if (value == null || value === "") return null;
+  const n = Number(value);
+  if (!Number.isFinite(n)) return null;
+  const pct = Math.abs(n) <= 3 ? n * 100 : n;
+  if (pct <= -100 || pct > 400) return null;
+  return pct;
 }
 
-function DcfWaccChip({ t, wacc, opportunity }) {
+function formatPts(spread, lang) {
+  const locale = lang === "ar" ? "ar" : undefined;
+  const body = spread.toLocaleString(locale, {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  });
+  return lang === "ar" ? `+${body} نقطة` : `+${body} pts`;
+}
+
+function DcfWaccChip({ t, lang, wacc, roic }) {
   const pct = parseWaccPct(wacc);
   if (pct == null) return null;
+  const roicPct = parseRoicPct(roic);
+  const recommended = roicPct != null && roicPct > pct;
+
+  if (!recommended) {
+    return (
+      <aside className="tp-dcf-beta tp-dcf-wacc" title={t("WACC_HINT")} aria-label={`${t("WACC")} ${formatWacc(pct)}`}>
+        <span className="tp-dcf-unlocked-label">{t("WACC")}</span>
+        <span className="tp-dcf-beta-value" dir="ltr">
+          {formatWacc(pct)}
+        </span>
+        <span className="tp-dcf-beta-hint">{t("WACC_LABEL")}</span>
+      </aside>
+    );
+  }
+
+  const spread = roicPct - pct;
+  const costShare = Math.max(8, Math.min(92, (pct / roicPct) * 100));
+  const edgeShare = 100 - costShare;
+
   return (
     <aside
-      className={`tp-dcf-beta tp-dcf-wacc${opportunity ? " tp-dcf-wacc-hot" : ""}`}
-      title={t("WACC_HINT")}
-      aria-label={`${t("WACC")} ${formatWacc(pct)}${opportunity ? `. ${t("WACC_OPPORTUNITY")}` : ""}`}
+      className="tp-dcf-beta tp-dcf-wacc tp-dcf-wacc-earn"
+      title={t("WACC_EARN_HINT")}
+      aria-label={`${t("ROIC")} ${formatWacc(roicPct)}. ${t("WACC")} ${formatWacc(pct)}. ${t("WACC_VERDICT")}`}
     >
-      <span className="tp-dcf-unlocked-label">{t("WACC")}</span>
-      <span className="tp-dcf-beta-value" dir="ltr">
-        {formatWacc(pct)}
-      </span>
-      <span className="tp-dcf-beta-hint">{t("WACC_LABEL")}</span>
+      <div className="tp-dcf-wacc-earn-head">
+        <span className="tp-dcf-unlocked-label">{t("WACC")}</span>
+        <span className="tp-dcf-wacc-rec">
+          <svg className="tp-dcf-wacc-rec-icon" viewBox="0 0 16 16" aria-hidden>
+            <circle cx="8" cy="8" r="7" />
+            <path d="M4.6 8.2 6.8 10.4 11.4 5.6" />
+          </svg>
+          {t("WACC_RECOMMENDED")}
+        </span>
+      </div>
+
+      <div className="tp-dcf-wacc-pair" dir="ltr">
+        <div className="tp-dcf-wacc-stat tp-dcf-wacc-stat-roic">
+          <span>{t("ROIC")}</span>
+          <strong>{formatWacc(roicPct)}</strong>
+        </div>
+        <span className="tp-dcf-wacc-gt" aria-hidden>
+          ›
+        </span>
+        <div className="tp-dcf-wacc-stat">
+          <span>{t("WACC")}</span>
+          <strong>{formatWacc(pct)}</strong>
+        </div>
+      </div>
+
+      <div className="tp-dcf-wacc-meter" aria-hidden>
+        <span className="tp-dcf-wacc-meter-fill">
+          <span className="tp-dcf-wacc-meter-cost" style={{ width: `${costShare}%` }} />
+          <span className="tp-dcf-wacc-meter-edge" style={{ width: `${edgeShare}%` }} />
+        </span>
+      </div>
+
+      <p className="tp-dcf-wacc-earn-copy">
+        <span className="tp-dcf-wacc-spread" dir="ltr">
+          {formatPts(spread, lang)}
+        </span>
+        <span>{t("WACC_VERDICT")}</span>
+      </p>
     </aside>
   );
 }
@@ -164,6 +229,7 @@ export function StockDcfHero({
   chartWidth = 640,
   beta = null,
   wacc = null,
+  roic = null,
   fair = null,
   fairLoading = false,
   fairError = "",
@@ -177,21 +243,13 @@ export function StockDcfHero({
   const yearlyFairValue = chartData?.yearlyFairValue || [];
   const parsedBeta = parseBeta(beta);
   const parsedWacc = parseWaccPct(wacc);
-  // Opportunity uses live market price vs WACC only — never DCF or EV fair value.
-  const opportunity = isWaccOpportunity(livePrice, parsedWacc);
   const metricChips =
     parsedBeta != null || parsedWacc != null ? (
       <div className="tp-dcf-metric-chips">
         <DcfBetaChip t={t} beta={parsedBeta} />
-        <DcfWaccChip t={t} wacc={parsedWacc} opportunity={opportunity} />
+        <DcfWaccChip t={t} lang={lang} wacc={parsedWacc} roic={roic} />
       </div>
     ) : null;
-  const opportunityBanner = opportunity ? (
-    <div className="tp-dcf-opportunity" role="status">
-      <span className="tp-dcf-opportunity-badge">{t("WACC_OPPORTUNITY")}</span>
-      <p className="tp-dcf-opportunity-copy">{t("WACC_OPPORTUNITY_COPY")}</p>
-    </div>
-  ) : null;
 
   const dcfFooter = data?.date ? (
     <div className="tp-dcf-unlocked-date">
@@ -327,7 +385,6 @@ export function StockDcfHero({
         ) : null}
 
         {metricChips}
-        {opportunityBanner}
         {chartBlock}
       </div>
     </section>

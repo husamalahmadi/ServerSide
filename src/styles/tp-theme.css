@@ -2369,47 +2369,195 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
   color: #0f766e;
 }
 
-.tp-dcf-wacc-hot {
-  border-color: #86efac;
-  background: linear-gradient(160deg, #ffffff 0%, #ecfdf5 100%);
-  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.12), 0 8px 20px rgba(16, 185, 129, 0.12);
+.tp-dcf-wacc-earn {
+  flex: 1 1 17.5rem;
+  max-width: 24rem;
+  gap: 0;
+  padding-block: 0.8rem 0.85rem;
+  overflow: hidden;
+  border-color: #6ee7b7;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(52, 211, 153, 0.22), transparent 52%),
+    linear-gradient(165deg, #ffffff 0%, #f0fdf4 100%);
+  box-shadow:
+    0 0 0 1px rgba(16, 185, 129, 0.14),
+    0 14px 32px rgba(5, 150, 105, 0.14);
 }
 
-.tp-dcf-wacc-hot::before {
-  background: #059669;
+.tp-dcf-wacc-earn::before {
+  background: linear-gradient(180deg, #34d399 0%, #047857 100%);
+  width: 4px;
 }
 
-.tp-dcf-opportunity {
+.tp-dcf-wacc-earn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 32%, rgba(255, 255, 255, 0.72) 48%, transparent 64%);
+  transform: translateX(-130%);
+  animation: tp-wacc-sheen 1.15s 0.25s ease both;
+  pointer-events: none;
+}
+
+.tp-dcf-wacc-earn > * {
+  position: relative;
+  z-index: 1;
+}
+
+.tp-dcf-wacc-earn-head {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 0.55rem 0.75rem;
-  margin-top: 0.85rem;
-  padding: 0.7rem 0.85rem;
-  border-radius: var(--tp-radius);
-  border: 1px solid #6ee7b7;
-  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 
-.tp-dcf-opportunity-badge {
+.tp-dcf-wacc-earn-head .tp-dcf-unlocked-label {
+  margin-bottom: 0;
+}
+
+.tp-dcf-wacc-rec {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  padding: 0.16rem 0.5rem 0.16rem 0.22rem;
+  border-radius: 999px;
+  border: 1px solid #86efac;
+  background: rgba(255, 255, 255, 0.92);
+  color: #065f46;
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #fff;
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
-  padding: 0.22rem 0.55rem;
-  border-radius: 999px;
+  line-height: 1.2;
+}
+
+.tp-dcf-wacc-rec-icon {
+  width: 14px;
+  height: 14px;
   flex: 0 0 auto;
 }
 
-.tp-dcf-opportunity-copy {
-  margin: 0;
+.tp-dcf-wacc-rec-icon circle {
+  fill: #059669;
+}
+
+.tp-dcf-wacc-rec-icon path {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tp-dcf-wacc-pair {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.65rem;
+  margin-top: 0.45rem;
+}
+
+.tp-dcf-wacc-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  min-width: 0;
+}
+
+.tp-dcf-wacc-stat span {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--tp-muted);
+}
+
+.tp-dcf-wacc-stat strong {
+  font-size: 1.35rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.05;
+  color: #0f766e;
+}
+
+.tp-dcf-wacc-stat-roic strong {
+  color: #047857;
+}
+
+.tp-dcf-wacc-gt {
+  margin-bottom: 0.15rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #34d399;
+}
+
+.tp-dcf-wacc-meter {
+  height: 7px;
+  margin-top: 0.62rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #d1fae5;
+}
+
+.tp-dcf-wacc-meter-fill {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transform-origin: 0 50%;
+  animation: tp-wacc-reveal 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+[dir="rtl"] .tp-dcf-wacc-meter-fill {
+  transform-origin: 100% 50%;
+}
+
+.tp-dcf-wacc-meter-cost {
+  height: 100%;
+  background: #0f766e;
+}
+
+.tp-dcf-wacc-meter-edge {
+  height: 100%;
+  background: linear-gradient(90deg, #34d399 0%, #059669 100%);
+}
+
+[dir="rtl"] .tp-dcf-wacc-meter-edge {
+  background: linear-gradient(270deg, #34d399 0%, #059669 100%);
+}
+
+.tp-dcf-wacc-earn-copy {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.5rem;
+  margin: 0.5rem 0 0;
   font-size: 12px;
-  font-weight: 600;
-  line-height: 1.45;
+  font-weight: 700;
+  line-height: 1.4;
   color: #065f46;
-  flex: 1 1 12rem;
+}
+
+.tp-dcf-wacc-spread {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  color: #047857;
+}
+
+@keyframes tp-wacc-reveal {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes tp-wacc-sheen {
+  from { transform: translateX(-130%); }
+  to { transform: translateX(130%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tp-dcf-wacc-meter-fill,
+  .tp-dcf-wacc-earn::after {
+    animation: none;
+  }
 }
 
 .tp-dcf-beta-hint {
@@ -5807,8 +5955,14 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
     box-shadow: none !important;
   }
 
-  .tp-dcf-opportunity {
+  .tp-dcf-wacc-earn,
+  .tp-dcf-wacc-earn::after {
+    animation: none !important;
     box-shadow: none !important;
+  }
+
+  .tp-dcf-wacc-earn::after {
+    display: none !important;
   }
 
   button,
@@ -5903,6 +6057,10 @@ body.tp-pdf-export .tp-dcf-hero-glow {
 body.tp-pdf-export .tp-dcf-beta {
   background: #fff !important;
   box-shadow: none !important;
+}
+
+body.tp-pdf-export .tp-dcf-wacc-earn::after {
+  display: none !important;
 }
 
 /* —— Insider Footprint —— */

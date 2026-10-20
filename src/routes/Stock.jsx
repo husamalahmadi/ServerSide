@@ -570,6 +570,13 @@ export default function Stock() {
     [keyMetrics.data]
   );
   const hasKm = kmCols.length > 0;
+  const latestRoic = useMemo(() => {
+    for (const row of kmCols) {
+      const n = Number(row?.returnOnInvestedCapital);
+      if (Number.isFinite(n)) return n;
+    }
+    return null;
+  }, [kmCols]);
   const kmCurrency = kmCols[0]?.reportedCurrency || currency;
   const kmTableGroups = useMemo(() => {
     const ar = lang === "ar";
@@ -799,6 +806,7 @@ export default function Stock() {
           chartWidth={isMobile ? 300 : 580}
           beta={profile?.beta}
           wacc={customDcf?.wacc}
+          roic={latestRoic}
           fair={fair}
           fairLoading={val.loading}
           fairError={val.error}

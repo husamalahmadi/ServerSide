@@ -157,9 +157,11 @@ export default {
   WACC: "WACC",
   WACC_HINT: "Weighted average cost of capital — the discount rate used in this DCF.",
   WACC_LABEL: "Cost of capital",
-  WACC_OPPORTUNITY: "Investment opportunity",
-  WACC_OPPORTUNITY_COPY:
-    "The share price is below WACC — a potentially attractive entry.",
+  ROIC: "ROIC",
+  WACC_RECOMMENDED: "Recommended",
+  WACC_VERDICT: "Good and recommended for investment",
+  WACC_EARN_HINT:
+    "Return on invested capital is above the cost of capital, so this business earns more than it costs to fund.",
   FV_CHART_SECTION: "2. Chart of price vs fair value",
   FV_CHART_LOADING: "Loading price vs fair value chart…",
   FV_CHART_NO_DATA: "Historical price data is not available for this symbol yet.",
