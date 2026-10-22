@@ -7,7 +7,7 @@ import { getLivePrice } from "../services/priceService.js";
 import { getFinancialsCached } from "../services/financialsService.js";
 import { computeValuation } from "../domain/valuation.js";
 import { isFmpRetryError } from "../services/fmpErrors.js";
-import { fmpProfile } from "../services/fmpService.js";
+import { fmpProfile, fmpRatios } from "../services/fmpService.js";
 import { translateToArabic } from "../services/translateService.js";
 import { Card } from "../components/Card.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
@@ -133,6 +133,12 @@ export default function Stock() {
   const [earnings, setEarnings] = useState({ loading: false, error: "", data: null });
   const [earningsRetry, setEarningsRetry] = useState(0);
   const [fmpSymbol, setFmpSymbol] = useState("");
+  const [priceFair, setPriceFair] = useState({
+    loading: false,
+    ratio: null,
+    period: null,
+    date: null,
+  });
 
   const reportDate = useMemo(() => new Date().toLocaleDateString(), []);
 
@@ -276,6 +282,34 @@ export default function Stock() {
 
     return () => { alive = false; };
   }, [ticker, market, catalogReady]);
+
+  useEffect(() => {
+    if (!fmpSymbol) {
+      setPriceFair({ loading: false, ratio: null, period: null, date: null });
+      return;
+    }
+    let alive = true;
+    setPriceFair({ loading: true, ratio: null, period: null, date: null });
+    (async () => {
+      try {
+        const data = await fmpRatios(fmpSymbol, { period: "Q1" });
+        if (!alive) return;
+        const ratio = Number(data?.priceToFairValue);
+        setPriceFair({
+          loading: false,
+          ratio: Number.isFinite(ratio) && ratio > 0 ? ratio : null,
+          period: data?.period || "Q1",
+          date: data?.date || null,
+        });
+      } catch {
+        if (!alive) return;
+        setPriceFair({ loading: false, ratio: null, period: null, date: null });
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [fmpSymbol]);
 
   const loadDcf = useCallback(async () => {
     if (!fmpSymbol) return;
@@ -807,6 +841,10 @@ export default function Stock() {
           beta={profile?.beta}
           wacc={customDcf?.wacc}
           roic={latestRoic}
+          priceToFairValue={priceFair.ratio}
+          priceToFairPeriod={priceFair.period}
+          priceToFairDate={priceFair.date}
+          priceToFairLoading={priceFair.loading}
           fair={fair}
           fairLoading={val.loading}
           fairError={val.error}

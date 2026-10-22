@@ -6,15 +6,15 @@ import { FmpIncompleteError } from "./fmpErrors.js";
 /**
  * Query-string symbol avoids broken paths for Tokyo tickers (e.g. /quote/7203.T) on some proxies.
  */
-function fmpApiUrl(endpoint, fmpSymbol) {
+function fmpApiUrl(endpoint, fmpSymbol, params = {}) {
   const sym = String(fmpSymbol || "").trim();
   if (!sym) throw new Error("FMP symbol required");
   const base = `${getApiUrl()}/api/fmp/${endpoint}`;
-  return `${base}?${new URLSearchParams({ symbol: sym })}`;
+  return `${base}?${new URLSearchParams({ symbol: sym, ...params })}`;
 }
 
-async function fmpFetch(endpoint, fmpSymbol) {
-  const url = fmpApiUrl(endpoint, fmpSymbol);
+async function fmpFetch(endpoint, fmpSymbol, params) {
+  const url = fmpApiUrl(endpoint, fmpSymbol, params);
   const res = await fetchWithRetry(url, {
     cache: "no-store",
     credentials: "omit",
@@ -41,10 +41,13 @@ export async function fmpProfile(fmpSymbol) {
 }
 
 /**
- * Latest annual ratios via Express `/api/fmp/ratios?symbol=…`.
+ * Ratios via Express `/api/fmp/ratios?symbol=…`.
+ * Pass `{ period: "Q1" }` for the latest fiscal first quarter (price to fair value).
  */
-export async function fmpRatios(fmpSymbol) {
-  return fmpFetch("ratios", fmpSymbol);
+export async function fmpRatios(fmpSymbol, { period } = {}) {
+  const params = {};
+  if (period) params.period = period;
+  return fmpFetch("ratios", fmpSymbol, params);
 }
 
 /**

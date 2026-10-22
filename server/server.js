@@ -1390,14 +1390,28 @@ app.get(["/api/fmp/news/stock", "/api/fmp/news/stock/:symbol"], async (req, res)
   }
 });
 
+function fmpRatiosPeriod(raw) {
+  const s = String(raw || "").trim();
+  if (!s) return "";
+  const upper = s.toUpperCase();
+  if (upper === "Q1" || upper === "Q2" || upper === "Q3" || upper === "Q4" || upper === "FY") return upper;
+  const lower = s.toLowerCase();
+  if (lower === "annual" || lower === "quarter") return lower;
+  return "";
+}
+
 app.get(["/api/fmp/ratios", "/api/fmp/ratios/:symbol"], async (req, res) => {
   const key = fmpApiKey();
   if (!key) return res.status(503).json({ error: "FMP_API_KEY not configured" });
   const symbol = fmpSymbolFromRequest(req);
   if (!symbol) return res.status(400).json({ error: "symbol query parameter required" });
+  const period = fmpRatiosPeriod(req.query?.period);
   try {
-    const data = await cachedFmp(`fmp:ratios:${symbol}`, 6 * 3600_000, async () => {
-      const url = `${FMP_STABLE_BASE}/ratios?${new URLSearchParams({ symbol, apikey: key })}`;
+    const cacheKey = period ? `fmp:ratios:${symbol}:${period}` : `fmp:ratios:${symbol}`;
+    const data = await cachedFmp(cacheKey, 6 * 3600_000, async () => {
+      const params = { symbol, apikey: key };
+      if (period) params.period = period;
+      const url = `${FMP_STABLE_BASE}/ratios?${new URLSearchParams(params)}`;
       const r = await fetch(url);
       const text = await r.text();
       if (!r.ok) throw new Error(`FMP ratios HTTP ${r.status}`);
@@ -1414,12 +1428,15 @@ app.get(["/api/fmp/ratios", "/api/fmp/ratios/:symbol"], async (req, res) => {
       const row = arr[0];
       const pe = Number(row.priceToEarningsRatio);
       const ps = Number(row.priceToSalesRatio);
+      const ptfv = Number(row.priceToFairValue);
       return {
         symbol: row.symbol ?? symbol,
         date: row.date ?? null,
         fiscalYear: row.fiscalYear ?? null,
+        period: row.period ?? (period || null),
         priceToEarningsRatio: Number.isFinite(pe) ? pe : null,
         priceToSalesRatio: Number.isFinite(ps) ? ps : null,
+        priceToFairValue: Number.isFinite(ptfv) && ptfv > 0 ? ptfv : null,
       };
     });
     res.json(data);

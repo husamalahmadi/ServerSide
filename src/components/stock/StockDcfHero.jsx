@@ -164,6 +164,106 @@ function DcfWaccChip({ t, lang, wacc, roic }) {
   );
 }
 
+function parsePriceToFair(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n) || n <= 0) return null;
+  return n;
+}
+
+/** The value shown to two decimals: 1.00 counts as trading at fair value. */
+function priceFairBand(ratio) {
+  const shown = Number(ratio.toFixed(2));
+  if (shown === 1) return "fair";
+  return shown > 1 ? "above" : "below";
+}
+
+/** Log scale: 0.25× at the left edge, 1× in the center, 4× at the right edge. */
+function priceFairGauge(ratio) {
+  const steps = Math.log(ratio) / Math.log(2);
+  const clamped = Math.max(-2, Math.min(2, steps));
+  return ((clamped + 2) / 4) * 100;
+}
+
+function formatPriceFair(ratio, lang) {
+  return ratio.toLocaleString(lang === "ar" ? "ar" : undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+function DcfPriceFairChip({ t, lang, ratio, period, date, loading }) {
+  const n = parsePriceToFair(ratio);
+  if (!loading && n == null) return null;
+
+  const band = n == null ? "loading" : priceFairBand(n);
+  const verdictKey = band === "above" ? "PTFV_ABOVE" : band === "below" ? "PTFV_BELOW" : "PTFV_AT";
+  const badgeKey = band === "above" ? "PTFV_BADGE_ABOVE" : band === "below" ? "PTFV_BADGE_BELOW" : "PTFV_BADGE_AT";
+  const gauge = n == null ? 50 : priceFairGauge(n);
+  const meta = [period, date].filter(Boolean).join(" · ");
+
+  return (
+    <aside
+      className={`tp-dcf-beta tp-dcf-ptfv tp-dcf-ptfv-${band}`}
+      title={t("PTFV_HINT")}
+      aria-busy={loading && n == null ? "true" : undefined}
+      aria-label={
+        n == null
+          ? t("PTFV_LABEL")
+          : `${t("PTFV_LABEL")} ${formatPriceFair(n, lang)}. ${t(verdictKey)}`
+      }
+    >
+      <div className="tp-dcf-ptfv-head">
+        <span className="tp-dcf-unlocked-label">{t("PTFV_LABEL")}</span>
+        {n != null ? (
+          <span className={`tp-dcf-ptfv-badge tp-dcf-ptfv-badge-${band}`}>
+            <svg className="tp-dcf-ptfv-badge-icon" viewBox="0 0 16 16" aria-hidden>
+              <circle cx="8" cy="8" r="7" />
+              {band === "above" ? (
+                <path d="M8 11.6V4.5M5.15 7.15 8 4.3l2.85 2.85" />
+              ) : band === "below" ? (
+                <path d="M8 4.4v7.1M5.15 8.85 8 11.7l2.85-2.85" />
+              ) : (
+                <path d="M4.4 6.35h7.2M4.4 9.65h7.2" />
+              )}
+            </svg>
+            {t(badgeKey)}
+          </span>
+        ) : null}
+      </div>
+
+      {n == null ? (
+        <span className="tp-dcf-skel-value tp-ptfv-skel" />
+      ) : (
+        <>
+          <div className="tp-dcf-ptfv-value" dir="ltr">
+            <strong>{formatPriceFair(n, lang)}</strong>
+            <span className="tp-dcf-ptfv-times">×</span>
+          </div>
+
+          <div className="tp-dcf-ptfv-gauge" dir="ltr" aria-hidden>
+            <span className="tp-dcf-ptfv-track">
+              <span className="tp-dcf-ptfv-fairline" />
+              <span className="tp-dcf-ptfv-dot" style={{ insetInlineStart: `calc(${gauge}% - 7px)` }} />
+            </span>
+            <span className="tp-dcf-ptfv-scale">
+              <span>0.25×</span>
+              <span>{t("PTFV_SCALE_FAIR")}</span>
+              <span>4×</span>
+            </span>
+          </div>
+
+          <p className="tp-dcf-ptfv-copy">{t(verdictKey)}</p>
+          {meta ? (
+            <p className="tp-dcf-ptfv-meta" dir="ltr">
+              {meta}
+            </p>
+          ) : null}
+        </>
+      )}
+    </aside>
+  );
+}
+
 function FairValueTile({
   t,
   currency,
@@ -230,6 +330,10 @@ export function StockDcfHero({
   beta = null,
   wacc = null,
   roic = null,
+  priceToFairValue = null,
+  priceToFairPeriod = null,
+  priceToFairDate = null,
+  priceToFairLoading = false,
   fair = null,
   fairLoading = false,
   fairError = "",
@@ -243,11 +347,20 @@ export function StockDcfHero({
   const yearlyFairValue = chartData?.yearlyFairValue || [];
   const parsedBeta = parseBeta(beta);
   const parsedWacc = parseWaccPct(wacc);
+  const parsedPriceFair = parsePriceToFair(priceToFairValue);
   const metricChips =
-    parsedBeta != null || parsedWacc != null ? (
+    parsedBeta != null || parsedWacc != null || parsedPriceFair != null || priceToFairLoading ? (
       <div className="tp-dcf-metric-chips">
         <DcfBetaChip t={t} beta={parsedBeta} />
         <DcfWaccChip t={t} lang={lang} wacc={parsedWacc} roic={roic} />
+        <DcfPriceFairChip
+          t={t}
+          lang={lang}
+          ratio={parsedPriceFair}
+          period={priceToFairPeriod}
+          date={priceToFairDate}
+          loading={priceToFairLoading}
+        />
       </div>
     ) : null;
 
