@@ -170,11 +170,11 @@ function parsePriceToFair(value) {
   return n;
 }
 
-/** The value shown to two decimals: 1.00 counts as trading at fair value. */
+/** Same bands as the conclusion: ≤ 0.85 undervalued, through 1.15 fairly valued. */
 function priceFairBand(ratio) {
-  const shown = Number(ratio.toFixed(2));
-  if (shown === 1) return "fair";
-  return shown > 1 ? "above" : "below";
+  if (ratio <= 0.85) return "below";
+  if (ratio <= 1.15) return "fair";
+  return "above";
 }
 
 /** Log scale: 0.25× at the left edge, 1× in the center, 4× at the right edge. */
@@ -275,14 +275,18 @@ function FairValueTile({
   highlight = false,
   emptyHint = "—",
   footer = null,
+  pending = false,
+  excluded = false,
+  excludeReason = null,
 }) {
   const n = Number(value);
   const hasValue = Number.isFinite(n);
-  const pct = !loading && showVsPrice ? vsPricePct(n, price) : null;
+  const pct = !loading && !pending && !excluded && showVsPrice ? vsPricePct(n, price) : null;
   const className = [
     "tp-fv-tile",
-    highlight ? "tp-fv-tile-dcf" : "",
+    highlight && !excluded ? "tp-fv-tile-dcf" : "",
     !showVsPrice ? "tp-fv-tile-price" : "",
+    excluded ? "tp-fv-tile-excluded" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -307,9 +311,37 @@ function FairValueTile({
       ) : (
         <div className="tp-fv-tile-empty">{emptyHint}</div>
       )}
+      {excluded && excludeReason ? <div className="tp-fv-tile-excluded-reason">{excludeReason}</div> : null}
       {footer}
     </div>
   );
+}
+
+function methodNote(methods, key) {
+  const row = (methods || []).find((m) => m.key === key);
+  if (!row) return { pending: false, excluded: false, reason: null };
+  return {
+    pending: Boolean(row.pending),
+    excluded: Boolean(row.reason) && !row.included,
+    reason: row.reason || null,
+  };
+}
+
+const EXCLUDE_KEY = {
+  equity_roe: "FV_EXCL_ROE",
+  equity_negative: "FV_EXCL_EQUITY",
+  fcf_negative: "FV_EXCL_FCF_NEG",
+  fcf_erratic: "FV_EXCL_FCF_ERRATIC",
+  earnings_negative: "FV_EXCL_EARNINGS",
+};
+
+function lastChartFair(rows) {
+  const list = Array.isArray(rows) ? rows : [];
+  for (let i = list.length - 1; i >= 0; i -= 1) {
+    const n = Number(list[i]?.fairValue);
+    if (Number.isFinite(n) && n > 0) return n;
+  }
+  return null;
 }
 
 export function StockDcfHero({
@@ -331,9 +363,8 @@ export function StockDcfHero({
   wacc = null,
   roic = null,
   priceToFairValue = null,
-  priceToFairPeriod = null,
-  priceToFairDate = null,
   priceToFairLoading = false,
+  methods = [],
   fair = null,
   fairLoading = false,
   fairError = "",
@@ -357,8 +388,6 @@ export function StockDcfHero({
           t={t}
           lang={lang}
           ratio={parsedPriceFair}
-          period={priceToFairPeriod}
-          date={priceToFairDate}
           loading={priceToFairLoading}
         />
       </div>
@@ -376,21 +405,29 @@ export function StockDcfHero({
   if (error) dcfEmptyHint = error;
   else if (!loading && !hasDcf) dcfEmptyHint = t("DCF_HERO_UNAVAILABLE");
 
+  const lineFair = lastChartFair(yearlyFairValue);
+  const liveEv = Number(fair?.fairEV);
+  const cardFair = lineFair ?? (Number.isFinite(liveEv) && liveEv > 0 ? liveEv : null);
+  const dcfNote = methodNote(methods, "dcf");
+  const earningsNote = methodNote(methods, "earnings");
+  const equityNote = methodNote(methods, "equity");
+  const excludeText = (reason) => (reason && EXCLUDE_KEY[reason] ? t(EXCLUDE_KEY[reason]) : null);
+
   const chartBlock = (
     <div className="tp-dcf-chart-section">
       <h2 className="tp-dcf-chart-title">{t("FV_CHART_SECTION")}</h2>
       <div className="tp-dcf-chart-wrap" id="tp-dcf-fair-value-chart">
         <div className={`tp-dcf-chart-dcf-box ${dir === "rtl" ? "is-rtl" : ""}`}>
-        {Number.isFinite(dcf) ? (
+        {cardFair != null ? (
           <>
-            <div className="tp-dcf-chart-dcf-label">{t("DCF_FAIR_VALUE")}</div>
+            <div className="tp-dcf-chart-dcf-label">{t("EV_FAIR_VALUE")}</div>
             <div className="tp-dcf-chart-dcf-value">
-              {fmt2(dcf)} <span>{currency}</span>
+              {fmt2(cardFair)} <span>{currency}</span>
             </div>
-            <p className="tp-dcf-chart-dcf-hint">{t("DCF_CHART_DIRECTION")}</p>
+            <p className="tp-dcf-chart-dcf-hint">{t("FV_CHART_EV_HINT")}</p>
           </>
         ) : (
-          <p className="tp-dcf-chart-dcf-hint">{t("DCF_CHART_DIRECTION")}</p>
+          <p className="tp-dcf-chart-dcf-hint">{t("FV_CHART_EV_HINT")}</p>
         )}
       </div>
 
@@ -452,6 +489,9 @@ export function StockDcfHero({
             highlight
             emptyHint={dcfEmptyHint}
             footer={dcfFooter}
+            pending={dcfNote.pending}
+            excluded={dcfNote.excluded}
+            excludeReason={excludeText(dcfNote.reason)}
           />
           <FairValueTile
             t={t}
@@ -479,6 +519,9 @@ export function StockDcfHero({
             price={price}
             loading={fairLoading}
             emptyHint={fairError || "—"}
+            pending={earningsNote.pending}
+            excluded={earningsNote.excluded}
+            excludeReason={excludeText(earningsNote.reason)}
           />
           <FairValueTile
             t={t}
@@ -488,6 +531,9 @@ export function StockDcfHero({
             price={price}
             loading={fairLoading}
             emptyHint={fairError || "—"}
+            pending={equityNote.pending}
+            excluded={equityNote.excluded}
+            excludeReason={excludeText(equityNote.reason)}
           />
         </div>
 

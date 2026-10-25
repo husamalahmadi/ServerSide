@@ -7,7 +7,7 @@ import { getLivePrice } from "../services/priceService.js";
 import { getFinancialsCached } from "../services/financialsService.js";
 import { computeValuation } from "../domain/valuation.js";
 import { isFmpRetryError } from "../services/fmpErrors.js";
-import { fmpProfile, fmpRatios } from "../services/fmpService.js";
+import { fmpProfile } from "../services/fmpService.js";
 import { translateToArabic } from "../services/translateService.js";
 import { Card } from "../components/Card.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
@@ -20,6 +20,7 @@ import { fetchCustomDcf } from "../services/customDcfService.js";
 import { fetchFairValueChart } from "../services/fairValueChartService.js";
 import { fetchKeyMetrics } from "../services/keyMetricsService.js";
 import { fetchEarnings } from "../services/earningsService.js";
+import { buildEarningsView } from "../domain/earningsSeries.js";
 import { fmt2, fmtBill, calcTrend } from "../domain/formatting.js";
 import { usePageMeta } from "../hooks/usePageMeta.js";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -32,7 +33,8 @@ import { StockReportPrintShell } from "../components/stock/StockReportPrintShell
 import { buildStockSeo } from "../seo/structuredData.js";
 import { buildStockNarrative } from "../seo/stockNarrative.js";
 import { fmpImageStockUrl } from "../../shared/fmpLogoUrl.js";
-import { isUndervalued } from "../../shared/fairValueVerdict.js";
+import { buildStockConclusion } from "../../shared/stockConclusion.js";
+import { StockConclusion } from "../components/stock/StockConclusion.jsx";
 import { stockPath } from "../../shared/seo/stockPaths.js";
 import { AiReport } from "../components/stock/AiReport.jsx";
 import { InsiderSignalSection } from "../components/insider/InsiderSignalSection.jsx";
@@ -128,17 +130,12 @@ export default function Stock() {
   const [peersRequested, setPeersRequested] = useState(false);
   const [dcf, setDcf] = useState({ loading: false, error: "", data: null });
   const [customDcf, setCustomDcf] = useState(null);
+  const [customDcfReady, setCustomDcfReady] = useState(false);
   const [fvChart, setFvChart] = useState({ loading: false, error: "", data: null });
   const [keyMetrics, setKeyMetrics] = useState({ loading: false, error: "", data: null });
   const [earnings, setEarnings] = useState({ loading: false, error: "", data: null });
   const [earningsRetry, setEarningsRetry] = useState(0);
   const [fmpSymbol, setFmpSymbol] = useState("");
-  const [priceFair, setPriceFair] = useState({
-    loading: false,
-    ratio: null,
-    period: null,
-    date: null,
-  });
 
   const reportDate = useMemo(() => new Date().toLocaleDateString(), []);
 
@@ -158,6 +155,11 @@ export default function Stock() {
     setFmpSymbol("");
     setProfile(null);
     setCustomDcf(null);
+    setCustomDcfReady(false);
+    setDcf({ loading: false, error: "", data: null });
+    setKeyMetrics({ loading: false, error: "", data: null });
+    setEarnings({ loading: false, error: "", data: null });
+    setFvChart({ loading: false, error: "", data: null });
     if (seeded?.market) {
       setCompany(seeded.name || "");
       setMarket(seeded.market);
@@ -283,34 +285,6 @@ export default function Stock() {
     return () => { alive = false; };
   }, [ticker, market, catalogReady]);
 
-  useEffect(() => {
-    if (!fmpSymbol) {
-      setPriceFair({ loading: false, ratio: null, period: null, date: null });
-      return;
-    }
-    let alive = true;
-    setPriceFair({ loading: true, ratio: null, period: null, date: null });
-    (async () => {
-      try {
-        const data = await fmpRatios(fmpSymbol, { period: "Q1" });
-        if (!alive) return;
-        const ratio = Number(data?.priceToFairValue);
-        setPriceFair({
-          loading: false,
-          ratio: Number.isFinite(ratio) && ratio > 0 ? ratio : null,
-          period: data?.period || "Q1",
-          date: data?.date || null,
-        });
-      } catch {
-        if (!alive) return;
-        setPriceFair({ loading: false, ratio: null, period: null, date: null });
-      }
-    })();
-    return () => {
-      alive = false;
-    };
-  }, [fmpSymbol]);
-
   const loadDcf = useCallback(async () => {
     if (!fmpSymbol) return;
     try {
@@ -327,17 +301,27 @@ export default function Stock() {
     loadDcf();
   }, [catalogReady, fmpSymbol, loadDcf, user?.id]);
 
-  const loadCustomDcf = useCallback(async () => {
-    if (!fmpSymbol) return;
-    const data = await fetchCustomDcf(fmpSymbol, market);
-    setCustomDcf(data);
-  }, [fmpSymbol, market]);
-
   useEffect(() => {
+    let alive = true;
     setCustomDcf(null);
-    if (!catalogReady || !fmpSymbol) return;
-    loadCustomDcf();
-  }, [catalogReady, fmpSymbol, loadCustomDcf]);
+    if (!catalogReady) {
+      setCustomDcfReady(false);
+      return undefined;
+    }
+    if (!fmpSymbol) {
+      setCustomDcfReady(true);
+      return undefined;
+    }
+    setCustomDcfReady(false);
+    fetchCustomDcf(fmpSymbol, market).then((data) => {
+      if (!alive) return;
+      setCustomDcf(data);
+      setCustomDcfReady(true);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [catalogReady, fmpSymbol, market]);
 
   const loadFvChart = useCallback(async () => {
     if (!fmpSymbol) return;
@@ -498,45 +482,65 @@ export default function Stock() {
   const serFCF = useMemo(() => toSeries("freeCashFlow"), [years]);
 
   const fair = val?.data;
-  const fairAvg = useMemo(() => {
-    const arr = [fair?.fairEV, fair?.fairPS, fair?.fairPE]
-      .map((n) => Number(n))
-      .filter((n) => Number.isFinite(n));
-    if (!arr.length) return null;
-    return arr.reduce((s, n) => s + n, 0) / arr.length;
-  }, [fair]);
-
-  const investmentAdvice = useMemo(() => {
-    const p = Number(price);
-    const avgGtPrice = isUndervalued(p, fairAvg);
-    const evGtPrice = isUndervalued(p, fair?.fairEV);
-    const revUp = calcTrend(serRevenue).kind === "up";
-    const opUp = calcTrend(serOp).kind === "up";
-    const netUp = calcTrend(serNet).kind === "up";
-    const fcfUp = calcTrend(serFCF).kind === "up";
-    const items = [
-      { key: "avg", met: avgGtPrice },
-      { key: "ev", met: evGtPrice },
-      { key: "rev", met: revUp },
-      { key: "op", met: opUp },
-      { key: "net", met: netUp },
-      { key: "fcf", met: fcfUp },
-    ];
-    const unmatchCount = items.filter((i) => !i.met).length;
-    const verdict = unmatchCount === 0 ? "good" : unmatchCount <= 2 ? "hold" : "avoid";
-    return { verdict, items };
-  }, [price, fairAvg, fair?.fairEV, serRevenue, serOp, serNet, serFCF]);
+  const conclusion = useMemo(() => {
+    const rows = Array.isArray(keyMetrics.data) ? keyMetrics.data : [];
+    const pick = (key) => {
+      for (const row of rows) {
+        const n = Number(row?.[key]);
+        if (Number.isFinite(n)) return n;
+      }
+      return null;
+    };
+    const last = (series) => (series.length ? series[series.length - 1].value : null);
+    return buildStockConclusion({
+      price,
+      dcf: dcf.data?.dcf,
+      dcfSettled: !dcf.loading,
+      fcfSettled: !(fin.loading && !fin.data),
+      fairEV: fair?.fairEV,
+      fairPS: fair?.fairPS,
+      fairPE: fair?.fairPE,
+      equityPerShare: fair?.equityPerShare,
+      equitySettled: !(keyMetrics.loading && !keyMetrics.data),
+      roe: pick("returnOnEquity"),
+      totalEquity: last(serEquity),
+      netIncome: last(serNet),
+      earningsSettled: !(fin.loading && !fin.data),
+      fcfSeries: serFCF.map((point) => point.value),
+      roic: pick("returnOnInvestedCapital"),
+      wacc: customDcf?.wacc,
+      trends: {
+        rev: calcTrend(serRevenue).kind === "up",
+        op: calcTrend(serOp).kind === "up",
+        net: calcTrend(serNet).kind === "up",
+        fcf: calcTrend(serFCF).kind === "up",
+      },
+      netDebtToEbitda: pick("netDebtToEBITDA"),
+    });
+  }, [price, dcf, fin.loading, fin.data, fair, keyMetrics, serEquity, serNet, serFCF, serRevenue, serOp, customDcf]);
+  const medianFair = conclusion.median;
+  const valuationReady =
+    prefetchCountdown <= 0 &&
+    !(fin.loading && !fin.data) &&
+    !(val.loading && !val.data) &&
+    !dcf.loading &&
+    !(keyMetrics.loading && !keyMetrics.data);
+  const conclusionReady = valuationReady && customDcfReady;
+  const nextEarningsDate = useMemo(
+    () => buildEarningsView(earnings.data?.rows || []).next?.date || null,
+    [earnings.data]
+  );
 
   const hasZeroData = useMemo(() => {
-    if (prefetchCountdown > 0 || fin.loading || val.loading) return false;
+    if (prefetchCountdown > 0 || fin.loading || val.loading || !valuationReady) return false;
     const zeroPrice = price !== null && price !== undefined && Number(price) === 0;
-    const zeroFairValue = val?.data && (fairAvg == null || fairAvg === 0);
+    const zeroFairValue = val?.data && (medianFair == null || medianFair === 0);
     const noFinancials = fin?.data && (years.length === 0 || (
       serRevenue.length === 0 && serOp.length === 0 && serNet.length === 0 &&
       serEquity.length === 0 && serFCF.length === 0
     ));
     return zeroPrice || zeroFairValue || noFinancials;
-  }, [prefetchCountdown, fin.loading, val.loading, fin?.data, val?.data, price, fairAvg, years.length, serRevenue.length, serOp.length, serNet.length, serEquity.length, serFCF.length]);
+  }, [prefetchCountdown, fin.loading, val.loading, valuationReady, fin?.data, val?.data, price, medianFair, years.length, serRevenue.length, serOp.length, serNet.length, serEquity.length, serFCF.length]);
 
   const companyDisplayName =
     (lang === "ar" && translatedProfile?.name) || profile?.name || company || ticker || "";
@@ -546,12 +550,12 @@ export default function Stock() {
         ticker,
         companyName: companyDisplayName,
         lang,
-        fairValue: fairAvg ?? seedNumber(stockSeed?.fairValue),
+        fairValue: medianFair ?? seedNumber(stockSeed?.fairValue),
         price,
         currency,
         market: market || stockSeed?.market,
       }),
-    [ticker, companyDisplayName, lang, fairAvg, price, currency, market, stockSeed]
+    [ticker, companyDisplayName, lang, medianFair, price, currency, market, stockSeed]
   );
   usePageMeta(seo);
 
@@ -563,13 +567,13 @@ export default function Stock() {
   const fairValueSeenFor = useRef("");
   useEffect(() => {
     const px = Number(price);
-    const fv = Number(fairAvg);
+    const fv = Number(medianFair);
     if (!ticker || fairValueSeenFor.current === ticker) return;
     if (!Number.isFinite(px) || px <= 0 || !Number.isFinite(fv) || fv <= 0) return;
     fairValueSeenFor.current = ticker;
     const gapPct = Math.round(((fv - px) / px) * 1000) / 10;
     trackEvent("fair_value_seen", { ticker, gap_pct: gapPct });
-  }, [ticker, price, fairAvg]);
+  }, [ticker, price, medianFair]);
 
   const stockNarrative = useMemo(() => {
     const prof = lang === "ar" && translatedProfile ? translatedProfile : profile;
@@ -582,13 +586,13 @@ export default function Stock() {
       sector: prof?.sector || "",
       currency,
       price,
-      fairValue: fairAvg ?? seedNumber(stockSeed?.fairValue),
+      fairValue: medianFair ?? seedNumber(stockSeed?.fairValue),
       companyDescription: prof?.description || "",
     });
   }, [
     companyDisplayName,
     ticker,
-    fairAvg,
+    medianFair,
     price,
     currency,
     lang,
@@ -724,7 +728,7 @@ export default function Stock() {
           industry={(lang === "ar" && translatedProfile?.industry) || profile?.industry || ""}
           reportDate={reportDate}
           price={price}
-          fairAvg={fairAvg}
+          fairAvg={medianFair}
           currency={currency}
           logoUrl={logoUrl && !logoLoadError ? logoUrl : null}
           reportUrl={typeof window !== "undefined" ? window.location.href : `https://www.trueprice.cash${stockPath(lang, ticker)}`}
@@ -841,10 +845,9 @@ export default function Stock() {
           beta={profile?.beta}
           wacc={customDcf?.wacc}
           roic={latestRoic}
-          priceToFairValue={priceFair.ratio}
-          priceToFairPeriod={priceFair.period}
-          priceToFairDate={priceFair.date}
-          priceToFairLoading={priceFair.loading}
+          priceToFairValue={valuationReady ? conclusion.ratio : null}
+          priceToFairLoading={!valuationReady}
+          methods={conclusion.methods}
           fair={fair}
           fairLoading={val.loading}
           fairError={val.error}
@@ -1065,59 +1068,18 @@ export default function Stock() {
               <span>{t("WAITING_BEFORE_FETCH")} {prefetchCountdown}s</span>
               <span style={{ fontSize: 13 }}>{t("WAITING_PREFETCH_HINT")}</span>
             </div>
-          ) : (fin.loading && !fin.data) || (val.loading && !val.data) ? (
+          ) : !conclusionReady ? (
             <div style={{ color: "#64748b" }}>Loading…</div>
           ) : (
             <div style={{ display: "grid", gap: 16 }}>
-              <div style={{ fontWeight: 600, fontSize: 14, color: "#374151" }}>
-                {t("INVESTMENT_CONDITIONS_INTRO")}
-              </div>
-              <ul style={{ margin: 0, paddingInlineStart: 20, display: "grid", gap: 6, color: "#475569", fontSize: 14 }}>
-                {investmentAdvice.items.map((item) => (
-                  <li key={item.key} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ color: item.met ? "#15803d" : "#b91c1c", fontWeight: 700 }}>
-                      {item.met ? "✓" : "✗"}
-                    </span>
-                    <span>
-                      {t(`INVESTMENT_CONDITION_${item.key.toUpperCase()}`)}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              {(investmentAdvice.verdict === "hold" || investmentAdvice.verdict === "avoid") && (
-                <div style={{ display: "grid", gap: 8 }}>
-                  <div style={{ fontWeight: 700, fontSize: 14, color: "#374151" }}>
-                    {t("INVESTMENT_WAIT_UNTIL")}
-                  </div>
-                  <ul style={{ margin: 0, paddingInlineStart: 20, display: "grid", gap: 4, color: "#64748b", fontSize: 12 }}>
-                    {investmentAdvice.items
-                      .filter((i) => !i.met)
-                      .map((item) => (
-                        <li key={item.key}>
-                          • {t(`INVESTMENT_CONDITION_${item.key.toUpperCase()}`)}
-                        </li>
-                      ))}
-                  </ul>
-                </div>
-              )}
-              <div
-                style={{
-                  fontWeight: 700,
-                  fontSize: 16,
-                  color:
-                    investmentAdvice.verdict === "good"
-                      ? "#15803d"
-                      : investmentAdvice.verdict === "hold"
-                        ? "#1d4ed8"
-                        : "#b91c1c",
-                }}
-              >
-                {investmentAdvice.verdict === "good"
-                  ? t("INVESTMENT_GOOD")
-                  : investmentAdvice.verdict === "hold"
-                    ? t("INVESTMENT_HOLD")
-                    : t("INVESTMENT_AVOID")}
-              </div>
+              <StockConclusion
+                t={t}
+                lang={lang}
+                currency={currency}
+                company={companyDisplayName}
+                conclusion={conclusion}
+                earningsDate={nextEarningsDate}
+              />
               <div className="no-print">{howWeCalculateLink}</div>
               <div
                 style={{

@@ -82,7 +82,7 @@ export function buildStockNarrative({
     ].filter(Boolean);
 
     const approach = [
-      "نبدأ بتقدير DCF (التدفقات النقدية المخصومة) كمقياس رئيسي للقيمة الجوهرية، ثم نعرض طرق تقييم إضافية تشمل EV للسهم، ومضاعفات P/S وP/E، مع متوسط مركّب للقيمة العادلة.",
+      "نبقي تقدير DCF إلى جانب قيم EV وP/S والأرباح وحقوق الملكية. نستبعد الطريقة التي لا تناسب الشركة، ثم نجمع الباقي بالوسيط لا بالمتوسط.",
       "تُستمد البيانات من قوائم مالية سنوية (إيرادات، دخل تشغيلي، صافي دخل، حقوق مساهمين، وتدفق نقدي حر) ومؤشرات FMP الرئيسية، مع سعر مباشر من السوق عند التوفر.",
       "مخطط السعر مقابل القيمة العادلة يوضح مسار السهم الشهري بجانب القيمة العادلة السنوية المحسوبة بطريقة EV: (قيمة المؤسسة + النقد − الدين) ÷ الأسهم القائمة.",
     ];
@@ -108,7 +108,7 @@ export function buildStockNarrative({
     ].filter(Boolean);
 
     const approach = [
-      "We lead with a discounted cash flow (DCF) estimate as the flagship intrinsic-value view, then layer enterprise-value (EV), price-to-sales (P/S), and price-to-earnings (P/E) approaches with a blended fair-value average.",
+      "We keep a discounted cash flow (DCF) estimate beside enterprise-value (EV), price-to-sales (P/S), earnings, and equity values. A method that does not fit the company is left out, and the rest are combined with the median rather than the average.",
       "Figures come from annual financial statements — revenue, operating income, net income, shareholders' equity, and free cash flow — plus key metrics from Financial Modeling Prep, with live quotes when available.",
       "The price-versus-fair-value chart plots monthly share prices against yearly EV-based fair value per share: (Enterprise Value + cash − debt) ÷ shares outstanding.",
     ];
