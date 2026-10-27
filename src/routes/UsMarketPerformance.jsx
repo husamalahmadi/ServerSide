@@ -171,7 +171,7 @@ export default function UsMarketPerformance() {
   const pageTitle =
     lang === "ar"
       ? "أداء السوق الأمريكي – TruePrice.Cash"
-      : "US Stock Market Performance – TruePrice";
+      : "US Stock Market Performance";
   const pageDesc =
     lang === "ar"
       ? "لقطة أداء قطاعات وصناعات السوق الأمريكي، أكبر الرابحين والخاسرين، وأكثر الأسهم تداولاً على TruePrice.Cash."
@@ -180,7 +180,7 @@ export default function UsMarketPerformance() {
   usePageMeta({
     title: pageTitle,
     description: pageDesc,
-    canonicalPath: "/us-markets",
+    pathname: "/us-markets",
   });
 
   const load = useCallback(() => {

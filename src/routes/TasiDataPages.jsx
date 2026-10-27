@@ -157,14 +157,18 @@ export default function TasiDataPages() {
           ? earningsNoteSeo(data.note)
           : kind === "earnings"
             ? earningsCalendarSeo()
-            : undervaluedSeo();
+            : kind === "undervalued"
+              ? undervaluedSeo()
+              : null;
 
   usePageMeta({
-    title: seo.documentTitle,
-    description: seo.metaDescription,
-    pathname: seo.pathname,
-    alternates: seo.alternates,
-    jsonLd: seo.jsonLd,
+    documentTitle: seo?.documentTitle,
+    metaDescription: seo?.metaDescription,
+    title: seo?.documentTitle || "تاسي",
+    description: seo?.metaDescription || "أسهم تاسي على TruePrice.Cash: السعر والقيمة العادلة حسب القطاع والنتائج.",
+    pathname: path,
+    alternates: { ar: path, "x-default": path },
+    jsonLd: seo?.jsonLd || null,
   });
 
   const updated = data?.updatedAt ? `آخر تحديث للأرقام: ${String(data.updatedAt).slice(0, 10)}` : "بانتظار أرقام القيمة العادلة من ذاكرة السوق.";

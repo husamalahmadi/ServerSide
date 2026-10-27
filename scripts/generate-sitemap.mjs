@@ -14,6 +14,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { flattenBlogPosts } from "../src/data/blogs/posts.js";
 import { TUTORIAL_ARTICLES } from "../src/data/tutorials/articles.js";
+import { absoluteCanonicalUrl } from "../shared/seo/canonicalUrl.js";
 import {
   EARNINGS_CALENDAR_PATH,
   UNDERVALUED_PATH,
@@ -115,8 +116,9 @@ function newestLastmod(paths) {
 }
 
 function urlEntry({ loc, lastmod, changefreq, priority }) {
+  const canonicalLoc = absoluteCanonicalUrl(SITE, loc);
   return `  <url>
-    <loc>${escapeXml(loc)}</loc>
+    <loc>${escapeXml(canonicalLoc)}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>

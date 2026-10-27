@@ -29,12 +29,12 @@ export default function SaMarketPerformance() {
     title:
       lang === "ar"
         ? "أداء سوق تداول (تاسي) – TruePrice.Cash"
-        : "TASI Stock Market Performance – TruePrice",
+        : "TASI Stock Market Performance",
     description:
       lang === "ar"
         ? "أكبر الرابحين والخاسرين والأكثر تداولاً في سوق تداول على TruePrice.Cash."
         : "TASI top gainers, losers, and most traded stocks on TruePrice.Cash.",
-    canonicalPath: "/sa-markets",
+    pathname: "/sa-markets",
   });
 
   const load = useCallback(() => {

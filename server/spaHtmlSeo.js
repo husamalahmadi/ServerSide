@@ -1,3 +1,4 @@
+import { absoluteCanonicalUrl } from "../shared/seo/canonicalUrl.js";
 import { buildStockNarrative, stockNarrativeToStaticHtml } from "../shared/seo/stockNarrative.js";
 import { DEFAULT_OG_IMAGE_PATH, OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from "../shared/seo/ogPaths.js";
 import { stockPath } from "../shared/seo/stockPaths.js";
@@ -16,10 +17,9 @@ function escapeAttr(text) {
 
 function absUrl(siteOrigin, pathOrUrl) {
   const raw = String(pathOrUrl || "").trim();
-  if (!raw) return siteOrigin;
-  if (/^https?:\/\//i.test(raw)) return raw;
-  const path = raw.startsWith("/") ? raw : `/${raw}`;
-  return `${siteOrigin.replace(/\/+$/, "")}${path}`;
+  if (!raw) return absoluteCanonicalUrl(siteOrigin, "/");
+  if (/^https?:\/\//i.test(raw)) return absoluteCanonicalUrl(siteOrigin, raw);
+  return absoluteCanonicalUrl(siteOrigin, raw);
 }
 
 function upsertMeta(html, attr, key, content) {

@@ -1,7 +1,9 @@
 /** Path builders for Arabic TASI pages shared by the server, sitemap, and client. */
 
+import { absoluteCanonicalUrl } from "./seo/canonicalUrl.js";
 import { formatDocumentTitle } from "./seo/pageTitles.js";
 import { formatMetaDescription } from "./seo/pageDescriptions.js";
+import { getSeoSiteUrl } from "./seo/siteUrl.js";
 
 export const UNDERVALUED_PATH = "/ar/tasi/أسهم-أقل-من-قيمتها-العادلة";
 export const EARNINGS_CALENDAR_PATH = "/ar/tasi/نتائج-الشركات";
@@ -153,7 +155,7 @@ function pageSeo({ title, description, pathname }) {
       "@context": "https://schema.org",
       "@type": "WebPage",
       name: title,
-      url: pathname,
+      url: absoluteCanonicalUrl(getSeoSiteUrl(), pathname),
       inLanguage: "ar",
       description,
     },

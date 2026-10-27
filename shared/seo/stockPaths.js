@@ -36,15 +36,17 @@ export function parseStockPath(pathname) {
  * 301 target when a stock URL is not the canonical locale path.
  * Bare /stock/:ticker goes to /en/stock/:ticker.
  * ?lang=ar or ?lang=en selects the locale and is then stripped.
+ * resolvedTicker (catalog symbol, e.g. BRK-B) replaces aliases such as BRK.B.
  * Null when the request is already canonical.
  */
-export function canonicalStockRedirect(pathname, langQuery) {
+export function canonicalStockRedirect(pathname, langQuery, resolvedTicker) {
   const parsed = parseStockPath(pathname);
   if (!parsed?.ticker) return null;
   const q = String(langQuery ?? "").trim().toLowerCase();
   const queryLocale = q === "ar" || q === "en" ? q : "";
   const locale = queryLocale || parsed.locale || "en";
-  const target = stockPath(locale, parsed.ticker);
+  const symbol = String(resolvedTicker || parsed.ticker).trim() || parsed.ticker;
+  const target = stockPath(locale, symbol);
   const path = String(pathname || "").split("?")[0].replace(/\/+$/, "") || "/";
   if (queryLocale || path !== target) return target;
   return null;

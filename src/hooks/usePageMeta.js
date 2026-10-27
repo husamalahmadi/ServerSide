@@ -7,6 +7,7 @@ import {
   DEFAULT_DOCUMENT_TITLE,
   formatDocumentTitle,
 } from "../seo/pageTitles.js";
+import { absoluteCanonicalUrl } from "../../shared/seo/canonicalUrl.js";
 const SITE_URL = (import.meta.env.VITE_SITE_URL || "https://www.trueprice.cash").replace(/\/+$/, "");
 
 function setMeta(name, content, isProperty = false) {
@@ -53,8 +54,7 @@ function removeJsonLd(id) {
 }
 
 function absUrl(pathname = "/") {
-  const p = pathname.startsWith("/") ? pathname : `/${pathname}`;
-  return `${SITE_URL}${p}`;
+  return absoluteCanonicalUrl(SITE_URL, pathname);
 }
 
 /**
@@ -69,7 +69,8 @@ export function usePageMeta({
   documentTitle,
   description,
   metaDescription,
-  pathname = "/",
+  pathname: pathnameProp,
+  canonicalPath,
   alternates = null,
   jsonLd = null,
   ogImage = "",
@@ -78,6 +79,10 @@ export function usePageMeta({
   useEffect(() => {
     const newTitle = documentTitle || formatDocumentTitle(title);
     const newDesc = metaDescription || formatMetaDescription(description);
+    const pathname =
+      pathnameProp ||
+      canonicalPath ||
+      (typeof window !== "undefined" ? window.location.pathname : "/");
     const canonical = absUrl(pathname);
     const image = ogImage || `${SITE_URL}/og/default.png`;
     const imageAlt = ogImageAlt || newTitle;
@@ -99,6 +104,7 @@ export function usePageMeta({
     setMeta("twitter:description", newDesc);
     setLink("canonical", canonical);
 
+    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
     if (alternates && typeof alternates === "object") {
       Object.entries(alternates).forEach(([lang, hrefPath]) => {
         setLink("alternate", absUrl(hrefPath), lang);
@@ -116,12 +122,10 @@ export function usePageMeta({
       setMeta("description", DEFAULT_META_DESCRIPTION);
       setMeta("og:title", DEFAULT_DOCUMENT_TITLE, true);
       setMeta("og:description", DEFAULT_META_DESCRIPTION, true);
-      setMeta("og:url", absUrl("/"), true);
       setMeta("og:image", `${SITE_URL}/og/default.png`, true);
       setMeta("og:image:secure_url", `${SITE_URL}/og/default.png`, true);
       setMeta("twitter:image", `${SITE_URL}/og/default.png`);
-      setLink("canonical", absUrl("/"));
       removeJsonLd("page-seo");
     };
-  }, [title, documentTitle, description, metaDescription, pathname, alternates, jsonLd, ogImage, ogImageAlt]);
+  }, [title, documentTitle, description, metaDescription, pathnameProp, canonicalPath, alternates, jsonLd, ogImage, ogImageAlt]);
 }

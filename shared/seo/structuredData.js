@@ -1,5 +1,6 @@
 import { DEFAULT_META_DESCRIPTION, formatMetaDescription } from "./pageDescriptions.js";
 import { DEFAULT_DOCUMENT_TITLE, formatDocumentTitle } from "./pageTitles.js";
+import { absoluteCanonicalUrl } from "./canonicalUrl.js";
 import { getSeoSiteUrl } from "./siteUrl.js";
 import { stockPath } from "./stockPaths.js";
 import { DEFAULT_OG_IMAGE_PATH, stockOgImagePath } from "./ogPaths.js";
@@ -21,9 +22,9 @@ function valuationSnippet(lang, price, fairValue, currency) {
 }
 
 function toAbs(pathname = "/") {
-  const siteUrl = getSeoSiteUrl();
-  const p = pathname.startsWith("/") ? pathname : `/${pathname}`;
-  return `${siteUrl}${p}`;
+  const raw = String(pathname || "").trim();
+  if (/^https?:\/\//i.test(raw)) return raw;
+  return absoluteCanonicalUrl(getSeoSiteUrl(), raw || "/");
 }
 
 /** Homepage WebSite schema (crawlable + supports stock URL pattern). */

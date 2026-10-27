@@ -12,6 +12,7 @@ import {
   buildTutorialArticleSeo,
   buildTutorialsIndexSeo,
 } from "../shared/seo/structuredData.js";
+import { absoluteCanonicalUrl } from "../shared/seo/canonicalUrl.js";
 import {
   localizeTutorialBodyHtml,
   tutorialArticlePath,
@@ -55,13 +56,13 @@ function hreflangLinks(alternates) {
   return Object.entries(alternates)
     .map(
       ([lang, path]) =>
-        `<link rel="alternate" hreflang="${escapeAttr(lang)}" href="${escapeAttr(SITE + path)}" />`
+        `<link rel="alternate" hreflang="${escapeAttr(lang)}" href="${escapeAttr(absoluteCanonicalUrl(SITE, path))}" />`
     )
     .join("\n  ");
 }
 
 function pageShell({ locale, seo, bodyHtml, dir }) {
-  const canonical = `${SITE}${seo.pathname}`;
+  const canonical = absoluteCanonicalUrl(SITE, seo.pathname);
   return `<!DOCTYPE html>
 <html lang="${locale}" dir="${dir}">
 <head>

@@ -58,6 +58,8 @@ import { generateAiReport } from "./aiReport.js";
 import { renderAiReport } from "./aiReportRenderer.js";
 import { injectSeoIntoSpaHtml, buildStockStaticFallback } from "./spaHtmlSeo.js";
 import { handleDefaultOg, handleStockOg, ogRuntime } from "./ogCard.js";
+import { absoluteCanonicalUrl } from "../shared/seo/canonicalUrl.js";
+import { buildCorePageSeo } from "../shared/seo/corePages.js";
 import { configureSeoSiteUrl } from "../shared/seo/siteUrl.js";
 import { buildBlogPostSeo, buildBlogsSeo, buildStockSeo, buildTutorialArticleSeo, buildTutorialsIndexSeo } from "../shared/seo/structuredData.js";
 import { parseBlogPath } from "../shared/seo/blogPaths.js";
@@ -402,11 +404,34 @@ app.post("/auth/logout", (req, res) => {
 app.get("/og/default.png", handleDefaultOg);
 app.get("/og/:locale/stock/:ticker.png", handleStockOg);
 
+/**
+ * Sitemap URLs have no trailing slash (except /) and no .html suffix.
+ * Collapse those aliases before static files can 301 the other direction.
+ */
+app.use((req, res, next) => {
+  if (req.method !== "GET" && req.method !== "HEAD") return next();
+  const path = req.path || "/";
+  if (path.startsWith("/api") || path.startsWith("/auth") || path.startsWith("/assets")) return next();
+
+  const search = req.originalUrl.includes("?") ? req.originalUrl.slice(req.originalUrl.indexOf("?")) : "";
+  if (path.length > 1 && path.endsWith("/")) {
+    return res.redirect(301, `${path.replace(/\/+$/, "")}${search}`);
+  }
+  if (path === "/index.html") return res.redirect(301, `/${search}`);
+  const indexHtml = path.match(/^(.+)\/index\.html$/i);
+  if (indexHtml) return res.redirect(301, `${indexHtml[1] || "/"}${search}`);
+  const articleHtml = path.match(/^(\/(?:en|ar)\/(?:blog|tutorials)\/[^/]+)\.html$/i);
+  if (articleHtml) return res.redirect(301, `${articleHtml[1]}${search}`);
+  return next();
+});
+
 // Static assets after OAuth. Hashed chunks do not need session (minor overhead on /assets/* is acceptable).
+// redirect:false — a directory such as /en/blogs must not 301 to /en/blogs/ (sitemap URL has no slash).
 if (existsSync(staticPath)) {
   app.use(
     express.static(staticPath, {
       index: "index.html",
+      redirect: false,
       setHeaders(res, filePath) {
         try {
           if (!filePath) return;
@@ -1688,13 +1713,21 @@ function loadSpaIndexTemplate(indexHtmlPath) {
 }
 
 function canonicalUrlForPath(reqPath) {
-  let path = String(reqPath || "/").split("?")[0];
-  if (path.length > 1) path = path.replace(/\/+$/, "");
-  if (!path) path = "/";
+  let path = String(reqPath || "/");
+  try {
+    path = decodeURIComponent(path);
+  } catch {
+    /* keep */
+  }
   const stock = parseStockPath(path);
-  if (stock && !stock.locale) path = `/en/stock/${encodeURIComponent(stock.ticker)}`;
-  if (path === "/blogs") path = "/en/blogs";
-  return path === "/" ? `${CANONICAL_SITE}/` : `${CANONICAL_SITE}${path}`;
+  if (stock && !stock.locale) path = `/en/stock/${stock.ticker}`;
+  if (String(path).replace(/\/+$/, "") === "/blogs") path = "/en/blogs";
+  return absoluteCanonicalUrl(CANONICAL_SITE, path);
+}
+
+function coreSeoInjectForRequest(req) {
+  const seo = buildCorePageSeo(req.path);
+  return seo ? { seo } : null;
 }
 
 function renderSpaIndexHtml(indexHtmlPath, canonical, seoInject = null) {
@@ -1868,7 +1901,16 @@ function trySendTutorialStatic(req, res, next) {
 app.use((req, res, next) => {
   if (req.method !== "GET" && req.method !== "HEAD") return next();
   const path = String(req.path || "").replace(/\/+$/, "") || "/";
-  const stockTarget = canonicalStockRedirect(path, req.query.lang);
+  const stock = parseStockPath(path);
+  let resolvedTicker = null;
+  if (stock?.ticker) {
+    try {
+      resolvedTicker = findStockByTicker(stock.ticker)?.hit?.ticker || null;
+    } catch {
+      resolvedTicker = null;
+    }
+  }
+  const stockTarget = canonicalStockRedirect(path, req.query.lang, resolvedTicker);
   if (stockTarget) return res.redirect(301, stockTarget);
   if (path === "/blogs") {
     const lang = String(req.query.lang || "").toLowerCase();
@@ -1920,12 +1962,17 @@ app.get("*", (req, res, next) => {
   }
   try {
     const seoInject = isKnownSpaRoute
-      ? tutorialSeoInjectForRequest(req) || stockSeoInjectForRequest(req) || blogsSeoInjectForRequest(req) || tasiSeo
+      ? tutorialSeoInjectForRequest(req) ||
+        stockSeoInjectForRequest(req) ||
+        blogsSeoInjectForRequest(req) ||
+        tasiSeo ||
+        coreSeoInjectForRequest(req)
       : null;
-    const canonical = isKnownSpaRoute
-      ? canonicalUrlForPath(seoInject?.seo?.pathname || req.path)
-      : `${CANONICAL_SITE}/`;
-    const html = renderSpaIndexHtml(indexHtml, canonical, seoInject);
+    const canonical = canonicalUrlForPath(seoInject?.seo?.pathname || req.path);
+    let html = renderSpaIndexHtml(indexHtml, canonical, seoInject);
+    if (!isKnownSpaRoute) {
+      html = html.replace(/(<meta\s+name="robots"\s+content=")[^"]*(")/i, "$1noindex$2");
+    }
     res.type("html").send(html);
   } catch (err) {
     console.error("[static] render index.html failed:", err.message);
