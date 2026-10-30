@@ -38,6 +38,7 @@ export function parseStockPath(pathname) {
  * ?lang=ar or ?lang=en selects the locale and is then stripped.
  * resolvedTicker (catalog symbol, e.g. BRK-B) replaces aliases such as BRK.B.
  * Null when the request is already canonical.
+ * Callers must not redirect a ticker that did not resolve; see stockRequestAction.
  */
 export function canonicalStockRedirect(pathname, langQuery, resolvedTicker) {
   const parsed = parseStockPath(pathname);
@@ -50,4 +51,19 @@ export function canonicalStockRedirect(pathname, langQuery, resolvedTicker) {
   const path = String(pathname || "").split("?")[0].replace(/\/+$/, "") || "/";
   if (queryLocale || path !== target) return target;
   return null;
+}
+
+/**
+ * How the server should answer a stock URL.
+ * Unresolved tickers stay on the URL Google crawled (410) instead of
+ * 301-ing to /en/stock/<junk>, which only creates a second Not found URL.
+ * lookupFailed keeps the locale redirect when the catalog cannot be read.
+ */
+export function stockRequestAction(pathname, langQuery, resolvedTicker, lookupFailed = false) {
+  const parsed = parseStockPath(pathname);
+  if (!parsed?.ticker) return { type: "continue" };
+  if (!lookupFailed && !resolvedTicker) return { type: "gone" };
+  const target = canonicalStockRedirect(pathname, langQuery, resolvedTicker);
+  if (target) return { type: "redirect", target };
+  return { type: "continue" };
 }

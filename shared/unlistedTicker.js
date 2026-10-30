@@ -5,11 +5,34 @@
  */
 
 const TICKER_RE = /^[A-Z0-9][A-Z0-9.\-]*$/;
+const HOST_TLD = /^(COM|NET|ORG|IO|CO|INFO|BIZ|APP|DEV|CASH|XYZ|ME|AI|UK|SA|JP|EDU|GOV)$/;
+
+/** Tokyo codes issued after numeric symbols ran out: 3 digits + a letter, e.g. 151A.T. */
+export function isTokyoAlphanumericTicker(rawTicker) {
+  return /^\d{3}[A-Z]\.T$/.test(String(rawTicker || "").trim().toUpperCase());
+}
+
+/**
+ * Hostnames and Morningstar fund ids (0P…) are not equities.
+ * Google already crawled these under /stock/… from old links.
+ */
+export function isNonEquitySymbol(rawTicker) {
+  const upper = String(rawTicker || "").trim().toUpperCase();
+  if (!upper) return true;
+  if (upper.startsWith("WWW.")) return true;
+  const labels = upper.split(".");
+  if (labels.length >= 3) return true;
+  if (labels.length === 2 && HOST_TLD.test(labels[1])) return true;
+  const bare = upper.replace(/\.(T|L|SR)$/, "");
+  if (/^0P[0-9A-Z]{6,}$/.test(bare)) return true;
+  return false;
+}
 
 export function inferUnlistedListing(rawTicker) {
   const upper = String(rawTicker || "").trim().toUpperCase();
   if (!upper || upper.length > 15 || !TICKER_RE.test(upper)) return null;
   if (upper.endsWith(".") || upper.endsWith("-")) return null;
+  if (isNonEquitySymbol(upper)) return null;
 
   if (upper.endsWith(".SR")) {
     const base = upper.slice(0, -3);
@@ -19,7 +42,8 @@ export function inferUnlistedListing(rawTicker) {
 
   if (upper.endsWith(".T")) {
     const base = upper.slice(0, -2);
-    if (!/^\d{3,5}$/.test(base)) return null;
+    // Numeric Tokyo codes, plus the newer 3-digit + letter codes (151A.T).
+    if (!/^(\d{3,5}|\d{3}[A-Z])$/.test(base)) return null;
     return { ticker: upper, name: upper, market: "jp", fmpSymbol: upper, currency: "JPY" };
   }
 

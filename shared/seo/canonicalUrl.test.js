@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { absoluteCanonicalUrl, canonicalPathname } from "./canonicalUrl.js";
-import { canonicalStockRedirect } from "./stockPaths.js";
+import { canonicalStockRedirect, stockRequestAction } from "./stockPaths.js";
 import { EARNINGS_CALENDAR_PATH, UNDERVALUED_PATH, sectorPath } from "../tasiProgrammatic.js";
 
 const SITE = "https://www.trueprice.cash";
@@ -42,4 +42,24 @@ test("stock aliases redirect to the catalog symbol", () => {
   assert.equal(canonicalStockRedirect("/en/stock/BRK-B", "", "BRK-B"), null);
   assert.equal(canonicalStockRedirect("/stock/AAPL", "ar", "AAPL"), "/ar/stock/AAPL");
   assert.equal(canonicalStockRedirect("/en/stock/2222", "", "2222"), null);
+});
+
+test("unresolved stock URLs are gone on the crawled URL", () => {
+  assert.deepEqual(stockRequestAction("/stock/www.tcw.com", "en", null), { type: "gone" });
+  assert.deepEqual(stockRequestAction("/stock/www.sv-ac.com", "", null), { type: "gone" });
+  assert.deepEqual(stockRequestAction("/stock/0P0000RP9B", "en", null), { type: "gone" });
+  assert.deepEqual(stockRequestAction("/en/stock/0P0000IC0E.T", "", null), { type: "gone" });
+  assert.deepEqual(stockRequestAction("/stock/0P1000TC5L", "en", null), { type: "gone" });
+});
+
+test("resolved legacy stock URLs redirect once", () => {
+  assert.deepEqual(stockRequestAction("/stock/151A.T", "", "151A.T"), {
+    type: "redirect",
+    target: "/en/stock/151A.T",
+  });
+  assert.deepEqual(stockRequestAction("/en/stock/151A.T", "", "151A.T"), { type: "continue" });
+  assert.deepEqual(stockRequestAction("/stock/AAPL", "ar", "AAPL"), {
+    type: "redirect",
+    target: "/ar/stock/AAPL",
+  });
 });

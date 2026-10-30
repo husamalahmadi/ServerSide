@@ -63,7 +63,8 @@ import { buildCorePageSeo } from "../shared/seo/corePages.js";
 import { configureSeoSiteUrl } from "../shared/seo/siteUrl.js";
 import { buildBlogPostSeo, buildBlogsSeo, buildStockSeo, buildTutorialArticleSeo, buildTutorialsIndexSeo } from "../shared/seo/structuredData.js";
 import { parseBlogPath } from "../shared/seo/blogPaths.js";
-import { canonicalStockRedirect, parseStockPath } from "../shared/seo/stockPaths.js";
+import { parseStockPath, stockRequestAction } from "../shared/seo/stockPaths.js";
+import { isTokyoAlphanumericTicker } from "../shared/unlistedTicker.js";
 import { buildTutorialSpaStaticFallback } from "../shared/seo/tutorialStatic.js";
 import { parseTutorialPath } from "../shared/seo/tutorialPaths.js";
 import { flattenBlogPosts } from "../src/data/blogs/posts.js";
@@ -837,6 +838,55 @@ function cachedFmp(key, ttlMs, fn) {
     _fmpCache.set(key, { data, ts: Date.now() });
     return data;
   });
+}
+
+/**
+ * True when FMP has a company profile. Used for Tokyo alphanumeric codes that
+ * are not in the local catalog (151A.T). Empty results are cached; transport
+ * errors are not, so a blip does not hide a real listing for hours.
+ */
+async function fmpSymbolListed(symbol) {
+  const key = fmpApiKey();
+  // null = could not check. Caller keeps the page rather than answering Gone.
+  if (!key) return null;
+  const upper = String(symbol || "").trim().toUpperCase();
+  if (!upper) return false;
+  const cacheKey = `fmp:listed:${upper}`;
+  const hit = _fmpCache.get(cacheKey);
+  if (hit && Date.now() - hit.ts < hit.ttl) return Boolean(hit.data?.listed);
+  try {
+    const url = `${FMP_STABLE_BASE}/profile?${new URLSearchParams({ symbol: upper, apikey: key })}`;
+    const r = await fetch(url);
+    const text = await r.text();
+    if (!r.ok) throw new Error(`FMP profile HTTP ${r.status}`);
+    let arr;
+    try {
+      arr = text ? JSON.parse(text) : null;
+    } catch {
+      throw new Error("FMP profile: invalid JSON");
+    }
+    if (arr && typeof arr === "object" && !Array.isArray(arr) && (arr["Error Message"] || arr.error)) {
+      throw new Error(String(arr["Error Message"] || arr.error));
+    }
+    const row = Array.isArray(arr) ? arr[0] : arr;
+    const name = String(row?.companyName || row?.name || "").trim();
+    const listed = Boolean(row && typeof row === "object" && name);
+    _fmpCache.set(cacheKey, {
+      data: { listed, name },
+      ts: Date.now(),
+      ttl: listed ? 6 * 3600_000 : 30 * 60_000,
+    });
+    return listed;
+  } catch {
+    return null;
+  }
+}
+
+function tokyoListedName(symbol) {
+  const upper = String(symbol || "").trim().toUpperCase();
+  const hit = _fmpCache.get(`fmp:listed:${upper}`);
+  const name = hit?.data?.name;
+  return typeof name === "string" && name.trim() ? name.trim() : "";
 }
 
 /** Symbol from ?symbol= (preferred for tickers like 7203.T) or legacy path segment. */
@@ -1782,9 +1832,11 @@ function stockSeoInjectForRequest(req) {
     if (!found) return null;
     const currency = CURRENCY_BY_MARKET[found.market] || "USD";
     const valuation = lookupScreenerValuation(found.market, found.hit.ticker);
+    const companyName = tokyoListedName(found.hit.ticker) || found.hit.name;
+    const hit = companyName === found.hit.name ? found.hit : { ...found.hit, name: companyName };
     const seo = buildStockSeo({
       ticker: found.hit.ticker,
-      companyName: found.hit.name,
+      companyName,
       lang,
       market: found.market,
       currency,
@@ -1793,7 +1845,7 @@ function stockSeoInjectForRequest(req) {
     });
     const stockSeed = {
       ticker: found.hit.ticker,
-      name: found.hit.name,
+      name: hit.name,
       market: found.market,
       industry: found.hit.industry || "",
       currency,
@@ -1805,7 +1857,7 @@ function stockSeoInjectForRequest(req) {
       seo,
       stockSeed,
       staticFallbackHtml: buildStockStaticFallback({
-        hit: found.hit,
+        hit,
         market: found.market,
         lang,
         seo,
@@ -1898,20 +1950,33 @@ function trySendTutorialStatic(req, res, next) {
   });
 }
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   if (req.method !== "GET" && req.method !== "HEAD") return next();
   const path = String(req.path || "").replace(/\/+$/, "") || "/";
   const stock = parseStockPath(path);
   let resolvedTicker = null;
+  let lookupFailed = false;
   if (stock?.ticker) {
     try {
-      resolvedTicker = findStockByTicker(stock.ticker)?.hit?.ticker || null;
-    } catch {
+      const found = findStockByTicker(stock.ticker);
+      resolvedTicker = found?.hit?.ticker || null;
+      if (
+        resolvedTicker &&
+        isTokyoAlphanumericTicker(resolvedTicker) &&
+        !getCatalogPools().jp.byUpperTicker.has(resolvedTicker.toUpperCase())
+      ) {
+        const listed = await fmpSymbolListed(resolvedTicker);
+        if (listed === false) resolvedTicker = null;
+      }
+    } catch (err) {
+      lookupFailed = true;
       resolvedTicker = null;
+      console.warn("[static] stock lookup failed:", err?.message || err);
     }
   }
-  const stockTarget = canonicalStockRedirect(path, req.query.lang, resolvedTicker);
-  if (stockTarget) return res.redirect(301, stockTarget);
+  const action = stockRequestAction(path, req.query.lang, resolvedTicker, lookupFailed);
+  if (action.type === "redirect") return res.redirect(301, action.target);
+  if (action.type === "gone") res.locals.stockGone = true;
   if (path === "/blogs") {
     const lang = String(req.query.lang || "").toLowerCase();
     return res.redirect(301, lang === "ar" ? "/ar/blogs" : "/en/blogs");
@@ -1950,7 +2015,8 @@ app.get("*", (req, res, next) => {
   ];
   const tasiSeo = tasiProgram.seoInject(req);
   const stockParsed = parseStockPath(req.path);
-  const unknownStock = Boolean(stockParsed && !findStockByTicker(stockParsed.ticker));
+  const stockGone = res.locals.stockGone === true;
+  const unknownStock = stockGone || Boolean(stockParsed && !findStockByTicker(stockParsed.ticker));
   const isKnownSpaRoute = !unknownStock && (knownRoutePatterns.some((re) => re.test(req.path)) || Boolean(tasiSeo));
   const indexHtml = join(staticPath, "index.html");
   if (!existsSync(indexHtml)) {
@@ -1958,7 +2024,9 @@ app.get("*", (req, res, next) => {
   }
   res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
   if (!isKnownSpaRoute) {
-    res.status(404);
+    // 410 for stock URLs that will never be listings. Other unknown paths stay 404.
+    res.status(unknownStock ? 410 : 404);
+    res.setHeader("X-Robots-Tag", "noindex");
   }
   try {
     const seoInject = isKnownSpaRoute
