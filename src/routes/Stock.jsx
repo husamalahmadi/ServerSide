@@ -34,7 +34,7 @@ import { buildStockSeo } from "../seo/structuredData.js";
 import { buildStockNarrative } from "../seo/stockNarrative.js";
 import { fmpImageStockUrl } from "../../shared/fmpLogoUrl.js";
 import { buildStockConclusion } from "../../shared/stockConclusion.js";
-import { StockConclusion } from "../components/stock/StockConclusion.jsx";
+import { StockConclusion, StockConclusionPending } from "../components/stock/StockConclusion.jsx";
 import { stockPath } from "../../shared/seo/stockPaths.js";
 import { AiReport } from "../components/stock/AiReport.jsx";
 import { InsiderSignalSection } from "../components/insider/InsiderSignalSection.jsx";
@@ -1062,16 +1062,18 @@ export default function Stock() {
         </Card>
 
         {/* 6. Investment summary */}
-        <Card title={t("INVESTMENT_SUMMARY")}>
+        <Card title={t("INVESTMENT_SUMMARY")} className="tp-invest-card">
           {prefetchCountdown > 0 ? (
-            <div style={{ color: "#64748b", display: "grid", gap: 4 }}>
-              <span>{t("WAITING_BEFORE_FETCH")} {prefetchCountdown}s</span>
-              <span style={{ fontSize: 13 }}>{t("WAITING_PREFETCH_HINT")}</span>
+            <div className="tp-brief-wait">
+              <span>
+                {t("WAITING_BEFORE_FETCH")} {prefetchCountdown}s
+              </span>
+              <span className="tp-brief-wait-hint">{t("WAITING_PREFETCH_HINT")}</span>
             </div>
           ) : !conclusionReady ? (
-            <div style={{ color: "#64748b" }}>Loading…</div>
+            <StockConclusionPending t={t} />
           ) : (
-            <div style={{ display: "grid", gap: 16 }}>
+            <>
               <StockConclusion
                 t={t}
                 lang={lang}
@@ -1080,17 +1082,13 @@ export default function Stock() {
                 conclusion={conclusion}
                 earningsDate={nextEarningsDate}
               />
-              <div className="no-print">{howWeCalculateLink}</div>
-              <div
-                style={{
-                  fontWeight: 600,
-                  fontSize: 14,
-                  color: "#ca8a04",
-                }}
-              >
-                {t("INVESTMENT_DISCLAIMER")}
-              </div>
-            </div>
+              <footer className="tp-brief-foot">
+                <Link className="tp-brief-method no-print" to="/methodology">
+                  {t("HOW_WE_CALCULATE_LINK")}
+                </Link>
+                <p className="tp-brief-disclaimer">{t("INVESTMENT_DISCLAIMER")}</p>
+              </footer>
+            </>
           )}
         </Card>
 
