@@ -6256,6 +6256,14 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
   color: var(--tp-primary);
 }
 
+.tp-tutorial-content .num,
+.tp-tutorial-content .principle-num,
+.tp-tutorial-content td.pos,
+.tp-tutorial-content td.neg {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
 .tp-tutorial-content .compare-header {
   padding: 0.55rem 0.75rem;
   font-size: 13px;
@@ -6270,6 +6278,11 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
 .tp-tutorial-content .compare-header.growth-h {
   background: #eef5ff;
   color: var(--tp-primary);
+}
+
+.tp-tutorial-content .compare-header.risk-h {
+  background: var(--tp-red-soft);
+  color: var(--tp-red);
 }
 
 .tp-tutorial-content .compare-body {
