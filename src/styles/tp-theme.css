@@ -6177,6 +6177,9 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
   color: var(--tp-primary);
 }
 
+.tp-tutorial-content .term-name.pos { color: #0b6b43; }
+.tp-tutorial-content .term-name.neg { color: #b42318; }
+
 .tp-tutorial-content .term-def {
   font-size: 12px;
   line-height: 1.55;
@@ -6283,6 +6286,30 @@ button.tp-market-pill.uk.active { box-shadow: 0 0 0 2px #6d28d9; }
 .tp-tutorial-content .compare-header.risk-h {
   background: var(--tp-red-soft);
   color: var(--tp-red);
+}
+
+.tp-tutorial-content .scenario-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin: 1rem 0 1.25rem;
+}
+
+.tp-tutorial-content .scenario-stack .compare-body {
+  padding: 0.85rem 0.95rem 0.35rem;
+}
+
+.tp-tutorial-content .scenario-stack h3 {
+  margin: 0.15rem 0 0.45rem;
+}
+
+.tp-tutorial-content .scenario-stack ul {
+  margin: 0.35rem 0 0.75rem;
+  padding-inline-start: 1.2rem;
+}
+
+.tp-tutorial-content .scenario-stack li {
+  margin: 0.3rem 0;
 }
 
 .tp-tutorial-content .compare-body {

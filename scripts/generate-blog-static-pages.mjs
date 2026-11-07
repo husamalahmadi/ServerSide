@@ -138,6 +138,8 @@ function pageShell({ locale, seo, bodyHtml, dir }) {
     .principle-num.neg { color: #b42318; }
     .num, td.pos, td.neg { direction: ltr; unicode-bidi: isolate; }
     .principle-title, .card h4, .term-name { margin: 0 0 0.35rem; font-size: 13px; font-weight: 800; color: var(--tp-ink); }
+    .term-name.pos { color: #0b6b43; }
+    .term-name.neg { color: #b42318; }
     .principle-desc, .card p, .term-def { margin: 0; font-size: 12px; line-height: 1.55; color: var(--tp-muted); }
     .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
     .compare-card { border: 1px solid var(--tp-border); border-radius: 10px; overflow: hidden; background: #fff; }
@@ -145,6 +147,11 @@ function pageShell({ locale, seo, bodyHtml, dir }) {
     .compare-header.value-h { background: #e8f5ee; color: #0b6b43; }
     .compare-header.growth-h { background: #eef5ff; color: var(--tp-primary); }
     .compare-header.risk-h { background: #fce7eb; color: #e63757; }
+    .scenario-stack { display: flex; flex-direction: column; gap: 0.85rem; margin: 1rem 0 1.25rem; }
+    .scenario-stack .compare-body { padding: 0.85rem 0.95rem 0.35rem; }
+    .scenario-stack h3 { margin: 0.15rem 0 0.45rem; }
+    .scenario-stack ul { margin: 0.35rem 0 0.75rem; padding-inline-start: 1.2rem; }
+    .scenario-stack li { margin: 0.3rem 0; }
     .compare-body { padding: 0.35rem 0.75rem 0.65rem; }
     .compare-row { padding: 0.4rem 0; border-bottom: 1px solid var(--tp-border); font-size: 13px; line-height: 1.5; }
     .compare-row:last-child { border-bottom: 0; }
