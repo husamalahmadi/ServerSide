@@ -2,6 +2,7 @@
  * aiReportRenderer.js
  * Converts the Claude agent JSON report into a fully styled bilingual HTML page.
  * Both English and Arabic sections have their own Chart.js charts.
+ * Updated for CFA Equity Asset Valuation top-down methodology.
  */
 
 const flagIcon = { ok: "✅", warning: "⚠️", danger: "🚨" };
@@ -25,6 +26,9 @@ function tableRows(items, keys) {
 function buildEnglishReport(en, charts, symbol) {
   const rec = en?.recommendation || {};
   const verdictClass = rec.verdict || "hold";
+  // Support both new valuation.fairValue and old fairValue paths
+  const fairValue = en?.valuation?.fairValue || en?.fairValue || {};
+  const sectionNum = { n: 0, next() { return ++this.n; } };
 
   return `
 <div dir="ltr" style="text-align:left;">
@@ -32,7 +36,8 @@ function buildEnglishReport(en, charts, symbol) {
   <div class="report-header">
     <div class="report-symbol">${escHtml(symbol)}</div>
     <div class="report-title">${escHtml(en?.companyName || symbol)} — Investment Research Report</div>
-    <div class="report-meta">TruePrice.Cash &nbsp;·&nbsp; AI Financial Analyst &nbsp;·&nbsp; ${escHtml(en?.reportDate || "")} &nbsp;·&nbsp; Current Price: ${escHtml(en?.currentPrice || "")}</div>
+    <div class="report-meta">TruePrice.Cash &nbsp;·&nbsp; AI Financial Analyst (CFA Methodology) &nbsp;·&nbsp; ${escHtml(en?.reportDate || "")} &nbsp;·&nbsp; Current Price: ${escHtml(en?.currentPrice || "")}</div>
+    <div style="margin-top:10px;font-size:12px;color:#90cdf4;">📊 Top-Down Approach: Macro Economy → Industry → Company → Valuation</div>
   </div>
 
   <div class="tp-ai-section">
@@ -40,8 +45,52 @@ function buildEnglishReport(en, charts, symbol) {
     <p>${escHtml(en?.executiveSummary || "")}</p>
   </div>
 
+  ${en?.macroContext ? `
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">2. Revenue &amp; Profitability Analysis</h2>
+    <h2 class="tp-ai-h2">2. Macroeconomic &amp; Country Context</h2>
+    <p>${escHtml(en.macroContext.economicEnvironment || "")}</p>
+    ${en.macroContext.keyMacroFactors?.length ? `
+    <h3 class="tp-ai-h3">Key Macro Factors</h3>
+    <ul class="tp-ai-list">${en.macroContext.keyMacroFactors.filter(Boolean).map((f) => `<li>${escHtml(f)}</li>`).join("")}</ul>` : ""}
+    ${en.macroContext.macroImpactOnCompany ? `<p><strong>Impact on Company:</strong> ${escHtml(en.macroContext.macroImpactOnCompany)}</p>` : ""}
+  </div>` : ""}
+
+  ${en?.industryAnalysis ? `
+  <div class="tp-ai-section">
+    <h2 class="tp-ai-h2">3. Industry Analysis</h2>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
+      ${en.industryAnalysis.industryName ? `<span class="tp-ai-badge">${escHtml(en.industryAnalysis.industryName)}</span>` : ""}
+      ${en.industryAnalysis.lifecycleStage ? `<span class="tp-ai-badge tp-ai-badge-blue">Lifecycle: ${escHtml(en.industryAnalysis.lifecycleStage)}</span>` : ""}
+    </div>
+    <p>${escHtml(en.industryAnalysis.competitiveDynamics || "")}</p>
+    ${en.industryAnalysis.portersFiveForces ? `
+    <h3 class="tp-ai-h3">Porter's Five Forces</h3>
+    <div class="tp-ai-table-wrap"><table class="tp-ai-table">
+      <thead><tr><th>Force</th><th>Assessment</th></tr></thead>
+      <tbody>
+        <tr><td>Competitive Rivalry</td><td>${escHtml(en.industryAnalysis.portersFiveForces.competitiveRivalry || "")}</td></tr>
+        <tr><td>Supplier Power</td><td>${escHtml(en.industryAnalysis.portersFiveForces.supplierPower || "")}</td></tr>
+        <tr><td>Buyer Power</td><td>${escHtml(en.industryAnalysis.portersFiveForces.buyerPower || "")}</td></tr>
+        <tr><td>Threat of Substitutes</td><td>${escHtml(en.industryAnalysis.portersFiveForces.threatOfSubstitutes || "")}</td></tr>
+        <tr><td>Barriers to Entry</td><td>${escHtml(en.industryAnalysis.portersFiveForces.barrierToEntry || "")}</td></tr>
+      </tbody>
+    </table></div>` : ""}
+    ${en.industryAnalysis.industryOutlook ? `<p><strong>Industry Outlook:</strong> ${escHtml(en.industryAnalysis.industryOutlook)}</p>` : ""}
+  </div>` : ""}
+
+  ${en?.companyAnalysis ? `
+  <div class="tp-ai-section">
+    <h2 class="tp-ai-h2">4. Company Competitive Analysis</h2>
+    <p>${escHtml(en.companyAnalysis.businessModel || "")}</p>
+    ${en.companyAnalysis.competitiveAdvantages?.length ? `
+    <h3 class="tp-ai-h3">Competitive Advantages</h3>
+    <ul class="tp-ai-list">${en.companyAnalysis.competitiveAdvantages.filter(Boolean).map((a) => `<li>${escHtml(a)}</li>`).join("")}</ul>` : ""}
+    ${en.companyAnalysis.managementAssessment ? `<p><strong>Management:</strong> ${escHtml(en.companyAnalysis.managementAssessment)}</p>` : ""}
+    ${en.companyAnalysis.earningsQuality ? `<p><strong>Earnings Quality:</strong> ${escHtml(en.companyAnalysis.earningsQuality)}</p>` : ""}
+  </div>` : ""}
+
+  <div class="tp-ai-section">
+    <h2 class="tp-ai-h2">5. Revenue &amp; Profitability Analysis</h2>
     <p>${escHtml(en?.revenueAnalysis || "")}</p>
     ${en?.margins ? `
     <h3 class="tp-ai-h3">Profitability Margins</h3>
@@ -55,6 +104,19 @@ function buildEnglishReport(en, charts, symbol) {
       </tbody>
     </table>
     </div>` : ""}
+
+    ${en?.dupont ? `
+    <h3 class="tp-ai-h3">DuPont ROE Decomposition</h3>
+    <div class="tp-ai-table-wrap"><table class="tp-ai-table">
+      <thead><tr><th>Component</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Net Profit Margin</td><td>${escHtml(en.dupont.netMargin || "")}</td></tr>
+        <tr><td>Asset Turnover</td><td>${escHtml(en.dupont.assetTurnover || "")}</td></tr>
+        <tr><td>Equity Multiplier</td><td>${escHtml(en.dupont.equityMultiplier || "")}</td></tr>
+        <tr><td><strong>ROE (Combined)</strong></td><td><strong>${escHtml(en.dupont.roe || "")}</strong></td></tr>
+      </tbody>
+    </table></div>
+    <p>${escHtml(en.dupont.analysis || "")}</p>` : ""}
 
     <div class="tp-ai-charts-grid">
       <div class="tp-ai-chart-box">
@@ -73,7 +135,7 @@ function buildEnglishReport(en, charts, symbol) {
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">3. Balance Sheet Health</h2>
+    <h2 class="tp-ai-h2">6. Balance Sheet Health</h2>
     ${en?.balanceSheet?.items ? `
     <div class="tp-ai-table-wrap"><table class="tp-ai-table">
       <thead><tr><th>Item</th><th>Prior Year</th><th>Latest Year</th><th>Change</th></tr></thead>
@@ -83,17 +145,19 @@ function buildEnglishReport(en, charts, symbol) {
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">4. Cash Flow Quality</h2>
+    <h2 class="tp-ai-h2">7. Cash Flow Quality &amp; FCF Analysis</h2>
     ${en?.cashFlow?.items ? `
     <div class="tp-ai-table-wrap"><table class="tp-ai-table">
       <thead><tr><th>Item</th><th>Prior Year</th><th>Latest Year</th><th>Assessment</th></tr></thead>
       <tbody>${tableRows(en.cashFlow.items, ["label", "prior", "latest", "assessment"])}</tbody>
     </table></div>` : ""}
+    ${en?.cashFlow?.fcffAnalysis ? `<p><strong>FCFF:</strong> ${escHtml(en.cashFlow.fcffAnalysis)}</p>` : ""}
+    ${en?.cashFlow?.fcfeAnalysis ? `<p><strong>FCFE:</strong> ${escHtml(en.cashFlow.fcfeAnalysis)}</p>` : ""}
     <p>${escHtml(en?.cashFlow?.analysis || "")}</p>
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">5. Key Financial Ratios</h2>
+    <h2 class="tp-ai-h2">8. Key Financial Ratios</h2>
     ${en?.ratios ? `
     <div class="tp-ai-table-wrap"><table class="tp-ai-table">
       <thead><tr><th>Ratio</th><th>Value</th><th>Industry Avg</th><th>Assessment</th></tr></thead>
@@ -102,29 +166,78 @@ function buildEnglishReport(en, charts, symbol) {
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">6. Fair Value Estimate (DCF)</h2>
-    <p>${escHtml(en?.fairValue?.analysis || "")}</p>
-    ${en?.fairValue?.scenarios ? `
+    <h2 class="tp-ai-h2">9. Multi-Model Valuation (CFA Framework)</h2>
+
+    ${en?.valuation?.fcfValuation ? `
+    <h3 class="tp-ai-h3">Free Cash Flow Valuation</h3>
     <div class="tp-ai-table-wrap"><table class="tp-ai-table">
-      <thead><tr><th>Scenario</th><th>Fair Value</th><th>vs Current Price</th><th>Probability</th></tr></thead>
-      <tbody>${tableRows(en.fairValue.scenarios, ["scenario", "value", "vsCurrentPrice", "probability"])}</tbody>
+      <thead><tr><th>Method</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>FCFF (Free Cash Flow to Firm)</td><td>${escHtml(en.valuation.fcfValuation.fcff || "")}</td></tr>
+        <tr><td>FCFE (Free Cash Flow to Equity)</td><td>${escHtml(en.valuation.fcfValuation.fcfe || "")}</td></tr>
+        <tr><td>Implied Fair Price</td><td><strong>${escHtml(en.valuation.fcfValuation.impliedPrice || "")}</strong></td></tr>
+      </tbody>
+    </table></div>
+    <p>${escHtml(en.valuation.fcfValuation.methodology || "")}</p>` : ""}
+
+    ${en?.valuation?.multiples?.length ? `
+    <h3 class="tp-ai-h3">Market-Based Multiples Valuation</h3>
+    <div class="tp-ai-table-wrap"><table class="tp-ai-table">
+      <thead><tr><th>Method</th><th>Implied Price</th><th>Basis</th></tr></thead>
+      <tbody>${tableRows(en.valuation.multiples, ["method", "impliedPrice", "basis"])}</tbody>
+    </table></div>` : ""}
+
+    ${en?.valuation?.ddm?.applicable !== false && en?.valuation?.ddm ? `
+    <h3 class="tp-ai-h3">Dividend Discount Model (Gordon Growth)</h3>
+    <div class="tp-ai-table-wrap"><table class="tp-ai-table">
+      <thead><tr><th>Component</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>Sustainable Growth Rate</td><td>${escHtml(en.valuation.ddm.sustainableGrowth || "")}</td></tr>
+        <tr><td>Implied Price (DDM)</td><td><strong>${escHtml(en.valuation.ddm.impliedPrice || "")}</strong></td></tr>
+      </tbody>
+    </table></div>
+    <p>${escHtml(en.valuation.ddm.methodology || "")}</p>` : ""}
+
+    ${en?.valuation?.residualIncome ? `
+    <h3 class="tp-ai-h3">Residual Income Assessment</h3>
+    <p><strong>Cost of Equity:</strong> ${escHtml(en.valuation.residualIncome.costOfEquity || "")} &nbsp;|&nbsp;
+       <strong>Residual Income:</strong> ${escHtml(en.valuation.residualIncome.residualIncome || "")}</p>
+    <p>${escHtml(en.valuation.residualIncome.assessment || "")}</p>` : ""}
+
+    <h3 class="tp-ai-h3">Fair Value Synthesis (Weighted Average)</h3>
+    <p>${escHtml(fairValue.analysis || "")}</p>
+    ${fairValue.weightedFairValue ? `<p class="tp-ai-fair-value-highlight">Weighted Fair Value: <strong>${escHtml(fairValue.weightedFairValue)}</strong></p>` : ""}
+    ${fairValue.scenarios ? `
+    <div class="tp-ai-table-wrap"><table class="tp-ai-table">
+      <thead><tr><th>Scenario</th><th>Fair Value</th><th>vs Current Price</th><th>Probability</th><th>Key Assumptions</th></tr></thead>
+      <tbody>${fairValue.scenarios.map((s) => `<tr>
+        <td>${escHtml(s.scenario)}</td>
+        <td>${escHtml(s.value)}</td>
+        <td>${escHtml(s.vsCurrentPrice)}</td>
+        <td>${escHtml(s.probability)}</td>
+        <td>${escHtml(s.assumptions || "")}</td>
+      </tr>`).join("")}</tbody>
     </table></div>` : ""}
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">7. Business Future Outlook</h2>
+    <h2 class="tp-ai-h2">10. Business Future Outlook</h2>
     <h3 class="tp-ai-h3">Core Business Model</h3>
     <p>${escHtml(en?.futureOutlook?.coreBusinessModel || "")}</p>
     ${en?.futureOutlook?.growthDrivers?.length ? `
     <h3 class="tp-ai-h3">Growth Drivers</h3>
-    <ul class="tp-ai-list">${en.futureOutlook.growthDrivers.map((d) => `<li>${escHtml(d)}</li>`).join("")}</ul>` : ""}
+    <ul class="tp-ai-list">${en.futureOutlook.growthDrivers.filter(Boolean).map((d) => `<li>${escHtml(d)}</li>`).join("")}</ul>` : ""}
+    ${en?.futureOutlook?.catalysts?.length ? `
+    <h3 class="tp-ai-h3">Key Catalysts</h3>
+    <ul class="tp-ai-list">${en.futureOutlook.catalysts.filter(Boolean).map((c) => `<li>${escHtml(c)}</li>`).join("")}</ul>` : ""}
     ${en?.futureOutlook?.disruptionRisks?.length ? `
     <h3 class="tp-ai-h3">Disruption Risks</h3>
-    <ul class="tp-ai-list">${en.futureOutlook.disruptionRisks.map((r) => `<li>${escHtml(r)}</li>`).join("")}</ul>` : ""}
+    <ul class="tp-ai-list">${en.futureOutlook.disruptionRisks.filter(Boolean).map((r) => `<li>${escHtml(r)}</li>`).join("")}</ul>` : ""}
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">8. Financial Statement Red Flags</h2>
+    <h2 class="tp-ai-h2">11. Financial Statement Red Flags (Beneish M-Score)</h2>
+    ${en?.redFlags?.mScore ? `<p><strong>M-Score:</strong> ${escHtml(en.redFlags.mScore)} — ${escHtml(en.redFlags.mScoreInterpretation || "")}</p>` : ""}
     ${en?.redFlags?.indicators ? `
     <h3 class="tp-ai-h3">Beneish M-Score Analysis</h3>
     <div class="tp-ai-table-wrap"><table class="tp-ai-table">
@@ -144,23 +257,30 @@ function buildEnglishReport(en, charts, symbol) {
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">9. Investment Risks</h2>
+    <h2 class="tp-ai-h2">12. Investment Risks</h2>
     ${en?.risks?.length ? `
     <ul class="tp-ai-list">
-      ${en.risks.map((r) => `<li><strong>${escHtml(r.title)}:</strong> ${escHtml(r.description)}</li>`).join("")}
+      ${en.risks.map((r) => {
+        const sevColor = r.severity === "high" ? "#fc8181" : r.severity === "medium" ? "#f6c90e" : "#68d391";
+        return `<li><strong style="color:${sevColor}">[${escHtml((r.severity || "").toUpperCase())}]</strong> <strong>${escHtml(r.title)}:</strong> ${escHtml(r.description)}</li>`;
+      }).join("")}
     </ul>` : ""}
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">10. Final Recommendation</h2>
+    <h2 class="tp-ai-h2">13. Final Recommendation</h2>
     <div class="tp-ai-verdict tp-ai-verdict-${escHtml(verdictClass)}">
       <div class="tp-ai-verdict-label">${escHtml(rec.verdictLabel || rec.verdict || "")}</div>
       <div class="tp-ai-verdict-target">
-        12-Month Price Target: <strong>${escHtml(rec.priceTarget || "")}</strong>
+        Price Target: <strong>${escHtml(rec.priceTarget || "")}</strong>
         &nbsp;|&nbsp; Upside/Downside: <strong>${escHtml(rec.upside || "")}</strong>
+        &nbsp;|&nbsp; Time Horizon: <strong>${escHtml(rec.timeHorizon || "12 months")}</strong>
       </div>
     </div>
     <p>${escHtml(rec.justification || "")}</p>
+    ${rec.keycatalysts?.length ? `
+    <h3 class="tp-ai-h3">Key Catalysts to Watch</h3>
+    <ul class="tp-ai-list">${rec.keycatalysts.filter(Boolean).map((c) => `<li>${escHtml(c)}</li>`).join("")}</ul>` : ""}
   </div>
 
   <div class="tp-ai-disclaimer">
@@ -175,6 +295,8 @@ function buildEnglishReport(en, charts, symbol) {
 function buildArabicReport(ar, charts, symbol) {
   const rec = ar?.recommendation || {};
   const verdictClass = rec.verdict || "hold";
+  // Support both new valuation.fairValue and old fairValue paths
+  const fairValue = ar?.valuation?.fairValue || ar?.fairValue || {};
 
   return `
 <div class="tp-ai-arabic" dir="rtl" style="text-align:right;">
@@ -182,7 +304,8 @@ function buildArabicReport(ar, charts, symbol) {
   <div class="report-header" style="text-align:right;">
     <div class="report-symbol">${escHtml(symbol)}</div>
     <div class="report-title">${escHtml(ar?.companyName || symbol)} — تقرير البحث الاستثماري</div>
-    <div class="report-meta">TruePrice.Cash &nbsp;·&nbsp; محلل مالي بالذكاء الاصطناعي &nbsp;·&nbsp; ${escHtml(ar?.reportDate || "")} &nbsp;·&nbsp; السعر الحالي: ${escHtml(ar?.currentPrice || "")}</div>
+    <div class="report-meta">TruePrice.Cash &nbsp;·&nbsp; محلل مالي بالذكاء الاصطناعي (منهجية CFA) &nbsp;·&nbsp; ${escHtml(ar?.reportDate || "")} &nbsp;·&nbsp; السعر الحالي: ${escHtml(ar?.currentPrice || "")}</div>
+    <div style="margin-top:10px;font-size:12px;color:#90cdf4;">📊 نهج من القمة إلى القاعدة: الاقتصاد الكلي ← القطاع ← الشركة ← التقييم</div>
   </div>
 
   <div class="tp-ai-section">
@@ -190,8 +313,52 @@ function buildArabicReport(ar, charts, symbol) {
     <p>${escHtml(ar?.executiveSummary || "")}</p>
   </div>
 
+  ${ar?.macroContext ? `
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">٢. تحليل الإيرادات والربحية</h2>
+    <h2 class="tp-ai-h2">٢. السياق الاقتصادي الكلي والبيئة البلدية</h2>
+    <p>${escHtml(ar.macroContext.economicEnvironment || "")}</p>
+    ${ar.macroContext.keyMacroFactors?.length ? `
+    <h3 class="tp-ai-h3">العوامل الكلية الرئيسية</h3>
+    <ul class="tp-ai-list">${ar.macroContext.keyMacroFactors.filter(Boolean).map((f) => `<li>${escHtml(f)}</li>`).join("")}</ul>` : ""}
+    ${ar.macroContext.macroImpactOnCompany ? `<p><strong>الأثر على الشركة:</strong> ${escHtml(ar.macroContext.macroImpactOnCompany)}</p>` : ""}
+  </div>` : ""}
+
+  ${ar?.industryAnalysis ? `
+  <div class="tp-ai-section">
+    <h2 class="tp-ai-h2">٣. تحليل القطاع</h2>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;justify-content:flex-end;">
+      ${ar.industryAnalysis.industryName ? `<span class="tp-ai-badge">${escHtml(ar.industryAnalysis.industryName)}</span>` : ""}
+      ${ar.industryAnalysis.lifecycleStage ? `<span class="tp-ai-badge tp-ai-badge-blue">مرحلة دورة الحياة: ${escHtml(ar.industryAnalysis.lifecycleStage)}</span>` : ""}
+    </div>
+    <p>${escHtml(ar.industryAnalysis.competitiveDynamics || "")}</p>
+    ${ar.industryAnalysis.portersFiveForces ? `
+    <h3 class="tp-ai-h3">القوى الخمس لبورتر</h3>
+    <div class="tp-ai-table-wrap"><table class="tp-ai-table">
+      <thead><tr><th>القوة</th><th>التقييم</th></tr></thead>
+      <tbody>
+        <tr><td>حدة المنافسة</td><td>${escHtml(ar.industryAnalysis.portersFiveForces.competitiveRivalry || "")}</td></tr>
+        <tr><td>قوة الموردين</td><td>${escHtml(ar.industryAnalysis.portersFiveForces.supplierPower || "")}</td></tr>
+        <tr><td>قوة المشترين</td><td>${escHtml(ar.industryAnalysis.portersFiveForces.buyerPower || "")}</td></tr>
+        <tr><td>تهديد البدائل</td><td>${escHtml(ar.industryAnalysis.portersFiveForces.threatOfSubstitutes || "")}</td></tr>
+        <tr><td>الحواجز أمام الدخول</td><td>${escHtml(ar.industryAnalysis.portersFiveForces.barrierToEntry || "")}</td></tr>
+      </tbody>
+    </table></div>` : ""}
+    ${ar.industryAnalysis.industryOutlook ? `<p><strong>التوقعات القطاعية:</strong> ${escHtml(ar.industryAnalysis.industryOutlook)}</p>` : ""}
+  </div>` : ""}
+
+  ${ar?.companyAnalysis ? `
+  <div class="tp-ai-section">
+    <h2 class="tp-ai-h2">٤. التحليل التنافسي للشركة</h2>
+    <p>${escHtml(ar.companyAnalysis.businessModel || "")}</p>
+    ${ar.companyAnalysis.competitiveAdvantages?.length ? `
+    <h3 class="tp-ai-h3">المزايا التنافسية</h3>
+    <ul class="tp-ai-list">${ar.companyAnalysis.competitiveAdvantages.filter(Boolean).map((a) => `<li>${escHtml(a)}</li>`).join("")}</ul>` : ""}
+    ${ar.companyAnalysis.managementAssessment ? `<p><strong>تقييم الإدارة:</strong> ${escHtml(ar.companyAnalysis.managementAssessment)}</p>` : ""}
+    ${ar.companyAnalysis.earningsQuality ? `<p><strong>جودة الأرباح:</strong> ${escHtml(ar.companyAnalysis.earningsQuality)}</p>` : ""}
+  </div>` : ""}
+
+  <div class="tp-ai-section">
+    <h2 class="tp-ai-h2">٥. تحليل الإيرادات والربحية</h2>
     <p>${escHtml(ar?.revenueAnalysis || "")}</p>
     ${ar?.margins ? `
     <h3 class="tp-ai-h3">هوامش الربحية</h3>
@@ -206,7 +373,20 @@ function buildArabicReport(ar, charts, symbol) {
     </table>
     </div>` : ""}
 
-    <!-- Arabic Charts with Arabic labels -->
+    ${ar?.dupont ? `
+    <h3 class="tp-ai-h3">تحليل دوبونت للعائد على حقوق الملكية</h3>
+    <div class="tp-ai-table-wrap"><table class="tp-ai-table">
+      <thead><tr><th>المكوّن</th><th>القيمة</th></tr></thead>
+      <tbody>
+        <tr><td>هامش صافي الربح</td><td>${escHtml(ar.dupont.netMargin || "")}</td></tr>
+        <tr><td>معدل دوران الأصول</td><td>${escHtml(ar.dupont.assetTurnover || "")}</td></tr>
+        <tr><td>مضاعف حقوق الملكية</td><td>${escHtml(ar.dupont.equityMultiplier || "")}</td></tr>
+        <tr><td><strong>العائد على حقوق الملكية (المحصلة)</strong></td><td><strong>${escHtml(ar.dupont.roe || "")}</strong></td></tr>
+      </tbody>
+    </table></div>
+    <p>${escHtml(ar.dupont.analysis || "")}</p>` : ""}
+
+    <!-- Arabic Charts -->
     <div class="tp-ai-charts-grid" style="direction:ltr;">
       <div class="tp-ai-chart-box">
         <div class="tp-ai-chart-title" style="direction:rtl;">الإيرادات السنوية</div>
@@ -224,7 +404,7 @@ function buildArabicReport(ar, charts, symbol) {
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">٣. صحة الميزانية العمومية</h2>
+    <h2 class="tp-ai-h2">٦. صحة الميزانية العمومية</h2>
     ${ar?.balanceSheet?.items ? `
     <div class="tp-ai-table-wrap"><table class="tp-ai-table">
       <thead><tr><th>البند</th><th>السنة السابقة</th><th>أحدث سنة</th><th>التغيير</th></tr></thead>
@@ -234,17 +414,19 @@ function buildArabicReport(ar, charts, symbol) {
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">٤. جودة التدفق النقدي</h2>
+    <h2 class="tp-ai-h2">٧. جودة التدفق النقدي وتحليل FCF</h2>
     ${ar?.cashFlow?.items ? `
     <div class="tp-ai-table-wrap"><table class="tp-ai-table">
       <thead><tr><th>البند</th><th>السنة السابقة</th><th>أحدث سنة</th><th>التقييم</th></tr></thead>
       <tbody>${tableRows(ar.cashFlow.items, ["label", "prior", "latest", "assessment"])}</tbody>
     </table></div>` : ""}
+    ${ar?.cashFlow?.fcffAnalysis ? `<p><strong>FCFF:</strong> ${escHtml(ar.cashFlow.fcffAnalysis)}</p>` : ""}
+    ${ar?.cashFlow?.fcfeAnalysis ? `<p><strong>FCFE:</strong> ${escHtml(ar.cashFlow.fcfeAnalysis)}</p>` : ""}
     <p>${escHtml(ar?.cashFlow?.analysis || "")}</p>
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">٥. النسب المالية الرئيسية</h2>
+    <h2 class="tp-ai-h2">٨. النسب المالية الرئيسية</h2>
     ${ar?.ratios ? `
     <div class="tp-ai-table-wrap"><table class="tp-ai-table">
       <thead><tr><th>النسبة</th><th>القيمة</th><th>متوسط الصناعة</th><th>التقييم</th></tr></thead>
@@ -253,29 +435,78 @@ function buildArabicReport(ar, charts, symbol) {
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">٦. تقدير القيمة العادلة (DCF)</h2>
-    <p>${escHtml(ar?.fairValue?.analysis || "")}</p>
-    ${ar?.fairValue?.scenarios ? `
+    <h2 class="tp-ai-h2">٩. التقييم متعدد النماذج (إطار CFA)</h2>
+
+    ${ar?.valuation?.fcfValuation ? `
+    <h3 class="tp-ai-h3">تقييم التدفق النقدي الحر</h3>
     <div class="tp-ai-table-wrap"><table class="tp-ai-table">
-      <thead><tr><th>السيناريو</th><th>القيمة العادلة</th><th>مقابل السعر الحالي</th><th>الاحتمالية</th></tr></thead>
-      <tbody>${tableRows(ar.fairValue.scenarios, ["scenario", "value", "vsCurrentPrice", "probability"])}</tbody>
+      <thead><tr><th>الطريقة</th><th>القيمة</th></tr></thead>
+      <tbody>
+        <tr><td>FCFF (التدفق النقدي الحر للشركة)</td><td>${escHtml(ar.valuation.fcfValuation.fcff || "")}</td></tr>
+        <tr><td>FCFE (التدفق النقدي الحر للملكية)</td><td>${escHtml(ar.valuation.fcfValuation.fcfe || "")}</td></tr>
+        <tr><td>السعر العادل المستنتج</td><td><strong>${escHtml(ar.valuation.fcfValuation.impliedPrice || "")}</strong></td></tr>
+      </tbody>
+    </table></div>
+    <p>${escHtml(ar.valuation.fcfValuation.methodology || "")}</p>` : ""}
+
+    ${ar?.valuation?.multiples?.length ? `
+    <h3 class="tp-ai-h3">التقييم بالمضاعفات السوقية</h3>
+    <div class="tp-ai-table-wrap"><table class="tp-ai-table">
+      <thead><tr><th>الطريقة</th><th>السعر المستنتج</th><th>الأساس</th></tr></thead>
+      <tbody>${tableRows(ar.valuation.multiples, ["method", "impliedPrice", "basis"])}</tbody>
+    </table></div>` : ""}
+
+    ${ar?.valuation?.ddm?.applicable !== false && ar?.valuation?.ddm ? `
+    <h3 class="tp-ai-h3">نموذج خصم الأرباح (نمو جوردون)</h3>
+    <div class="tp-ai-table-wrap"><table class="tp-ai-table">
+      <thead><tr><th>المكوّن</th><th>القيمة</th></tr></thead>
+      <tbody>
+        <tr><td>معدل النمو المستدام</td><td>${escHtml(ar.valuation.ddm.sustainableGrowth || "")}</td></tr>
+        <tr><td>السعر المستنتج (DDM)</td><td><strong>${escHtml(ar.valuation.ddm.impliedPrice || "")}</strong></td></tr>
+      </tbody>
+    </table></div>
+    <p>${escHtml(ar.valuation.ddm.methodology || "")}</p>` : ""}
+
+    ${ar?.valuation?.residualIncome ? `
+    <h3 class="tp-ai-h3">تقييم الدخل المتبقي</h3>
+    <p><strong>تكلفة حقوق الملكية:</strong> ${escHtml(ar.valuation.residualIncome.costOfEquity || "")} &nbsp;|&nbsp;
+       <strong>الدخل المتبقي:</strong> ${escHtml(ar.valuation.residualIncome.residualIncome || "")}</p>
+    <p>${escHtml(ar.valuation.residualIncome.assessment || "")}</p>` : ""}
+
+    <h3 class="tp-ai-h3">تركيب القيمة العادلة (المتوسط المرجح)</h3>
+    <p>${escHtml(fairValue.analysis || "")}</p>
+    ${fairValue.weightedFairValue ? `<p class="tp-ai-fair-value-highlight">القيمة العادلة المرجحة: <strong>${escHtml(fairValue.weightedFairValue)}</strong></p>` : ""}
+    ${fairValue.scenarios ? `
+    <div class="tp-ai-table-wrap"><table class="tp-ai-table">
+      <thead><tr><th>السيناريو</th><th>القيمة العادلة</th><th>مقابل السعر الحالي</th><th>الاحتمالية</th><th>الافتراضات</th></tr></thead>
+      <tbody>${fairValue.scenarios.map((s) => `<tr>
+        <td>${escHtml(s.scenario)}</td>
+        <td>${escHtml(s.value)}</td>
+        <td>${escHtml(s.vsCurrentPrice)}</td>
+        <td>${escHtml(s.probability)}</td>
+        <td>${escHtml(s.assumptions || "")}</td>
+      </tr>`).join("")}</tbody>
     </table></div>` : ""}
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">٧. توقعات مستقبل الأعمال</h2>
+    <h2 class="tp-ai-h2">١٠. توقعات مستقبل الأعمال</h2>
     <h3 class="tp-ai-h3">نموذج الأعمال الأساسي</h3>
     <p>${escHtml(ar?.futureOutlook?.coreBusinessModel || "")}</p>
     ${ar?.futureOutlook?.growthDrivers?.length ? `
     <h3 class="tp-ai-h3">محركات النمو</h3>
-    <ul class="tp-ai-list">${ar.futureOutlook.growthDrivers.map((d) => `<li>${escHtml(d)}</li>`).join("")}</ul>` : ""}
+    <ul class="tp-ai-list">${ar.futureOutlook.growthDrivers.filter(Boolean).map((d) => `<li>${escHtml(d)}</li>`).join("")}</ul>` : ""}
+    ${ar?.futureOutlook?.catalysts?.length ? `
+    <h3 class="tp-ai-h3">المحفزات الرئيسية</h3>
+    <ul class="tp-ai-list">${ar.futureOutlook.catalysts.filter(Boolean).map((c) => `<li>${escHtml(c)}</li>`).join("")}</ul>` : ""}
     ${ar?.futureOutlook?.disruptionRisks?.length ? `
     <h3 class="tp-ai-h3">مخاطر الاضطراب</h3>
-    <ul class="tp-ai-list">${ar.futureOutlook.disruptionRisks.map((r) => `<li>${escHtml(r)}</li>`).join("")}</ul>` : ""}
+    <ul class="tp-ai-list">${ar.futureOutlook.disruptionRisks.filter(Boolean).map((r) => `<li>${escHtml(r)}</li>`).join("")}</ul>` : ""}
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">٨. إشارات الإنذار في البيانات المالية</h2>
+    <h2 class="tp-ai-h2">١١. إشارات الإنذار في البيانات المالية (Beneish M-Score)</h2>
+    ${ar?.redFlags?.mScore ? `<p><strong>M-Score:</strong> ${escHtml(ar.redFlags.mScore)} — ${escHtml(ar.redFlags.mScoreInterpretation || "")}</p>` : ""}
     ${ar?.redFlags?.indicators ? `
     <h3 class="tp-ai-h3">تحليل Beneish M-Score</h3>
     <div class="tp-ai-table-wrap"><table class="tp-ai-table">
@@ -295,23 +526,31 @@ function buildArabicReport(ar, charts, symbol) {
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">٩. مخاطر الاستثمار</h2>
+    <h2 class="tp-ai-h2">١٢. مخاطر الاستثمار</h2>
     ${ar?.risks?.length ? `
     <ul class="tp-ai-list">
-      ${ar.risks.map((r) => `<li><strong>${escHtml(r.title)}:</strong> ${escHtml(r.description)}</li>`).join("")}
+      ${ar.risks.map((r) => {
+        const sevColor = r.severity === "high" ? "#fc8181" : r.severity === "medium" ? "#f6c90e" : "#68d391";
+        const sevAr = r.severity === "high" ? "عالية" : r.severity === "medium" ? "متوسطة" : "منخفضة";
+        return `<li><strong style="color:${sevColor}">[${sevAr}]</strong> <strong>${escHtml(r.title)}:</strong> ${escHtml(r.description)}</li>`;
+      }).join("")}
     </ul>` : ""}
   </div>
 
   <div class="tp-ai-section">
-    <h2 class="tp-ai-h2">١٠. التوصية النهائية</h2>
+    <h2 class="tp-ai-h2">١٣. التوصية النهائية</h2>
     <div class="tp-ai-verdict tp-ai-verdict-${escHtml(verdictClass)}">
       <div class="tp-ai-verdict-label">${escHtml(rec.verdictLabel || rec.verdict || "")}</div>
       <div class="tp-ai-verdict-target">
-        هدف السعر لـ12 شهرًا: <strong>${escHtml(rec.priceTarget || "")}</strong>
+        هدف السعر: <strong>${escHtml(rec.priceTarget || "")}</strong>
         &nbsp;|&nbsp; الارتفاع/الانخفاض: <strong>${escHtml(rec.upside || "")}</strong>
+        &nbsp;|&nbsp; الأفق الزمني: <strong>${escHtml(rec.timeHorizon || "12 شهراً")}</strong>
       </div>
     </div>
     <p>${escHtml(rec.justification || "")}</p>
+    ${(rec.keyatalysts || rec.keycatalysts)?.length ? `
+    <h3 class="tp-ai-h3">المحفزات الرئيسية للمتابعة</h3>
+    <ul class="tp-ai-list">${(rec.keyatalysts || rec.keycatalysts || []).filter(Boolean).map((c) => `<li>${escHtml(c)}</li>`).join("")}</ul>` : ""}
   </div>
 
   <div class="tp-ai-disclaimer" style="text-align:right;">
@@ -323,8 +562,7 @@ function buildArabicReport(ar, charts, symbol) {
 </div>`;
 }
 
-export function renderAiReport(report, symbol, lang = "en") {
-  const isAr = lang === "ar";
+export function renderAiReport(report, symbol) {
   const charts = report.charts || {};
   const en = report.english || {};
   const ar = report.arabic || {};
@@ -340,21 +578,13 @@ export function renderAiReport(report, symbol, lang = "en") {
   const chartRevenue = JSON.stringify(charts.revenue || []);
   const chartOp = JSON.stringify(charts.operatingIncome || []);
   const chartCf = JSON.stringify(charts.operatingCashFlow || []);
-  const pageLang = isAr ? "ar" : "en";
-  const pageDir = isAr ? "rtl" : "ltr";
-  const pageTitle = isAr
-    ? `${escHtml(symbol)} تقرير استثماري — TruePrice.Cash`
-    : `${escHtml(symbol)} Investment Report — TruePrice.Cash`;
-  const bodyHtml = isAr
-    ? buildArabicReport(ar, charts, symbol)
-    : buildEnglishReport(en, charts, symbol);
 
   return `<!DOCTYPE html>
-<html lang="${pageLang}" dir="${pageDir}">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${pageTitle}</title>
+<title>${escHtml(symbol)} Investment Report — TruePrice.Cash</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -382,38 +612,37 @@ body { font-family: Inter, 'Segoe UI', sans-serif; background: #0a1628; color: #
 .tp-ai-chart-full { grid-column: 1 / -1; }
 .tp-ai-chart-title { color: #c9a84c; font-size: 12px; font-weight: 600; text-align: center; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
 .tp-ai-verdict { border-radius: 10px; padding: 18px 24px; margin: 14px 0; text-align: center; }
-.tp-ai-verdict-buy { background: #1a4731; border: 1px solid #68d391; }
+.tp-ai-verdict-buy, .tp-ai-verdict-strong-buy { background: #1a4731; border: 1px solid #68d391; }
 .tp-ai-verdict-hold { background: #3d3000; border: 1px solid #f6c90e; }
-.tp-ai-verdict-sell { background: #3d0000; border: 1px solid #fc8181; }
+.tp-ai-verdict-sell, .tp-ai-verdict-strong-sell { background: #3d0000; border: 1px solid #fc8181; }
 .tp-ai-verdict-label { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
-.tp-ai-verdict-buy .tp-ai-verdict-label { color: #68d391; }
+.tp-ai-verdict-buy .tp-ai-verdict-label, .tp-ai-verdict-strong-buy .tp-ai-verdict-label { color: #68d391; }
 .tp-ai-verdict-hold .tp-ai-verdict-label { color: #f6c90e; }
-.tp-ai-verdict-sell .tp-ai-verdict-label { color: #fc8181; }
+.tp-ai-verdict-sell .tp-ai-verdict-label, .tp-ai-verdict-strong-sell .tp-ai-verdict-label { color: #fc8181; }
 .tp-ai-verdict-target { color: #e8e8e8; font-size: 14px; }
 .tp-ai-lang-divider { border: none; border-top: 2px solid #c9a84c44; margin: 48px 0 32px; }
 .tp-ai-lang-label { text-align: center; color: #c9a84c; font-size: 13px; margin-bottom: 32px; }
 .tp-ai-disclaimer { background: #071428; border: 1px solid #c9a84c33; border-radius: 8px; padding: 16px 20px; font-size: 12px; color: #718096; margin-top: 32px; line-height: 1.7; }
-img, svg, canvas, table { max-width: 100%; }
-.tp-ai-table { min-width: 520px; }
+.tp-ai-badge { background: #1a3c5e; color: #90cdf4; border: 1px solid #2d5a8c; border-radius: 20px; padding: 3px 12px; font-size: 12px; font-weight: 600; }
+.tp-ai-badge-blue { background: #0d2d4a; color: #c9a84c; border-color: #c9a84c44; }
+.tp-ai-fair-value-highlight { background: #0d2d4a; border-left: 3px solid #c9a84c; padding: 10px 16px; border-radius: 6px; font-size: 15px; color: #fff; margin: 10px 0; }
+.tp-ai-arabic .tp-ai-fair-value-highlight { border-left: none; border-right: 3px solid #c9a84c; }
 @media (max-width: 600px) {
-  .tp-ai-wrap { padding: 16px 12px; }
-  .report-header { padding: 16px; }
-  .report-title { font-size: 18px; overflow-wrap: anywhere; }
   .tp-ai-charts-grid { grid-template-columns: 1fr; }
   .tp-ai-chart-full { grid-column: 1; }
-  .tp-ai-section { padding: 14px; }
-  .tp-ai-verdict { padding: 14px 12px; }
-  .tp-ai-verdict-label { font-size: 18px; overflow-wrap: anywhere; }
-  .tp-ai-disclaimer { padding: 12px; }
-  .tp-ai-chart-box { padding: 10px; min-width: 0; }
-  .tp-ai-chart-box canvas { max-width: 100% !important; }
+  .tp-ai-section { padding: 16px; }
 }
 </style>
 </head>
 <body>
 <div class="tp-ai-wrap">
 
-${bodyHtml}
+${buildEnglishReport(en, charts, symbol)}
+
+<hr class="tp-ai-lang-divider">
+<div class="tp-ai-lang-label">◆ النسخة العربية ◆</div>
+
+${buildArabicReport(ar, charts, symbol)}
 
 </div>
 
