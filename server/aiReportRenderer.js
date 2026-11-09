@@ -1,7 +1,7 @@
 /**
  * aiReportRenderer.js
- * Converts the Claude agent JSON report into a fully styled bilingual HTML page.
- * Both English and Arabic sections have their own Chart.js charts.
+ * Converts the Claude agent JSON report into a fully styled HTML page
+ * in the requested language only (English or Arabic).
  * Updated for CFA Equity Asset Valuation top-down methodology.
  */
 
@@ -562,7 +562,8 @@ function buildArabicReport(ar, charts, symbol) {
 </div>`;
 }
 
-export function renderAiReport(report, symbol) {
+export function renderAiReport(report, symbol, lang = "en") {
+  const isAr = lang === "ar";
   const charts = report.charts || {};
   const en = report.english || {};
   const ar = report.arabic || {};
@@ -578,13 +579,21 @@ export function renderAiReport(report, symbol) {
   const chartRevenue = JSON.stringify(charts.revenue || []);
   const chartOp = JSON.stringify(charts.operatingIncome || []);
   const chartCf = JSON.stringify(charts.operatingCashFlow || []);
+  const pageLang = isAr ? "ar" : "en";
+  const pageDir = isAr ? "rtl" : "ltr";
+  const pageTitle = isAr
+    ? `${escHtml(symbol)} تقرير استثماري — TruePrice.Cash`
+    : `${escHtml(symbol)} Investment Report — TruePrice.Cash`;
+  const bodyHtml = isAr
+    ? buildArabicReport(ar, charts, symbol)
+    : buildEnglishReport(en, charts, symbol);
 
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="${pageLang}" dir="${pageDir}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${escHtml(symbol)} Investment Report — TruePrice.Cash</title>
+<title>${pageTitle}</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -620,8 +629,6 @@ body { font-family: Inter, 'Segoe UI', sans-serif; background: #0a1628; color: #
 .tp-ai-verdict-hold .tp-ai-verdict-label { color: #f6c90e; }
 .tp-ai-verdict-sell .tp-ai-verdict-label, .tp-ai-verdict-strong-sell .tp-ai-verdict-label { color: #fc8181; }
 .tp-ai-verdict-target { color: #e8e8e8; font-size: 14px; }
-.tp-ai-lang-divider { border: none; border-top: 2px solid #c9a84c44; margin: 48px 0 32px; }
-.tp-ai-lang-label { text-align: center; color: #c9a84c; font-size: 13px; margin-bottom: 32px; }
 .tp-ai-disclaimer { background: #071428; border: 1px solid #c9a84c33; border-radius: 8px; padding: 16px 20px; font-size: 12px; color: #718096; margin-top: 32px; line-height: 1.7; }
 .tp-ai-badge { background: #1a3c5e; color: #90cdf4; border: 1px solid #2d5a8c; border-radius: 20px; padding: 3px 12px; font-size: 12px; font-weight: 600; }
 .tp-ai-badge-blue { background: #0d2d4a; color: #c9a84c; border-color: #c9a84c44; }
@@ -637,12 +644,7 @@ body { font-family: Inter, 'Segoe UI', sans-serif; background: #0a1628; color: #
 <body>
 <div class="tp-ai-wrap">
 
-${buildEnglishReport(en, charts, symbol)}
-
-<hr class="tp-ai-lang-divider">
-<div class="tp-ai-lang-label">◆ النسخة العربية ◆</div>
-
-${buildArabicReport(ar, charts, symbol)}
+${bodyHtml}
 
 </div>
 
