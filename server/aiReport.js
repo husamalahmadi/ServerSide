@@ -549,8 +549,12 @@ CASH FLOW STATEMENTS (most recent first):
 ${JSON.stringify(cashFlows, null, 2)}
 `;
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 120000); // 2 min timeout
+
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
+    signal: controller.signal,
     headers: {
       "x-api-key": ANTHROPIC_API_KEY,
       "anthropic-version": "2023-06-01",
@@ -558,7 +562,7 @@ ${JSON.stringify(cashFlows, null, 2)}
     },
     body: JSON.stringify({
       model: "claude-sonnet-4-6",
-      max_tokens: 16000,
+      max_tokens: 8000,
       system: CFA_SYSTEM_PROMPT,
       messages: [
         {
@@ -569,6 +573,7 @@ ${JSON.stringify(cashFlows, null, 2)}
     }),
   });
 
+  clearTimeout(timeout);
   const data = await res.json();
   console.log(`[aiReport] Claude status: ${res.status}`);
 
