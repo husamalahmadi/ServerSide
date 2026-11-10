@@ -255,7 +255,7 @@ export function AiReport({ symbol, t: tProp }) {
         <div style={{ background: "#1a0000", border: "1px solid #fc8181", borderRadius: 10, padding: 24, color: "#fc8181", fontSize: 14 }}>
           <strong>{t("AI_REPORT_FAILED")}</strong> {errorMsg}
           <br />
-          <button onClick={() => generate(false)} style={{ marginTop: 12, background: "#c9a84c", border: "none", color: "#0a1628", borderRadius: 6, padding: "8px 18px", fontWeight: 700, cursor: "pointer" }}>
+          <button onClick={() => generate(true)} style={{ marginTop: 12, background: "#c9a84c", border: "none", color: "#0a1628", borderRadius: 6, padding: "8px 18px", fontWeight: 700, cursor: "pointer" }}>
             {t("AI_REPORT_TRY_AGAIN")}
           </button>
         </div>

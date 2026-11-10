@@ -54,7 +54,7 @@ import {
 } from "./emailNotifications.js";
 import { renderUnsubscribeConfirmPage, renderUnsubscribePage } from "./emailTemplates.js";
 import { sendDueWeeklyDigests, subscribeDigest, unsubscribeDigest } from "./digestSubscribers.js";
-import { generateAiReport } from "./aiReport.js";
+import { generateAiReport, readCachedAiReport } from "./aiReport.js";
 import { renderAiReport } from "./aiReportRenderer.js";
 import { injectSeoIntoSpaHtml, buildStockStaticFallback } from "./spaHtmlSeo.js";
 import { handleDefaultOg, handleStockOg, ogRuntime } from "./ogCard.js";
@@ -1636,44 +1636,56 @@ function ensureScreenerCacheWarm() {
 // requireAuth is already defined in this file — it blocks unauthenticated users
 // Only signed-in users can generate or view AI reports
 
-// In-memory job queue for async report generation
+// In-memory job queue for async report generation.
+// A finished bilingual report often takes longer than the HTTP request limit,
+// so the route only reads cache or job state and returns immediately.
 const _aiReportJobs = new Map(); // symbol -> { status, report, error, startedAt }
+const AI_REPORT_STALE_MS = 10 * 60 * 1000;
+
+function startAiReportJob(symbol, forceRefresh) {
+  const jobRecord = { status: "running", startedAt: Date.now() };
+  _aiReportJobs.set(symbol, jobRecord);
+  generateAiReport(symbol, forceRefresh).then(({ report }) => {
+    if (_aiReportJobs.get(symbol) !== jobRecord) return;
+    _aiReportJobs.set(symbol, { status: "done", report, startedAt: jobRecord.startedAt });
+  }).catch((err) => {
+    console.error("[ai-report] background error:", err.message);
+    if (_aiReportJobs.get(symbol) !== jobRecord) return;
+    _aiReportJobs.set(symbol, {
+      status: "error",
+      error: err.message || "Report generation failed",
+      startedAt: jobRecord.startedAt,
+    });
+  });
+}
 
 app.get("/api/ai-report/:symbol", requireAuth, async (req, res) => {
   const symbol = (req.params.symbol || "").toUpperCase().trim();
   if (!symbol) return res.status(400).json({ error: "symbol required" });
   const forceRefresh = req.query.refresh === "1";
 
-  // Check if already cached (fast path)
-  try {
-    const { report, source } = await generateAiReport(symbol, false);
-    if (source === "cache") return res.json({ ok: true, symbol, source, report });
-  } catch (_) {}
+  if (!forceRefresh) {
+    const cached = readCachedAiReport(symbol);
+    if (cached) return res.json({ ok: true, symbol, source: "cache", report: cached });
+  }
 
-  // Check job status
   const job = _aiReportJobs.get(symbol);
-  if (job) {
-    if (job.status === "done") {
-      _aiReportJobs.delete(symbol);
-      return res.json({ ok: true, symbol, source: "claude", report: job.report });
-    }
-    if (job.status === "error") {
-      _aiReportJobs.delete(symbol);
-      return res.status(500).json({ ok: false, error: job.error });
-    }
-    // still running
+  const running = job && job.status === "running" && Date.now() - job.startedAt < AI_REPORT_STALE_MS;
+  if (running) {
     return res.json({ ok: true, symbol, status: "generating", message: "Report is being generated, please poll again in 10 seconds" });
   }
 
-  // Start background job
-  _aiReportJobs.set(symbol, { status: "running", startedAt: Date.now() });
-  generateAiReport(symbol, forceRefresh).then(({ report }) => {
-    _aiReportJobs.set(symbol, { status: "done", report });
-  }).catch((err) => {
-    console.error("[ai-report] background error:", err.message);
-    _aiReportJobs.set(symbol, { status: "error", error: err.message });
-  });
+  if (job?.status === "done" && !forceRefresh) {
+    _aiReportJobs.delete(symbol);
+    return res.json({ ok: true, symbol, source: "claude", report: job.report });
+  }
 
+  if (job?.status === "error" && !forceRefresh) {
+    _aiReportJobs.delete(symbol);
+    return res.status(500).json({ ok: false, error: job.error });
+  }
+
+  startAiReportJob(symbol, forceRefresh);
   return res.json({ ok: true, symbol, status: "generating", message: "Report generation started, please poll again in 10 seconds" });
 });
 
@@ -1682,14 +1694,17 @@ app.get("/api/ai-report/:symbol/html", requireAuth, async (req, res) => {
   if (!symbol) return res.status(400).send("symbol required");
   const lang = req.query.lang === "ar" ? "ar" : "en";
   try {
-    // Only reads from cache — generation is handled by the JSON endpoint above
-    const { report } = await generateAiReport(symbol, false);
+    const job = _aiReportJobs.get(symbol);
+    const report = readCachedAiReport(symbol) || (job?.status === "done" ? job.report : null);
+    if (!report) {
+      return res.status(409).type("text/plain").send("Report is not ready yet.");
+    }
     const html = renderAiReport(report, symbol, lang);
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.send(html);
   } catch (err) {
     console.error("[ai-report/html] error:", err.message);
-    res.status(500).send(`<p style="color:red">Report generation failed: ${err.message}</p>`);
+    res.status(500).type("text/plain").send(err.message || "Report generation failed");
   }
 });
 

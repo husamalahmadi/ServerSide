@@ -28,6 +28,11 @@ function readCached(symbol) {
   } catch { return null; }
 }
 
+/** Cache lookup only. Does not call Claude. */
+export function readCachedAiReport(symbol) {
+  return readCached(symbol);
+}
+
 function writeCache(symbol, report) {
   try {
     getDb()
@@ -549,33 +554,45 @@ CASH FLOW STATEMENTS (most recent first):
 ${JSON.stringify(cashFlows, null, 2)}
 `;
 
+  // The bilingual CFA report is several thousand tokens. Two minutes is not
+  // enough, and aborting leaves nothing in the cache, so every retry fails.
+  const CLAUDE_TIMEOUT_MS = 8 * 60 * 1000;
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 120000); // 2 min timeout
+  const timeout = setTimeout(() => controller.abort(), CLAUDE_TIMEOUT_MS);
 
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    signal: controller.signal,
-    headers: {
-      "x-api-key": ANTHROPIC_API_KEY,
-      "anthropic-version": "2023-06-01",
-      "content-type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-6",
-      max_tokens: 8000,
-      system: CFA_SYSTEM_PROMPT,
-      messages: [
-        {
-          role: "user",
-          content: `Here is the real financial data for ${symbol} fetched from FMP API. Apply the CFA top-down methodology and return the JSON report:\n\n${dataContext}`,
-        },
-      ],
-    }),
-  });
+  let res;
+  try {
+    res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      signal: controller.signal,
+      headers: {
+        "x-api-key": ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 16000,
+        system: CFA_SYSTEM_PROMPT,
+        messages: [
+          {
+            role: "user",
+            content: `Here is the real financial data for ${symbol} fetched from FMP API. Apply the CFA top-down methodology and return the JSON report:\n\n${dataContext}`,
+          },
+        ],
+      }),
+    });
+  } catch (err) {
+    if (err?.name === "AbortError") {
+      throw new Error("The analysis took too long and was stopped. Please try again.");
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
 
-  clearTimeout(timeout);
   const data = await res.json();
-  console.log(`[aiReport] Claude status: ${res.status}`);
+  console.log(`[aiReport] Claude status: ${res.status} stop=${data?.stop_reason || ""}`);
 
   if (!res.ok) {
     throw new Error(data?.error?.message || `Claude API error ${res.status}`);
@@ -583,6 +600,9 @@ ${JSON.stringify(cashFlows, null, 2)}
 
   const textBlock = data?.content?.find((b) => b.type === "text");
   if (!textBlock?.text) throw new Error("Claude returned no content");
+  if (data.stop_reason === "max_tokens") {
+    throw new Error("Claude report was cut off before the JSON finished");
+  }
 
   let raw = textBlock.text.trim()
     .replace(/^```json\s*/i, "")
