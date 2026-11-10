@@ -1636,26 +1636,54 @@ function ensureScreenerCacheWarm() {
 // requireAuth is already defined in this file — it blocks unauthenticated users
 // Only signed-in users can generate or view AI reports
 
+// In-memory job queue for async report generation
+const _aiReportJobs = new Map(); // symbol -> { status, report, error, startedAt }
+
 app.get("/api/ai-report/:symbol", requireAuth, async (req, res) => {
   const symbol = (req.params.symbol || "").toUpperCase().trim();
   if (!symbol) return res.status(400).json({ error: "symbol required" });
   const forceRefresh = req.query.refresh === "1";
+
+  // Check if already cached (fast path)
   try {
-    const { report, source } = await generateAiReport(symbol, forceRefresh);
-    res.json({ ok: true, symbol, source, report });
-  } catch (err) {
-    console.error("[ai-report] error:", err.message);
-    res.status(500).json({ ok: false, error: err.message });
+    const { report, source } = await generateAiReport(symbol, false);
+    if (source === "cache") return res.json({ ok: true, symbol, source, report });
+  } catch (_) {}
+
+  // Check job status
+  const job = _aiReportJobs.get(symbol);
+  if (job) {
+    if (job.status === "done") {
+      _aiReportJobs.delete(symbol);
+      return res.json({ ok: true, symbol, source: "claude", report: job.report });
+    }
+    if (job.status === "error") {
+      _aiReportJobs.delete(symbol);
+      return res.status(500).json({ ok: false, error: job.error });
+    }
+    // still running
+    return res.json({ ok: true, symbol, status: "generating", message: "Report is being generated, please poll again in 10 seconds" });
   }
+
+  // Start background job
+  _aiReportJobs.set(symbol, { status: "running", startedAt: Date.now() });
+  generateAiReport(symbol, forceRefresh).then(({ report }) => {
+    _aiReportJobs.set(symbol, { status: "done", report });
+  }).catch((err) => {
+    console.error("[ai-report] background error:", err.message);
+    _aiReportJobs.set(symbol, { status: "error", error: err.message });
+  });
+
+  return res.json({ ok: true, symbol, status: "generating", message: "Report generation started, please poll again in 10 seconds" });
 });
 
 app.get("/api/ai-report/:symbol/html", requireAuth, async (req, res) => {
   const symbol = (req.params.symbol || "").toUpperCase().trim();
   if (!symbol) return res.status(400).send("symbol required");
-  const forceRefresh = req.query.refresh === "1";
   const lang = req.query.lang === "ar" ? "ar" : "en";
   try {
-    const { report } = await generateAiReport(symbol, forceRefresh);
+    // Only reads from cache — generation is handled by the JSON endpoint above
+    const { report } = await generateAiReport(symbol, false);
     const html = renderAiReport(report, symbol, lang);
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.send(html);
