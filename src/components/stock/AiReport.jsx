@@ -3,6 +3,9 @@
  * AI-generated investment report panel on the Stock page.
  * Shown in English or Arabic to match the site language.
  * Only signed-in users can generate reports — guests see a sign-in prompt.
+ *
+ * Uses async polling: kicks off generation via JSON endpoint, polls every 8s
+ * until done, then fetches the HTML render. Avoids 30s server timeout.
  */
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
@@ -34,38 +37,85 @@ export function AiReport({ symbol, t: tProp }) {
   const lastSymbolRef = useRef(symbol);
   const autoLoadRef = useRef(false);
   const requestIdRef = useRef(0);
+  const pollTimerRef = useRef(null);
+
+  // Fetch the HTML render once the JSON report is ready
+  const fetchHtml = useCallback(async (sym, lng, requestId) => {
+    const params = new URLSearchParams();
+    params.set("lang", lng === "ar" ? "ar" : "en");
+    const url = `${getApiUrl()}/api/ai-report/${encodeURIComponent(sym)}/html?${params}`;
+    const res = await fetch(url, { credentials: "include" });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || `HTTP ${res.status}`);
+    }
+    return res.text();
+  }, []);
 
   const generate = useCallback(async (forceRefresh = false, { keepVisible } = {}) => {
     if (!symbol || !user) return;
     const requestId = ++requestIdRef.current;
+
+    // Clear any existing poll timer
+    if (pollTimerRef.current) {
+      clearTimeout(pollTimerRef.current);
+      pollTimerRef.current = null;
+    }
+
     if (!keepVisible) {
       setStatus("loading");
       setHtmlContent("");
     }
     setErrorMsg("");
-    try {
-      const params = new URLSearchParams();
-      params.set("lang", lang === "ar" ? "ar" : "en");
-      if (forceRefresh) params.set("refresh", "1");
-      const url = `${getApiUrl()}/api/ai-report/${encodeURIComponent(symbol)}/html?${params}`;
-      const res = await fetch(url, { credentials: "include" });
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || `HTTP ${res.status}`);
+
+    const params = new URLSearchParams();
+    if (forceRefresh) params.set("refresh", "1");
+    const jsonUrl = `${getApiUrl()}/api/ai-report/${encodeURIComponent(symbol)}?${params}`;
+
+    // Poll the JSON endpoint until status is not "generating"
+    const poll = async () => {
+      if (requestId !== requestIdRef.current) return; // stale request
+      try {
+        const res = await fetch(jsonUrl, { credentials: "include" });
+        const data = await res.json();
+
+        if (requestId !== requestIdRef.current) return;
+
+        if (!res.ok || data.ok === false) {
+          throw new Error(data.error || `HTTP ${res.status}`);
+        }
+
+        if (data.status === "generating") {
+          // Still running — poll again in 8 seconds
+          pollTimerRef.current = setTimeout(poll, 8000);
+          return;
+        }
+
+        // Report is ready — now fetch the HTML render
+        const html = await fetchHtml(symbol, lang, requestId);
+        if (requestId !== requestIdRef.current) return;
+
+        shownLangRef.current = lang;
+        lastSymbolRef.current = symbol;
+        autoLoadRef.current = true;
+        setHtmlContent(html);
+        setStatus("done");
+      } catch (err) {
+        if (requestId !== requestIdRef.current) return;
+        setErrorMsg(err.message || "Failed to generate report");
+        setStatus("error");
       }
-      const html = await res.text();
-      if (requestId !== requestIdRef.current) return;
-      shownLangRef.current = lang;
-      lastSymbolRef.current = symbol;
-      autoLoadRef.current = true;
-      setHtmlContent(html);
-      setStatus("done");
-    } catch (err) {
-      if (requestId !== requestIdRef.current) return;
-      setErrorMsg(err.message || "Failed to generate report");
-      setStatus("error");
-    }
-  }, [symbol, user, lang]);
+    };
+
+    poll();
+  }, [symbol, user, lang, fetchHtml]);
+
+  // Cleanup poll timer on unmount
+  useEffect(() => {
+    return () => {
+      if (pollTimerRef.current) clearTimeout(pollTimerRef.current);
+    };
+  }, []);
 
   const onIframeLoad = useCallback(() => {
     const resize = () => {
@@ -109,6 +159,7 @@ export function AiReport({ symbol, t: tProp }) {
     if (lastSymbolRef.current === symbol) return;
     lastSymbolRef.current = symbol;
     requestIdRef.current += 1;
+    if (pollTimerRef.current) { clearTimeout(pollTimerRef.current); pollTimerRef.current = null; }
     setHtmlContent("");
     setErrorMsg("");
     if (symbol && user && autoLoadRef.current) {
