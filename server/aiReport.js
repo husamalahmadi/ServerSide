@@ -1,8 +1,16 @@
 import Database from "better-sqlite3";
+import { Agent, fetch as undiciFetch } from "undici";
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || "";
 const FMP_API_KEY = process.env.FMP_API_KEY || "";
 const CACHE_TTL_SEC = 30 * 24 * 60 * 60;
+// Node's default fetch gives up after 5 minutes of waiting for a response.
+// Claude sends nothing until the full report is done, so that cutoff becomes "fetch failed".
+const claudeDispatcher = new Agent({
+  headersTimeout: 0,
+  bodyTimeout: 0,
+  connectTimeout: 30_000,
+});
 
 let _db = null;
 function getDb() {
@@ -556,14 +564,15 @@ ${JSON.stringify(cashFlows, null, 2)}
 
   // The bilingual CFA report is several thousand tokens. Two minutes is not
   // enough, and aborting leaves nothing in the cache, so every retry fails.
-  const CLAUDE_TIMEOUT_MS = 8 * 60 * 1000;
+  const CLAUDE_TIMEOUT_MS = 10 * 60 * 1000;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), CLAUDE_TIMEOUT_MS);
 
   let res;
   try {
-    res = await fetch("https://api.anthropic.com/v1/messages", {
+    res = await undiciFetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
+      dispatcher: claudeDispatcher,
       signal: controller.signal,
       headers: {
         "x-api-key": ANTHROPIC_API_KEY,
@@ -586,7 +595,8 @@ ${JSON.stringify(cashFlows, null, 2)}
     if (err?.name === "AbortError") {
       throw new Error("The analysis took too long and was stopped. Please try again.");
     }
-    throw err;
+    const cause = err?.cause?.message || err?.cause?.code || "";
+    throw new Error(cause ? `Could not reach the analysis service: ${cause}` : (err?.message || "Could not reach the analysis service"));
   } finally {
     clearTimeout(timeout);
   }
