@@ -38,6 +38,7 @@ export function AiReport({ symbol, t: tProp }) {
   const autoLoadRef = useRef(false);
   const requestIdRef = useRef(0);
   const pollTimerRef = useRef(null);
+  const nonJsonPollsRef = useRef(0);
 
   // Fetch the HTML render once the JSON report is ready
   const fetchHtml = useCallback(async (sym, lng, requestId) => {
@@ -55,6 +56,7 @@ export function AiReport({ symbol, t: tProp }) {
   const generate = useCallback(async (forceRefresh = false, { keepVisible } = {}) => {
     if (!symbol || !user) return;
     const requestId = ++requestIdRef.current;
+    nonJsonPollsRef.current = 0;
 
     // Clear any existing poll timer
     if (pollTimerRef.current) {
@@ -77,9 +79,24 @@ export function AiReport({ symbol, t: tProp }) {
       if (requestId !== requestIdRef.current) return; // stale request
       try {
         const res = await fetch(jsonUrl, { credentials: "include" });
-        const data = await res.json();
+        const text = await res.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch {
+          // A restart or proxy timeout returns an HTML page ("<!DOCTYPE ...").
+          // That is not a failed report — keep polling until the API answers.
+          if (requestId !== requestIdRef.current) return;
+          nonJsonPollsRef.current += 1;
+          if (nonJsonPollsRef.current <= 15) {
+            pollTimerRef.current = setTimeout(poll, 8000);
+            return;
+          }
+          throw new Error("The server was restarting and did not return the report. Please try again.");
+        }
 
         if (requestId !== requestIdRef.current) return;
+        nonJsonPollsRef.current = 0;
 
         if (!res.ok || data.ok === false) {
           throw new Error(data.error || `HTTP ${res.status}`);
