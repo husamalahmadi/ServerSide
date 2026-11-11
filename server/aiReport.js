@@ -581,7 +581,7 @@ ${JSON.stringify(cashFlows, null, 2)}
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-6",
-        max_tokens: 16000,
+        max_tokens: 24000,
         system: CFA_SYSTEM_PROMPT,
         messages: [
           {
