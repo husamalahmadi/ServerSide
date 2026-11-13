@@ -51,7 +51,16 @@ import {
   secretMatches,
   startFairValueEmailCron,
   unsubscribeByToken,
+  unsubscribeKind,
 } from "./emailNotifications.js";
+import {
+  listStockFollows,
+  migrateStockAlertSchema,
+  recordStockView,
+  removeStockFollow,
+  runStockAlertsIfIdle,
+  startStockAlertCron,
+} from "./stockAlerts.js";
 import { renderUnsubscribeConfirmPage, renderUnsubscribePage } from "./emailTemplates.js";
 import { sendDueWeeklyDigests, subscribeDigest, unsubscribeDigest } from "./digestSubscribers.js";
 import { generateAiReport, readCachedAiReport } from "./aiReport.js";
@@ -104,6 +113,7 @@ if (!cols.includes("profile_completed")) {
 if (!cols.includes("current_session_id")) db.exec("ALTER TABLE users ADD COLUMN current_session_id TEXT");
 migrateWatchlistFairValueColumns(db);
 migrateEmailNotificationSchema(db);
+migrateStockAlertSchema(db);
 const portCols = db.prepare("PRAGMA table_info(portfolios)").all().map((c) => c.name);
 if (!portCols.includes("cash")) {
   db.exec("ALTER TABLE portfolios ADD COLUMN cash REAL NOT NULL DEFAULT 100000");
@@ -560,6 +570,13 @@ app.post("/api/activity", requireAuth, (req, res) => {
     "INSERT INTO activity_log (user_id, type, ticker, metadata) VALUES (?, ?, ?, ?)"
   );
   stmt.run(req.user.id, type, ticker || null, metadata ? JSON.stringify(metadata) : null);
+  if (type === "view" && ticker) {
+    try {
+      recordStockView(db, { userId: req.user.id, ticker, lang: req.body?.lang });
+    } catch (err) {
+      console.warn(`[stock-alerts] follow ${ticker} failed: ${err.message}`);
+    }
+  }
   res.json({ ok: true });
 });
 app.get("/api/activity/me", requireAuth, (req, res) => {
@@ -571,15 +588,41 @@ app.get("/api/activity/me", requireAuth, (req, res) => {
 
 // Email notification preferences
 app.put("/api/me/email-prefs", requireAuth, (req, res) => {
-  const { emailFvAlerts } = req.body || {};
-  if (typeof emailFvAlerts !== "boolean") {
-    return res.status(400).json({ error: "emailFvAlerts must be a boolean" });
+  const { emailFvAlerts, emailStockAlerts } = req.body || {};
+  const updates = [];
+  const params = [];
+  if (emailFvAlerts !== undefined) {
+    if (typeof emailFvAlerts !== "boolean") {
+      return res.status(400).json({ error: "emailFvAlerts must be a boolean" });
+    }
+    updates.push("email_fv_alerts=?");
+    params.push(emailFvAlerts ? 1 : 0);
   }
-  db.prepare("UPDATE users SET email_fv_alerts=?, updated_at=datetime('now') WHERE id=?").run(
-    emailFvAlerts ? 1 : 0,
+  if (emailStockAlerts !== undefined) {
+    if (typeof emailStockAlerts !== "boolean") {
+      return res.status(400).json({ error: "emailStockAlerts must be a boolean" });
+    }
+    updates.push("email_stock_alerts=?");
+    params.push(emailStockAlerts ? 1 : 0);
+  }
+  if (!updates.length) {
+    return res.status(400).json({ error: "emailFvAlerts or emailStockAlerts is required" });
+  }
+  db.prepare(`UPDATE users SET ${updates.join(", ")}, updated_at=datetime('now') WHERE id=?`).run(
+    ...params,
     req.user.id
   );
-  res.json({ ok: true, emailFvAlerts });
+  res.json({ ok: true, emailFvAlerts, emailStockAlerts });
+});
+
+// Stocks the user follows by viewing them (source of viewed-stock emails)
+app.get("/api/me/stock-follows", requireAuth, (req, res) => {
+  res.json({ items: listStockFollows(db, req.user.id) });
+});
+
+app.delete("/api/me/stock-follows/:ticker", requireAuth, (req, res) => {
+  removeStockFollow(db, req.user.id, req.params.ticker);
+  res.json({ ok: true });
 });
 
 /**
@@ -594,12 +637,19 @@ app.get("/api/email/unsubscribe", (req, res) => {
   res
     .status(200)
     .type("html")
-    .send(renderUnsubscribeConfirmPage({ siteUrl: CLIENT_URL, token: req.query?.token }));
+    .send(
+      renderUnsubscribeConfirmPage({
+        siteUrl: CLIENT_URL,
+        token: req.query?.token,
+        kind: unsubscribeKind(req.query?.kind),
+      })
+    );
 });
 
 app.post("/api/email/unsubscribe", (req, res) => {
-  unsubscribeByToken(db, req.query?.token);
-  res.status(200).type("html").send(renderUnsubscribePage({ siteUrl: CLIENT_URL }));
+  const kind = unsubscribeKind(req.query?.kind);
+  unsubscribeByToken(db, req.query?.token, kind);
+  res.status(200).type("html").send(renderUnsubscribePage({ siteUrl: CLIENT_URL, kind }));
 });
 
 app.post("/api/email/digest-subscribe", (req, res) => {
@@ -658,6 +708,22 @@ app.post("/api/internal/dispatch-emails", requireInternalToken, (req, res) => {
   void runFairValueEmailDispatchIfIdle({ db, siteUrl: CLIENT_URL, apiUrl: SERVER_URL });
   void sendDueWeeklyDigests({ db, siteUrl: CLIENT_URL, apiUrl: SERVER_URL }).catch((err) => {
     console.warn("[email] weekly digest failed:", err?.message || err);
+  });
+  res.status(202).json({ ok: true, started: true });
+});
+
+app.post("/api/internal/run-stock-alerts", requireInternalToken, (req, res) => {
+  const apiKey = fmpApiKey();
+  if (!apiKey) return res.status(503).json({ error: "FMP_API_KEY not configured" });
+  if (!emailConfigured()) return res.status(503).json({ error: "email not configured" });
+  void runStockAlertsIfIdle({
+    db,
+    apiKey,
+    financialsStore: fmpFinancialsStore,
+    siteUrl: CLIENT_URL,
+    apiUrl: SERVER_URL,
+    delayMs: Number(process.env.WATCHLIST_FV_DELAY_MS || 350),
+    sendDelayMs: Number(process.env.EMAIL_SEND_DELAY_MS || 400),
   });
   res.status(202).json({ ok: true, started: true });
 });
@@ -2126,5 +2192,14 @@ app.listen(PORT, () => {
     siteUrl: CLIENT_URL,
     apiUrl: SERVER_URL,
     delayMs: Number(process.env.EMAIL_SEND_DELAY_MS || 400),
+  });
+  startStockAlertCron({
+    db,
+    financialsStore: fmpFinancialsStore,
+    apiKeyFn: fmpApiKey,
+    siteUrl: CLIENT_URL,
+    apiUrl: SERVER_URL,
+    delayMs: Number(process.env.WATCHLIST_FV_DELAY_MS || 350),
+    sendDelayMs: Number(process.env.EMAIL_SEND_DELAY_MS || 400),
   });
 });

@@ -63,12 +63,14 @@ const UNSUBSCRIBED_PAGE_COPY = {
     dir: "ltr",
     TITLE: "You're unsubscribed",
     BODY: "You will no longer receive fair-value change emails. You can turn them back on any time from your profile settings.",
+    BODY_STOCK: "You will no longer receive emails about changes in stocks you viewed. You can turn them back on any time from your profile settings.",
     BACK: "Back to TruePrice.cash",
   },
   ar: {
     dir: "rtl",
     TITLE: "تم إلغاء الاشتراك",
     BODY: "لن تصلك رسائل تغيّر القيمة العادلة بعد الآن. يمكنك إعادة تشغيلها في أي وقت من إعدادات ملفك الشخصي.",
+    BODY_STOCK: "لن تصلك رسائل عن تغيّرات الأسهم التي اطّلعت عليها بعد الآن. يمكنك إعادة تشغيلها في أي وقت من إعدادات ملفك الشخصي.",
     BACK: "العودة إلى TruePrice.cash",
   },
 };
@@ -78,6 +80,8 @@ const UNSUBSCRIBE_CONFIRM_COPY = {
     dir: "ltr",
     TITLE: "Turn off fair-value emails?",
     BODY: "You will stop receiving emails when a stock on your watchlists moves 10% or more in fair value, or flips between undervalued and overvalued.",
+    TITLE_STOCK: "Turn off emails about stocks you viewed?",
+    BODY_STOCK: "You will stop receiving emails when the price or fair value of a stock you viewed changes, or when it flips between undervalued and overvalued.",
     CONFIRM: "Yes, unsubscribe",
     BACK: "Keep them on",
   },
@@ -85,6 +89,8 @@ const UNSUBSCRIBE_CONFIRM_COPY = {
     dir: "rtl",
     TITLE: "إيقاف رسائل القيمة العادلة؟",
     BODY: "لن تصلك رسائل عندما تتغيّر القيمة العادلة لسهم في قوائم مراقبتك بنسبة 10% أو أكثر، أو عندما يتحوّل بين مقوَّم بأقل من قيمته ومقوَّم بأعلى منها.",
+    TITLE_STOCK: "إيقاف رسائل الأسهم التي اطّلعت عليها؟",
+    BODY_STOCK: "لن تصلك رسائل عندما يتغيّر سعر أو قيمة عادلة سهم اطّلعت عليه، أو عندما يتحوّل بين مقوَّم بأقل من قيمته ومقوَّم بأعلى منها.",
     CONFIRM: "نعم، إلغاء الاشتراك",
     BACK: "الإبقاء عليها",
   },
@@ -293,15 +299,17 @@ ${blocksHtml}
  * scanners prefetch those, so the GET must not change anything — this page does, via a
  * POST the reader has to click.
  */
-export function renderUnsubscribeConfirmPage({ siteUrl, token, actionPath = "/api/email/unsubscribe" }) {
+export function renderUnsubscribeConfirmPage({ siteUrl, token, actionPath = "/api/email/unsubscribe", kind }) {
   const site = String(siteUrl || "").replace(/\/+$/, "");
-  const action = `${actionPath}?token=${encodeURIComponent(String(token || ""))}`;
+  const isStock = kind === "stock";
+  const kindParam = isStock ? "kind=stock&" : "";
+  const action = `${actionPath}?${kindParam}token=${encodeURIComponent(String(token || ""))}`;
   const block = (lang) => {
     const copy = UNSUBSCRIBE_CONFIRM_COPY[lang];
     return `
       <section dir="${copy.dir}" style="margin:0 0 28px 0;">
-        <h1 style="margin:0 0 8px 0;font:700 22px/1.3 system-ui,Arial,sans-serif;color:${NAVY};">${escapeHtml(copy.TITLE)}</h1>
-        <p style="margin:0 0 16px 0;font:400 15px/1.7 system-ui,Arial,sans-serif;color:${INK};">${escapeHtml(copy.BODY)}</p>
+        <h1 style="margin:0 0 8px 0;font:700 22px/1.3 system-ui,Arial,sans-serif;color:${NAVY};">${escapeHtml(isStock ? copy.TITLE_STOCK : copy.TITLE)}</h1>
+        <p style="margin:0 0 16px 0;font:400 15px/1.7 system-ui,Arial,sans-serif;color:${INK};">${escapeHtml(isStock ? copy.BODY_STOCK : copy.BODY)}</p>
         <form method="POST" action="${escapeHtml(action)}" style="margin:0 0 12px 0;">
           <button type="submit" style="padding:10px 18px;border:none;border-radius:8px;background:${NAVY};color:#ffffff;font:600 14px/1 system-ui,Arial,sans-serif;cursor:pointer;">${escapeHtml(copy.CONFIRM)}</button>
         </form>
@@ -316,14 +324,14 @@ export function renderUnsubscribeConfirmPage({ siteUrl, token, actionPath = "/ap
  * Shown after unsubscribing, for any token, valid or not, so the page never reveals
  * whether a token exists.
  */
-export function renderUnsubscribePage({ siteUrl }) {
+export function renderUnsubscribePage({ siteUrl, kind }) {
   const site = String(siteUrl || "").replace(/\/+$/, "");
   const block = (lang) => {
     const copy = UNSUBSCRIBED_PAGE_COPY[lang];
     return `
       <section dir="${copy.dir}" style="margin:0 0 28px 0;">
         <h1 style="margin:0 0 8px 0;font:700 22px/1.3 system-ui,Arial,sans-serif;color:${NAVY};">${escapeHtml(copy.TITLE)}</h1>
-        <p style="margin:0 0 12px 0;font:400 15px/1.7 system-ui,Arial,sans-serif;color:${INK};">${escapeHtml(copy.BODY)}</p>
+        <p style="margin:0 0 12px 0;font:400 15px/1.7 system-ui,Arial,sans-serif;color:${INK};">${escapeHtml(kind === "stock" ? copy.BODY_STOCK : copy.BODY)}</p>
         <a href="${escapeHtml(site || "/")}" style="font:600 14px/1 system-ui,Arial,sans-serif;color:${NAVY};">${escapeHtml(copy.BACK)}</a>
       </section>`;
   };

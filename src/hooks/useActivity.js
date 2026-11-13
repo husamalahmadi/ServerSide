@@ -2,19 +2,21 @@ import { useCallback, useEffect } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 import { getApiUrl } from "../config/env.js";
 
-export function useTrackView(ticker) {
+/** Logs a stock view, which also follows the stock for change emails in this language. */
+export function useTrackView(ticker, lang) {
   const { user } = useAuth();
   const apiUrl = getApiUrl();
+  const userId = user?.id;
 
   useEffect(() => {
-    if (!ticker || !user) return;
+    if (!ticker || !userId) return;
     fetch(`${apiUrl}/api/activity`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type: "view", ticker: ticker.toUpperCase() }),
+      body: JSON.stringify({ type: "view", ticker: ticker.toUpperCase(), lang }),
     }).catch(() => {});
-  }, [user, ticker, apiUrl]);
+  }, [userId, ticker, lang, apiUrl]);
 }
 
 export function useActivity() {

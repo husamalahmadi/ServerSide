@@ -66,9 +66,10 @@ function seedNumber(value) {
 export default function Stock() {
   const { ticker } = useParams();
   const { t, lang, dir } = useI18n();
-  const { user, login } = useAuth();
+  const { user, login, loading: authLoading } = useAuth();
+  const signedIn = Boolean(user);
   const signInNavigating = useRef(false);
-  useTrackView(ticker);
+  useTrackView(ticker, lang);
   const [shareCopied, setShareCopied] = useState(false);
   const isMobile = useIsMobile(700);
 
@@ -193,7 +194,7 @@ export default function Stock() {
 
   // Price: LIVE ONLY (no cache)
   useEffect(() => {
-    if (!catalogReady || !market) return;
+    if (!signedIn || !catalogReady || !market) return;
     let alive = true;
     (async () => {
       try {
@@ -212,7 +213,7 @@ export default function Stock() {
       }
     })();
     return () => { alive = false; };
-  }, [ticker, market, catalogReady]);
+  }, [ticker, market, catalogReady, signedIn]);
 
   const loadFinancials = useCallback(async () => {
     try {
@@ -238,15 +239,15 @@ export default function Stock() {
 
   // Load financials and valuation immediately once the catalog is ready
   useEffect(() => {
-    if (!catalogReady || !market) return;
+    if (!signedIn || !catalogReady || !market) return;
     setPrefetchCountdown(0);
     loadFinancials();
     loadValuation();
-  }, [ticker, market, catalogReady, loadFinancials, loadValuation]);
+  }, [ticker, market, catalogReady, signedIn, loadFinancials, loadValuation]);
 
   // Logo & profile
   useEffect(() => {
-    if (!catalogReady || !market) return;
+    if (!signedIn || !catalogReady || !market) return;
     let alive = true;
     setLogoLoadError(false);
     setLogoFallbackUrl(null);
@@ -283,7 +284,7 @@ export default function Stock() {
     })();
 
     return () => { alive = false; };
-  }, [ticker, market, catalogReady]);
+  }, [ticker, market, catalogReady, signedIn]);
 
   const loadDcf = useCallback(async () => {
     if (!fmpSymbol) return;
@@ -297,14 +298,14 @@ export default function Stock() {
   }, [fmpSymbol, market]);
 
   useEffect(() => {
-    if (!catalogReady || !fmpSymbol) return;
+    if (!signedIn || !catalogReady || !fmpSymbol) return;
     loadDcf();
-  }, [catalogReady, fmpSymbol, loadDcf, user?.id]);
+  }, [signedIn, catalogReady, fmpSymbol, loadDcf, user?.id]);
 
   useEffect(() => {
     let alive = true;
     setCustomDcf(null);
-    if (!catalogReady) {
+    if (!signedIn || !catalogReady) {
       setCustomDcfReady(false);
       return undefined;
     }
@@ -321,7 +322,7 @@ export default function Stock() {
     return () => {
       alive = false;
     };
-  }, [catalogReady, fmpSymbol, market]);
+  }, [signedIn, catalogReady, fmpSymbol, market]);
 
   const loadFvChart = useCallback(async () => {
     if (!fmpSymbol) return;
@@ -335,9 +336,9 @@ export default function Stock() {
   }, [fmpSymbol]);
 
   useEffect(() => {
-    if (!catalogReady || !fmpSymbol) return;
+    if (!signedIn || !catalogReady || !fmpSymbol) return;
     loadFvChart();
-  }, [catalogReady, fmpSymbol, loadFvChart]);
+  }, [signedIn, catalogReady, fmpSymbol, loadFvChart]);
 
   const loadKeyMetrics = useCallback(async () => {
     if (!fmpSymbol) return;
@@ -352,12 +353,12 @@ export default function Stock() {
   }, [fmpSymbol, t]);
 
   useEffect(() => {
-    if (!catalogReady || !fmpSymbol) return;
+    if (!signedIn || !catalogReady || !fmpSymbol) return;
     loadKeyMetrics();
-  }, [catalogReady, fmpSymbol, loadKeyMetrics]);
+  }, [signedIn, catalogReady, fmpSymbol, loadKeyMetrics]);
 
   useEffect(() => {
-    if (!catalogReady || !fmpSymbol) return;
+    if (!signedIn || !catalogReady || !fmpSymbol) return;
     let alive = true;
     setEarnings({ loading: true, error: "", data: null });
     fetchEarnings(fmpSymbol)
@@ -370,7 +371,7 @@ export default function Stock() {
     return () => {
       alive = false;
     };
-  }, [catalogReady, fmpSymbol, earningsRetry]);
+  }, [signedIn, catalogReady, fmpSymbol, earningsRetry]);
 
   // Translate profile to Arabic when lang is ar
   useEffect(() => {
@@ -710,6 +711,53 @@ export default function Stock() {
   );
 
   if (missingTicker) return <NotFound />;
+
+  if (!signedIn) {
+    return (
+      <div className="tp-page tp-stock-page" dir={dir} lang={lang}>
+        <div className="tp-stock-body">
+          <div className="tp-stock-report-col tp-stock-content-rail">
+            <div className="no-print tp-stock-banner">
+              <div style={{ display: "grid", gap: 2, minWidth: 0 }}>
+                <h1 style={{ fontSize: 18, fontWeight: 900, margin: 0 }}>{companyDisplayName || ticker}</h1>
+                <div className="tp-stock-banner-meta">
+                  <b>{t("TICKER")}:</b> {ticker}
+                </div>
+              </div>
+            </div>
+            <Card>
+              {authLoading ? (
+                <div style={{ color: "#64748b", padding: 24, textAlign: "center" }}>{t("LOADING")}</div>
+              ) : (
+                <div className="tp-ai-gate">
+                  <div style={{ fontSize: 36, marginBottom: 12 }}>🔒</div>
+                  <div className="tp-ai-gate-title">
+                    {t("STOCK_GATE_TITLE").replace("{ticker}", ticker)}
+                  </div>
+                  <div className="tp-ai-gate-body">{t("STOCK_GATE_BODY")}</div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (signInNavigating.current) return;
+                      signInNavigating.current = true;
+                      trackEvent("stock_gate_sign_in", { ticker });
+                      login();
+                    }}
+                    className="tp-signin-google"
+                  >
+                    <GoogleGIcon size={13} />
+                    {t("AI_REPORT_CONTINUE_GOOGLE")}
+                  </button>
+                  <div className="tp-ai-gate-foot">{t("AI_REPORT_SIGN_IN_FOOTER")}</div>
+                </div>
+              )}
+            </Card>
+          </div>
+        </div>
+        <SiteFooter t={t} />
+      </div>
+    );
+  }
 
   return (
     <div className="tp-page tp-stock-page" dir={dir} lang={lang}>

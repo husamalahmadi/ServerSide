@@ -366,6 +366,15 @@ export default {
   PROFILE_EMAIL_ALERTS_HINT:
     "Email me when a stock on my watchlists moves 10% or more in fair value, or flips between undervalued and overvalued.",
   PROFILE_EMAIL_ALERTS_SAVE_FAILED: "Could not save your email preference. Please try again.",
+  PROFILE_STOCK_ALERTS: "Emails about stocks I viewed",
+  PROFILE_STOCK_ALERTS_HINT:
+    "Email me when the price or fair value of a stock I opened moves 5% or more, or when it flips between undervalued and overvalued.",
+  PROFILE_STOCK_FOLLOWS: "Stocks you'll hear about",
+  PROFILE_STOCK_FOLLOWS_EMPTY: "Open any stock page while signed in and it will appear here.",
+  PROFILE_STOCK_FOLLOWS_LOAD_FAILED: "Could not load your followed stocks.",
+  STOCK_GATE_TITLE: "Sign in to see the full {ticker} analysis",
+  STOCK_GATE_BODY:
+    "Price, fair value, financials, earnings and the investment summary are available to signed-in members. Once you sign in, we'll email you when anything important changes in this stock — even when you're not on the site. You can turn these emails off any time from your profile.",
   WATCHLIST_FV_LABEL: "Fair value",
   WATCHLIST_FV_MOVED: "Fair value moved {pct}%",
   WATCHLIST_FV_NOW_UNDERVALUED: "Now undervalued",

@@ -21,29 +21,70 @@ export default function Profile() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [emailAlerts, setEmailAlerts] = useState(true);
+  const [stockAlerts, setStockAlerts] = useState(true);
   const [emailPrefError, setEmailPrefError] = useState("");
+  const [stockFollows, setStockFollows] = useState({ loading: false, error: "", items: [] });
   const apiUrl = getApiUrl();
 
   const isOwnProfile = currentUser && (urlHandle === currentUser.handle || (!urlHandle && currentUser));
+  const ownProfile = Boolean(isOwnProfile);
 
   useEffect(() => {
-    if (currentUser) setEmailAlerts(currentUser.email_fv_alerts !== 0);
+    if (!currentUser) return;
+    setEmailAlerts(currentUser.email_fv_alerts !== 0);
+    setStockAlerts(currentUser.email_stock_alerts !== 0);
   }, [currentUser]);
 
-  const toggleEmailAlerts = async (next) => {
-    setEmailAlerts(next);
+  useEffect(() => {
+    if (!apiUrl || !ownProfile) return;
+    let alive = true;
+    setStockFollows((s) => ({ ...s, loading: true, error: "" }));
+    fetch(`${apiUrl}/api/me/stock-follows`, { credentials: "include", cache: "no-store" })
+      .then((r) => {
+        if (!r.ok) throw new Error("load failed");
+        return r.json();
+      })
+      .then((data) => {
+        if (alive) setStockFollows({ loading: false, error: "", items: data.items || [] });
+      })
+      .catch(() => {
+        if (alive) setStockFollows({ loading: false, error: t("PROFILE_STOCK_FOLLOWS_LOAD_FAILED"), items: [] });
+      });
+    return () => {
+      alive = false;
+    };
+  }, [apiUrl, ownProfile, currentUser?.id, t]);
+
+  /** `field` is the email-prefs body key; `setLocal` mirrors it in the checkbox. */
+  const saveEmailPref = async (field, next, setLocal) => {
+    setLocal(next);
     setEmailPrefError("");
     try {
       const res = await fetch(`${apiUrl}/api/me/email-prefs`, {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ emailFvAlerts: next }),
+        body: JSON.stringify({ [field]: next }),
       });
       if (!res.ok) throw new Error("save failed");
       await refreshUser();
     } catch {
-      setEmailAlerts(!next);
+      setLocal(!next);
+      setEmailPrefError(t("PROFILE_EMAIL_ALERTS_SAVE_FAILED"));
+    }
+  };
+
+  const removeStockFollow = async (ticker) => {
+    const before = stockFollows.items;
+    setStockFollows((s) => ({ ...s, items: s.items.filter((i) => i.ticker !== ticker) }));
+    try {
+      const res = await fetch(`${apiUrl}/api/me/stock-follows/${encodeURIComponent(ticker)}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("remove failed");
+    } catch {
+      setStockFollows((s) => ({ ...s, items: before }));
       setEmailPrefError(t("PROFILE_EMAIL_ALERTS_SAVE_FAILED"));
     }
   };
@@ -360,7 +401,7 @@ export default function Profile() {
                   <input
                     type="checkbox"
                     checked={emailAlerts}
-                    onChange={(e) => void toggleEmailAlerts(e.target.checked)}
+                    onChange={(e) => void saveEmailPref("emailFvAlerts", e.target.checked, setEmailAlerts)}
                     style={{ marginTop: 3 }}
                   />
                   <span>
@@ -370,6 +411,74 @@ export default function Profile() {
                     </span>
                   </span>
                 </label>
+                <label style={{ display: "flex", alignItems: "flex-start", gap: 8, cursor: "pointer", marginTop: 12 }}>
+                  <input
+                    type="checkbox"
+                    checked={stockAlerts}
+                    onChange={(e) => void saveEmailPref("emailStockAlerts", e.target.checked, setStockAlerts)}
+                    style={{ marginTop: 3 }}
+                  />
+                  <span>
+                    <span style={{ fontWeight: 600, fontSize: 14 }}>{t("PROFILE_STOCK_ALERTS")}</span>
+                    <span style={{ display: "block", fontSize: 12, color: "#64748b", marginTop: 2 }}>
+                      {t("PROFILE_STOCK_ALERTS_HINT")}
+                    </span>
+                  </span>
+                </label>
+                {stockAlerts && (
+                  <div style={{ marginTop: 10, paddingInlineStart: 24 }}>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: "#334155", marginBottom: 6 }}>
+                      {t("PROFILE_STOCK_FOLLOWS")}
+                    </div>
+                    {stockFollows.loading ? (
+                      <div style={{ fontSize: 12, color: "#64748b" }}>{t("LOADING")}</div>
+                    ) : stockFollows.error ? (
+                      <div style={{ fontSize: 12, color: "#b91c1c" }}>{stockFollows.error}</div>
+                    ) : stockFollows.items.length === 0 ? (
+                      <div style={{ fontSize: 12, color: "#64748b" }}>{t("PROFILE_STOCK_FOLLOWS_EMPTY")}</div>
+                    ) : (
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                        {stockFollows.items.map((item) => (
+                          <span
+                            key={item.ticker}
+                            title={item.name || item.ticker}
+                            style={{
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: 6,
+                              padding: "3px 4px 3px 10px",
+                              borderRadius: 999,
+                              border: "1px solid #e5e7eb",
+                              background: "#fff",
+                              fontSize: 12,
+                            }}
+                          >
+                            <Link to={stockPath(lang, item.ticker)} style={{ color: "#1d4ed8", fontWeight: 600 }}>
+                              {item.ticker}
+                            </Link>
+                            <button
+                              type="button"
+                              onClick={() => void removeStockFollow(item.ticker)}
+                              aria-label={`${t("REMOVE")} ${item.ticker}`}
+                              title={t("REMOVE")}
+                              style={{
+                                border: "none",
+                                background: "transparent",
+                                color: "#94a3b8",
+                                cursor: "pointer",
+                                fontSize: 14,
+                                lineHeight: 1,
+                                padding: "0 4px",
+                              }}
+                            >
+                              ×
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
                 {emailPrefError && (
                   <div style={{ color: "#b91c1c", marginTop: 8, fontSize: 13 }}>{emailPrefError}</div>
                 )}

@@ -93,14 +93,28 @@ export function unsubscribeTokenFor(db, userId, knownToken) {
   return fresh;
 }
 
-/** Turn fair-value emails off for the owner of this token. Unknown tokens are ignored. */
-export function unsubscribeByToken(db, token) {
+/** Preference column each unsubscribe link kind turns off. */
+const UNSUBSCRIBE_COLUMNS = {
+  fv: "email_fv_alerts",
+  stock: "email_stock_alerts",
+};
+
+export function unsubscribeKind(kind) {
+  return kind === "stock" ? "stock" : "fv";
+}
+
+/**
+ * Turn one kind of email off for the owner of this token ("fv" for watchlist fair-value
+ * alerts, "stock" for viewed-stock alerts). Unknown tokens are ignored.
+ */
+export function unsubscribeByToken(db, token, kind) {
   const t = String(token || "").trim();
   if (!t) return false;
   const user = db.prepare("SELECT id FROM users WHERE unsubscribe_token=?").get(t);
   if (!user) return false;
-  db.prepare("UPDATE users SET email_fv_alerts=0, updated_at=datetime('now') WHERE id=?").run(user.id);
-  console.log(`[email] user ${user.id} unsubscribed from fair-value alerts`);
+  const k = unsubscribeKind(kind);
+  db.prepare(`UPDATE users SET ${UNSUBSCRIBE_COLUMNS[k]}=0, updated_at=datetime('now') WHERE id=?`).run(user.id);
+  console.log(`[email] user ${user.id} unsubscribed from ${k} alerts`);
   return true;
 }
 
