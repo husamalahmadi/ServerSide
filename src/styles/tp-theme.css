@@ -7656,6 +7656,12 @@ body.tp-pdf-export .tp-dcf-ptfv::after {
   height: auto;
 }
 
+.tp-tutorial-content img {
+  display: block;
+  margin: 0.75rem 0 0.35rem;
+  border-radius: 8px;
+}
+
 .tp-tutorial-content pre {
   max-width: 100%;
   overflow-x: auto;
