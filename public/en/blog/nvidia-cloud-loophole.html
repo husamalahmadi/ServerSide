@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Closing the Cloud Door After the Compute Has Left</title>
+  <meta name="description" content="The Commerce Department moved to close the offshore cloud loophole for Nvidia chips. The rule is overdue, and the 90-day gap still matters." />
+  <link rel="canonical" href="https://www.trueprice.cash/en/blog/nvidia-cloud-loophole" />
+  <link rel="alternate" hreflang="en" href="https://www.trueprice.cash/en/blog/nvidia-cloud-loophole" />
+  <link rel="alternate" hreflang="x-default" href="https://www.trueprice.cash/en/blog/nvidia-cloud-loophole" />
+  <meta property="og:title" content="Closing the Cloud Door After the Compute Has Left" />
+  <meta property="og:description" content="The Commerce Department moved to close the offshore cloud loophole for Nvidia chips. The rule is overdue, and the 90-day gap still matters." />
+  <meta property="og:url" content="https://www.trueprice.cash/en/blog/nvidia-cloud-loophole" />
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://www.trueprice.cash/og/default.png" />
+  <meta property="og:image:secure_url" content="https://www.trueprice.cash/og/default.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://www.trueprice.cash/og/default.png" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BlogPosting","@id":"https://www.trueprice.cash/en/blog/nvidia-cloud-loophole#post","headline":"Closing the Cloud Door After the Compute Has Left","description":"The Commerce Department moved to close the offshore cloud loophole for Nvidia chips. The rule is overdue, and the 90-day gap still matters.","url":"https://www.trueprice.cash/en/blog/nvidia-cloud-loophole","mainEntityOfPage":"https://www.trueprice.cash/en/blog/nvidia-cloud-loophole","inLanguage":"en","datePublished":"2026-11-16","dateModified":"2026-11-16","isPartOf":{"@type":"Blog","url":"https://www.trueprice.cash/en/blogs","name":"TruePrice.Cash Blog"},"publisher":{"@type":"Organization","name":"TruePrice.Cash","url":"https://www.trueprice.cash/"},"author":{"@type":"Organization","name":"TruePrice.Cash","url":"https://www.trueprice.cash/"}}]}</script>
+  <style>
+    :root { --tp-primary: #2c7be5; --tp-ink: #1a2b42; --tp-muted: #5a6b85; --tp-border: #d4e6fb; }
+    body { font-family: system-ui,Segoe UI,Roboto,sans-serif; margin: 0; color: var(--tp-ink); line-height: 1.65; background: #f6faff; }
+    .wrap { max-width: 820px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+    header.site { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--tp-border); }
+    header.site a { color: var(--tp-primary); text-decoration: none; font-weight: 600; font-size: 14px; }
+    .brand { font-weight: 800; font-size: 1.1rem; color: var(--tp-ink); }
+    .hero { background: linear-gradient(140deg,#fff,#eef5ff); border: 1px solid var(--tp-border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
+    .hero h1 { margin: 0 0 0.5rem; font-size: 1.75rem; line-height: 1.25; }
+    .hero h1 em { font-style: normal; color: var(--tp-primary); }
+    .hero p { margin: 0.35rem 0 0; color: var(--tp-muted); font-size: 15px; }
+    article { background: #fff; border: 1px solid var(--tp-border); border-radius: 12px; padding: 1.25rem 1.35rem; }
+    article a { color: var(--tp-primary); }
+    article img { max-width: 100%; height: auto; display: block; margin: 0.75rem 0 0.35rem; border-radius: 8px; }
+    article h2 { margin: 1.5rem 0 0.75rem; font-size: 1.25rem; }
+    article h3 { margin: 1.25rem 0 0.5rem; font-size: 1.05rem; }
+    article p, article li { margin: 0 0 0.85rem; font-size: 15px; }
+    .toc { background: #eef5ff; border: 1px solid var(--tp-border); border-radius: 10px; padding: 1rem 1.1rem; margin-bottom: 1.25rem; }
+    .toc-title { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #5a7aa8; margin: 0 0 0.5rem; }
+    .toc ol { margin: 0; padding-inline-start: 1.25rem; }
+    .toc li { margin: 0.25rem 0; font-size: 13px; }
+    .callout { margin: 1rem 0; padding: 0.9rem 1rem; border-inline-start: 3px solid var(--tp-primary); background: #eef5ff; border-radius: 10px; }
+    .callout-label { font-size: 10px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--tp-primary); margin-bottom: 0.35rem; }
+    .callout p:last-child { margin-bottom: 0; }
+    .table-wrap { overflow-x: auto; margin: 1rem 0; border: 1px solid var(--tp-border); border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border-bottom: 1px solid var(--tp-border); padding: 0.55rem 0.75rem; text-align: start; vertical-align: top; }
+    th { background: #f0f6ff; color: var(--tp-ink); font-size: 12px; }
+    tr:last-child td { border-bottom: 0; }
+    .pos { color: #0b6b43; font-weight: 700; }
+    .neg { color: #b42318; font-weight: 700; }
+    .principle-grid, .card-grid, .term-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.75rem; margin: 1rem 0; }
+    .principle-card, .card, .term-card { padding: 0.85rem; border: 1px solid var(--tp-border); border-radius: 10px; background: #fafcff; }
+    .principle-num { margin-bottom: 0.25rem; font-size: 1.35rem; font-weight: 800; line-height: 1; color: var(--tp-primary); direction: ltr; unicode-bidi: isolate; }
+    .principle-num.pos { color: #0b6b43; }
+    .principle-num.neg { color: #b42318; }
+    .num, td.pos, td.neg { direction: ltr; unicode-bidi: isolate; }
+    .principle-title, .card h4, .term-name { margin: 0 0 0.35rem; font-size: 13px; font-weight: 800; color: var(--tp-ink); }
+    .term-name.pos { color: #0b6b43; }
+    .term-name.neg { color: #b42318; }
+    .principle-desc, .card p, .term-def { margin: 0; font-size: 12px; line-height: 1.55; color: var(--tp-muted); }
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
+    .compare-card { border: 1px solid var(--tp-border); border-radius: 10px; overflow: hidden; background: #fff; }
+    .compare-header { padding: 0.55rem 0.75rem; font-size: 13px; font-weight: 800; }
+    .compare-header.value-h { background: #e8f5ee; color: #0b6b43; }
+    .compare-header.growth-h { background: #eef5ff; color: var(--tp-primary); }
+    .compare-header.risk-h { background: #fce7eb; color: #e63757; }
+    .scenario-stack { display: flex; flex-direction: column; gap: 0.85rem; margin: 1rem 0 1.25rem; }
+    .scenario-stack .compare-body { padding: 0.85rem 0.95rem 0.35rem; }
+    .scenario-stack h3 { margin: 0.15rem 0 0.45rem; }
+    .scenario-stack ul { margin: 0.35rem 0 0.75rem; padding-inline-start: 1.2rem; }
+    .scenario-stack li { margin: 0.3rem 0; }
+    .compare-body { padding: 0.35rem 0.75rem 0.65rem; }
+    .compare-row { padding: 0.4rem 0; border-bottom: 1px solid var(--tp-border); font-size: 13px; line-height: 1.5; }
+    .compare-row:last-child { border-bottom: 0; }
+    .steps { display: flex; flex-direction: column; gap: 0.85rem; margin: 1rem 0; }
+    .step { display: grid; grid-template-columns: auto 1fr; gap: 0.85rem; align-items: start; }
+    .step-num { display: flex; align-items: center; justify-content: center; width: 1.85rem; height: 1.85rem; border-radius: 50%; background: var(--tp-primary); color: #fff; font-size: 12px; font-weight: 800; }
+    .step h4 { margin: 0 0 0.35rem; font-size: 14px; }
+    .step p { margin: 0; }
+    .series-complete { margin-top: 1.5rem; padding: 1.35rem 1.25rem; border-radius: 12px; background: linear-gradient(140deg, #1a2b42, #2c7be5); color: #fff; text-align: center; }
+    .series-complete h3 { margin: 0 0 0.5rem; color: #fff; }
+    .series-complete p { margin: 0 auto; max-width: 36rem; color: #e8f2ff; }
+    .sources { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--tp-border); font-size: 14px; }
+    @media (max-width: 640px) { .compare-grid { grid-template-columns: 1fr; } }
+    .catalog { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.65rem; }
+    .catalog a { display: block; padding: 0.85rem 1rem; background: #fff; border: 1px solid var(--tp-border); border-radius: 10px; color: var(--tp-ink); text-decoration: none; }
+    .catalog a strong { display: block; font-size: 1.05rem; }
+    .catalog a span { display: block; margin-top: 0.35rem; color: var(--tp-muted); font-size: 14px; font-weight: 400; }
+    footer { margin-top: 2rem; text-align: center; font-size: 12px; color: var(--tp-muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="site">
+      <a class="brand" href="/">TruePrice.Cash</a>
+      <div>
+        <a href="/en/blogs">English</a>
+        ·
+        <a href="/ar/blogs">العربية</a>
+        ·
+        <a href="/en/tutorials">Tutorials</a>
+        ·
+        <a href="/">Home</a>
+      </div>
+    </header>
+    <div class="hero">
+      <p style="font-size:13px;margin:0 0 0.5rem;"><a href="/en/blogs">Blog</a></p>
+      <h1>Closing the Cloud Door After the Compute Has Left</h1>
+      <p>2026-11-16 · 5 min</p>
+      <p>A critical read of CNBC's “Nvidia fallout: Commerce targets loophole for China’s data center use” — November 16, 2026</p>
+    </div>
+    <article>
+      <nav class="toc" aria-label="In this article">
+<div class="toc-title">In this article</div>
+<ol>
+<li><a href="#right">What the article gets right</a></li>
+<li><a href="#old">An old problem, newly framed</a></li>
+<li><a href="#policy">Personality crowds out policy</a></li>
+<li><a href="#gap">The 90-day gap</a></li>
+<li><a href="#investor">The investor angle</a></li>
+<li><a href="#signals">Mixed signals from the top</a></li>
+<li><a href="#bottom">The bottom line</a></li>
+</ol>
+</nav>
+<section class="section" id="right">
+<h2>A timely brief that tells you what to feel</h2>
+<p>On Monday, <a href="https://www.cnbc.com/2026/11/16/nvidia-commerce-china-lutnick.html" target="_blank" rel="noopener">CNBC reported</a>, in “Nvidia fallout: Commerce targets loophole for China’s data center use,” that the Commerce Department moved to close the loophole that lets Chinese companies rent Nvidia computing power from data centers outside China, calling it the first U.S. policy response to the scandal that forced Jensen Huang out as CEO. The reporting is timely and gets the headline facts right. But the framing tells readers what to feel about the story more than it helps them understand the rule.</p>
+<div class="principle-grid">
+<div class="principle-card"><div class="principle-num">90 days</div><div class="principle-title">Before it takes effect</div><div class="principle-desc">An interim final rule. Long enough to sign capacity, front-load training, and restructure ownership.</div></div>
+<div class="principle-card"><div class="principle-num">5</div><div class="principle-title">Extra-license countries</div><div class="principle-desc">Singapore, Malaysia, Thailand, Indonesia, and Brazil.</div></div>
+<div class="principle-card"><div class="principle-num">KYC</div><div class="principle-title">Due diligence</div><div class="principle-desc">Foreign data centers, foundries, and chip exporters must know their customers.</div></div>
+<div class="principle-card"><div class="principle-num">NSC</div><div class="principle-title">Who wrote it</div><div class="principle-desc">Treasury and the National Security Council, not the department that issued it.</div></div>
+</div>
+<h2>What the article gets right</h2>
+<p>Its most important detail is easy to miss: the rule was written by Treasury and the National Security Council, not by the department that issued it. That is the real story. The agency that legally “holds the pen” on export controls had to be bypassed by its own government. <a href="https://www.axios.com/2026/11/11/trump-lutnick-nvidia-china-chip-export-controls" target="_blank" rel="noopener">Axios had already reported</a> that Commerce Secretary Howard Lutnick resisted curbs pushed by other officials. CNBC deserves credit for putting that authorship up front.</p>
+</section>
+<section class="section" id="old">
+<h2>“Fallout” framing makes an old problem sound new</h2>
+<p>Calling the rule a response to the Huang scandal implies the loophole was a fresh discovery. It was not. Chinese AI developers renting top-tier U.S. chips through offshore cloud providers has been a known gap for years, and Congress has already tried to close it with the <a href="https://theonenova.substack.com/p/remote-access-to-ai-chips" target="_blank" rel="noopener">Remote Access Security Act</a>. The scandal did not create the problem. It created the political cost of ignoring it. Readers who see this as a crisis response miss the harder question: why did a known gap stay open until a scandal forced action?</p>
+</section>
+<section class="section" id="policy">
+<h2>Personality crowds out policy</h2>
+<p>Much of the coverage around this rule is palace intrigue: Lutnick against Bessent, who knew what, and when. That matters, but the rule itself is what will shape markets, and its mechanics deserve more space than the feud. Based on <a href="https://thehill.com/policy/technology/6222897-bis-limits-remote-computing-exports/" target="_blank" rel="noopener">The Hill’s</a> and <a href="https://www.ibtimes.com/us-restricts-china-remote-access-ai-chips-3809815" target="_blank" rel="noopener">IBTimes’</a> reporting, the key terms are:</p>
+<div class="steps">
+<div class="step"><div class="step-num">1</div><div><h4>Interim, and not yet in force</h4><p>It is an interim final rule that takes effect in <span class="num">90</span> days.</p></div></div>
+<div class="step"><div class="step-num">2</div><div><h4>A license for “significant” compute</h4><p>A license is required for advanced chips going to overseas data centers that provide “significant” computing power to companies headquartered in restricted countries.</p></div></div>
+<div class="step"><div class="step-num">3</div><div><h4>Five countries, extra licensing</h4><p>Extra licensing applies to Singapore, Malaysia, Thailand, Indonesia, and Brazil.</p></div></div>
+<div class="step"><div class="step-num">4</div><div><h4>Know your customer</h4><p>Foreign data centers, foundries, and chip exporters must perform Know-Your-Customer due diligence.</p></div></div>
+</div>
+<p>Each of these terms raises questions the drama leaves out.</p>
+<div class="card-grid">
+<div class="card"><h4>What counts as “significant”?</h4><p>The license turns on a word the coverage does not define.</p></div>
+<div class="card"><h4>Who audits the customer list?</h4><p>Who audits a Malaysian cloud operator’s customer list?</p></div>
+<div class="card"><h4>Who is behind the shell?</h4><p>How does a Chinese parent company get spotted behind a Singapore shell?</p></div>
+</div>
+<div class="callout"><div class="callout-label">The test that is still unproven</div><p>A rule is only as strong as its enforcement, and enforcement is exactly what Commerce has been accused of neglecting.</p></div>
+</section>
+<section class="section" id="gap">
+<h2>The 90-day gap is the real loophole</h2>
+<p>Ninety days is a long time in AI compute. It is enough time to sign long-term capacity contracts, front-load training runs, and restructure ownership. The rule is also “interim,” so it can still be revised under industry lobbying. That gap gets little attention in the coverage, even though it decides whether the rule plugs the leak or just announces that one exists.</p>
+</section>
+<section class="section" id="investor">
+<h2>The investor angle is underplayed</h2>
+<p>For a business outlet, the market impact deserves center stage. <a href="https://www.yahoo.com/news/politics/articles/commerce-closes-china-backdoor-nvidia-165619069.html" target="_blank" rel="noopener">Yahoo News</a> described the rule as a blow to Nvidia, whose chips fill those Southeast Asian data centers. Investors need to know how much of Nvidia’s data center revenue flows through these five countries, how much of that demand is ultimately Chinese, and what happens to “neocloud” customers built on this arbitrage. Without that sizing, the story stays political when it should also be financial.</p>
+</section>
+<section class="section" id="signals">
+<h2>Mixed signals from the top</h2>
+<p>The same day, <a href="https://www.cnbc.com/2026/11/16/trump-lutnick-nvidia-national-security-jensen-huant.html" target="_blank" rel="noopener">CNBC itself reported</a> that President Trump said he would be fine with Huang returning as CEO, sees no national security risk, and has no plans to replace Lutnick. That sits awkwardly next to a “crackdown” headline. Is the rule a real change in policy, or damage control meant to quiet Congress before the December hearings? The article, as framed, does not ask.</p>
+</section>
+<section class="section" id="bottom">
+<h2>The bottom line</h2>
+<p>CNBC’s piece is a solid news brief. It is a weak guide to what changes next. The rule is overdue, its toughest provisions depend on enforcement nobody has tested, and the politics around it are still in flux. Investors and readers should watch the fine print rather than the headline.</p>
+<div class="term-grid">
+<div class="term-card"><div class="term-name">“Significant”</div><div class="term-def">How the rule defines computing power. That definition decides who needs a license.</div></div>
+<div class="term-card"><div class="term-name">Five licenses</div><div class="term-def">The licensing decisions for Singapore, Malaysia, Thailand, Indonesia, and Brazil.</div></div>
+<div class="term-card"><div class="term-name num">NVDA</div><div class="term-def">Nvidia’s next earnings call, and how much data-center demand runs through the five countries.</div></div>
+<div class="term-card"><div class="term-name">December</div><div class="term-def">Congressional hearings, and whether the rule is policy or damage control.</div></div>
+</div>
+<div class="series-complete"><h3>Watch the fine print, not the headline.</h3><p>The rule is overdue. Its toughest parts depend on enforcement nobody has tested, and the politics around it are still in flux.</p></div>
+<div class="sources"><h3>Disclaimer</h3><p>This post is editorial commentary for information and discussion only. It is not investment advice or a recommendation to buy or sell any security.</p></div>
+</section>
+      
+    </article>
+    <footer>© TruePrice.Cash</footer>
+  </div>
+</body>
+</html>
